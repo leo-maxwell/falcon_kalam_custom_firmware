@@ -53,9 +53,24 @@ Nothing here is hardware-tested yet.
 | VIA layout options | 3 options; default view = 2u backspace | same 3; default view = **HHKB** | **+** |
 | Caps Lock indicator LED | PA10, active-low (`led_set` `0x08003E10`) | same (base `indicators`), since 2026-10-26 | **=** (was missing in the first flashed image `9b61141e…`; found when the user reported the dark Caps Lock LED) |
 | RGB underglow | rgblight, 4 × WS2812 on PA1, GRB, bit-bang, all 43 effects | identical | **=** |
-| RGB off on USB suspend | unknown | yes (`RGBLIGHT_SLEEP`) | **?**/+ |
+| RGB off on USB suspend | unknown | yes (`RGBLIGHT_SLEEP`) | **?**/+ (hardware test: put the Mac to sleep → LEDs go off) |
 | RGB defaults | mode 9 rainbow swirl, brightness 127, hue 0, sat 255, speed 0 (probe, right after the stock EEPROM reset); no brightness cap in code | same defaults (POLICY-PARITY in `falcon/config.h`); no cap | **=** |
 | Grave-escape, space-cadet, magic keycodes | compiled in | compiled in (QMK defaults) | **=** |
+
+### Hardware outputs and peripherals (sweep after the Caps Lock LED miss)
+
+Three independent checks on the stock image (2026-10-26):
+
+1. **Peripheral usage** (`feature_parity.txt`, every build). Both images reference the same blocks: AFIO, BKP, DWT, FLASH, GPIOA, GPIOB, NVIC/SysTick, PWR, RCC, SCB, USB. Release-only: CoreDebug (newer ChibiOS enables the cycle counter explicitly). Stock-only: none. Neither uses a timer, SPI, I2C, ADC, UART, DMA or GPIO ports C–E, so there is no PWM backlight and no PC13 status LED.
+2. **Pin-mode calls** (`vendor_analysis.txt` §8a). Constant setups exist only for PA1 (WS2812), PA10 (Caps LED) and PA12 (USB re-enumeration, `board.h`). Matrix pins go through the verified pin tables.
+3. **Every GPIO output-register write** (BSRR/BRR/ODR/CRx). These are only PA10 (Caps LED, set high = off at init), PA1 (WS2812), PA12 (USB) and `board.h` defaults.
+
+**Lights on this board: the Caps Lock LED (PA10) and the 4-LED RGB module (PA1). That's all.**
+The host-LED path drives only PA10: no Num/Scroll Lock LEDs and no RGB Caps
+Lock indication. The one stock-looking oddity, a value clamped to 20–200 at
+`0x080068C8`, is QMK's twinkle effect (`RGBLIGHT_EFFECT_TWINKLE_LIFE`), which
+we compile identically. The stock VIA JSON declares no custom menus, so it has
+no vendor-specific VIA features.
 
 ### Default keymap
 

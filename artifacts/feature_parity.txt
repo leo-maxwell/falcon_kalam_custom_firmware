@@ -15,4 +15,5 @@ HID: consumer (ID 4)                   yes                          yes         
 HID: NKRO bitmap (ID 6)                yes                          no                           *
 matrix pins (vendor tables)            yes                          yes                          =
 clock RCC_CFGR 0x001D6400              yes                          yes                          =
+peripherals referenced                 AFIO BKP DWT FLASH GPIOA GPIOB NVIC/SysTick PWR RCC SCB USB AFIO BKP CoreDebug DWT FLASH GPIOA GPIOB NVIC/SysTick PWR RCC SCB USB *
 rgblight: all 43 effects               yes                          yes                          =

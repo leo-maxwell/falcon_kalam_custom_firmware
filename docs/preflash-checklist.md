@@ -66,6 +66,7 @@ The first boot reinitialises EEPROM (R4, accepted).
 5. **Matrix and keymap**: VIA with `via/falcon_hs_r2.json` (it opens as HHKB) → key tester. Every key registers once at the expected position (L-1).
 6. **RGB**: Fn+Z toggles, Fn+X cycles modes, red/green/blue appear in the right order (R6). The VIA lighting menu works.
 7. **Persistence**: change a key in VIA, replug → the change survives.
-8. **Parity extras**: LShift+RShift+B → DFU (Command); `qmk console` shows output after LShift+RShift+D; `tools/falcon_probe.py info` on our firmware → compare with `artifacts/stock_probe_info.txt`.
-9. **Bootmagic reset**: hold Esc while plugging in → DFU. Replug → defaults are back.
-10. Record the results in `docs/hardware.md` and `docs/layout.md` ("Unverified" → "Verified"/"Refuted").
+8. **Lights**: the Caps Lock LED follows Caps Lock (on when the Mac's Caps Lock is on, also after a replug); the RGB module goes off when the Mac sleeps (`RGBLIGHT_SLEEP`).
+9. **Parity extras**: LShift+RShift+B → DFU (Command); `qmk console` shows output after LShift+RShift+D; `tools/falcon_probe.py info` on our firmware → compare with `artifacts/stock_probe_info.txt`.
+10. **Bootmagic reset**: hold Esc while plugging in → DFU. Replug → defaults are back.
+11. Record the results in `docs/hardware.md` and `docs/layout.md` ("Unverified" → "Verified"/"Refuted").

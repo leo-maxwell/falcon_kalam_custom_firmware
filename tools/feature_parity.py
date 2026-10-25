@@ -31,6 +31,19 @@ ROWS = b''.join(struct.pack('<I', v) for v in (0x40010C03, 0x40010C04, 0x40010C0
 COLS = b''.join(struct.pack('<I', v) for v in (0x40010809, 0x40010803, 0x40010804, 0x40010805, 0x40010806, 0x40010807,
                                                  0x40010C00, 0x40010C01, 0x40010C0A, 0x40010C0B, 0x40010C0C, 0x40010C0D,
                                                  0x40010C0E, 0x40010C0F, 0x40010808))
+# Peripheral blocks (STM32F103/GD32F103 memory map). A block referenced by only
+# one image (e.g. a timer for PWM backlight, another GPIO port for an LED) is a
+# feature-gap candidate; this is how hardware outputs are compared, since
+# descriptors cannot show them.
+PERIPHERALS = [(0x40000000, 'TIM2'), (0x40000400, 'TIM3'), (0x40000800, 'TIM4'), (0x40002800, 'RTC'),
+               (0x40002C00, 'WWDG'), (0x40003000, 'IWDG'), (0x40003800, 'SPI2'), (0x40004400, 'USART2'),
+               (0x40004800, 'USART3'), (0x40005400, 'I2C1'), (0x40005800, 'I2C2'), (0x40005C00, 'USB'),
+               (0x40006000, 'USB SRAM'), (0x40006400, 'CAN'), (0x40006C00, 'BKP'), (0x40007000, 'PWR'),
+               (0x40010000, 'AFIO'), (0x40010400, 'EXTI'), (0x40010800, 'GPIOA'), (0x40010C00, 'GPIOB'),
+               (0x40011000, 'GPIOC'), (0x40011400, 'GPIOD'), (0x40011800, 'GPIOE'), (0x40012400, 'ADC1'),
+               (0x40012800, 'ADC2'), (0x40012C00, 'TIM1'), (0x40013000, 'SPI1'), (0x40013800, 'USART1'),
+               (0x40020000, 'DMA1'), (0x40021000, 'RCC'), (0x40022000, 'FLASH'), (0x40023000, 'CRC'),
+               (0xE000E000, 'NVIC/SysTick'), (0xE000ED00, 'SCB'), (0xE0001000, 'DWT'), (0xE000EDF0, 'CoreDebug')]
 ALL_MODES = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
 
 
@@ -65,6 +78,17 @@ def config_descriptor(d):
     return None
 
 
+def peripherals(d):
+    """Peripheral blocks whose base (+ up to 1 KB) appears as a 32-bit literal."""
+    used = set()
+    for i in range(0, len(d) - 3, 4):
+        v = struct.unpack_from('<I', d, i)[0]
+        for base, name in PERIPHERALS:
+            if base <= v < base + 0x400:
+                used.add(name)
+    return used
+
+
 def features(d):
     f = {'size (bytes)': len(d)}
     dev = re.search(rb'\x12\x01\x00\x02\x00\x00\x00\x40(..)(..)(..)', d, re.S)
@@ -78,6 +102,7 @@ def features(d):
         f['HID: ' + name] = 'yes' if sig in d else 'no'
     f['matrix pins (vendor tables)'] = 'yes' if ROWS in d and COLS in d else 'no'
     f['clock RCC_CFGR 0x001D6400'] = 'yes' if struct.pack('<I', 0x001D6400) in d else 'no'
+    f['peripherals referenced'] = ' '.join(sorted(peripherals(d)))
     f['rgblight: all 43 effects'] = 'yes' if ALL_MODES + b'\x00' in d or ALL_MODES in d else 'no/other'
     return f
 
