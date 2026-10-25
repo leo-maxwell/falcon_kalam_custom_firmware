@@ -1,3 +1,3 @@
-PASS  hhkb_via: rejected (./keyboards/falcon_hs_r2/config.h:13:6: error: #error "NKRO must stay disabled on the Falcon HS R2 (macOS Caps Lock / input-source issue)")
+PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_hs_r2/keymaps/falcon/config.h:13:6: error: #error "POLICY-NKRO: NKRO must stay d)
 PASS  neg_oversize: rejected (| /opt/homebrew/opt/arm-none-eabi-binutils/bin/arm-none-eabi-ld: .build/falcon_hs_r2_neg_oversize.elf section `.rodata' will not fit in regi)
 RESULT: PASS

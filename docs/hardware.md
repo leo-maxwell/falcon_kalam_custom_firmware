@@ -28,7 +28,13 @@ port, GPIO reset values identical to that board's `board.h`, the board's
 wear-leveling, QMK's HID report layout (report IDs 2/3/4/6), a VIA raw-HID
 interface, and QMK ≥ 0.19 keycode numbering (`QK_GESC=0x7C16`, `QK_BOOT=0x7C00`,
 `UG_TOGG=0x7820`). The VIA JSON uses the v3 format (`menus`), so the vendor
-firmware speaks VIA protocol ≥ 12. The exact QMK/ChibiOS revision is unknown.
+firmware speaks VIA protocol ≥ 12.
+
+QMK's Command/console strings identify the build (`vendor_analysis.txt` §8b):
+`BUILD: (Mar 14 2025)`, `CHIBIOS: "be44b3"`,
+`CONTRIB: "develop_2021_q3-455-g77cb0a"`, `GCC: 10.1.0`,
+`OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND NKRO LTO`. No QMK version
+string is embedded.
 
 That matters for GD32 compatibility: the vendor image demonstrates that this
 ChibiOS STM32F1 HAL configuration (RCC, GPIO/AFIO, USB FS device, flash
@@ -42,7 +48,7 @@ the HAL revision the vendor used.
 | MCU | GigaDevice GD32F103C8T6, Cortex-M3 | Given | — |
 | Flash | 64 KB, 1 KB pages | Verified | readback ends at `0x0800FFFF`; WL storage found in last 2 pages, placed via F_SIZE |
 | SRAM | 20 KB | Given (datasheet), not measured | vendor initial SP `0x20000400` is consistent; size not proven by firmware |
-| Bootloader | STM32duino/Maple DFU, `1EAF:0003`, alt 2, app at `0x08002000` | Verified | DFU suffix VID/PID; vector table at `0x08002000` |
+| Bootloader | STM32duino-bootloader "boot20" (MIT, LeafLabs-derived), `1EAF:0003`, bcdDevice `0x0201`, alt 2, app at `0x08002000` | Verified (USB identity, 2026-10-26); variant unknown | `docs/bootloader.md`, `artifacts/device_inspection_2026-10-26.txt` |
 | Bootloader flags | `BKP_DR10 = 0x424C` at boot (`0x080094B0`); `0x424D` before `mcu_reset` (`0x08007876`) | Verified | identical to QMK `STM32_F103_STM32DUINO` `board.c` / `bootloaders/stm32duino.c` |
 | Flash descriptor | 128 × 1 KB sectors, base `0x08000000` (`0x0800C148`) | Verified | ChibiOS `STM32F103xB` registry — larger than the part; storage placement is clamped by flash size |
 
@@ -136,8 +142,11 @@ no longer depends on how a GD32 reports F_SIZE; the verifier confirms the image
 does not read F_SIZE at all. Backing/logical sizes stay 2048/1024 as in the
 vendor image, and the linker script keeps code out of those pages.
 
-The vendor write log holds only 4 non-erased bytes (`bf 00 be 00` at
-`0x0800FC08`); the vendor persistent configuration is essentially empty.
+The write log decodes (flash stores `~value`) to two `OPTIMIZED_64` entries,
+logical addresses 0 and 1 = `0xFF`, right after a full erase. That is exactly
+QMK's `nvm_eeconfig_disable()`: format, then EECONFIG magic = `0xFFFF`. In other
+words, Bootmagic (or Clear-EEPROM) ran just before the backup, and **the backup
+contains no user configuration**.
 
 ## 7. RGB
 
@@ -149,7 +158,9 @@ The vendor write log holds only 4 non-erased bytes (`bf 00 be 00` at
 | Byte order | GRB | Verified | `rgblight_setrgb` stores r→[1], g→[0], b→[2] (`0x080049F6`) |
 | Reset time | 280 µs (QMK default) | Verified | 1,344 × 15-cycle loop at 72 MHz |
 | Physical placement (underglow vs. indicators) | — | Unverified | — |
-| Vendor's enabled effects / brightness cap | — | Unverified | not reconstructed |
+| Enabled effects | all 43 rgblight modes | Verified | `mode_base_table` at `0x0800C2B6` |
+| Brightness cap | — | Unverified | not reconstructed |
+| Cross-check with the second agent's notes | agree, except their table addresses | — | `docs/rgb-crosscheck.md` |
 
 ## 8. HID interfaces
 
@@ -162,8 +173,7 @@ The vendor write log holds only 4 non-erased bytes (`bf 00 be 00` at
 
 ## 9. Unresolved assumptions (summary)
 
-See `docs/risks.md` for impact and mitigation. Briefly: exact vendor QMK/ChibiOS
-revision; HSE frequency only inferred; physical presence of `4,0/4,13/4,14` and
-which split variants this unit has; LED placement and the vendor's effect list;
-bootloader contents and behaviour (not backed up); option-byte/read-protection
-state; GD32 timing differences for WS2812 bit-banging under a newer HAL.
+See `docs/risks.md` for impact and mitigation. Briefly: HSE frequency only
+inferred; **physical layout (OPEN ISSUE L-1, `docs/layout.md`)**; LED part and
+placement; bootloader binary variant (not dumped yet) and option-byte/RDP state;
+GD32 behaviour under the newer QMK/ChibiOS (intended by policy).

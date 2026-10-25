@@ -2,18 +2,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Falcon HS R2 (GD32F103C8T6, STM32duino/Maple DFU bootloader).
-// Every value here is traced to the manufacturer firmware in docs/hardware.md.
+// Base keyboard definition: hardware facts only, no policy. Every value is
+// traced to the manufacturer firmware in docs/hardware.md. Project policy
+// (NKRO off, VIA, keymap) lives in the userspace layer, see docs/architecture.md.
 
 #pragma once
 
-// --- NKRO is permanently off ------------------------------------------------
-// keyboard.json sets "nkro": false. This guard stops the build if anything
-// re-enables it (a keymap rules.mk, a command-line NKRO_ENABLE=yes, ...).
-#if defined(NKRO_ENABLE)
-#    error "NKRO must stay disabled on the Falcon HS R2 (macOS Caps Lock / input-source issue)"
-#endif
-
-// --- Persistent storage -----------------------------------------------------
 // The vendor image locates its wear-leveling area at runtime from the F_SIZE
 // register and its data sits at 0x0800F800-0x0800FFFF in the flash readback,
 // i.e. F_SIZE reads 64 KB on this unit. Pin the size so the location does not

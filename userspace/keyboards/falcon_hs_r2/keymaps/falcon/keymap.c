@@ -1,16 +1,17 @@
 // Copyright 2026 Leo Maxwell
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
-// VIA keymap. Same HHKB base and Fn layers as the default keymap, laid out on
-// LAYOUT_all so every matrix position named in the VIA definition has a sane
-// default whichever layout option (split backspace / left shift / spacebar)
-// the board is built with:
+// Falcon release keymap (policy layer). HHKB US ANSI base and HHKB Fn layer,
+// laid out on LAYOUT_all so every matrix position named in the VIA definition
+// has a sane default whichever layout option the board is built with:
 //   - 2u backspace  : the 2u key sits on 0,14 and sends `; remap it in VIA.
 //   - split L-shift : the extra 1u key at 3,1 is a second Left Shift.
 //   - split space   : 4,5 / 4,7 / 4,9 all send Space.
-// Layers 2 and 3 are left transparent for VIA (DYNAMIC_KEYMAP_LAYER_COUNT 4).
+// Layers 2 and 3 are transparent for VIA (DYNAMIC_KEYMAP_LAYER_COUNT 4).
 
 #include QMK_KEYBOARD_H
+#include "raw_hid.h"
+#include "via.h"
 
 enum layers {
     _BASE,
@@ -51,3 +52,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 // clang-format on
+
+// POLICY-FLASHREAD: read-only raw-HID command so the bootloader can be backed up
+// once this firmware runs (DFU alt 2 cannot read below 0x08002000). Only the
+// ranges below are readable; nothing is ever written. Host side:
+// tools/falcon_probe.py dump-bootloader.
+//
+//   request : F0 a3 a2 a1 a0 len           (address big-endian, len <= 24)
+//   reply   : F0 a3 a2 a1 a0 len  data...  on success
+//             F0 a3 a2 a1 a0 00            if the range is not allowed
+#define FALCON_CMD_READ 0xF0
+#define FALCON_READ_MAX 24
+
+static bool falcon_read_allowed(uint32_t addr, uint8_t len) {
+    static const struct {
+        uint32_t start, end; // end exclusive
+    } ranges[] = {
+        {0x08000000, 0x08002000}, // STM32duino/Maple bootloader (8 KB)
+        {0x1FFFF7E0, 0x1FFFF7F0}, // F_SIZE + 96-bit unique ID
+        {0x1FFFF800, 0x1FFFF810}, // option bytes
+    };
+    for (uint8_t i = 0; i < sizeof(ranges) / sizeof(ranges[0]); i++) {
+        if (addr >= ranges[i].start && addr + len <= ranges[i].end && addr + len >= addr) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool via_command_kb(uint8_t *data, uint8_t length) {
+    if (data[0] != FALCON_CMD_READ || length < 6 + FALCON_READ_MAX) {
+        return false;
+    }
+    uint32_t addr = ((uint32_t)data[1] << 24) | ((uint32_t)data[2] << 16) | ((uint32_t)data[3] << 8) | data[4];
+    uint8_t  len  = data[5];
+    if (len == 0 || len > FALCON_READ_MAX || !falcon_read_allowed(addr, len)) {
+        data[5] = 0;
+    } else {
+        const volatile uint8_t *src = (const volatile uint8_t *)addr;
+        for (uint8_t i = 0; i < len; i++) {
+            data[6 + i] = src[i];
+        }
+    }
+    raw_hid_send(data, length);
+    return true;
+}

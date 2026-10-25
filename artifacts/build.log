@@ -1,12 +1,13 @@
 
 ==> Environment
-date (UTC):   2026-10-25T14:02:28Z
+date (UTC):   2026-10-25T14:28:01Z
 host:         Darwin 27.0.0 arm64
 gcc:          arm-none-eabi-gcc (Homebrew ARM GCC 8.5.0_2) 8.5.0
 objcopy:      GNU objcopy (GNU Binutils) 2.41
 qmk cli:      1.1.8
 python:       Python 3.14.6
 make:         GNU Make 3.81
+userspace:    /Volumes/Develop/falcon-keyboard/userspace
 
 ==> Original artifacts unchanged
 manufacturer_firmware.bin: OK
@@ -16,9 +17,12 @@ manufacturer_jsonfile.json: OK
 ==> Re-derive hardware facts from the manufacturer firmware
 RESULT: PASS (0 failures)
 
-==> QMK source pinned and clean
+==> QMK source pinned, clean, and on the latest local release (docs/policy.md)
 pinned:       180f394b489c238cb231c2bf8b080262155e03c0
-checked out:  180f394b489c238cb231c2bf8b080262155e03c0 (0.34.7)
+checked out:  180f394b489c238cb231c2bf8b080262155e03c0
+qmk HEAD:            180f394b48 (release tag: 0.34.7)
+newest local tag:    0.34.7
+policy (offline):    OK -- run 'scripts/qmk_policy.sh --online' to compare with upstream
    6170ddf92d55be54c89b708d1882eea229edeb2c lib/chibios (heads/qmk-master)
    5a9ad82b6ba4f649cdb800e8c2bbc9be2d3ce767 lib/chibios-contrib (develop_2021_q3-638-g5a9ad82b)
    102c27d7cc2aaac87c133702e7829a105e0cb433 lib/chibios-contrib/ext/mcux-sdk (MCUX_2.9.0-19-g102c27d7c)
@@ -29,14 +33,13 @@ checked out:  180f394b489c238cb231c2bf8b080262155e03c0 (0.34.7)
    c2e3b4e10d281e7f0f694d3ecbd9f320977288cc lib/printf (v4.0.0-266-gc2e3b4e)
    819dbc1e5d5926b17e27e00ca6d3d2988adae04e lib/vusb (releases/20121206-24-g819dbc1)
 
-==> Stage keyboards/falcon_hs_r2 into qmk_firmware
+==> Stage base keyboards/falcon_hs_r2 into qmk_firmware
 staged (tree clean)
 
-==> qmk lint
-Ψ Lint check passed!
+==> qmk lint (base keyboard, upstream rules)
 Ψ Lint check passed!
 
-==> Build falcon_hs_r2:default (compile check)
+==> Build base falcon_hs_r2:default (normal firmware, reference only)
 Making falcon_hs_r2 with keymap default
 
 Generating: .build/obj_falcon_hs_r2_default/src/info_deps.d                                         [OK]
@@ -49,18 +52,18 @@ Generating: .build/obj_falcon_hs_r2_default/src/info_config.h                   
  [OK]
  [OK]
 Compiling: quantum/keymap_introspection.c                                                          Compiling: quantum/quantum.c                                                                       Compiling: quantum/bitwise.c                                                                       Compiling: quantum/led.c                                                                            [OK]
- [OK]
 Compiling: quantum/action.c                                                                         [OK]
 Compiling: quantum/action_layer.c                                                                   [OK]
+ [OK]
 Compiling: quantum/action_tapping.c                                                                Compiling: quantum/action_util.c                                                                   Compiling: quantum/eeconfig.c                                                                       [OK]
  [OK]
 Compiling: quantum/keyboard.c                                                                       [OK]
- [OK]
 Compiling: quantum/keymap_common.c                                                                  [OK]
+ [OK]
 Compiling: quantum/keycode_config.c                                                                Compiling: quantum/sync_timer.c                                                                     [OK]
  [OK]
- [OK]
 Compiling: quantum/logging/debug.c                                                                  [OK]
+ [OK]
 Compiling: quantum/logging/sendchar.c                                                               [OK]
 Compiling: quantum/process_keycode/process_default_layer.c                                          [OK]
 Compiling: quantum/process_keycode/process_oneshot.c                                               Compiling: quantum/process_keycode/process_quantum.c                                                [OK]
@@ -68,13 +71,13 @@ Compiling: quantum/process_keycode/process_oneshot.c                            
 Compiling: quantum/nvm/eeprom/nvm_eeconfig.c                                                       Compiling: quantum/logging/print.c                                                                  [OK]
 Compiling: quantum/matrix_common.c                                                                  [OK]
 Compiling: quantum/matrix.c                                                                         [OK]
-Compiling: quantum/debounce/sym_defer_g.c                                                          Compiling: quantum/main.c                                                                           [OK]
+Compiling: quantum/debounce/sym_defer_g.c                                                           [OK]
+Compiling: quantum/main.c                                                                           [OK]
 Compiling: lib/printf/src/printf/printf.c                                                           [OK]
  [OK]
- [OK]
 Compiling: drivers/eeprom/eeprom_driver.c                                                          Compiling: drivers/eeprom/eeprom_wear_leveling.c                                                   Compiling: quantum/wear_leveling/wear_leveling.c                                                    [OK]
- [OK]
 Compiling: platforms/chibios/drivers/wear_leveling/wear_leveling_efl.c                              [OK]
+ [OK]
 Compiling: quantum/process_keycode/process_underglow.c                                             Compiling: quantum/color.c                                                                          [OK]
  [OK]
 Compiling: quantum/rgblight/rgblight.c                                                              [OK]
@@ -100,203 +103,14 @@ Compiling: platforms/suspend.c                                                  
 Compiling: platforms/timer.c                                                                        [OK]
  [OK]
 Compiling: platforms/chibios/hardware_id.c                                                          [OK]
-Compiling: platforms/chibios/platform.c                                                             [OK]
-Compiling: platforms/chibios/suspend.c                                                             Compiling: platforms/chibios/timer.c                                                                [OK]
-Assembling: lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.S                           [OK]
-Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.S                          Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.S                           Compiling: platforms/chibios/bootloaders/stm32duino.c                                               [OK]
+Compiling: platforms/chibios/platform.c                                                            Compiling: platforms/chibios/suspend.c                                                              [OK]
  [OK]
+Compiling: platforms/chibios/timer.c                                                               Assembling: lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.S                          Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.S                           Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.S                          Compiling: platforms/chibios/bootloaders/stm32duino.c                                               [OK]
 Compiling: tmk_core/protocol/chibios/usb_main.c                                                     [OK]
  [OK]
+ [OK]
+ [OK]
 Compiling: tmk_core/protocol/chibios/chibios.c                                                      [OK]
-Compiling: tmk_core/protocol/usb_descriptor.c                                                      Compiling: tmk_core/protocol/chibios/usb_driver.c                                                  Compiling: tmk_core/protocol/chibios/usb_endpoints.c                                                [OK]
- [OK]
- [OK]
-Compiling: tmk_core/protocol/chibios/usb_report_handling.c                                         Compiling: tmk_core/protocol/chibios/usb_util.c                                                     [OK]
- [OK]
-Compiling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.c                               Compiling: lib/chibios/os/rt/src/chsys.c                                                            [OK]
- [OK]
- [OK]
-Compiling: lib/chibios/os/rt/src/chrfcu.c                                                          Compiling: lib/chibios/os/rt/src/chdebug.c                                                          [OK]
- [OK]
-Compiling: lib/chibios/os/rt/src/chtrace.c                                                          [OK]
-Compiling: lib/chibios/os/rt/src/chvt.c                                                             [OK]
-Compiling: lib/chibios/os/rt/src/chschd.c                                                          Compiling: lib/chibios/os/rt/src/chinstances.c                                                      [OK]
-Compiling: lib/chibios/os/rt/src/chthreads.c                                                        [OK]
-Compiling: lib/chibios/os/rt/src/chtm.c                                                             [OK]
-Compiling: lib/chibios/os/rt/src/chstats.c                                                          [OK]
- [OK]
-Compiling: lib/chibios/os/rt/src/chregistry.c                                                       [OK]
-Compiling: lib/chibios/os/rt/src/chsem.c                                                           Compiling: lib/chibios/os/rt/src/chmtx.c                                                            [OK]
-Compiling: lib/chibios/os/rt/src/chcond.c                                                           [OK]
-Compiling: lib/chibios/os/rt/src/chevents.c                                                         [OK]
- [OK]
-Compiling: lib/chibios/os/rt/src/chmsg.c                                                           Compiling: lib/chibios/os/rt/src/chdynamic.c                                                        [OK]
- [OK]
-Compiling: lib/chibios/os/common/ports/ARMv7-M/chcore.c                                             [OK]
-Compiling: lib/chibios/os/hal/osal/rt-nil/osal.c                                                   Compiling: lib/chibios/os/oslib/src/chmboxes.c                                                      [OK]
- [OK]
-Compiling: lib/chibios/os/oslib/src/chmemcore.c                                                     [OK]
-Compiling: lib/chibios/os/oslib/src/chmemheaps.c                                                   Compiling: lib/chibios/os/oslib/src/chmempools.c                                                    [OK]
- [OK]
-Compiling: lib/chibios/os/oslib/src/chpipes.c                                                       [OK]
-Compiling: lib/chibios/os/oslib/src/chobjcaches.c                                                  Compiling: lib/chibios/os/oslib/src/chdelegates.c                                                   [OK]
- [OK]
-Compiling: lib/chibios/os/oslib/src/chfactory.c                                                     [OK]
-Compiling: lib/chibios/os/hal/src/hal.c                                                            Compiling: lib/chibios/os/hal/src/hal_safety.c                                                      [OK]
-Compiling: lib/chibios/os/hal/src/hal_st.c                                                          [OK]
-Compiling: lib/chibios/os/hal/src/hal_buffers.c                                                    Compiling: lib/chibios/os/hal/src/hal_queues.c                                                      [OK]
- [OK]
-Compiling: lib/chibios/os/hal/src/hal_mmcsd.c                                                      Compiling: lib/chibios/os/hal/src/hal_adc.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_can.c                                                         [OK]
- [OK]
-Compiling: lib/chibios/os/hal/src/hal_crypto.c                                                      [OK]
-Compiling: lib/chibios/os/hal/src/hal_dac.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_efl.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_gpt.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_i2c.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_i2s.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_icu.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_mac.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_mmc_spi.c                                                     [OK]
-Compiling: lib/chibios/os/hal/src/hal_pal.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_pwm.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_rtc.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_sdc.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_serial.c                                                      [OK]
-Compiling: lib/chibios/os/hal/src/hal_serial_usb.c                                                  [OK]
-Compiling: lib/chibios/os/hal/src/hal_sio.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_spi.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_trng.c                                                        [OK]
-Compiling: lib/chibios/os/hal/src/hal_uart.c                                                        [OK]
-Compiling: lib/chibios/os/hal/src/hal_usb.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_wdg.c                                                         [OK]
-Compiling: lib/chibios/os/hal/src/hal_wspi.c                                                       Compiling: lib/chibios/os/hal/src/hal_flash.c                                                       [OK]
-Compiling: lib/chibios/os/hal/ports/common/ARMCMx/nvic.c                                            [OK]
- [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/stm32_isr.c                                     [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_lld.c                                       [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_efl_lld.c                                   [OK]
- [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_adc_lld.c                                  Compiling: lib/chibios/os/hal/ports/STM32/LLD/CANv1/hal_can_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/DACv1/hal_dac_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/DMAv1/stm32_dma.c                                     [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/GPIOv1/hal_pal_lld.c                                  [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/I2Cv1/hal_i2c_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/RTCv1/hal_rtc_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/SDIOv1/hal_sdc_lld.c                                  [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/SPIv1/hal_i2s_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/SPIv1/hal_spi_v2_lld.c                                [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/SYSTICKv1/hal_st_lld.c                                [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_gpt_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_icu_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_pwm_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_serial_lld.c                              [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_uart_lld.c                                [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/xWDGv1/hal_wdg_lld.c                                  [OK]
-Compiling: platforms/chibios/boards/STM32_F103_STM32DUINO/board/board.c                            Compiling: lib/chibios/os/hal/lib/streams/chprintf.c                                                [OK]
- [OK]
-Compiling: lib/chibios/os/hal/lib/streams/chscanf.c                                                 [OK]
-Compiling: lib/chibios/os/hal/lib/streams/memstreams.c                                             Compiling: lib/chibios/os/hal/lib/streams/nullstreams.c                                             [OK]
-Compiling: lib/chibios/os/hal/lib/streams/bufstreams.c                                              [OK]
- [OK]
-Compiling: lib/chibios/os/various/newlib_bindings/syscalls.c                                        [OK]
-Compiling: platforms/chibios/syscall-fallbacks.c                                                    [OK]
-Compiling: platforms/chibios/wait.c                                                                 [OK]
- [OK]
-Compiling: platforms/chibios/synchronization_util.c                                                Compiling: platforms/chibios/interrupt_handlers.c                                                   [OK]
- [OK]
- [OK]
-Compiling: .build/obj_falcon_hs_r2_default/src/default_keyboard.c                                   [OK]
-Linking: .build/falcon_hs_r2_default.elf                                                            [OK]
-Creating binary load file for flashing: .build/falcon_hs_r2_default.bin                            Creating load file for flashing: .build/falcon_hs_r2_default.hex                                    [OK]
- [OK]
-
-Size after:
-   text	   data	    bss	    dec	    hex	filename
-      0	  37502	      0	  37502	   927e	falcon_hs_r2_default.bin
-
-Copying falcon_hs_r2_default.bin to qmk_firmware folder                                             [OK]
-
-==> Build falcon_hs_r2:hhkb_via (release)
-Making falcon_hs_r2 with keymap hhkb_via
-
-Generating: .build/obj_falcon_hs_r2_hhkb_via/src/info_deps.d                                        [OK]
-Generating: .build/obj_falcon_hs_r2_hhkb_via/src/default_keyboard.c                                arm-none-eabi-gcc (Homebrew ARM GCC 8.5.0_2) 8.5.0
-Copyright (C) 2018 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Generating: .build/obj_falcon_hs_r2_hhkb_via/src/info_config.h                                     Generating: .build/obj_falcon_hs_r2_hhkb_via/src/default_keyboard.h                                 [OK]
- [OK]
- [OK]
-Compiling: quantum/keymap_introspection.c                                                          Compiling: quantum/quantum.c                                                                       Compiling: quantum/bitwise.c                                                                       Compiling: quantum/led.c                                                                            [OK]
- [OK]
-Compiling: quantum/action.c                                                                        Compiling: quantum/action_layer.c                                                                   [OK]
- [OK]
-Compiling: quantum/action_tapping.c                                                                Compiling: quantum/action_util.c                                                                   Compiling: quantum/eeconfig.c                                                                       [OK]
- [OK]
-Compiling: quantum/keyboard.c                                                                       [OK]
- [OK]
-Compiling: quantum/keymap_common.c                                                                  [OK]
-Compiling: quantum/keycode_config.c                                                                Compiling: quantum/sync_timer.c                                                                     [OK]
- [OK]
-Compiling: quantum/logging/debug.c                                                                  [OK]
- [OK]
-Compiling: quantum/logging/sendchar.c                                                               [OK]
-Compiling: quantum/process_keycode/process_default_layer.c                                          [OK]
-Compiling: quantum/process_keycode/process_oneshot.c                                               Compiling: quantum/process_keycode/process_quantum.c                                                [OK]
- [OK]
-Compiling: quantum/nvm/eeprom/nvm_eeconfig.c                                                       Compiling: quantum/logging/print.c                                                                 Compiling: quantum/matrix_common.c                                                                  [OK]
- [OK]
-Compiling: quantum/matrix.c                                                                         [OK]
-Compiling: quantum/debounce/sym_defer_g.c                                                           [OK]
-Compiling: quantum/main.c                                                                           [OK]
-Compiling: lib/printf/src/printf/printf.c                                                           [OK]
- [OK]
-Compiling: drivers/eeprom/eeprom_driver.c                                                          Compiling: drivers/eeprom/eeprom_wear_leveling.c                                                   Compiling: quantum/wear_leveling/wear_leveling.c                                                    [OK]
- [OK]
-Compiling: platforms/chibios/drivers/wear_leveling/wear_leveling_efl.c                              [OK]
-Compiling: quantum/process_keycode/process_underglow.c                                             Compiling: quantum/color.c                                                                          [OK]
- [OK]
- [OK]
-Compiling: quantum/rgblight/rgblight.c                                                              [OK]
-Compiling: quantum/rgblight/rgblight_drivers.c                                                     Compiling: quantum/led_tables.c                                                                     [OK]
-Compiling: quantum/raw_hid.c                                                                        [OK]
-Compiling: lib/fnv/qmk_fnv_type_validation.c                                                        [OK]
-Compiling: lib/fnv/hash_32a.c                                                                       [OK]
-Compiling: lib/fnv/hash_64a.c                                                                       [OK]
- [OK]
-Compiling: drivers/led/ws2812.c                                                                     [OK]
-Compiling: platforms/chibios/drivers/ws2812_bitbang.c                                               [OK]
-Compiling: quantum/bootmagic/bootmagic.c                                                           Compiling: quantum/dynamic_keymap.c                                                                 [OK]
-Compiling: quantum/nvm/eeprom/nvm_dynamic_keymap.c                                                  [OK]
-Compiling: quantum/process_keycode/process_grave_esc.c                                              [OK]
-Compiling: quantum/process_keycode/process_magic.c                                                  [OK]
- [OK]
-Compiling: quantum/mousekey.c                                                                      Compiling: quantum/send_string/send_string.c                                                        [OK]
-Compiling: quantum/process_keycode/process_space_cadet.c                                           Compiling: quantum/process_keycode/process_tri_layer.c                                              [OK]
-Compiling: quantum/tri_layer.c                                                                      [OK]
- [OK]
- [OK]
-Compiling: quantum/via.c                                                                            [OK]
-Compiling: quantum/nvm/eeprom/nvm_via.c                                                            Compiling: tmk_core/protocol/host.c                                                                Compiling: tmk_core/protocol/report.c                                                               [OK]
- [OK]
-Compiling: tmk_core/protocol/usb_device_state.c                                                     [OK]
-Compiling: tmk_core/protocol/usb_util.c                                                             [OK]
- [OK]
-Compiling: platforms/suspend.c                                                                     Compiling: platforms/synchronization_util.c                                                         [OK]
-Compiling: platforms/timer.c                                                                        [OK]
- [OK]
-Compiling: platforms/chibios/hardware_id.c                                                          [OK]
-Compiling: platforms/chibios/platform.c                                                            Compiling: platforms/chibios/suspend.c                                                              [OK]
-Compiling: platforms/chibios/timer.c                                                                [OK]
- [OK]
-Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.S                           Assembling: lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.S                          Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.S                          Compiling: platforms/chibios/bootloaders/stm32duino.c                                               [OK]
-Compiling: tmk_core/protocol/chibios/usb_main.c                                                    Compiling: tmk_core/protocol/chibios/chibios.c                                                      [OK]
- [OK]
- [OK]
- [OK]
 Compiling: tmk_core/protocol/usb_descriptor.c                                                      Compiling: tmk_core/protocol/chibios/usb_driver.c                                                   [OK]
  [OK]
 Compiling: tmk_core/protocol/chibios/usb_endpoints.c                                                [OK]
@@ -328,13 +142,13 @@ Compiling: lib/chibios/os/oslib/src/chmemcore.c                                 
 Compiling: lib/chibios/os/oslib/src/chmemheaps.c                                                   Compiling: lib/chibios/os/oslib/src/chmempools.c                                                    [OK]
  [OK]
 Compiling: lib/chibios/os/oslib/src/chpipes.c                                                       [OK]
-Compiling: lib/chibios/os/oslib/src/chobjcaches.c                                                   [OK]
-Compiling: lib/chibios/os/oslib/src/chdelegates.c                                                  Compiling: lib/chibios/os/oslib/src/chfactory.c                                                     [OK]
+Compiling: lib/chibios/os/oslib/src/chobjcaches.c                                                  Compiling: lib/chibios/os/oslib/src/chdelegates.c                                                   [OK]
  [OK]
+Compiling: lib/chibios/os/oslib/src/chfactory.c                                                     [OK]
 Compiling: lib/chibios/os/hal/src/hal.c                                                            Compiling: lib/chibios/os/hal/src/hal_safety.c                                                      [OK]
 Compiling: lib/chibios/os/hal/src/hal_st.c                                                          [OK]
-Compiling: lib/chibios/os/hal/src/hal_buffers.c                                                    Compiling: lib/chibios/os/hal/src/hal_queues.c                                                      [OK]
- [OK]
+Compiling: lib/chibios/os/hal/src/hal_buffers.c                                                     [OK]
+Compiling: lib/chibios/os/hal/src/hal_queues.c                                                      [OK]
 Compiling: lib/chibios/os/hal/src/hal_mmcsd.c                                                      Compiling: lib/chibios/os/hal/src/hal_adc.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_can.c                                                         [OK]
  [OK]
@@ -347,7 +161,198 @@ Compiling: lib/chibios/os/hal/src/hal_i2s.c                                     
 Compiling: lib/chibios/os/hal/src/hal_icu.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_mac.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_mmc_spi.c                                                     [OK]
-Compiling: lib/chibios/os/hal/src/hal_pal.c                                                         [OK]
+ [OK]
+Compiling: lib/chibios/os/hal/src/hal_pal.c                                                        Compiling: lib/chibios/os/hal/src/hal_pwm.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_rtc.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_sdc.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_serial.c                                                      [OK]
+Compiling: lib/chibios/os/hal/src/hal_serial_usb.c                                                  [OK]
+Compiling: lib/chibios/os/hal/src/hal_sio.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_spi.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_trng.c                                                        [OK]
+Compiling: lib/chibios/os/hal/src/hal_uart.c                                                        [OK]
+Compiling: lib/chibios/os/hal/src/hal_usb.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_wdg.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_wspi.c                                                       Compiling: lib/chibios/os/hal/src/hal_flash.c                                                       [OK]
+Compiling: lib/chibios/os/hal/ports/common/ARMCMx/nvic.c                                            [OK]
+ [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/stm32_isr.c                                     [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_lld.c                                       [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_efl_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_adc_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/CANv1/hal_can_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/DACv1/hal_dac_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/DMAv1/stm32_dma.c                                     [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/GPIOv1/hal_pal_lld.c                                  [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/I2Cv1/hal_i2c_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/RTCv1/hal_rtc_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/SDIOv1/hal_sdc_lld.c                                  [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/SPIv1/hal_i2s_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/SPIv1/hal_spi_v2_lld.c                                [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/SYSTICKv1/hal_st_lld.c                                [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_gpt_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_icu_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_pwm_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_serial_lld.c                              [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_uart_lld.c                                [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/xWDGv1/hal_wdg_lld.c                                  [OK]
+Compiling: platforms/chibios/boards/STM32_F103_STM32DUINO/board/board.c                            Compiling: lib/chibios/os/hal/lib/streams/chprintf.c                                                [OK]
+ [OK]
+Compiling: lib/chibios/os/hal/lib/streams/chscanf.c                                                 [OK]
+Compiling: lib/chibios/os/hal/lib/streams/memstreams.c                                             Compiling: lib/chibios/os/hal/lib/streams/nullstreams.c                                             [OK]
+Compiling: lib/chibios/os/hal/lib/streams/bufstreams.c                                              [OK]
+ [OK]
+Compiling: lib/chibios/os/various/newlib_bindings/syscalls.c                                        [OK]
+Compiling: platforms/chibios/syscall-fallbacks.c                                                    [OK]
+Compiling: platforms/chibios/wait.c                                                                 [OK]
+Compiling: platforms/chibios/synchronization_util.c                                                 [OK]
+Compiling: platforms/chibios/interrupt_handlers.c                                                   [OK]
+ [OK]
+ [OK]
+Compiling: .build/obj_falcon_hs_r2_default/src/default_keyboard.c                                   [OK]
+Linking: .build/falcon_hs_r2_default.elf                                                            [OK]
+Creating binary load file for flashing: .build/falcon_hs_r2_default.bin                            Creating load file for flashing: .build/falcon_hs_r2_default.hex                                    [OK]
+ [OK]
+
+Size after:
+   text	   data	    bss	    dec	    hex	filename
+      0	  38150	      0	  38150	   9506	falcon_hs_r2_default.bin
+
+Copying falcon_hs_r2_default.bin to qmk_firmware folder                                             [OK]
+Copying falcon_hs_r2_default.bin to userspace folder                                                [OK]
+90f3afe9ade7d798bc692941f0dc2ef034e342ef5faf506fcbe2ba16f73150b5  falcon_hs_r2_default.bin
+
+==> Build release falcon_hs_r2:falcon (base + policy layer)
+Making falcon_hs_r2 with keymap falcon
+
+Generating: .build/obj_falcon_hs_r2_falcon/src/info_deps.d                                          [OK]
+Generating: .build/obj_falcon_hs_r2_falcon/src/default_keyboard.c                                  arm-none-eabi-gcc (Homebrew ARM GCC 8.5.0_2) 8.5.0
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Generating: .build/obj_falcon_hs_r2_falcon/src/info_config.h                                       Generating: .build/obj_falcon_hs_r2_falcon/src/default_keyboard.h                                   [OK]
+ [OK]
+ [OK]
+Compiling: quantum/keymap_introspection.c                                                          Compiling: quantum/quantum.c                                                                       Compiling: quantum/bitwise.c                                                                       Compiling: quantum/led.c                                                                            [OK]
+ [OK]
+Compiling: quantum/action.c                                                                         [OK]
+Compiling: quantum/action_layer.c                                                                   [OK]
+Compiling: quantum/action_tapping.c                                                                Compiling: quantum/action_util.c                                                                   Compiling: quantum/eeconfig.c                                                                       [OK]
+ [OK]
+Compiling: quantum/keyboard.c                                                                       [OK]
+ [OK]
+ [OK]
+Compiling: quantum/keymap_common.c                                                                 Compiling: quantum/keycode_config.c                                                                 [OK]
+Compiling: quantum/sync_timer.c                                                                     [OK]
+Compiling: quantum/logging/debug.c                                                                  [OK]
+ [OK]
+Compiling: quantum/logging/sendchar.c                                                               [OK]
+Compiling: quantum/process_keycode/process_default_layer.c                                          [OK]
+Compiling: quantum/process_keycode/process_oneshot.c                                               Compiling: quantum/process_keycode/process_quantum.c                                                [OK]
+ [OK]
+Compiling: quantum/nvm/eeprom/nvm_eeconfig.c                                                       Compiling: quantum/logging/print.c                                                                  [OK]
+Compiling: quantum/matrix_common.c                                                                  [OK]
+ [OK]
+Compiling: quantum/matrix.c                                                                        Compiling: quantum/debounce/sym_defer_g.c                                                          Compiling: quantum/main.c                                                                           [OK]
+ [OK]
+Compiling: lib/printf/src/printf/printf.c                                                           [OK]
+ [OK]
+Compiling: drivers/eeprom/eeprom_driver.c                                                          Compiling: drivers/eeprom/eeprom_wear_leveling.c                                                   Compiling: quantum/wear_leveling/wear_leveling.c                                                    [OK]
+ [OK]
+Compiling: platforms/chibios/drivers/wear_leveling/wear_leveling_efl.c                              [OK]
+Compiling: quantum/process_keycode/process_underglow.c                                             Compiling: quantum/color.c                                                                          [OK]
+ [OK]
+ [OK]
+Compiling: quantum/rgblight/rgblight.c                                                              [OK]
+Compiling: quantum/rgblight/rgblight_drivers.c                                                     Compiling: quantum/led_tables.c                                                                     [OK]
+Compiling: quantum/raw_hid.c                                                                        [OK]
+Compiling: lib/fnv/qmk_fnv_type_validation.c                                                        [OK]
+Compiling: lib/fnv/hash_32a.c                                                                       [OK]
+ [OK]
+Compiling: lib/fnv/hash_64a.c                                                                       [OK]
+Compiling: drivers/led/ws2812.c                                                                     [OK]
+Compiling: platforms/chibios/drivers/ws2812_bitbang.c                                               [OK]
+Compiling: quantum/bootmagic/bootmagic.c                                                           Compiling: quantum/dynamic_keymap.c                                                                 [OK]
+Compiling: quantum/nvm/eeprom/nvm_dynamic_keymap.c                                                  [OK]
+Compiling: quantum/process_keycode/process_grave_esc.c                                              [OK]
+Compiling: quantum/process_keycode/process_magic.c                                                  [OK]
+Compiling: quantum/mousekey.c                                                                       [OK]
+Compiling: quantum/send_string/send_string.c                                                        [OK]
+Compiling: quantum/process_keycode/process_space_cadet.c                                            [OK]
+Compiling: quantum/process_keycode/process_tri_layer.c                                              [OK]
+Compiling: quantum/tri_layer.c                                                                      [OK]
+ [OK]
+Compiling: quantum/via.c                                                                            [OK]
+Compiling: quantum/nvm/eeprom/nvm_via.c                                                            Compiling: tmk_core/protocol/host.c                                                                Compiling: tmk_core/protocol/report.c                                                               [OK]
+ [OK]
+Compiling: tmk_core/protocol/usb_device_state.c                                                     [OK]
+Compiling: tmk_core/protocol/usb_util.c                                                             [OK]
+ [OK]
+Compiling: platforms/suspend.c                                                                     Compiling: platforms/synchronization_util.c                                                         [OK]
+Compiling: platforms/timer.c                                                                        [OK]
+ [OK]
+Compiling: platforms/chibios/hardware_id.c                                                          [OK]
+Compiling: platforms/chibios/platform.c                                                            Compiling: platforms/chibios/suspend.c                                                              [OK]
+Compiling: platforms/chibios/timer.c                                                                [OK]
+ [OK]
+Assembling: lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.S                          Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.S                           Assembling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.S                          Compiling: platforms/chibios/bootloaders/stm32duino.c                                               [OK]
+Compiling: tmk_core/protocol/chibios/usb_main.c                                                    Compiling: tmk_core/protocol/chibios/chibios.c                                                      [OK]
+ [OK]
+ [OK]
+ [OK]
+Compiling: tmk_core/protocol/usb_descriptor.c                                                      Compiling: tmk_core/protocol/chibios/usb_driver.c                                                   [OK]
+ [OK]
+Compiling: tmk_core/protocol/chibios/usb_endpoints.c                                               Compiling: tmk_core/protocol/chibios/usb_report_handling.c                                          [OK]
+Compiling: tmk_core/protocol/chibios/usb_util.c                                                     [OK]
+ [OK]
+Compiling: lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.c                               Compiling: lib/chibios/os/rt/src/chsys.c                                                            [OK]
+ [OK]
+ [OK]
+Compiling: lib/chibios/os/rt/src/chrfcu.c                                                          Compiling: lib/chibios/os/rt/src/chdebug.c                                                          [OK]
+ [OK]
+Compiling: lib/chibios/os/rt/src/chtrace.c                                                          [OK]
+Compiling: lib/chibios/os/rt/src/chvt.c                                                             [OK]
+Compiling: lib/chibios/os/rt/src/chschd.c                                                          Compiling: lib/chibios/os/rt/src/chinstances.c                                                      [OK]
+Compiling: lib/chibios/os/rt/src/chthreads.c                                                        [OK]
+Compiling: lib/chibios/os/rt/src/chtm.c                                                             [OK]
+Compiling: lib/chibios/os/rt/src/chstats.c                                                          [OK]
+ [OK]
+Compiling: lib/chibios/os/rt/src/chregistry.c                                                       [OK]
+Compiling: lib/chibios/os/rt/src/chsem.c                                                            [OK]
+Compiling: lib/chibios/os/rt/src/chmtx.c                                                           Compiling: lib/chibios/os/rt/src/chcond.c                                                           [OK]
+Compiling: lib/chibios/os/rt/src/chevents.c                                                         [OK]
+ [OK]
+Compiling: lib/chibios/os/rt/src/chmsg.c                                                           Compiling: lib/chibios/os/rt/src/chdynamic.c                                                        [OK]
+ [OK]
+Compiling: lib/chibios/os/common/ports/ARMv7-M/chcore.c                                             [OK]
+Compiling: lib/chibios/os/hal/osal/rt-nil/osal.c                                                   Compiling: lib/chibios/os/oslib/src/chmboxes.c                                                      [OK]
+ [OK]
+Compiling: lib/chibios/os/oslib/src/chmemcore.c                                                     [OK]
+Compiling: lib/chibios/os/oslib/src/chmemheaps.c                                                   Compiling: lib/chibios/os/oslib/src/chmempools.c                                                    [OK]
+ [OK]
+Compiling: lib/chibios/os/oslib/src/chpipes.c                                                       [OK]
+Compiling: lib/chibios/os/oslib/src/chobjcaches.c                                                  Compiling: lib/chibios/os/oslib/src/chdelegates.c                                                   [OK]
+ [OK]
+Compiling: lib/chibios/os/oslib/src/chfactory.c                                                     [OK]
+Compiling: lib/chibios/os/hal/src/hal.c                                                             [OK]
+Compiling: lib/chibios/os/hal/src/hal_safety.c                                                     Compiling: lib/chibios/os/hal/src/hal_st.c                                                          [OK]
+Compiling: lib/chibios/os/hal/src/hal_buffers.c                                                     [OK]
+Compiling: lib/chibios/os/hal/src/hal_queues.c                                                      [OK]
+Compiling: lib/chibios/os/hal/src/hal_mmcsd.c                                                      Compiling: lib/chibios/os/hal/src/hal_adc.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_can.c                                                         [OK]
+ [OK]
+Compiling: lib/chibios/os/hal/src/hal_crypto.c                                                      [OK]
+Compiling: lib/chibios/os/hal/src/hal_dac.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_efl.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_gpt.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_i2c.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_i2s.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_icu.c                                                         [OK]
+Compiling: lib/chibios/os/hal/src/hal_mac.c                                                         [OK]
+ [OK]
+Compiling: lib/chibios/os/hal/src/hal_mmc_spi.c                                                    Compiling: lib/chibios/os/hal/src/hal_pal.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_pwm.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_rtc.c                                                         [OK]
 Compiling: lib/chibios/os/hal/src/hal_sdc.c                                                         [OK]
@@ -366,10 +371,10 @@ Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/stm32_isr.c                 
 Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_lld.c                                       [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_efl_lld.c                                   [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_adc_lld.c                                   [OK]
- [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/CANv1/hal_can_lld.c                                   [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/DACv1/hal_dac_lld.c                                  Compiling: lib/chibios/os/hal/ports/STM32/LLD/DMAv1/stm32_dma.c                                    Compiling: lib/chibios/os/hal/ports/STM32/LLD/GPIOv1/hal_pal_lld.c                                  [OK]
- [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/DACv1/hal_dac_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/DMAv1/stm32_dma.c                                     [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/GPIOv1/hal_pal_lld.c                                  [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/I2Cv1/hal_i2c_lld.c                                   [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/RTCv1/hal_rtc_lld.c                                   [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/SDIOv1/hal_sdc_lld.c                                  [OK]
@@ -381,8 +386,8 @@ Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_icu_lld.c               
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/TIMv1/hal_pwm_lld.c                                   [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_serial_lld.c                              [OK]
 Compiling: lib/chibios/os/hal/ports/STM32/LLD/USARTv1/hal_uart_lld.c                                [OK]
- [OK]
-Compiling: lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.c                                  Compiling: lib/chibios/os/hal/ports/STM32/LLD/xWDGv1/hal_wdg_lld.c                                  [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.c                                   [OK]
+Compiling: lib/chibios/os/hal/ports/STM32/LLD/xWDGv1/hal_wdg_lld.c                                  [OK]
 Compiling: platforms/chibios/boards/STM32_F103_STM32DUINO/board/board.c                            Compiling: lib/chibios/os/hal/lib/streams/chprintf.c                                                [OK]
  [OK]
 Compiling: lib/chibios/os/hal/lib/streams/chscanf.c                                                 [OK]
@@ -392,47 +397,51 @@ Compiling: lib/chibios/os/hal/lib/streams/bufstreams.c                          
 Compiling: lib/chibios/os/various/newlib_bindings/syscalls.c                                        [OK]
 Compiling: platforms/chibios/syscall-fallbacks.c                                                    [OK]
 Compiling: platforms/chibios/wait.c                                                                 [OK]
+Compiling: platforms/chibios/synchronization_util.c                                                 [OK]
+Compiling: platforms/chibios/interrupt_handlers.c                                                   [OK]
  [OK]
-Compiling: platforms/chibios/synchronization_util.c                                                Compiling: platforms/chibios/interrupt_handlers.c                                                   [OK]
  [OK]
- [OK]
-Compiling: .build/obj_falcon_hs_r2_hhkb_via/src/default_keyboard.c                                  [OK]
-Linking: .build/falcon_hs_r2_hhkb_via.elf                                                           [OK]
-Creating binary load file for flashing: .build/falcon_hs_r2_hhkb_via.bin                           Creating load file for flashing: .build/falcon_hs_r2_hhkb_via.hex                                   [OK]
+Compiling: .build/obj_falcon_hs_r2_falcon/src/default_keyboard.c                                    [OK]
+Linking: .build/falcon_hs_r2_falcon.elf                                                             [OK]
+Creating binary load file for flashing: .build/falcon_hs_r2_falcon.bin                             Creating load file for flashing: .build/falcon_hs_r2_falcon.hex                                     [OK]
  [OK]
 
 Size after:
    text	   data	    bss	    dec	    hex	filename
-      0	  42082	      0	  42082	   a462	falcon_hs_r2_hhkb_via.bin
+      0	  42318	      0	  42318	   a54e	falcon_hs_r2_falcon.bin
 
-Copying falcon_hs_r2_hhkb_via.bin to qmk_firmware folder                                            [OK]
-c811d03f6b6bb589cc891bcd4e61eadfe3b29eb28a01c81f9b0b1d8e10e28b45  falcon_hs_r2_hhkb_via.bin
+Copying falcon_hs_r2_falcon.bin to qmk_firmware folder                                              [OK]
+Copying falcon_hs_r2_falcon.bin to userspace folder                                                 [OK]
+c8bf1de67839add07f5f7f67a3cbbd88f2c6e19e2bf3a550de9ca1cd49422e39  falcon_hs_r2_falcon.bin
 
-==> Reproducibility: rebuild from clean and compare
-first:  c811d03f6b6bb589cc891bcd4e61eadfe3b29eb28a01c81f9b0b1d8e10e28b45
-second: c811d03f6b6bb589cc891bcd4e61eadfe3b29eb28a01c81f9b0b1d8e10e28b45
+==> Reproducibility: rebuild release from clean and compare
+first:  c8bf1de67839add07f5f7f67a3cbbd88f2c6e19e2bf3a550de9ca1cd49422e39
+second: c8bf1de67839add07f5f7f67a3cbbd88f2c6e19e2bf3a550de9ca1cd49422e39
 reproducible: yes
 
-==> Verify firmware image
-# Falcon HS R2 firmware verification: falcon_hs_r2_hhkb_via.bin
+==> Verify base image (normal firmware: NKRO present, no VIA)
+NOTE: offline checks only. Compilation and these checks do not establish hardware compatibility.
+
+==> Verify release image (policy: NKRO absent, VIA present)
+# Falcon HS R2 firmware verification: falcon_hs_r2_falcon.bin (profile: release)
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0x5BFB17D5 valid
-    file 42100 bytes, payload 42084 bytes
+  [PASS] DFU suffix CRC32 0x43EF6DC2 valid
+    file 42336 bytes, payload 42320 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800BF78 inside application flash
-  [PASS] LOAD lma 0x0800BF78-0x0800C464 inside application flash
+  [PASS] LOAD lma 0x08002000-0x0800C064 inside application flash
+  [PASS] LOAD lma 0x0800C064-0x0800C550 inside application flash
   [PASS] RAM segment 0x20000C00-0x200010EC inside 20 KB SRAM
   [PASS] RAM segment 0x200010F0-0x20001B80 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800C464 (< 0x0800F800)
+  [PASS] image ends at 0x0800C550 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 42084 / 55296 bytes (76.1%), 13212 bytes free
+    application flash used 42320 / 55296 bytes (76.5%), 12976 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -445,10 +454,13 @@ reproducible: yes
 
 ## 4. USB / HID
   [PASS] device descriptor USB 2.0 / EP0 64 / 9DD1:9D89 / bcdDevice 0x0001 (same as vendor)
-  [PASS] raw HID usage page 0xFF60 / usage 0x61 present (VIA)
-  [PASS] no keyboard bitmap (NKRO) report in any HID descriptor
-  [PASS] only NKRO symbol is the empty send_nkro stub (2 bytes, bx lr): ['send_nkro']
-  [PASS] -DNKRO_ENABLE absent from compiler flags
+  [PASS] raw HID usage page 0xFF60 / usage 0x61 (VIA) present
+  [PASS] compiler flags read from falcon_hs_r2_falcon.cflags.txt
+  [PASS] POLICY-NKRO: no keyboard bitmap (NKRO) report in any HID descriptor
+  [PASS] POLICY-NKRO: only NKRO symbol is the empty send_nkro stub (2 bytes, bx lr): ['send_nkro']
+  [PASS] POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags
+  [PASS] keymap comes from the userspace policy layer
+  [PASS] POLICY-FLASHREAD: read-only via_command_kb handler linked
   [PASS] -DVIA_ENABLE present
   [PASS] -DRAW_ENABLE present
   [PASS] -DDYNAMIC_KEYMAP_ENABLE present
@@ -473,10 +485,13 @@ reproducible: yes
   [PASS] wear-leveling 2048/1024 at 0x0800F800-0x0800FFFF matches vendor readback
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
+  [PASS] LAYOUT_60_hhkb is the first (default) layout
+  [PASS] falcon_hs_r2.json: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb
+  [PASS] falcon_hs_r2.json: same matrix positions as the vendor VIA JSON
   [PASS] WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)
 
 RESULT: PASS (0 failures)
 NOTE: offline checks only. Compilation and these checks do not establish hardware compatibility.
 
-==> Done -- artifact NOT flashed
-/Volumes/Develop/falcon-keyboard/artifacts/falcon_hs_r2_hhkb_via.bin
+==> Done -- artifacts NOT flashed
+release: /Volumes/Develop/falcon-keyboard/artifacts/falcon_hs_r2_falcon.bin

@@ -13,8 +13,14 @@ approved (see `preflash-checklist.md`), or to recover from a failed test.
 | `originals/manufacturer_jsonfile.json` | vendor VIA definition | load into VIA after restoring |
 | `originals/SHA256SUMS` | hashes of the three files | `cd originals && shasum -a 256 -c SHA256SUMS` |
 
-The originals are read-only (`chmod 444`) and committed to git. Not preserved:
-the bootloader (`0x08000000–0x08001FFF`) and the option bytes (risk R1).
+The originals are read-only (`chmod 444`) and committed to git. Not preserved
+yet: the bootloader (`0x08000000–0x08001FFF`) and the option bytes (risk R1,
+`docs/bootloader.md`). A fresh read-only upload on 2026-10-26 was byte-identical
+to `falcon_flash_backup.bin` (`artifacts/device_inspection_2026-10-26.txt`).
+
+**Always use DFU alt 2.** A download to alt 1 erases `0x08002000`. After any
+download the keyboard probably stays in DFU (upstream bootloader flag bug, R7):
+unplug and replug it.
 
 ## 1. Get into the bootloader
 
@@ -23,9 +29,11 @@ Use whichever applies, then check with `dfu-util -l`. Expect `1eaf:0003` with an
 
 1. **Our firmware**: unplug, hold **Esc** (matrix 0,0), plug in. This is
    Bootmagic: it clears EEPROM and calls `bootloader_jump()`.
-2. **Vendor firmware**: hold Fn and press Tab (`QK_BOOT` in the vendor default
-   keymap, unless VIA changed it). Bootmagic may also work, but the vendor's
-   setting is unknown.
+2. **Vendor firmware**: Bootmagic (hold Esc while plugging in; the vendor has
+   BOOTMAGIC compiled in and the EEPROM backup shows it was used), or Fn+Tab
+   (`QK_BOOT` in the vendor's compiled keymap), or QMK Command
+   LShift+RShift+B ("Jump to Bootloader" is compiled in; the key combo is QMK's
+   default and unverified).
 3. **Power-on window**: the Maple bootloader is expected to enumerate briefly
    after power-on before starting the application (unverified, risk R7). `dfu-util`
    with `-w` (wait for device) can catch it.
@@ -83,5 +91,6 @@ so PA13 (SWDIO) and PA14 (SWCLK) work with an ST-Link or a CMSIS-DAP probe. You
 would need to identify the SWD pads on the PCB, which has not been done. If
 read-out protection is off, read the whole 64 KB first. If the bootloader is
 gone, a STM32duino ("generic_boot20") bootloader binary would have to be found
-and validated; it has not been identified (risk R1). Treat the part as a GD32:
+and validated. Candidates are in `bootloader/STM32duino-bootloader/bootloader_only_binaries/`;
+the installed variant is not identified (risk R1). Treat the part as a GD32:
 use a probe/OpenOCD target that supports GD32F1 flash programming.

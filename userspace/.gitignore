@@ -1,0 +1,4 @@
+# QMK copies built images into the userspace root.
+/*.bin
+/*.hex
+/*.uf2

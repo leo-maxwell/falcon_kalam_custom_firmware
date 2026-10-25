@@ -63,6 +63,9 @@
   [PASS] 0x0800FC00-0x0800FFFF (WL write log) holds data
     write log non-FF bytes at offsets [8, 9, 10, 11]: ff ff ff ff ff ff ff ff bf 00 be 00 ff ff ff ff
     => F_SIZE reads 64 KB on this unit; EEPROM = 0x0800F800-0x0800FFFF (2 KB backing, 1 KB logical)
+  [PASS] write log = fresh erase + OPTIMIZED_64 writes addr0=0xFF, addr1=0xFF => EECONFIG magic 0xFFFF
+    => exactly nvm_eeconfig_disable(): eeprom_driver_format() then magic=0xFFFF, i.e. Bootmagic/Clear-EEPROM ran;
+       the backup holds NO user configuration (any earlier VIA keymap was erased before the readback)
 
 ## 8. RGB (WS2812 bit-bang, rgblight)
   [PASS] ws2812_init: palSetGroupMode(GPIOA, mask 0x0002, 6=OUTPUT_PUSHPULL) => data pin PA1
@@ -70,6 +73,16 @@
   [PASS] reset latch loop 1344 x 15 cycles = 20160 cycles = 280 us @ 72 MHz (WS2812_TRST_US default)
   [PASS] rgblight_set -> ws2812_setleds(led, 4) => RGBLIGHT_LED_COUNT 4
   [PASS] rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB
+  [PASS] rgblight mode_base_table @0x0800C2B6 has all 43 modes: static, breathing x4, rainbow mood x3, swirl x6, snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled
+
+## 8b. Vendor build identity (QMK Command/console strings)
+  [PASS] @0x0800B746 "BUILD:  (Mar 14 2025)"
+  [PASS] @0x0800B75C "CHIBIOS: "be44b3", CONTRIB: "develop_2021_q3-455-g77cb0a""
+  [PASS] @0x0800B796 "OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND NKRO LTO BOOTLOADER_SIZE"
+  [PASS] @0x0800B7E4 "GCC: 10.1.0"
+  [PASS] @0x0800B70E "VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001"
+  [PASS] Command feature present (magic key combo; default LShift+RShift) incl. "NKRO Toggle" and "Jump to Bootloader"
+    => vendor = QMK (no version string; keycodes >= 0.19) on ChibiOS be44b3, built 2025-03-14 with GCC 10.1.0, NKRO compiled in
 
 ## 9. Vendor default keymap (2 layers @0x0800C18A)
     layer 0:

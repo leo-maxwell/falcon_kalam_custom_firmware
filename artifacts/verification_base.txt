@@ -1,0 +1,60 @@
+# Falcon HS R2 firmware verification: falcon_hs_r2_default.bin (profile: base)
+
+## 1. Binary container
+  [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
+  [PASS] DFU suffix CRC32 0x965B8E43 valid
+    file 38168 bytes, payload 38152 bytes
+  [PASS] payload is byte-identical to objcopy -O binary of the ELF
+
+## 2. Flash and RAM placement
+  [PASS] linker script app start 0x08002000
+  [PASS] linker script app limit 0x0800F800 == EEPROM start
+  [PASS] LOAD lma 0x08002000-0x0800B158 inside application flash
+  [PASS] LOAD lma 0x0800B158-0x0800B508 inside application flash
+  [PASS] RAM segment 0x20000C00-0x20001970 inside 20 KB SRAM
+  [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
+  [PASS] image ends at 0x0800B508 (< 0x0800F800)
+  [PASS] binary length agrees with ELF load segments
+    application flash used 38152 / 55296 bytes (69.0%), 17144 bytes free
+    bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
+    static RAM (data+bss+stacks+heap reservation) up to 0x20005000
+
+## 3. Vector table
+  [PASS] initial SP 0x20000400 in SRAM
+  [PASS] initial SP equals __main_stack_end__
+  [PASS] reset vector 0x08002239 is Thumb code in the image
+  [PASS] reset vector is Reset_Handler
+  [PASS] all populated entries of the 76-entry vector table point into the image
+
+## 4. USB / HID
+  [PASS] device descriptor USB 2.0 / EP0 64 / 9DD1:9D89 / bcdDevice 0x0001 (same as vendor)
+  [PASS] raw HID usage page 0xFF60 / usage 0x61 (VIA) absent
+  [PASS] compiler flags read from falcon_hs_r2_default.cflags.txt
+  [PASS] base is a normal QMK build: NKRO bitmap report present
+  [PASS] base flags: NKRO_ENABLE on, VIA_ENABLE off
+  [PASS] -DEEPROM_WEAR_LEVELING present
+  [PASS] -DRGBLIGHT_ENABLE present
+  [PASS] -DRGBLIGHT_WS2812 present
+  [PASS] -DBOOTLOADER_STM32DUINO present
+  [PASS] -DQMK_BOARD_STM32_F103_STM32DUINO present
+
+## 5. Configuration matches the manufacturer firmware
+  [PASS] keyboard.json rows == vendor row_pins B3 B4 B5 B6 A2
+  [PASS] keyboard.json cols == vendor col_pins A9 A3 A4 A5 A6 A7 B0 B1 B10 B11 B12 B13 B14 B15 A8
+  [PASS] compiled image contains row_pins table identical to vendor
+  [PASS] compiled image contains col_pins table identical to vendor
+  [PASS] diode_direction COL2ROW
+  [PASS] ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)
+  [PASS] no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)
+  [PASS] RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor
+  [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr 0x1D0000) present
+  [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (STM32duino board)
+  [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present
+  [PASS] wear-leveling 2048/1024 at 0x0800F800-0x0800FFFF matches vendor readback
+  [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
+  [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
+  [PASS] LAYOUT_60_hhkb is the first (default) layout
+  [PASS] WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)
+
+RESULT: PASS (0 failures)
+NOTE: offline checks only. Compilation and these checks do not establish hardware compatibility.

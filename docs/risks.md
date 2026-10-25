@@ -1,29 +1,31 @@
 # Unresolved risks and unsupported features
 
 Offline verification passed (`artifacts/verification.txt`,
-`artifacts/negative_tests.log`). None of that proves the firmware works on the
-keyboard. The items below stay open until a hardware test.
+`artifacts/verification_base.txt`, `artifacts/negative_tests.log`). None of
+that proves the firmware works on the keyboard. **HR** marks items that need
+a human decision or review before the first flash.
 
 ## Risks
 
-| # | Risk | Likelihood / impact | Evidence and mitigation |
+| # | Risk | Status / impact | Evidence and mitigation |
 |---|---|---|---|
-| R1 | **The bootloader is not backed up.** The readback starts at `0x08002000`, so `0x08000000–0x08001FFF` (Maple bootloader) and the option bytes were never saved. | Low / **high** | Neither firmware nor DFU alt 2 writes below `0x08002000`, and the linker script places nothing there. If the bootloader is lost anyway, the only way back is SWD (PA13/PA14 stay enabled) with an ST-Link and a matching STM32duino bootloader binary, which has not been identified. Recommended before the first flash: a full-chip SWD backup, if the hardware allows it (read-out protection state is unknown). |
-| R2 | **A newer QMK/ChibiOS revision on the GD32.** The vendor's HAL revision is proven on this chip; ours (QMK 0.34.7, pinned ChibiOS) is not. GD32F103 is not fully STM32F103-compatible: flash timing, USB peripheral corner cases, and different peripheral reset/start-up timing. | Medium / medium | Same board files, clock tree, flash descriptor, pin tables and bootloader flags as the vendor image (checked byte-level by the verifier). The vendor image restores normal operation if ours fails to enumerate (see recovery.md). |
-| R3 | **HSE frequency is inferred (8 MHz), not measured.** | Low / high | It follows from PLL ×9 plus two independent 72 MHz timing constants, and from the vendor's USB working at USBPRE /1.5. If wrong, USB would not enumerate on the vendor firmware either. |
-| R4 | **The first boot resets persistent configuration.** VIA's EEPROM magic is derived from the build date, so our firmware rejects the vendor data and reinitialises EEPROM (keymap, RGB, eeconfig). | Certain / low | The vendor write log holds only 4 bytes; the full original state is in `originals/falcon_flash_backup.bin`. `SKIP_VERSION=yes` fixes the magic for our builds, so if a later build changes the EEPROM layout, clear EEPROM with Bootmagic. |
-| R5 | **Physical layout positions not confirmed.** The vendor keymap uses `4,0/4,13/4,14`, which are absent from the VIA JSON. Which split variants (backspace, left shift, space) this unit has is unknown. | Medium / low | LAYOUT_all covers exactly the 63 VIA positions. The first hardware test must exercise every key with VIA's key tester (preflash checklist §C). |
-| R6 | **WS2812 bit-bang timing.** It is cycle-counted NOP timing. GD32 flash execution speed and a different compiler/HAL can shift it. | Medium / low | Same driver, defaults and 72 MHz clock as the vendor. Failure shows up as wrong colours or flicker, not damage. LED placement, the vendor effect list and any brightness cap are unknown; all rgblight effects except RGB test are enabled at QMK default brightness (4 LEDs, worst case ≈ 240 mA). |
-| R7 | **Bootloader entry behaviour is assumed.** That the Maple bootloader honours `BKP_DR10 = 0x424C/0x424D` and offers a DFU window at power-on follows QMK's stm32duino conventions; neither has been observed on this unit. | Medium / medium | Bootmagic (hold Esc while plugging in) calls `bootloader_jump()`, the same path the vendor's `QK_BOOT` (Fn+Tab in its keymap) used. Test bootloader re-entry immediately after the first flash (checklist §C1). |
-| R8 | **macOS Caps Lock/input-source fix is untested.** Disabling NKRO is the requested fix; it has not been confirmed on the user's Mac. | — | Checklist §C4. |
-| R9 | **GCC 8.5 toolchain.** It is the Homebrew keg QMK's formula installs. It is old, but it builds cleanly. | Low / low | Toolchain versions are recorded in `artifacts/build.log`; the build is reproducible only with this toolchain. |
+| R1 **HR** | **The bootloader is not backed up yet.** DFU cannot read `0x08000000–0x08001FFF` or the option bytes. | Open / high if lost | Identified as the MIT-licensed STM32duino-bootloader (`docs/bootloader.md`); source pinned as a submodule. Neither firmware nor DFU alt 2 writes below `0x08002000`, and our linker script places nothing there. Backup route A: our firmware's read-only `FALCON_READ` command, right after the first flash. Route B: SWD before flashing (pads, probe, RDP state unknown). **Decide: accept route A (flash before the backup), or do SWD first.** |
+| R2 | **A newer QMK on the GD32.** This is intended (POLICY-QMK-LATEST). The vendor ran ChibiOS `be44b3` (2025-03-14 build); ours is QMK 0.34.7's pinned ChibiOS. GD32F103 is not fully STM32F103-compatible. | Accepted by policy / medium | Same board files, clock tree, flash descriptor, pin tables and bootloader flags as the vendor (byte-level checks). The vendor image is the fallback (`recovery.md`). |
+| R3 | **HSE frequency is inferred (8 MHz).** | Low / high | Follows from PLL ×9 plus two independent 72 MHz timing constants, and from USB needing 48 MHz at ÷1.5. |
+| R4 | **The first boot resets persistent configuration.** | **Accepted by the user** | Nothing is lost anyway: the backup's EEPROM is the result of a Bootmagic erase (decoded write log, `vendor_analysis.txt` §7). `SKIP_VERSION=yes` fixes the VIA magic across our builds; clear EEPROM with Bootmagic if a later build changes the EEPROM layout. |
+| R5 **HR** | **Physical layout is not settled: OPEN ISSUE L-1** (`docs/layout.md`). | **Open until the user settles it** | `LAYOUT_all` covers the 63 VIA positions. A read-only probe on the vendor firmware (`tools/falcon_probe.py matrix`) is ready and needs the keyboard out of DFU plus the user pressing every key. |
+| R6 | **WS2812 bit-bang timing.** It is cycle-counted NOP timing. | Medium / low | Same driver, defaults, 72 MHz clock, PA1, 4 LEDs, GRB, all effects as the vendor (cross-checked with the second agent, `docs/rgb-crosscheck.md`). A failure shows up as wrong colours or flicker. |
+| R7 **HR** | **Bootloader flag handling (source-confirmed upstream bug).** `bool flagSet` makes `0x424D` behave like `0x424C`. | Expected / low | If the device runs upstream code: after **every flash** it stays in DFU until replugged, and `QK_REBOOT` lands in DFU. **Never download to alt 1**: that erases `0x08002000`. The variant actually installed is unknown until it is dumped. |
+| R8 | **The macOS Caps Lock/input-source fix is untested.** | Open | The release contains no NKRO code; the vendor had NKRO + Command "NKRO Toggle". Checklist §C4. |
+| R9 | **GCC 8.5 toolchain** (the vendor used 10.1). | Low | Versions are logged; the build is reproducible with this toolchain. |
+| R10 **HR** | **New custom firmware code: POLICY-FLASHREAD.** `via_command_kb` in the policy keymap reads memory for the host. | Needs code review | Only reads; whitelisted to the bootloader, option bytes and F_SIZE/UID; length ≤ 24; overflow-checked. Any host program can read those ranges, including the chip UID (a device identifier). Remove after the backup if not wanted. |
+| R11 | **Wrong image flashed.** `falcon_hs_r2_default.bin` (base, with NKRO) sits next to the release. | Procedural | Only `falcon_hs_r2_falcon.bin` with the approved SHA-256 may be flashed (checklist §0). |
 
-## Unsupported or intentionally omitted
+## Unsupported or intentionally omitted (release)
 
-* **NKRO**: permanently disabled. The build fails if `NKRO_ENABLE` is set.
-* **Matrix positions `4,0`, `4,13`, `4,14`** are not in any layout: there is no VIA or physical evidence for them.
-* **Console/debug output, Command**: off, as in QMK defaults.
-* **The vendor default keymap is not reproduced.** It used Caps = `LT(1, Caps)`, GESC and Fn+Tab = `QK_BOOT`. This firmware ships the native HHKB map; the vendor map is documented in `artifacts/vendor_analysis.txt` §9 and can be recreated in VIA.
-* **`QK_BOOT` is not on any default layer.** It is reachable with Bootmagic or by assigning it in VIA.
+* **NKRO**: off by policy (POLICY-NKRO). It is still on in the base, as in a normal QMK build.
+* **Console and Command**: the vendor had both (Command: LShift+RShift+key, including "NKRO Toggle" and "Jump to Bootloader"). They are omitted, as in normal QMK keyboards.
+* **Matrix positions `4,0`, `4,13`, `4,14`** are not in any layout until L-1 is settled.
+* **The vendor default keymap is not reproduced** (Caps = `LT(1,Caps)`, GESC, Fn+Tab = `QK_BOOT`). The release is HHKB as required. The vendor map is in `vendor_analysis.txt` §9.
+* **`QK_BOOT` is not on any default layer.** Use Bootmagic (Esc held while plugging in) or assign it in VIA.
 * **Fn+Esc = `KC_PWR`**, as on a real HHKB. On macOS it opens the shut-down dialog.
-* **The keymap is named `hhkb_via`, not `via`**, because QMK's lint reserves the name `via`. This has no functional effect.

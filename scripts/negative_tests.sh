@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Prove the two safety nets actually fire (run after scripts/build.sh):
-#   1. NKRO cannot be re-enabled (config.h #error).
+#   1. NKRO cannot be re-enabled in the release keymap (policy-layer config.h #error).
 #   2. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F800 in the keyboard-local linker script).
 # Uses throw-away keymaps inside the staged copy; restores it afterwards.
@@ -12,7 +12,7 @@ KB=falcon_hs_r2
 STAGED="$QMK/keyboards/$KB"
 LOG="$ROOT/artifacts/negative_tests.log"
 export PATH="${FALCON_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}:${FALCON_BINUTILS_BIN:-/opt/homebrew/opt/arm-none-eabi-binutils/bin}:$PATH"
-export LC_ALL=C TZ=UTC QMK_HOME="$QMK" SKIP_VERSION=yes
+export LC_ALL=C TZ=UTC QMK_HOME="$QMK" SKIP_VERSION=yes QMK_USERSPACE="$ROOT/userspace"
 
 [[ -d "$STAGED" ]] || { echo "run scripts/build.sh first" >&2; exit 1; }
 trap 'rsync -a --delete "$ROOT/keyboards/$KB/" "$STAGED/"' EXIT
@@ -31,15 +31,14 @@ expect_failure() {
     fi
 }
 
-# 1. NKRO forced on from the command line.
-expect_failure hhkb_via "NKRO must stay disabled" NKRO_ENABLE=yes
+# 1. POLICY-NKRO: NKRO forced on from the command line for the release keymap.
+expect_failure falcon "POLICY-NKRO: NKRO must stay disabled" NKRO_ENABLE=yes
 
-# 2. 16 KB of extra read-only data pushes the ~42 KB image past 0x0800F800.
+# 2. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F800.
 mkdir -p "$STAGED/keymaps/neg_oversize"
-cp "$STAGED/keymaps/hhkb_via/keymap.c" "$STAGED/keymaps/neg_oversize/keymap.c"
-cp "$STAGED/keymaps/hhkb_via/rules.mk" "$STAGED/keymaps/neg_oversize/rules.mk"
+cp "$STAGED/keymaps/default/keymap.c" "$STAGED/keymaps/neg_oversize/keymap.c"
 cat >> "$STAGED/keymaps/neg_oversize/keymap.c" <<'EOF'
-const uint8_t falcon_ballast[16 * 1024] = {1};
+const uint8_t falcon_ballast[20 * 1024] = {1};
 // Referenced through a volatile index so --gc-sections cannot drop it.
 void keyboard_post_init_user(void) {
     static volatile uint32_t idx;

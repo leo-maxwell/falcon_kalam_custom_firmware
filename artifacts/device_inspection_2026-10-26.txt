@@ -1,0 +1,16 @@
+# Read-only device inspection, 2026-10-25T14:23Z
+# Only enumeration and DFU UPLOAD (device->host) were performed. Nothing was written or reset.
+
+$ dfu-util -l
+Found DFU: [1eaf:0003] ver=0201, devnum=11, cfg=1, intf=0, path="0-1.4.1.3", alt=2, name="STM32duino bootloader v1.0  Upload to Flash 0x8002000", serial="LLM 003"
+Found DFU: [1eaf:0003] ver=0201, devnum=11, cfg=1, intf=0, path="0-1.4.1.3", alt=1, name="STM32duino bootloader v1.0  Upload to Flash 0x8005000", serial="LLM 003"
+Found DFU: [1eaf:0003] ver=0201, devnum=11, cfg=1, intf=0, path="0-1.4.1.3", alt=0, name="STM32duino bootloader v1.0  ERROR. Upload to RAM not supported.", serial="LLM 003"
+
+$ ioreg (Maple 003)
+"idProduct" = 3
+"bcdDevice" = 513
+
+$ dfu-util -d 1eaf:0003 -a 2 -U build/readback_2026-10-26.bin -Z 57344
+transfer size 1024; 57344 bytes received; trailing LIBUSB_ERROR_PIPE = bootloader ends upload at 0x08010000
+sha256 4abf550ae7c093a28060ca7402fa3789366845ec8e72e65cb7e682a35e45d9f2
+=> byte-identical to originals/falcon_flash_backup.bin (device unchanged since backup)

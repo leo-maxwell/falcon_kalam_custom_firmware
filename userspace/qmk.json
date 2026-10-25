@@ -1,0 +1,6 @@
+{
+    "userspace_version": "1.1",
+    "build_targets": [
+        ["falcon_hs_r2", "falcon"]
+    ]
+}

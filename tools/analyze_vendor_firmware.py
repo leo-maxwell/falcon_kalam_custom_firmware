@@ -77,6 +77,9 @@ class Image:
         off = addr - APP_BASE
         return self.data[off:off + n]
 
+    def u8(self, addr):
+        return self.bytes(addr, 1)[0]
+
     def u16(self, addr):
         return struct.unpack('<H', self.bytes(addr, 2))[0]
 
@@ -233,6 +236,19 @@ def analyse(c):
     used = [i for i, b in enumerate(wl1) if b != 0xFF]
     c.info('write log non-FF bytes at offsets %s: %s' % (used, wl1[:16].hex(' ')))
     c.info('=> F_SIZE reads 64 KB on this unit; EEPROM = 0x0800F800-0x0800FFFF (2 KB backing, 1 KB logical)')
+    # Decode the write log (QMK quantum/wear_leveling): flash stores ~value
+    # (FLASH_ATTR_ERASED_IS_ONE), entries are 16-bit; type = top 2 bits of byte 0.
+    entries = []
+    for off in range(8, 1024, 2):
+        raw = struct.unpack_from('<H', wl1, off)[0]
+        if raw == 0xFFFF:
+            continue
+        b0, b1 = (~raw) & 0xFF, ((~raw) >> 8) & 0xFF
+        entries.append((b0 >> 6, b0 & 0x3F, b1))
+    c.check(entries == [(1, 0, 0xFF), (1, 1, 0xFF)] and wl1[:8] == b'\xff' * 8,
+            'write log = fresh erase + OPTIMIZED_64 writes addr0=0xFF, addr1=0xFF => EECONFIG magic 0xFFFF')
+    c.info('=> exactly nvm_eeconfig_disable(): eeprom_driver_format() then magic=0xFFFF, i.e. Bootmagic/Clear-EEPROM ran;')
+    c.info('   the backup holds NO user configuration (any earlier VIA keymap was erased before the readback)')
 
     # ------------------------------------------------------------------
     c.section('8. RGB (WS2812 bit-bang, rgblight)')
@@ -244,6 +260,22 @@ def analyse(c):
     c.check(img.thumb(0x08004776, '2104') and img.thumb(0x08004768, '2b04'), 'rgblight_set -> ws2812_setleds(led, 4) => RGBLIGHT_LED_COUNT 4')
     c.check(img.thumb(0x080049F6, '7058 7019 709a'),
             'rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB')
+
+    modes = list(img.bytes(0x0800C2B6, 43))
+    qmk_all = [0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6
+    c.check(modes == qmk_all and img.u8(0x0800C2B6 + 43) == 0,
+            'rgblight mode_base_table @0x0800C2B6 has all 43 modes: static, breathing x4, rainbow mood x3, swirl x6, '
+            'snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled')
+
+    # ------------------------------------------------------------------
+    c.section('8b. Vendor build identity (QMK Command/console strings)')
+    for addr, text in ((0x0800B746, b'BUILD:  (Mar 14 2025)'), (0x0800B75C, b'CHIBIOS: "be44b3", CONTRIB: "develop_2021_q3-455-g77cb0a"'),
+                       (0x0800B796, b'OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND NKRO LTO BOOTLOADER_SIZE'),
+                       (0x0800B7E4, b'GCC: 10.1.0'), (0x0800B70E, b'VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001')):
+        c.check(img.bytes(addr, len(text)) == text, '@0x%08X "%s"' % (addr, text.decode()))
+    c.check(bool(img.find(b'NKRO Toggle')) and bool(img.find(b'Jump to Bootloader')),
+            'Command feature present (magic key combo; default LShift+RShift) incl. "NKRO Toggle" and "Jump to Bootloader"')
+    c.info('=> vendor = QMK (no version string; keycodes >= 0.19) on ChibiOS be44b3, built 2025-03-14 with GCC 10.1.0, NKRO compiled in')
 
     # ------------------------------------------------------------------
     c.section('9. Vendor default keymap (2 layers @0x0800C18A)')

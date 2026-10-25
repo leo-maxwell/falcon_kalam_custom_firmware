@@ -9,10 +9,12 @@ bootloader.
 * Hardware evidence and open questions: see `docs/hardware.md` in the
   parent project.
 
-Make example for this keyboard (after staging it into `qmk_firmware/keyboards`,
-which `scripts/build.sh` does):
+This is the normal (base) keyboard definition; its `default` keymap is HHKB.
+The project's release firmware adds a policy layer from `userspace/`
+(`falcon_hs_r2:falcon`); see `docs/architecture.md`. Make example (after
+`scripts/build.sh` has staged this folder into `qmk_firmware/keyboards`):
 
-    make falcon_hs_r2:hhkb_via SKIP_VERSION=yes
+    make falcon_hs_r2:default
 
 **Do not flash without completing `docs/preflash-checklist.md`.**
 

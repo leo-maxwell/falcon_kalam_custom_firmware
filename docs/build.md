@@ -44,31 +44,23 @@ scripts/negative_tests.sh
 1. Records the tool versions.
 2. Checks `originals/SHA256SUMS`.
 3. Re-runs `tools/analyze_vendor_firmware.py` and writes `artifacts/vendor_analysis.txt`.
-4. Checks that the QMK commit and its submodules match the pins and that the tree is clean.
-5. Stages the keyboard and runs `qmk lint` for both keymaps.
-6. Builds `falcon_hs_r2:default` as a compile check and `falcon_hs_r2:hhkb_via` as the release, each from clean, with `SKIP_VERSION=yes` (fixed version and date strings) and `LC_ALL=C TZ=UTC`.
-7. Copies the `.bin` (with DFU suffix), `.elf`, `.map`, compiler flags and the generated `info_config.h` into `artifacts/`.
-8. With `--twice`, rebuilds from clean and requires an identical SHA-256.
-9. Runs `scripts/verify_firmware.py` and writes `artifacts/verification.txt`.
+4. Checks the QMK pin, its submodules and a clean tree, and enforces **POLICY-QMK-LATEST** offline (`scripts/qmk_policy.sh --offline`).
+5. Stages the base keyboard and runs `qmk lint` (upstream rules) on it.
+6. Builds, each from clean, with `SKIP_VERSION=yes` and `LC_ALL=C TZ=UTC`:
+   - the **base** `falcon_hs_r2:default`: the normal firmware, reference only, with NKRO;
+   - the **release** `falcon_hs_r2:falcon`: base plus the userspace policy layer (`QMK_USERSPACE=userspace/`). The build fails if this keymap is not taken from `userspace/`.
+7. Copies `.bin` (with DFU suffix), `.elf`, `.map`, compiler flags and generated `info_config.h` for both into `artifacts/`.
+8. With `--twice`, rebuilds the release from clean and requires an identical SHA-256.
+9. Verifies the base (`--profile base`: NKRO present, no VIA) and the release (`--profile release`: NKRO absent, VIA present, HHKB as VIA's default view, keymap from userspace).
 
 ## Results of this revision
 
-| | |
-|---|---|
-| Release image | `artifacts/falcon_hs_r2_hhkb_via.bin` |
-| SHA-256 | `c811d03f6b6bb589cc891bcd4e61eadfe3b29eb28a01c81f9b0b1d8e10e28b45` |
-| Payload | 42,084 bytes at `0x08002000–0x0800C463` (76.1% of 55,296), plus a 16-byte DFU suffix |
-| Free application flash | 13,212 bytes |
-| Reproducibility | identical hash across independent clean builds |
-| Lint | `qmk lint` passed for `default` and `hhkb_via` |
-| Verification | `artifacts/verification.txt`: PASS |
-| Negative tests | `artifacts/negative_tests.log`: PASS |
-| Default keymap (compile check) | 37,502 bytes |
+| | Release `falcon_hs_r2_falcon.bin` | Base `falcon_hs_r2_default.bin` |
+|---|---|---|
+| SHA-256 | see `artifacts/falcon_hs_r2_falcon.bin.sha256` | see `artifacts/falcon_hs_r2_default.bin.sha256` |
+| Payload | 42,320 B (76.5% of 55,296), 12,976 B free | 38,152 B |
+| NKRO / VIA | absent / present | present / absent |
+| Flash? | the only image that may be flashed after approval | **never**: reference only |
 
-## Keymaps
-
-* `default`: native HHKB US ANSI on `LAYOUT_60_hhkb`, 2 layers, no VIA.
-* `hhkb_via` (**release**): the same base and Fn layers on `LAYOUT_all`, so
-  the split backspace, left shift and spacebar variants all have defaults, plus
-  2 transparent layers for VIA (4 total). Use with `via/falcon_hs_r2.json`
-  (the vendor JSON with only the name changed) or with the original vendor JSON.
+Reproducibility: identical hash across independent clean builds. Lint, both
+verifications and the negative tests pass (see `artifacts/`).

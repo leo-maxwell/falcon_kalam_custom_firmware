@@ -44,14 +44,17 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--bin', type=Path, required=True)
     ap.add_argument('--elf', type=Path, required=True)
-    ap.add_argument('--map', type=Path, required=True)
+    ap.add_argument('--profile', choices=('base', 'release'), required=True,
+                    help='base: normal firmware (NKRO present, no VIA); release: policy layer (NKRO absent, VIA present)')
+    ap.add_argument('--via-json', type=Path, help='VIA definition shipped with the release (release profile)')
     ap.add_argument('--keyboard-json', type=Path, required=True)
     ap.add_argument('--cflags', type=Path, help='cflags.txt from the build (default: next to --bin)')
     ap.add_argument('--report', type=Path)
     args = ap.parse_args()
 
     c = vendor.Checker()
-    c.lines.append('# Falcon HS R2 firmware verification: %s' % args.bin.name)
+    c.lines.append('# Falcon HS R2 firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
+    release = args.profile == 'release'
     kb = json.loads(args.keyboard_json.read_text())
     raw = args.bin.read_bytes()
 
@@ -123,30 +126,38 @@ def main():
     vid, pid = int(kb['usb']['vid'], 16), int(kb['usb']['pid'], 16)
     devdesc = struct.pack('<BBHBBBBHHH', 18, 1, 0x0200, 0, 0, 0, 64, vid, pid, 0x0001)
     c.check(len(img.find(devdesc)) == 1, 'device descriptor USB 2.0 / EP0 64 / %04X:%04X / bcdDevice 0x0001 (same as vendor)' % (vid, pid))
-    c.check(bool(img.find(bytes.fromhex('0660ff0961'))), 'raw HID usage page 0xFF60 / usage 0x61 present (VIA)')
+    via_hid = bool(img.find(bytes.fromhex('0660ff0961')))
+    c.check(via_hid == release, 'raw HID usage page 0xFF60 / usage 0x61 (VIA) %s' % ('present' if release else 'absent'))
     nkro_bitmap = re.compile(rb'\x05\x07\x19\x00\x29[\x00-\xff]\x15\x00\x25\x01')
-    c.check(not nkro_bitmap.search(payload), 'no keyboard bitmap (NKRO) report in any HID descriptor')
-    # The ChibiOS host driver always defines send_nkro(); without NKRO_ENABLE its
-    # body is compiled out. Accept it only as a bare `bx lr`, nothing else.
     sizes = {}
     for line in run('arm-none-eabi-nm', '-S', str(args.elf)).splitlines():
         parts = line.split()
         if len(parts) == 4:
             sizes[parts[3]] = (int(parts[0], 16), int(parts[1], 16))
     nk_syms = sorted(s for s in syms if 'nkro' in s.lower())
-    stub = sizes.get('send_nkro')
-    stub_ok = stub is not None and stub[1] == 2 and img.u16(stub[0] & ~1) == 0x4770
-    c.check(nk_syms == ['send_nkro'] and stub_ok,
-            'only NKRO symbol is the empty send_nkro stub (2 bytes, bx lr): %s' % nk_syms)
     cflags_path = args.cflags or args.bin.with_name(args.bin.stem + '.cflags.txt')
-    if cflags_path.exists():
-        flags = cflags_path.read_text().split()
-        c.check('-DNKRO_ENABLE' not in flags, '-DNKRO_ENABLE absent from compiler flags')
-        for want in ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE', '-DEEPROM_WEAR_LEVELING',
-                     '-DRGBLIGHT_ENABLE', '-DRGBLIGHT_WS2812', '-DBOOTLOADER_STM32DUINO', '-DQMK_BOARD_STM32_F103_STM32DUINO'):
-            c.check(want in flags, '%s present' % want)
+    flags = cflags_path.read_text().split() if cflags_path.exists() else []
+    c.check(bool(flags), 'compiler flags read from %s' % cflags_path.name)
+    if release:
+        # POLICY-NKRO. The ChibiOS host driver always defines send_nkro(); without
+        # NKRO_ENABLE its body is compiled out. Accept it only as a bare `bx lr`.
+        c.check(not nkro_bitmap.search(payload), 'POLICY-NKRO: no keyboard bitmap (NKRO) report in any HID descriptor')
+        stub = sizes.get('send_nkro')
+        stub_ok = stub is not None and stub[1] == 2 and img.u16(stub[0] & ~1) == 0x4770
+        c.check(nk_syms == ['send_nkro'] and stub_ok,
+                'POLICY-NKRO: only NKRO symbol is the empty send_nkro stub (2 bytes, bx lr): %s' % nk_syms)
+        c.check('-DNKRO_ENABLE' not in flags, 'POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags')
+        c.check(any('userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c' in f for f in flags),
+                'keymap comes from the userspace policy layer')
+        c.check('falcon_read_allowed' in syms or 'via_command_kb' in syms, 'POLICY-FLASHREAD: read-only via_command_kb handler linked')
+        want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE')
     else:
-        c.check(False, 'cflags file %s not found' % cflags_path)
+        c.check(bool(nkro_bitmap.search(payload)), 'base is a normal QMK build: NKRO bitmap report present')
+        c.check('-DNKRO_ENABLE' in flags and '-DVIA_ENABLE' not in flags, 'base flags: NKRO_ENABLE on, VIA_ENABLE off')
+        want = ()
+    for w in want + ('-DEEPROM_WEAR_LEVELING', '-DRGBLIGHT_ENABLE', '-DRGBLIGHT_WS2812',
+                     '-DBOOTLOADER_STM32DUINO', '-DQMK_BOARD_STM32_F103_STM32DUINO'):
+        c.check(w in flags, '%s present' % w)
 
     # ------------------------------------------------------------------
     c.section('5. Configuration matches the manufacturer firmware')
@@ -175,6 +186,19 @@ def main():
     hhkb_pos = set(tuple(k['matrix']) for k in kb['layouts']['LAYOUT_60_hhkb']['layout'])
     c.check(all_pos == via_pos, 'LAYOUT_all covers exactly the %d matrix positions of the vendor VIA JSON' % len(via_pos))
     c.check(hhkb_pos <= via_pos and len(hhkb_pos) == 60, 'LAYOUT_60_hhkb is a 60-key subset of the VIA positions')
+    c.check(list(kb['layouts'])[0] == 'LAYOUT_60_hhkb', 'LAYOUT_60_hhkb is the first (default) layout')
+    if args.via_json:
+        vj = json.loads(args.via_json.read_text())
+        default_view = set()
+        for row in vj['layouts']['keymap']:
+            for k in row:
+                if isinstance(k, str) and k:
+                    legend = k.split('\n')
+                    opt = legend[3] if len(legend) > 3 else ''
+                    if not opt or opt.split(',')[1] == '0':
+                        default_view.add(tuple(int(x) for x in legend[0].split(',')))
+        c.check(default_view == hhkb_pos, '%s: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb' % args.via_json.name)
+        c.check(set(tuple(p) for p in vendor.via_positions(vj)) == via_pos, '%s: same matrix positions as the vendor VIA JSON' % args.via_json.name)
     c.check(kb['ws2812']['pin'] == 'A1' and kb['rgblight']['led_count'] == 4, 'WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)')
 
     c.lines.append('')
