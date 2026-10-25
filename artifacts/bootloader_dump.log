@@ -1,0 +1,4 @@
+bootloader_0x08000000.bin         8192 bytes  sha256 55dce2dd777c7a8286295d4f5920c3d4a815506771f1fafb5e541845695933cf
+fsize_uid_0x1FFFF7E0.bin            16 bytes  sha256 ce7b06db5536adc52639a19ba7adc95e60d98c5426e8f95127e6ef0766cd6452
+option_bytes_0x1FFFF800.bin         16 bytes  sha256 639f516bcf4cef4efe1ac4c1353b0c79d332c378f1d2cf6ba7f3f2c65e857f91
+second read identical

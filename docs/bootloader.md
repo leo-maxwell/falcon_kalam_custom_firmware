@@ -48,23 +48,26 @@ So the only remaining DFU-only action is the flash itself.
 | Host command (VIA `id_bootloader_jump`) | — | **not available**: QMK disabled it in 2021 (#11892) |
 | Shorting reset/boot pads | hardware access | last resort |
 
-## Which build variant? (unresolved)
+## Installed build: identified (2026-10-26)
 
-Upstream ships about 25 prebuilt variants (`bootloader_only_binaries/`). They
-differ in LED pin, button pin and crystal. Evidence so far:
+The dump taken with POLICY-FLASHREAD right after the first flash
+(`originals/device_dump_2026-10-26/bootloader_0x08000000.bin`, read twice,
+identical) is **byte-identical to upstream
+`bootloader_only_binaries/generic-none_bootloader.bin`** (6,960 bytes, the rest
+of the 8 KB erased) at the pinned submodule commit `df689808`. It is an
+unmodified upstream build without LED or button, running on the GD32.
 
-* The app's clocks (PLL ×9, USB ÷1.5) prove an **8 MHz** crystal, and the
-  bootloader does USB on the same crystal. Upstream's GD32-specific targets
-  (`gd32f1_generic_boot20_pc13`, `gd32f1_frankenmaple`) are built for 12 MHz
-  (`XTAL12M`), so they are **unlikely**. A generic 8 MHz STM32 build (for
-  example `generic_boot20_pc13`) running on the GD32 is the likely case. This
-  is unverified.
-* `generic_boot20_pa1` blinks an LED on **PA1**, which is the WS2812 data line
-  here. If that variant is installed, the LEDs may glitch while in DFU. That
-  is cosmetic.
-* A vendor-modified build is also possible.
+| Register | Value | Meaning |
+|---|---|---|
+| F_SIZE `0x1FFFF7E0` | 64 | 64 KB flash, read directly from the chip |
+| Option bytes `0x1FFFF800` | `A5 5A FF…` | **RDP off**, no write protection, USER `0xFF` → a full SWD read and restore is possible |
 
 ## Known upstream behaviour that affects QMK
+
+**Observed on the device:** after the first DFU download the keyboard started
+the application by itself (no replug). The prebuilt `generic-none` binary
+therefore does not show the `bool` bug of the current source described below.
+The source analysis is kept for reference.
 
 In `hardware.c`, `checkAndClearBootloaderFlag()` stores its result in a
 `bool`, so `RTC_BOOTLOADER_JUST_UPLOADED` (`0x424D`, value 2) collapses to 1
@@ -84,7 +87,7 @@ device runs this code:
   `0x08002000` (the first page of our app) and writes to `0x08005000`. Every
   command in this project uses `-a 2`.
 
-## Backup — why it was not possible yet, and how it will be done
+## Backup — done 2026-10-26 via route 1 (kept for reference)
 
 The DFU upload of alt 1/2 starts at `0x08005000`/`0x08002000`. The bootloader
 has no way to read itself over USB. There are two routes:

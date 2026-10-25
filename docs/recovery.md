@@ -13,9 +13,10 @@ approved (see `preflash-checklist.md`), or to recover from a failed test.
 | `originals/manufacturer_jsonfile.json` | vendor VIA definition | load into VIA after restoring |
 | `originals/SHA256SUMS` | hashes of the three files | `cd originals && shasum -a 256 -c SHA256SUMS` |
 
-The originals are read-only (`chmod 444`) and committed to git. Not preserved
-yet: the bootloader (`0x08000000–0x08001FFF`) and the option bytes (risk R1,
-`docs/bootloader.md`). A fresh read-only upload on 2026-10-26 was byte-identical
+The originals are read-only (`chmod 444`) and committed to git. The bootloader
+(`0x08000000–0x08001FFF`), F_SIZE/UID and option bytes were dumped on
+2026-10-26 into `originals/device_dump_2026-10-26/`. The bootloader is upstream
+`generic-none`; RDP is off, so a full SWD restore is possible. A fresh read-only upload on 2026-10-26 was byte-identical
 to `falcon_flash_backup.bin` (`artifacts/device_inspection_2026-10-26.txt`).
 
 **Always use DFU alt 2.** A download to alt 1 erases `0x08002000`. After any

@@ -1,0 +1,17 @@
+
+
+Opening DFU capable USB device...
+Device ID 1eaf:0003
+Device DFU version 0110
+Claiming USB DFU Interface...
+Setting Alternate Interface #2 ...
+Determining device status...
+DFU state(2) = dfuIDLE, status(0) = No error condition is present
+DFU mode device DFU version 0110
+Device returned transfer size 1024
+Copying data from PC to DFU device
+Download done.
+DFU state(8) = dfuMANIFEST-WAIT-RESET, status(0) = No error condition is present
+Resetting USB to switch back to runtime mode
+error resetting after download (LIBUSB_ERROR_TIMEOUT)
+Done!
