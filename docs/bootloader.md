@@ -42,7 +42,7 @@ So the only remaining DFU-only action is the flash itself.
 | Path | Needs | Evidence |
 |---|---|---|
 | Power-on window: plug in while `dfu-util -w …` waits | — | **not available.** On 2026-10-26 a watched replug showed the app enumerating directly, with no `1EAF:0003` in between (`artifacts/usb_watch_replug.txt`). Consistent with a FASTBOOT-style variant (e.g. upstream `generic_boot20_pc13_fastboot`) or a vendor build. A window under ~0.3 s cannot be ruled out. |
-| Bootmagic: hold Esc (0,0) while plugging in | stock or our firmware | stock has BOOTMAGIC compiled in. Its EEPROM log shows `eeconfig_disable()` with no later boot, which is exactly what Bootmagic leaves behind, so it was very likely used to enter the current DFU session. Key position is the QMK default (unverified for stock). |
+| Bootmagic: hold Esc (0,0) while plugging in | stock or our firmware | **verified in stock code** (`0x08009B40`, `vendor_analysis.txt` §6): two scans, then debounced row 0 bit 0 (= Esc per the layout probe), then erase EEPROM + magic `0xFFFF`, then `bootloader_jump()`. This matches the EEPROM footprint in the backup. Our release uses QMK's default `0,0`. |
 | Fn+Tab (`QK_BOOT`) | stock firmware; VIA keymap reset to compiled defaults | stock compiled keymap layer 1 |
 | LShift+RShift+B (Command) | stock or our release | "Jump to Bootloader" compiled into both |
 | Host command (VIA `id_bootloader_jump`) | — | **not available**: QMK disabled it in 2021 (#11892) |

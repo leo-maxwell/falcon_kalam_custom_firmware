@@ -50,6 +50,7 @@
   [PASS] AFIO_MAPR |= 0x02000000 (SWJ_CFG=010): JTAG-DP off, SW-DP on => PB3/PB4/PA15 usable as GPIO
   [PASS] boardInit writes BKP_DR10 = 0x424C (RTC_BOOTLOADER_FLAG)
   [PASS] mcu_reset writes BKP_DR10 = 0x424D (RTC_BOOTLOADER_JUST_UPLOADED) before NVIC reset
+  [PASS] Bootmagic @0x08009B40: matrix_scan x2, row 0 (debounced matrix 0x200017A6) bit 0 -> eeconfig_disable -> bootloader_jump; key = 0,0 = Esc
   [PASS] GPIOA CRH reset value 0x888884B8
   [PASS] GPIOC CRH 0x88388888, GPIOD CRL 0x88888844 (PD0/PD1 = OSC_IN/OUT)
     these equal VAL_GPIOxCRx in QMK platforms/chibios/boards/STM32_F103_STM32DUINO/board/board.h

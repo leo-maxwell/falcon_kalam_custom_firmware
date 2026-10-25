@@ -211,6 +211,13 @@ def analyse(c):
             'boardInit writes BKP_DR10 = 0x424C (RTC_BOOTLOADER_FLAG)')
     c.check(img.thumb(0x08007876, 'f244 224d') and img.u32(0x08007884) == 0x40006C00,
             'mcu_reset writes BKP_DR10 = 0x424D (RTC_BOOTLOADER_JUST_UPLOADED) before NVIC reset')
+    # Bootmagic (QMK bootmagic_scan): scan, wait, scan; test matrix row 0 bit 0;
+    # eeconfig_disable() (format + magic 0xFFFF at addr 0); bootloader_jump().
+    c.check(img.thumb(0x08009B40, 'f7fc fade') and img.thumb(0x08009B4C, 'f7fc fad8')
+            and img.u32(0x08009BCC) == img.u32(0x08006240) == 0x200017A6
+            and img.thumb(0x08009B52, '881b 07dc') and img.thumb(0x08009B5C, 'f64f 71ff 2000')
+            and img.thumb(0x08009B66, 'f7fb f9f9'),
+            'Bootmagic @0x08009B40: matrix_scan x2, row 0 (debounced matrix 0x200017A6) bit 0 -> eeconfig_disable -> bootloader_jump; key = 0,0 = Esc')
     expected_cr = {0x08009608: 0x888884B8}
     c.check(all(img.u32(a) == v for a, v in expected_cr.items()), 'GPIOA CRH reset value 0x888884B8')
     c.check(img.u32(0x0800960C) == 0x88388888 and img.u32(0x08009610) == 0x88888844,
