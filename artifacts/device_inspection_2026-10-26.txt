@@ -14,3 +14,17 @@ $ dfu-util -d 1eaf:0003 -a 2 -U build/readback_2026-10-26.bin -Z 57344
 transfer size 1024; 57344 bytes received; trailing LIBUSB_ERROR_PIPE = bootloader ends upload at 0x08010000
 sha256 4abf550ae7c093a28060ca7402fa3789366845ec8e72e65cb7e682a35e45d9f2
 => byte-identical to originals/falcon_flash_backup.bin (device unchanged since backup)
+
+# Addendum (same DFU session, still read-only): standard GET_DESCRIPTOR requests via pyusb
+device desc:  12 01 00 01 00 00 00 40 af 1e 03 00 01 02 01 02 03 01   (USB 1.10, EP0 64, bcdDevice 0x0201)
+config desc:  09 02 2d 00 01 01 00 80 32 09 04 00 00 00 fe 01 02 04 09 04 00 01 00 fe 01 02 05
+              09 04 00 02 00 fe 01 02 06 09 21 03 ff 00 00 04 10 01
+              bus-powered 100 mA; 1 interface, alts 0/1/2, class FE/01 proto 02 (DFU mode)
+DFU functional: bmAttributes 0x03 (canDnload, canUpload; not manifestation-tolerant, no willDetach),
+              wDetachTimeOut 255 ms, wTransferSize 1024, bcdDFU 0x0110
+strings:      1 "LeafLabs"  2 "Maple 003"  3 "LLM 003"
+              4 "STM32duino bootloader v1.0  ERROR. Upload to RAM not supported."
+              5 "STM32duino bootloader v1.0  Upload to Flash 0x8005000"
+              6 "STM32duino bootloader v1.0  Upload to Flash 0x8002000"
+upload end:   upstream source ends uploads at getFlashEnd() = F_SIZE*1024 + 0x08000000; the upload
+              stopped exactly at 0x08010000 => F_SIZE register reads 64 (KB) on this chip.

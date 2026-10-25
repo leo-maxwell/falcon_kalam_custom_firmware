@@ -8,7 +8,7 @@ check.
 
 | ID | Rule | Implemented in | Enforced by | To change |
 |---|---|---|---|---|
-| POLICY-NKRO | Release has no NKRO (stock NKRO breaks the macOS Caps Lock / input-source toggle) | `falcon/rules.mk` `NKRO_ENABLE = no`; `falcon/config.h` `#error` | `verify_firmware.py` release (no NKRO report, flag or code); `negative_tests.sh` | after an upstream fix is confirmed on macOS: delete both lines, flip the release checks (roadmap I8) |
+| POLICY-NKRO | NKRO is a **configuration** decision, not a base decision: the base supports it (`keyboard.json` `"nkro": true`, verified in the base image), and the release configuration disables it at build time, because stock NKRO breaks the macOS Caps Lock / input-source toggle and stock's runtime NK_OFF did not survive a replug | `falcon/rules.mk` `NKRO_ENABLE = no`; `falcon/config.h` `#error` | `verify_firmware.py` release (no NKRO report, flag or code); `negative_tests.sh` | after an upstream fix is confirmed on macOS: delete both lines, flip the release checks (roadmap I8) |
 | POLICY-VIA | Release is VIA-configurable | `falcon/rules.mk` | verifier: `-DVIA_ENABLE`, raw HID `0xFF60` | — |
 | POLICY-PARITY | Release provides every stock feature: console, Command, LTO on top of the base's bootmagic/mousekey/extrakey/rgblight | `falcon/rules.mk` | verifier flags + console interface; `artifacts/feature_parity.txt` | `docs/parity.md` records any deliberate deviation |
 | POLICY-FLASHREAD | Release can read (never write) the bootloader, option bytes and UID over raw HID, for backup | `falcon/keymap.c` `via_command_kb` | verifier symbol check; probe whitelist | remove after the bootloader backup if not wanted (roadmap I2) |

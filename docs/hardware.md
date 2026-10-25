@@ -168,7 +168,7 @@ contains no user configuration**.
 |---|---|---|
 | Boot keyboard (6KRO) | yes | yes |
 | Shared EP: mouse (ID 2), system (ID 3), consumer (ID 4) | yes | yes |
-| Shared EP: **NKRO bitmap (ID 6)** | **yes** | **no** (`NKRO_ENABLE` off; build fails if enabled) |
+| Shared EP: **NKRO bitmap (ID 6)** | **yes** | base: **yes**; release: **no**, disabled by configuration (POLICY-NKRO) |
 | VIA raw HID (`0xFF60`/`0x61`, 32 B) | yes | yes (protocol `0x000D`) |
 
 ## 9. Unresolved assumptions (summary)

@@ -19,6 +19,35 @@ device descriptor has bcdDevice bytes `0x01, 0x02` (= `0x0201`).
 source file). It is not proprietary. Redistributing it, including inside this
 project, is allowed if the MIT notice is kept.
 
+## DFU session inventory (2026-10-26)
+
+Everything this bootloader allows **reading** has been read. The rest cannot
+be read over DFU, or needs the application to run.
+
+| Item | Reachable in DFU? | Status |
+|---|---|---|
+| Enumeration, device/config/DFU-functional descriptors, all 7 strings | yes | **done**; all consistent with the pinned source (bcdDevice `0x0201`, 100 mA, DFU 1.1, 1024-byte transfers) |
+| Flash `0x08002000–0x0800FFFF` (app + EEPROM), alt 2 upload | yes | **done**; byte-identical to `originals/falcon_flash_backup.bin` |
+| Flash size | yes, indirectly | **done**: the upload stops at `getFlashEnd()` (F_SIZE-based) = `0x08010000`, so the chip reports 64 KB |
+| Alt 1 upload (`0x08005000+`) | yes | not needed: a subset of alt 2. Avoid alt 1 entirely (its *download* erases `0x08002000`). |
+| RAM (alt 0) | no | the bootloader returns an error by design |
+| Bootloader `0x08000000–0x08001FFF`, option bytes, UID | **no** | needs FALCON_READ (our firmware) or SWD |
+| Stock runtime values (VIA layers/macros/RGB), live matrix | no | need the stock application running |
+| Flashing (download) | yes | **not done**: waiting for checklist approval |
+
+So the only remaining DFU-only action is the flash itself.
+
+## Getting into DFU without shorting pads
+
+| Path | Needs | Evidence |
+|---|---|---|
+| Power-on window: plug in while `dfu-util -w …` waits | nothing; replug only | upstream non-FASTBOOT builds enumerate for `BOOTLOADER_WAIT` iterations before jumping. **Not yet observed on this unit**: run `tools/usb_watch.py` during a replug |
+| Bootmagic: hold Esc (0,0) while plugging in | stock or our firmware | stock has BOOTMAGIC compiled in. Its EEPROM log shows `eeconfig_disable()` with no later boot, which is exactly what Bootmagic leaves behind, so it was very likely used to enter the current DFU session. Key position is the QMK default (unverified for stock). |
+| Fn+Tab (`QK_BOOT`) | stock firmware; VIA keymap reset to compiled defaults | stock compiled keymap layer 1 |
+| LShift+RShift+B (Command) | stock or our release | "Jump to Bootloader" compiled into both |
+| Host command (VIA `id_bootloader_jump`) | — | **not available**: QMK disabled it in 2021 (#11892) |
+| Shorting reset/boot pads | hardware access | last resort |
+
 ## Which build variant? (unresolved)
 
 Upstream ships about 25 prebuilt variants (`bootloader_only_binaries/`). They

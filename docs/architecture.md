@@ -49,6 +49,7 @@ something (e.g. NKRO on macOS), only L2 changes.
 | `tools/analyze_vendor_firmware.py` | re-derives every hardware fact from `originals/` (§4) |
 | `tools/feature_parity.py` | stock vs release table from the binaries (§4) → `artifacts/feature_parity.txt` |
 | `tools/falcon_probe.py` | read-only USB probe over VIA raw HID (§5) |
+| `tools/usb_watch.py` | passive USB arrival/departure log with timestamps (measures the bootloader's power-on DFU window) |
 | `tools/disassemble_vendor.sh` | objdump listing of the vendor app (`build/`, git-ignored) |
 
 ### Data and evidence

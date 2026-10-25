@@ -2,7 +2,8 @@
 
 A reproducible, independently maintained QMK firmware for the Falcon HS R2
 (GD32F103C8T6, STM32duino/Maple DFU bootloader, USB `9DD1:9D89`), HHKB layout
-by default, VIA-configurable, NKRO disabled by policy.
+by default, VIA-configurable. NKRO is supported by the base keyboard and disabled
+by the release configuration (POLICY-NKRO).
 
 > **Status: built and verified offline. Not flashed.** Flashing needs the
 > separate review in [`docs/preflash-checklist.md`](docs/preflash-checklist.md).
@@ -15,7 +16,7 @@ originals/             immutable vendor artifacts + SHA256SUMS (read-only)
 qmk_firmware/          upstream QMK, submodule, always the latest release (docs/policy.md)
 keyboards/falcon_hs_r2/  BASE: a normal QMK keyboard (hardware facts, NKRO on, keymap "default" = HHKB)
 userspace/             POLICY: QMK External Userspace
-  keyboards/falcon_hs_r2/keymaps/falcon/   NKRO off; VIA, console, Command, LTO on; HHKB keymap; FALCON_READ
+  keyboards/falcon_hs_r2/keymaps/falcon/   NKRO disabled (config); VIA, console, Command, LTO on; HHKB keymap; FALCON_READ
 via/falcon_hs_r2.json  VIA definition (vendor JSON; HHKB is the default layout option)
 bootloader/STM32duino-bootloader/  MIT bootloader source, pinned reference (never built or flashed here)
 tools/                 vendor analysis, stock/release parity table, disassembly, read-only USB probe

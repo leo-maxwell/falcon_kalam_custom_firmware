@@ -24,8 +24,8 @@ a human decision or review before the first flash.
 
 ## Unsupported or intentionally omitted (release)
 
-* **NKRO**: off by policy (POLICY-NKRO). It is still on in the base, as in a normal QMK build.
-* **Command "N" (NKRO toggle)** has no effect, because NKRO is not compiled in.
+* **NKRO**: supported by the base (as in a normal QMK build); disabled by the release configuration (POLICY-NKRO).
+* **Command "N" (NKRO toggle)** has no effect in the release, because the configuration compiles NKRO out.
 * **Matrix positions `4,0`, `4,13`, `4,14`** are not in any layout until L-1 is settled.
 * **The vendor default keymap is not reproduced** (Caps = `LT(1,Caps)`, GESC, Fn+Tab = `QK_BOOT`). The release is HHKB as required. The vendor map is in `vendor_analysis.txt` §9.
 * **`QK_BOOT` is not on any default layer.** Use Bootmagic (Esc held while plugging in) or assign it in VIA.

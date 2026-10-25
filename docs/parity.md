@@ -5,7 +5,7 @@ current QMK. **Phase 2** = improvements. Status as of release image
 `falcon_hs_r2_falcon.bin` (SHA-256 in `artifacts/falcon_hs_r2_falcon.bin.sha256`).
 
 Status key: **=** same as stock · **+** same function, done better ·
-**×** excluded by policy · **?** needs the live probe or hardware to confirm ·
+**cfg** supported by the base, disabled by release configuration · **?** needs the live probe or hardware to confirm ·
 **new** not in stock.
 
 Evidence: `artifacts/feature_parity.txt` (generated from both binaries on
@@ -34,7 +34,7 @@ Nothing here is hardware-tested yet.
 | Interfaces / endpoints / polling | 4 HID, EP 81/82/03/84/85, 1 ms | identical | **=** |
 | Power, remote wakeup | 500 mA, yes | identical | **=** |
 | Boot keyboard 6KRO | yes | yes | **=** |
-| NKRO (report ID 6) | yes; breaks macOS Caps Lock / input source | **no NKRO code** (build fails if enabled) | **×** POLICY-NKRO (this is the fix) |
+| NKRO (report ID 6) | yes; breaks macOS Caps Lock / input source | base: yes (supported). Release config: disabled at build time (build fails if re-enabled) | **cfg** POLICY-NKRO (this is the fix) |
 | Mouse keys, system, consumer reports | yes | yes | **=** |
 | HID console (`qmk console`) | yes | yes | **=** |
 | VIA raw HID | yes, protocol ≥ 12 (exact: **?**) | protocol `0x000D` | **+** (newer) |
@@ -73,7 +73,7 @@ required. Every stock capability is still reachable:
 
 ### Phase 1 summary
 
-* **Done:** every stock firmware feature except NKRO, which is excluded on purpose.
+* **Done:** every stock firmware feature. NKRO is implemented in the base and switched off by the release configuration (POLICY-NKRO); removing two lines there re-enables it.
 * **Waiting on the live probe** (read-only, with the stock firmware running): exact stock VIA protocol, layer and macro counts, and RGB defaults. Run `tools/falcon_probe.py info` once, then update the **?** rows.
 * **Waiting on hardware:** everything. Nothing has been flashed.
 
