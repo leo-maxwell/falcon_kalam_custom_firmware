@@ -34,8 +34,8 @@ something (e.g. NKRO on macOS), only L2 changes.
 | `keyboards/falcon_hs_r2/readme.md` | L1 | upstream-style readme |
 | `userspace/qmk.json` | L2 | userspace manifest; build target `falcon_hs_r2:falcon` |
 | `userspace/…/falcon/rules.mk` | L2 | POLICY-NKRO (`NKRO_ENABLE = no`), POLICY-VIA, POLICY-PARITY (console, Command, LTO) |
-| `userspace/…/falcon/config.h` | L2 | POLICY-NKRO guard: `#error` if `NKRO_ENABLE` is defined |
-| `userspace/…/falcon/keymap.c` | L2 | HHKB keymap on `LAYOUT_all`, 4 layers; POLICY-FLASHREAD handler |
+| `userspace/…/falcon/config.h` | L2 | POLICY-NKRO guard (`#error` if `NKRO_ENABLE` is defined); POLICY-PARITY stock RGB defaults (rainbow swirl, brightness 127) |
+| `userspace/…/falcon/keymap.c` | L2 | HHKB keymap on `LAYOUT_60_hhkb` (this unit is an HHKB classic), 4 layers as stock; POLICY-FLASHREAD handler |
 | `via/falcon_hs_r2.json` | L2 | VIA definition: vendor JSON with HHKB as layout option 0 |
 
 ### Tooling
@@ -48,7 +48,7 @@ something (e.g. NKRO on macOS), only L2 changes.
 | `scripts/qmk_policy.sh` | POLICY-QMK-LATEST: `--offline`, `--online`, `--update` |
 | `tools/analyze_vendor_firmware.py` | re-derives every hardware fact from `originals/` (§4) |
 | `tools/feature_parity.py` | stock vs release table from the binaries (§4) → `artifacts/feature_parity.txt` |
-| `tools/falcon_probe.py` | read-only USB probe over VIA raw HID (§5) |
+| `tools/falcon_probe.py` | read-only USB probe over VIA raw HID (§5); `decode-log` re-maps logs from the pre-fix decoder |
 | `tools/usb_watch.py` | passive USB arrival/departure log with timestamps (measures the bootloader's power-on DFU window) |
 | `tools/disassemble_vendor.sh` | objdump listing of the vendor app (`build/`, git-ignored) |
 
@@ -59,7 +59,7 @@ something (e.g. NKRO on macOS), only L2 changes.
 | `originals/` | vendor BIN, DFU readback, VIA JSON, `SHA256SUMS`: read-only, never modified |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule: reference only, never built or flashed |
 | `artifacts/` | release and base images (`.bin` with DFU suffix, `.elf`, `.map`, cflags, `info_config.h`, `.sha256`), logs, reports, device inspection |
-| `docs/` | `policy`, `architecture`, `parity`, `hardware`, `bootloader`, `layout` (OPEN L-1), `rgb-crosscheck`, `build`, `recovery`, `preflash-checklist`, `risks` |
+| `docs/` | `policy`, `architecture`, `parity`, `hardware`, `bootloader`, `layout` (L-1, settled), `rgb-crosscheck`, `build`, `recovery`, `preflash-checklist`, `risks` |
 
 ## 3. Build flow (`scripts/build.sh`)
 

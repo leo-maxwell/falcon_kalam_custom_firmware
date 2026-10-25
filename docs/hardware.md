@@ -157,6 +157,7 @@ contains no user configuration**.
 | LED count | 4 | Verified | `rgblight_set` → `ws2812_setleds(led, 4)` (`0x08004776`) |
 | Byte order | GRB | Verified | `rgblight_setrgb` stores r→[1], g→[0], b→[2] (`0x080049F6`) |
 | Reset time | 280 µs (QMK default) | Verified | 1,344 × 15-cycle loop at 72 MHz |
+| Physical form | separate, detachable RGB module on a connector | Verified (user, 2026-10-26) | the module was disconnected and reconnected before the stock probe |
 | Physical placement (underglow vs. indicators) | — | Unverified | — |
 | Enabled effects | all 43 rgblight modes | Verified | `mode_base_table` at `0x0800C2B6` |
 | Brightness cap | — | Unverified | not reconstructed |
@@ -174,6 +175,6 @@ contains no user configuration**.
 ## 9. Unresolved assumptions (summary)
 
 See `docs/risks.md` for impact and mitigation. Briefly: HSE frequency only
-inferred; **physical layout (OPEN ISSUE L-1, `docs/layout.md`)**; LED part and
+inferred; LED part and
 placement; bootloader binary variant (not dumped yet) and option-byte/RDP state;
 GD32 behaviour under the newer QMK/ChibiOS (intended by policy).

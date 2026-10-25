@@ -41,7 +41,7 @@ So the only remaining DFU-only action is the flash itself.
 
 | Path | Needs | Evidence |
 |---|---|---|
-| Power-on window: plug in while `dfu-util -w …` waits | nothing; replug only | upstream non-FASTBOOT builds enumerate for `BOOTLOADER_WAIT` iterations before jumping. **Not yet observed on this unit**: run `tools/usb_watch.py` during a replug |
+| Power-on window: plug in while `dfu-util -w …` waits | — | **not available.** On 2026-10-26 a watched replug showed the app enumerating directly, with no `1EAF:0003` in between (`artifacts/usb_watch_replug.txt`). Consistent with a FASTBOOT-style variant (e.g. upstream `generic_boot20_pc13_fastboot`) or a vendor build. A window under ~0.3 s cannot be ruled out. |
 | Bootmagic: hold Esc (0,0) while plugging in | stock or our firmware | stock has BOOTMAGIC compiled in. Its EEPROM log shows `eeconfig_disable()` with no later boot, which is exactly what Bootmagic leaves behind, so it was very likely used to enter the current DFU session. Key position is the QMK default (unverified for stock). |
 | Fn+Tab (`QK_BOOT`) | stock firmware; VIA keymap reset to compiled defaults | stock compiled keymap layer 1 |
 | LShift+RShift+B (Command) | stock or our release | "Jump to Bootloader" compiled into both |

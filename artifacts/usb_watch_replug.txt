@@ -1,0 +1,4 @@
+   0.026 s  watching (now present: bootloader (DFU))
+   0.026 s  + 1EAF:0003 bootloader (DFU)
+  31.287 s  - 1EAF:0003 bootloader (DFU) (was present 31.261 s)
+ 153.249 s  + 9DD1:9D89 Falcon application

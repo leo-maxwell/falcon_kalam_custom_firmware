@@ -7,7 +7,7 @@ by the release configuration (POLICY-NKRO).
 
 > **Status: built and verified offline. Not flashed.** Flashing needs the
 > separate review in [`docs/preflash-checklist.md`](docs/preflash-checklist.md).
-> **Open issue L-1:** the physical layout is not settled ([`docs/layout.md`](docs/layout.md)).
+> Physical layout settled: HHKB classic ([`docs/layout.md`](docs/layout.md)).
 
 ## Structure: normal base + policy layer
 

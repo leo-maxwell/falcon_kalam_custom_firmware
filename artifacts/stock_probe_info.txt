@@ -1,0 +1,7 @@
+product:           Falcon / Falcon
+VIA protocol:      0x000C
+dynamic layers:    4
+macros:            16, buffer 384 bytes
+rgblight now:      {'brightness': 127, 'effect': 9, 'effect_speed': 0, 'color(h,s)': [0, 255]}
+layout options:    0x00000000
+matrix state cmd:  supported (rows now: 0000 0000 0000 0000 0000)

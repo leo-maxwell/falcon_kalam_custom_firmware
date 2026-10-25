@@ -101,10 +101,19 @@ class Probe:
         return out
 
     def matrix(self):
+        """Raw switch matrix as ROWS 16-bit masks (bit c = column c pressed).
+
+        Reply layout: [0x02, 0x03, ...]. VIA protocol >= 12 echoes the requested
+        row offset in byte 2, so row data starts at byte 3; older firmware starts
+        at byte 2. Each row is 2 bytes big-endian (MATRIX_COLS 9..16).
+        """
+        if not hasattr(self, '_matrix_start'):
+            self._matrix_start = 3 if self.protocol() >= 0x000C else 2
         r = self.send(GET_KEYBOARD_VALUE, KV_SWITCH_MATRIX_STATE, 0)
         if r[0] == UNHANDLED:
             return None
-        return [int.from_bytes(r[2 + 2 * row:4 + 2 * row], 'big') for row in range(ROWS)]
+        st = self._matrix_start
+        return [int.from_bytes(r[st + 2 * row:st + 2 + 2 * row], 'big') for row in range(ROWS)]
 
     def keymap_buffer(self, nbytes):
         out = bytearray()
@@ -178,6 +187,26 @@ def cmd_matrix(p, a):
         print('\n%d distinct positions: %s' % (len(seen), ' '.join('%d,%d' % k for k in sorted(seen))))
 
 
+def legacy_to_actual(r, c):
+    """Map a position logged by the pre-fix decoder (start byte 2 on a protocol-12
+    firmware) to the real matrix position. That decoder read every row one byte
+    early: its row r = (real row r-1 low byte << 8) | real row r high byte, so
+    its columns 0-7 are real (r, c+8) and its columns 8-14 are real (r-1, c-8).
+    Real column 7 and real row 4 columns 0-7 were never visible to it."""
+    return (r, c + 8) if c < 8 else (r - 1, c - 8)
+
+
+def cmd_decode_log(_, a):
+    seen = []
+    for line in Path(a.csv).read_text().splitlines()[1:]:
+        _, r, c, ev = line.split(',')
+        if ev == 'down':
+            seen.append(legacy_to_actual(int(r), int(c)))
+    print('%d presses -> real positions in press order:' % len(seen))
+    print(' '.join('%d,%d' % p for p in seen))
+    print('distinct: %s' % ' '.join('%d,%d' % p for p in sorted(set(seen))))
+
+
 def cmd_dump_bootloader(p, a):
     out = Path(a.outdir)
     out.mkdir(parents=True, exist_ok=True)
@@ -203,9 +232,13 @@ def main():
     s.add_argument('out')
     s = sub.add_parser('matrix')
     s.add_argument('--log')
+    s = sub.add_parser('decode-log', help='re-map a matrix log recorded with the pre-fix decoder (offline)')
+    s.add_argument('csv')
     s = sub.add_parser('dump-bootloader')
     s.add_argument('outdir')
     a = ap.parse_args()
+    if a.cmd == 'decode-log':
+        return cmd_decode_log(None, a)
     p = Probe()
     {'info': cmd_info, 'dump-keymap': cmd_dump_keymap, 'matrix': cmd_matrix, 'dump-bootloader': cmd_dump_bootloader}[a.cmd](p, a)
 

@@ -1,61 +1,43 @@
-# OPEN ISSUE L-1: physical layout not settled
+# ISSUE L-1: physical layout — SETTLED (2026-10-26)
 
-**Status: OPEN.** This stays open until the user explicitly records a
-settlement in the "Settlement" section below. The firmware's HHKB default is
-a design choice. It does **not** settle this issue.
+**Settlement (by the user):** "my board has physically the same key layout as
+HHKB classic". The unit is a 60-key HHKB classic: split `\` + `` ` `` top right,
+1.5u Backspace on the Tab row, 2.25u left Shift (no split), Fn right of right
+Shift, bottom row Alt · ◆ · Space · ◆ · Alt, blank corners.
+→ Release keymap uses **`LAYOUT_60_hhkb`**.
 
-## What is known
+## Evidence
 
-| Source | Says |
-|---|---|
-| Vendor VIA JSON | 63 matrix positions; HHKB base; options: split backspace (`0,13`+`0,14` vs 2u `0,14`), split left shift (`3,0`+`3,1`), split spacebar (`4,5`/`4,7`/`4,9`) |
-| Vendor compiled keymap | also assigns `4,0` LCtrl, `4,13` RCtrl and `4,14` KC_NO; `4,11` RAlt, `4,12` MO(1); Caps position `LT(1,Caps)` |
-| Vendor EEPROM | erased by Bootmagic before the backup, so no record of how the user's unit was configured |
-| Hardware | never measured |
+Read-only matrix probe on the stock firmware (`tools/falcon_probe.py matrix`).
+The user pressed every key once, row by row, left to right.
 
-## What must be determined
+* Raw log: `artifacts/layout_probe.csv`. Decoded: `artifacts/layout_probe_decoded.txt`.
+* The probe version used for the recording had a decoder bug: protocol-12
+  firmware echoes a row-offset byte, so the matrix data starts at byte 3, not 2.
+  Every reading was shifted by 8 columns across a row boundary, and real
+  column 7 and real row 4 columns 0–7 were invisible. The fixed decoder is in
+  `falcon_probe.py`. `falcon_probe.py decode-log` re-maps the recorded log
+  exactly (`legacy_to_actual()` explains the mapping).
+* Result: **53 presses, in strict press order, at exactly the
+  `LAYOUT_60_hhkb` positions** except the 7 keys the old decoder could not see:
+  `0,7 1,7 2,7 3,7` (7 U J M) and `4,1 4,2 4,7` (left Alt, left ◆, Space).
+  53 + 7 = 60. No position outside `LAYOUT_60_hhkb` fired: `3,1`, `4,0`,
+  `4,13`, `4,14` and `1,13` stayed silent.
 
-1. Which matrix position each physical key produces: all keys, including
-   the bottom row and the 1.5u blanks on either side of it (`4,0`, `4,13`, `4,14`?).
-2. Which variants this unit has: backspace (HHKB split or 2u), left shift
-   (2.25u or split), spacebar (7u or 3-1-3). These are physical keycaps and
-   switches on a hot-swap PCB.
-3. Whether any switch position is unpopulated or doubled.
+| Row | Probed positions (decoded) | Not visible to the old decoder |
+|---|---|---|
+| 0 | 0,0–0,6, 0,8–0,14 | 0,7 |
+| 1 | 1,0–1,6, 1,8–1,12, 1,14 | 1,7 |
+| 2 | 2,0–2,6, 2,8–2,11, 2,14 | 2,7 |
+| 3 | 3,0, 3,2–3,6, 3,8–3,12, 3,14 | 3,7 |
+| 4 | 4,11, 4,12 | 4,1, 4,2, 4,7 |
 
-## How to settle it (read-only, no flashing)
+The 7 unseen positions follow from the settlement and the vendor VIA JSON.
+They are checked again on hardware in the first flash test (checklist §C5).
 
-The manufacturer firmware is still on the keyboard. Unplug and replug it
-normally (do not hold Esc), then:
+## Consequences
 
-```bash
-tools/falcon_probe.py info
-```
-
-```bash
-tools/falcon_probe.py matrix --log artifacts/layout_probe.csv
-```
-
-Press every key once, left to right and row by row, then Ctrl-C. The probe
-only sends VIA read queries (enforced by a whitelist).
-
-If `info` reports the matrix query as unsupported, or no presses appear (newer
-QMK returns zeros unless built with `VIA_INSECURE`), use the
-**VIA Key Tester** in the VIA app with `originals/manufacturer_jsonfile.json`.
-It relies on the same query. Failing that, the matrix can only be read after
-flashing our firmware (a matrix-test build would be needed, under a separate
-approval).
-
-## Settlement (to be filled in by the user)
-
-| | |
-|---|---|
-| Date / method | |
-| Backspace | HHKB split / 2u |
-| Left shift | 2.25u / split |
-| Spacebar | 7u / 3-1-3 |
-| Positions observed (paste probe output) | |
-| Unexpected positions (e.g. `4,0`, `4,13`, `4,14`) | |
-| Settled by (user) | |
-
-After settlement: adjust `LAYOUT_all` / keymaps if needed, and turn R5 in
-`docs/risks.md` into "closed".
+* The base keeps `LAYOUT_all` (63 VIA positions), because the PCB supports the split variants.
+* The release keymap is `LAYOUT_60_hhkb`. Unused matrix positions are `KC_NO` and assignable in VIA.
+* `via/falcon_hs_r2.json` already opens on HHKB (layout option 0).
+* QMK/VIA draw the HHKB space as 7u; the real cap may differ. This is cosmetic only.

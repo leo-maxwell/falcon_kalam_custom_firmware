@@ -34,10 +34,10 @@ Use whichever applies, then check with `dfu-util -l`. Expect `1eaf:0003` with an
    (`QK_BOOT` in the vendor's compiled keymap), or QMK Command
    LShift+RShift+B ("Jump to Bootloader" is compiled in; the key combo is QMK's
    default and unverified).
-3. **Power-on window**: the Maple bootloader is expected to enumerate briefly
-   after power-on before starting the application (unverified, risk R7). `dfu-util`
-   with `-w` (wait for device) can catch it.
-4. **Neither works**: SWD (step 5).
+3. **Power-on window: not available.** A watched replug showed no DFU window
+   (risk R13), so a plain replug does not reach the bootloader.
+4. **None of the key methods work** (the firmware does not boot or scan): short the
+   reset/boot pads as before, or use SWD (step 5).
 
 ## 2. Restore the manufacturer firmware **[WRITES DEVICE]**
 

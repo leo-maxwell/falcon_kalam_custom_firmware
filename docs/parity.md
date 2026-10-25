@@ -37,7 +37,7 @@ Nothing here is hardware-tested yet.
 | NKRO (report ID 6) | yes; breaks macOS Caps Lock / input source | base: yes (supported). Release config: disabled at build time (build fails if re-enabled) | **cfg** POLICY-NKRO (this is the fix) |
 | Mouse keys, system, consumer reports | yes | yes | **=** |
 | HID console (`qmk console`) | yes | yes | **=** |
-| VIA raw HID | yes, protocol ≥ 12 (exact: **?**) | protocol `0x000D` | **+** (newer) |
+| VIA raw HID | yes, protocol `0x000C` (probe) | protocol `0x000D` | **+** (newer) |
 
 ### Keyboard functions
 
@@ -48,12 +48,12 @@ Nothing here is hardware-tested yet.
 | Bootmagic (Esc on plug-in → DFU + clear EEPROM) | yes | yes | **=** |
 | Command (LShift+RShift+key: B bootloader, Backspace clear EEPROM, …) | yes | yes, QMK defaults | **=** (N "NKRO toggle" is a no-op) |
 | EEPROM emulation | wear-leveling 2 KB / 1 KB logical | same, location deterministic | **+** |
-| VIA dynamic keymap layers | **?** (probe `info`) | 4 | **?** |
-| VIA macros | **?** (probe `info`) | 16, buffer = rest of the 1 KB EEPROM | **?** |
+| VIA dynamic keymap layers | 4 (probe) | 4 | **=** |
+| VIA macros | 16, 384-byte buffer (probe) | 16, 383-byte buffer (newer eeconfig is 1 B larger) | **=** |
 | VIA layout options | 3 options; default view = 2u backspace | same 3; default view = **HHKB** | **+** |
 | RGB underglow | rgblight, 4 × WS2812 on PA1, GRB, bit-bang, all 43 effects | identical | **=** |
 | RGB off on USB suspend | unknown | yes (`RGBLIGHT_SLEEP`) | **?**/+ |
-| RGB defaults (mode, HSV, brightness cap) | **?** (probe `info` reads the current state) | QMK defaults, no cap | **?** |
+| RGB defaults | mode 9 rainbow swirl, brightness 127, hue 0, sat 255, speed 0 (probe, right after the stock EEPROM reset); no brightness cap in code | same defaults (POLICY-PARITY in `falcon/config.h`); no cap | **=** |
 | Grave-escape, space-cadet, magic keycodes | compiled in | compiled in (QMK defaults) | **=** |
 
 ### Default keymap
@@ -68,20 +68,20 @@ required. Every stock capability is still reachable:
 | Fn+1…= = F1–F12, Fn+Esc = `` ` `` | Fn+1…= = F1–F12 (HHKB), `` ` `` on the top row |
 | Fn+Tab = `QK_BOOT` | Bootmagic (Esc), Command LShift+RShift+B, or VIA |
 | Fn+Q / Fn+W = RGB toggle / next mode | Fn+Z/X/C/V/B = toggle / mode / hue / sat / value |
-| Bottom row LCtl·LGui·LAlt·Space·RAlt·Fn·RCtl (incl. `4,0`/`4,13`) | HHKB: Alt·GUI·Space·GUI·Alt; `4,0`/`4,13`/`4,14` pending L-1 |
+| Bottom row LCtl·LGui·LAlt·Space·RAlt·Fn·RCtl (incl. `4,0`/`4,13`, which don't exist on this unit) | HHKB: Alt·◆·Space·◆·Alt (layout settled, L-1) |
 | (none) | full HHKB Fn layer: arrows, Home/End/PgUp/PgDn, media, Ins/Del, PrtSc/ScrLk/Pause, keypad ops |
 
 ### Phase 1 summary
 
 * **Done:** every stock firmware feature. NKRO is implemented in the base and switched off by the release configuration (POLICY-NKRO); removing two lines there re-enables it.
-* **Waiting on the live probe** (read-only, with the stock firmware running): exact stock VIA protocol, layer and macro counts, and RGB defaults. Run `tools/falcon_probe.py info` once, then update the **?** rows.
+* **Stock probe done** (2026-10-26, read-only): VIA protocol, layers, macros and RGB defaults are filled in above; parity was reached for all of them. The physical layout is settled (HHKB classic).
 * **Waiting on hardware:** everything. Nothing has been flashed.
 
 ## Phase 2: improvements (roadmap)
 
 | # | Improvement | Depends on | Notes |
 |---|---|---|---|
-| I1 | Settle the physical layout (L-1) and fix `LAYOUT_all` to match reality | probe / user | `docs/layout.md` |
+| I1 | ~~Settle the physical layout~~ **done**: HHKB classic, release on `LAYOUT_60_hhkb` | — | `docs/layout.md` |
 | I2 | Back up and identify the bootloader, then drop POLICY-FLASHREAD if not wanted | first flash | `docs/bootloader.md` |
 | I3 | `QK_REBOOT` that really restarts the app: override `mcu_reset()` to skip the `0x424D` flag, which the upstream bootloader mishandles | I2 (confirm the installed bootloader has the bug) | policy layer only |
 | I4 | RGB power/brightness cap from a measured LED current | hardware | `RGBLIGHT_LIMIT_VAL` |

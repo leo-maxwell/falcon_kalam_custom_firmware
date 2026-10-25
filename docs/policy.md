@@ -25,7 +25,7 @@ check.
 | POLICY-EVIDENCE | Hardware parameters come only from verified evidence. Anything unproven is marked unverified, never invented. | `analyze_vendor_firmware.py` (exact-address checks); `docs/hardware.md` status column |
 | POLICY-READONLY-DEVICE | Without checklist approval, only read the device: enumeration, DFU **upload**, whitelisted VIA queries | probe whitelist; `docs/preflash-checklist.md` |
 | POLICY-FLASH-GATE | Flash only `falcon_hs_r2_falcon.bin` with the approved hash, via DFU **alt 2** (alt 1 erases `0x08002000`), after the checklist approval | `docs/preflash-checklist.md` §0 |
-| POLICY-OPEN-ISSUES | An open issue (currently L-1 layout) stays open until the user explicitly settles it in its document | `docs/layout.md` settlement table |
+| POLICY-OPEN-ISSUES | An open issue stays open until the user explicitly settles it in its document (L-1 layout: settled 2026-10-26; none open) | the issue document's settlement section |
 
 ## QMK update procedure (POLICY-QMK-LATEST)
 

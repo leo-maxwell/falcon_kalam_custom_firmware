@@ -63,15 +63,15 @@ Archive member included to satisfy reference by file (symbol)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-reent.o)
                               /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signalr.o) (errno)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_ldivmod.o)
-                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o (__aeabi_ldivmod)
+                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o (__aeabi_ldivmod)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_uldivmod.o)
-                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o (__aeabi_uldivmod)
+                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o (__aeabi_uldivmod)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_udivmoddi4.o)
                               /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_ldivmod.o) (__udivmoddi4)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_dvmd_tls.o)
                               /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_ldivmod.o) (__aeabi_ldiv0)
 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memcmp.o)
-                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o (memcmp)
+                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o (memcmp)
 
 Allocating common symbols
 Common symbol       size              file
@@ -112,30 +112,30 @@ __lock___sfp_recursive_mutex
 
 Discarded input sections
 
- .text          0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .data          0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss           0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text          0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .data          0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss           0x00000000        0x0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ws2812_set_color_all
-                0x00000000       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__cxa_pure_virtual
-                0x00000000        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._gettimeofday_r
-                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .text._link_r  0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .text._link_r  0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._times_r
-                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._unlink_r
-                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .text._open_r  0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .text._open_r  0x00000000        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.vsnprintf
-                0x00000000       0x2e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000       0x2e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.snprintf
-                0x00000000       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.vsprintf
-                0x00000000        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .text.sprintf  0x00000000       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .text.sprintf  0x00000000       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__dso_handle
-                0x00000000        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data          0x00000000        0x0 .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
  .bss           0x00000000        0x0 .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
  .data          0x00000000        0x0 .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
@@ -249,7 +249,7 @@ ram7             0x00000000         0x00000000
 Linker script and memory map
 
 LOAD .build/obj_falcon_hs_r2_falcon/.build/obj_falcon_hs_r2_falcon/src/default_keyboard.o
-LOAD /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+LOAD /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 LOAD .build/obj_falcon_hs_r2_falcon/quantum/keymap_introspection.o
 LOAD .build/obj_falcon_hs_r2_falcon/quantum/quantum.o
 LOAD .build/obj_falcon_hs_r2_falcon/quantum/bitwise.o
@@ -686,481 +686,481 @@ END GROUP
                 0x080040b4                __aeabi_idiv0
  *(.text.*)
  .text.host_raw_hid_send.constprop.123
-                0x080040b8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080040b8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.via_command_kb.constprop.121
-                0x080040cc       0xa0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080040cc       0xa0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.read_source_layers_cache_impl.constprop.117
-                0x0800416c       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800416c       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.update_source_layers_cache_impl.constprop.116
-                0x0800419c       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800419c       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ch_dlist_insert.constprop.107
-                0x080041d4       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080041d4       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.hsv_to_rgb_impl.constprop.101
-                0x08004204       0xd0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004204       0xd0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.waiting_buffer_typed.isra.2.constprop.76
-                0x080042d4       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080042d4       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__sch_ready_behind
-                0x08004318       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004318       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chThdDequeueAllI.constprop.52
-                0x08004334       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004334       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chThdDequeueNextI.constprop.15
-                0x08004366       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004366       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800437e        0x2 
  .text.usb_lld_init_endpoint
-                0x08004380       0xb4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004380       0xb4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_lld_reset.constprop.44
-                0x08004434       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004434       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_packet_write_from_buffer
-                0x08004470       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004470       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._pal_lld_setgroupmode
-                0x080044b8       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080044b8       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_query_erase
-                0x0800451c       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800451c       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_start_erase_all
-                0x08004546        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004546        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_program
-                0x0800454a       0x94 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800454a       0x94 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080045de        0x2 
  .text.efl_lld_get_descriptor
-                0x080045e0        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080045e0        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.flashGetSectorOffset
-                0x080045e8       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080045e8       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_verify_erase
-                0x08004602       0x34 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004602       0x34 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_start_erase_sector
-                0x08004636       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004636       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usbStartTransmitI
-                0x0800466e       0x56 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800466e       0x56 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usbStartReceiveI
-                0x080046c4       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080046c4       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.setup_error
-                0x08004718       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004718       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._usb_ep0out
-                0x08004768       0x68 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004768       0x68 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._usb_ep0in
-                0x080047d0       0x98 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080047d0       0x98 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.set_address
-                0x08004868       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004868       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obqPostFullBufferS
-                0x08004890       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004890       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obqFlush
-                0x080048b6       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080048b6       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obqGetFullBufferI
-                0x080048d6       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080048d6       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obqResetI
-                0x080048f2       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080048f2       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08004906        0x2 
  .text.__port_irq_epilogue
-                0x08004908       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004908       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ch_sch_prio_insert
-                0x08004954       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004954       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chThdResumeI
-                0x08004972       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004972       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text._usb_ep0setup
-                0x08004984      0x378 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004984      0x378 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__idle_thread
-                0x08004cfc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004cfc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__sch_wakeup
-                0x08004d00       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004d00       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chSysHalt
-                0x08004d44        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004d44        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_shared_idle_timer_elapsed
-                0x08004d50       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004d50       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_shared_get_idle_rate
-                0x08004db0       0x16 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004db0       0x16 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08004dc6        0x2 
  .text.usb_shared_set_idle_rate
-                0x08004dc8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004dc8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_idle_timer_elapsed
-                0x08004dec       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004dec       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_get_idle_rate
-                0x08004e40        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004e40        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_set_idle_rate
-                0x08004e4c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004e4c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_endpoint_in_is_inactive
-                0x08004e68       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004e68       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_endpoint_in_tx_complete_cb
-                0x08004e9e       0xb0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004e9e       0xb0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obnotify
-                0x08004f4e       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004f4e       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_start_receive
-                0x08004f84       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004f84       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_endpoint_out_rx_complete_cb
-                0x08004fbc       0x5c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08004fbc       0x5c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ibnotify
-                0x08005018        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005018        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_dummy
-                0x0800501e        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800501e        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_nkro
-                0x08005020        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005020        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08005022        0x2 
  .text.usb_requests_hook_cb
-                0x08005024      0x1e0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005024      0x1e0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.set_led_transfer_cb
-                0x08005204       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005204       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_event_queue_enqueue
-                0x08005230       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005230       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_get_descriptor_cb
-                0x08005260      0x140 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005260      0x140 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__NVIC_SystemReset
-                0x080053a0       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080053a0       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_device_state_get_leds
-                0x080053c4        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080053c4        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.del_key_from_report
-                0x080053d0       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080053d0       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.add_key_byte
-                0x080053f4       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080053f4       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08005426        0x2 
  .text.host_consumer_send
-                0x08005428       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005428       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.host_system_send
-                0x08005464       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005464       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.host_keyboard_leds
-                0x0800549c       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800549c       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.mousekey_off
-                0x080054b0       0xec /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080054b0       0xec /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wheel_unit
-                0x0800559c       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800559c       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.move_unit
-                0x08005600       0x6c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005600       0x6c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.mousekey_on
-                0x0800566c       0xbc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800566c       0xbc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.times_inv_sqrt2
-                0x08005728       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005728       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ws2812_set_color
-                0x08005750       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005750       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ws2812_init
-                0x08005768       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005768       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.sendByte
-                0x08005778       0x7c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005778       0x7c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.ws2812_flush
-                0x080057f4       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080057f4       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_set
-                0x0800583c       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800583c       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_setrgb.part.4
-                0x08005868       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005868       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_sethsv_noeeprom_old.part.5
-                0x0800588c       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800588c       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_breathing
-                0x080058c8       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080058c8       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_rainbow_mood
-                0x080058f4       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080058f4       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_rgbtest
-                0x08005918       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005918       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_check_config
-                0x08005954       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005954       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.sethsv_raw
-                0x08005974       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005974       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_alternating
-                0x080059a0       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080059a0       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_christmas
-                0x080059e0       0x98 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080059e0       0x98 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_knight
-                0x08005a78       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005a78       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_snake
-                0x08005b00       0xac /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005b00       0xac /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_rainbow_swirl
-                0x08005bac       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005bac       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.backing_store_read
-                0x08005bec       0x58 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005bec       0x58 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.backing_store_write
-                0x08005c44       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005c44       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_lock
-                0x08005c84       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005c84       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_unlock
-                0x08005cbc       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005cbc       0x54 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_write_consolidated
-                0x08005d10       0xd8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005d10       0xd8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.putchar_wrapper
-                0x08005de8        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005de8        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.putchar_via_gadget
-                0x08005df4       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005df4       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.out_rev_
-                0x08005e1a       0x5e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005e1a       0x5e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.print_integer
-                0x08005e78      0x17e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005e78      0x17e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08005ff6        0x2 
  .text.vsnprintf_impl.constprop.114
-                0x08005ff8      0x390 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08005ff8      0x390 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.gpio_atomic_set_pin_input_high
-                0x08006388       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006388       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.null_sendchar_func
-                0x080063aa        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080063aa        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080063ae        0x2 
  .text.mod_config
-                0x080063b0       0xc8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080063b0       0xc8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.keycode_config
-                0x08006478      0x110 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006478      0x110 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.action_for_keycode
-                0x08006588      0x1bc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006588      0x1bc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.del_mods
-                0x08006744       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006744       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.debug_waiting_buffer
-                0x08006754       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006754       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.update_tri_layer
-                0x08006774       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006774       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.layer_off
-                0x080067a0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080067a0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.clear_oneshot_layer_state
-                0x080067b8       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080067b8       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.layer_on
-                0x080067e8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .text.bitrev   0x080067fc       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080067e8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .text.bitrev   0x080067fc       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_lld_read
-                0x08006822       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006822       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_shared_get_report
-                0x0800684c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800684c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_shared_set_report
-                0x08006868       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006868       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_get_report
-                0x08006890       0x16 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006890       0x16 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080068a6        0x2 
  .text.usb_set_report
-                0x080068a8       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080068a8       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_read
-                0x080068c8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080068c8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeprom_read_byte
-                0x080068ec       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080068ec       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_eeconfig_read_rgblight.constprop.74
-                0x08006908       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006908       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_via_read_layout_options.part.1
-                0x08006938        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006938        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.via_eeprom_is_valid
-                0x08006942       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006942       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_dynamic_keymap_read_keycode.part.0
-                0x0800696e       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800696e       0x2a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.keymap_key_to_keycode
-                0x08006998       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006998       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080069be        0x2 
  .text.layer_switch_get_layer
-                0x080069c0       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080069c0       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.layer_switch_get_action
-                0x08006a10       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006a10       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.is_tap_record
-                0x08006a34       0x5a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006a34       0x5a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.get_event_keycode
-                0x08006a8e       0x5e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006a8e       0x5e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_dynamic_keymap_macro_read_buffer
-                0x08006aec       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006aec       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_string_get_next_nvm
-                0x08006b28       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006b28       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_eeconfig_read_keymap
-                0x08006b46       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006b46       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usbInitEndpointI
-                0x08006b66       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006b66       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_event_cb
-                0x08006b98      0x108 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006b98      0x108 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_shared_reset_report
-                0x08006ca0       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006ca0       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_reset_report
-                0x08006cc6       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006cc6       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08006ce2        0x2 
  .text.wear_leveling_clear_cache
-                0x08006ce4       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006ce4       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chSchGoSleepS
-                0x08006d04       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006d04       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_acquire_exclusive
-                0x08006d20       0x70 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006d20       0x70 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chSchGoSleepTimeoutS
-                0x08006d90       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006d90       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.obqGetEmptyBufferTimeoutS
-                0x08006de0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006de0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.chThdSleep
-                0x08006e2c       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006e2c       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.backing_store_erase
-                0x08006e44       0x84 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006e44       0x84 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_erase
-                0x08006ec8       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006ec8       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08006efa        0x2 
  .text.wear_leveling_consolidate_if_needed
-                0x08006efc       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006efc       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_append_raw
-                0x08006f28       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006f28       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.wear_leveling_write
-                0x08006f50      0x178 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08006f50      0x178 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeprom_update_dword
-                0x080070c8       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080070c8       0x2c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeprom_update_word
-                0x080070f4       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080070f4       0x32 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeprom_update_byte
-                0x08007126       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007126       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_eeconfig_update_rgblight.constprop.103
-                0x08007148       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007148       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_decrease_speed
-                0x08007164       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007164       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_increase_speed
-                0x08007178       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007178       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeconfig_update_rgblight_default
-                0x0800718c       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800718c       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.dynamic_keymap_reset
-                0x080071a4       0x5c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080071a4       0x5c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.nvm_dynamic_keymap_macro_reset
-                0x08007200       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007200       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.eeconfig_init_via
-                0x08007264       0x46 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007264       0x46 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080072aa        0x2 
  .text.eeconfig_init_quantum
-                0x080072ac       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080072ac       0x50 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_effect_twinkle
-                0x080072fc       0xe8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .text._fini    0x080073e4        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080072fc       0xe8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .text._fini    0x080073e4        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080073e4                _fini
  .text.suspend_power_down_modules
-                0x080073e6        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080073e6        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080073e6                __cpu_init
- .text._getpid  0x080073e8        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text._getpid  0x080073e8        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080073e8                _getpid
- .text._kill    0x080073ec        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text._kill    0x080073ec        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080073ec                _kill
- .text._exit    0x080073f8        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text._exit    0x080073f8        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080073f8                _exit
- .text._sbrk_r  0x08007404       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text._sbrk_r  0x08007404       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007404                _sbrk_r
  .text._isatty_r
-                0x08007444        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007444        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007444                _isatty_r
  .text._fstat_r
-                0x08007448       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007448       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007448                _fstat_r
  .text._lseek_r
-                0x08007460        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007460        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007460                _lseek_r
  .text._write_r
-                0x08007464        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007464        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007464                _write_r
- .text._read_r  0x08007468        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text._read_r  0x08007468        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007468                _read_r
  .text._close_r
-                0x08007472        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007472        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007472                _close_r
  *fill*         0x08007476        0x2 
  .text.Vector90
-                0x08007478      0x2d0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007478      0x2d0 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007478                Vector90
  .text.SysTick_Handler
-                0x08007748       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007748       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007748                SysTick_Handler
  .text.SVC_Handler
-                0x080077ac       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080077ac       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080077ac                SVC_Handler
  *fill*         0x080077be        0x2 
  .text.chThdExit
-                0x080077c0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080077c0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080077c0                chThdExit
  .text.__sch_reschedule_ahead
-                0x080077d8       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080077d8       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080077d8                chSchDoPreemption
  .text.chSchRescheduleS
-                0x08007810       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007810       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.usb_endpoint_in_send.part.1.constprop.51
-                0x08007828       0xe6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007828       0xe6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800790e        0x2 
  .text.send_report
-                0x08007910       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007910       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_raw_hid
-                0x08007940       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007940       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_extra
-                0x08007950        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007950        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_mouse
-                0x0800795a        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800795a        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_keyboard
-                0x08007964        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007964        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800796e        0x2 
  .text.sendchar
-                0x08007970       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007970       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.efl_release_exclusive
-                0x080079ac       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080079ac       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.timer_read32
-                0x08007a0c       0x8c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007a0c       0x8c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.matrix_scan
-                0x08007a98      0x150 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007a98      0x150 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.__init_ram_areas
-                0x08007be8       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007be8       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007be8                __init_ram_areas
  .text.__default_exit
-                0x08007c20        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007c20        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007c20                __default_exit
  .text.__late_init
-                0x08007c22        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007c22        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007c22                __late_init
  .text.__early_init
-                0x08007c24       0x74 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007c24       0x74 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007c24                __early_init
- .text.vprintf  0x08007c98       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text.vprintf  0x08007c98       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x08007c98                vprintf
- .text.printf   0x08007cc0       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .text.printf   0x08007cc0       0x1a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08007cda        0x2 
  .text.mousekey_send
-                0x08007cdc       0xfc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007cdc       0xfc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.mousekey_param_print
-                0x08007dd8       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007dd8       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.mousekey_console
-                0x08007e20      0x1dc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007e20      0x1dc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_timer_disable
-                0x08007ffc       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08007ffc       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_timer_enable
-                0x08008020       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008020       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_sethsv_eeprom_helper
-                0x0800806c      0x13c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800806c      0x13c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_decrease_val
-                0x080081a8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080081a8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_increase_val
-                0x080081c4       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080081c4       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_decrease_sat
-                0x080081e0       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080081e0       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_increase_sat
-                0x080081fc       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080081fc       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_decrease_hue
-                0x08008218       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008218       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_increase_hue
-                0x08008230       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008230       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_disable_noeeprom
-                0x08008248       0x34 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008248       0x34 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_mode_eeprom_helper
-                0x0800827c       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800827c       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_enable_noeeprom
-                0x0800830c       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800830c       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_step_reverse
-                0x08008344       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008344       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.rgblight_step
-                0x08008360       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008360       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.send_6kro_report
-                0x08008378       0xcc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008378       0xcc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.clear_keyboard
-                0x08008444       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008444       0x64 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.switch_default_layer
-                0x080084a8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080084a8       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.command_common
-                0x080084cc      0x264 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080084cc      0x264 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.unregister_mods
-                0x08008730       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008730       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x08008742        0x2 
  .text.register_mods
-                0x08008744       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008744       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.unregister_code
-                0x08008758       0x72 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008758       0x72 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x080087ca        0x2 
  .text.oneshot_set
-                0x080087cc       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080087cc       0x48 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.register_code
-                0x08008814      0x13c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008814      0x13c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.tap_code_delay
-                0x08008950       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008950       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.perform_space_cadet.constprop.85
-                0x08008988       0xac /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008988       0xac /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.process_record
-                0x08008a34      0xb4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08008a34      0xb4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.waiting_buffer_scan_tap
-                0x08009580       0x7c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08009580       0x7c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.process_tapping
-                0x080095fc      0x280 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080095fc      0x280 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.action_exec
-                0x0800987c       0xe8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800987c       0xe8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .text.generate_tick_event
-                0x08009964       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x08009964       0x38 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800999c        0x4 
  .text.startup.main
-                0x080099a0     0x1594 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x080099a0     0x1594 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                 0x080099a0                main
  *(.glue_7t)
  .glue_7t       0x0800af34        0x0 linker stubs
@@ -1192,129 +1192,129 @@ END GROUP
                 0x0800b07c                __sf_fake_stdin
  *(.rodata.*)
  .rodata.CIE1931_CURVE
-                0x0800b09c      0x100 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b09c      0x100 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.CSWTCH.3
-                0x0800b19c       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b19c       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.CSWTCH.4
-                0x0800b1ac       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b1ac       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.CSWTCH.5
-                0x0800b1bc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b1bc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.CSWTCH.8
-                0x0800b1c0        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b1c0        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800b1c3        0x1 
  .rodata.CSWTCH.9
-                0x0800b1c4       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b1c4       0x36 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ConfigurationDescriptor
-                0x0800b1fa       0x74 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b1fa       0x74 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ConsoleReport
-                0x0800b26e       0x15 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b26e       0x15 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.DeviceDescriptor
-                0x0800b283       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b283       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.KeyboardReport
-                0x0800b295       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b295       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.LanguageString
-                0x0800b2d9        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b2d9        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ManufacturerString
-                0x0800b2dd       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b2dd       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ProductString
-                0x0800b2ed       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b2ed       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_BREATHING_INTERVALS
-                0x0800b309        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b309        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_GRADIENT_RANGES
-                0x0800b30d        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b30d        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_KNIGHT_INTERVALS
-                0x0800b312        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b312        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_RAINBOW_MOOD_INTERVALS
-                0x0800b315        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b315        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_RAINBOW_SWIRL_INTERVALS
-                0x0800b318        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b318        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RGBLED_TWINKLE_INTERVALS
-                0x0800b31b        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b31b        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.RawReport
-                0x0800b31e       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b31e       0x22 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.SharedReport
-                0x0800b340       0x7d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b340       0x7d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata._exit.str1.1
-                0x0800b3bd      0xc2d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800b3bd      0xc2d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                   0x5 (size before relaxing)
  .rodata._kill.str1.1
-                0x0800bfea        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800bfea        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.active_status
-                0x0800bfea        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800bfea        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ascii_to_altgr_lut
-                0x0800bfec       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800bfec       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ascii_to_keycode_lut
-                0x0800bffc       0x80 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800bffc       0x80 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ascii_to_shift_lut
-                0x0800c07c       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c07c       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.cfgtab.7274
-                0x0800c08c       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c08c       0x12 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800c09e        0x2 
  .rodata.ch_core0_cfg
-                0x0800c0a0        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c0a0        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.col_pins
-                0x0800c0ac       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c0ac       0x3c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.command_common.str1.1
-                0x0800c0e8      0x4f7 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c0e8      0x4f7 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.efl_lld_descriptor
-                0x0800c0e8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c0e8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.ep0config
-                0x0800c104       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c104       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.halted_status
-                0x0800c128        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c128        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.hex_str.10161
-                0x0800c12a       0x11 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c12a       0x11 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800c13b        0x1 
  .rodata.keymaps
-                0x0800c13c      0x258 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c13c      0x258 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.main.str1.1
-                0x0800c394      0x2b1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c394      0x2b1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.mode_base_table
-                0x0800c394       0x2b /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c394       0x2b /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.mousekey_console.str1.1
-                0x0800c3bf      0x16e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3bf      0x16e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.mousekey_param_print.str1.1
-                0x0800c3bf       0x7d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3bf       0x7d /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.mousekey_send.str1.1
-                0x0800c3bf       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3bf       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.oneshot_set.str1.1
-                0x0800c3bf       0x15 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3bf       0x15 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.process_record.str1.1
-                0x0800c3bf       0xc9 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3bf       0xc9 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800c3bf        0x1 
  .rodata.ram_areas
-                0x0800c3c0       0x80 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c3c0       0x80 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_disable_noeeprom.str1.1
-                0x0800c440       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c440       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_effect_breathe_table
-                0x0800c440      0x100 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c440      0x100 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_enable_noeeprom.str1.1
-                0x0800c540       0x39 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x39 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_mode_eeprom_helper.str1.1
-                0x0800c540       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x3a /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_sethsv_eeprom_helper.str1.1
-                0x0800c540       0x73 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x73 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_timer_disable.str1.1
-                0x0800c540       0x19 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x19 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.rgblight_timer_enable.str1.1
-                0x0800c540       0x19 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x19 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.row_pins
-                0x0800c540       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c540       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.send_6kro_report.str1.1
-                0x0800c554       0x21 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c554       0x21 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.str1.1
-                0x0800c554        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c554        0x3 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.switch_default_layer.str1.1
-                0x0800c554        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c554        0x5 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.usb_endpoint_interface_lut
-                0x0800c554        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c554        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.usbcfg
-                0x0800c558       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .rodata.vmt    0x0800c568       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c558       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .rodata.vmt    0x0800c568       0x28 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.vsnprintf_impl.constprop.114.str1.1
-                0x0800c590        0xd /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c590        0xd /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .rodata.zero_status
-                0x0800c590        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x0800c590        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x0800c592        0x2 
  .rodata.str1.4
                 0x0800c594       0xc5 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-rand.o)
@@ -1359,70 +1359,70 @@ END GROUP
                 0x20000c00                _impure_ptr
  *(.data.*)
  .data.__compound_literal.0.lto_priv.125
-                0x20000c64       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000c64       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.1
-                0x20000cb0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000cb0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.10
-                0x20000cfc       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000cfc       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.11
-                0x20000d48        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000d48        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.12
-                0x20000d4c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000d4c       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.14
-                0x20000d68       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000d68       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.15
-                0x20000db4        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000db4        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.16
-                0x20000db8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000db8       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.2
-                0x20000dd4       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000dd4       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.3
-                0x20000e20       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000e20       0x24 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.4
-                0x20000e44       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000e44       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.6
-                0x20000e60       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000e60       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.7
-                0x20000eac        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000eac        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.__compound_literal.8
-                0x20000eb0       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000eb0       0x1c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.base_offset
-                0x20000ecc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ecc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.chibios_driver
-                0x20000ed0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ed0       0x18 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.first_sector
-                0x20000ee8        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .data.func     0x20000eec        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ee8        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .data.func     0x20000eec        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.high_bound.9638
-                0x20000ef0        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef0        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.increment.9639
-                0x20000ef1        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef1        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.increment.9651
-                0x20000ef2        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef2        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_delay
-                0x20000ef3        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef3        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_interval
-                0x20000ef4        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef4        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_max_speed
-                0x20000ef5        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef5        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_time_to_max
-                0x20000ef6        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef6        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_wheel_max_speed
-                0x20000ef7        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef7        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.mk_wheel_time_to_max
-                0x20000ef8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000ef8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20000ef9        0x3 
  .data.sector_count
-                0x20000efc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000efc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.static_effect_table
-                0x20000f00        0xb /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000f00        0xb /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.usb_device_state
-                0x20000f0b        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000f0b        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20000f0f        0x1 
  .data.usb_endpoints_in
-                0x20000f10      0x240 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20000f10      0x240 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .data.usb_endpoints_out
-                0x20001150       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001150       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *(.ramtext)
                 0x200011d8                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_edata = .)
@@ -1438,175 +1438,175 @@ END GROUP
                 0x200011d8                __malloc_free_list
                 0x200011dc                __malloc_sbrk_start
  *(.bss.*)
- .bss.EFLD1     0x200011e0       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .bss.EFLD1     0x200011e0       0x20 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.SerialNumberString
-                0x20001200       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.USBD1     0x20001244       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001200       0x44 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.USBD1     0x20001244       0x88 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.0.lto_priv.124
-                0x200012cc        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200012cc        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.13
-                0x200012d4       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200012d4       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.17
-                0x20001364       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001364       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.18
-                0x200013f4       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200013f4       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.5
-                0x20001484       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001484       0x90 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.__compound_literal.9
-                0x20001514       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001514       0x30 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.animation_status
-                0x20001544        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001544        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x2000154a        0x6 
- .bss.ch0       0x20001550       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .bss.ch0       0x20001550       0x60 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ch_c0_idle_thread_wa
-                0x200015b0      0x110 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200015b0      0x110 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ch_memcore
-                0x200016c0        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016c0        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.command_state
-                0x200016c8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016c8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.debouncing.7747
-                0x200016c9        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016c9        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x200016ca        0x2 
  .bss.debouncing_time.7746
-                0x200016cc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016cc        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.debug_config
-                0x200016d0        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016d0        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.default_layer_state
-                0x200016d1        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016d1        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x200016d2        0x2 
  .bss.desc.12449
-                0x200016d4        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016d4        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.descriptor.10580
-                0x200016d8        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.driver    0x200016e0        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016d8        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.driver    0x200016e0        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ecc_error_occurred
-                0x200016e4        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016e4        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x200016e5        0x3 
  .bss.ep0_state
-                0x200016e8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016e8       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ep0setup_buffer
-                0x200016fc        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200016fc        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.event_queue
-                0x20001704       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001704       0x10 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.event_queue_head
-                0x20001714        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001714        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.event_queue_tail
-                0x20001715        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001715        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20001716        0x2 
- .bss.flash     0x20001718        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .bss.flash     0x20001718        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.flash_erased_is_one
-                0x2000171c        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000171c        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.grave_esc_was_shifted
-                0x2000171d        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000171d        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x2000171e        0x2 
  .bss.idle_rate.10500
-                0x20001720        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001720        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.is_issuing_read
-                0x20001721        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001721        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.is_rgblight_initialized
-                0x20001722        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001722        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.is_set.10160
-                0x20001723        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001723        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.is_suspended
-                0x20001724        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001724        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.keyboard_protocol.10663
-                0x20001725        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001725        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.keymap_config
-                0x20001726        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001726        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_consumer_usage
-                0x20001728        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001728        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_led_status.10511
-                0x2000172a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000172a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_report.8068
-                0x2000172b        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000172b        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_suspend_state
-                0x20001733        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001733        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_system_usage
-                0x20001734        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001734        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_tick.11960
-                0x20001736        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001736        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_ticks
-                0x20001738        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001738        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_timer_c
-                0x2000173c        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000173c        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.last_timer_w
-                0x2000173e        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000173e        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.layer_state
-                0x20001740        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001740        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.led_twinkle_state
-                0x20001741       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001741       0x14 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.low_bound.9637
-                0x20001755        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.matrix    0x20001756        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001755        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.matrix    0x20001756        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.matrix_previous
-                0x20001760        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001760        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.mouse_report
-                0x2000176a        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000176a        0x6 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.mousekey_accel
-                0x20001770        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001770        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.mousekey_repeat
-                0x20001771        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001771        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.mousekey_wheel_repeat
-                0x20001772        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001772        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20001773        0x1 
  .bss.ms_offset
-                0x20001774        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001774        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.oneshot_layer_data
-                0x20001778        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001778        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.oneshot_locked_mods
-                0x20001779        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001779        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.oneshot_mods
-                0x2000177a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000177a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.param.12447
-                0x2000177b        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.pos.9622  0x2000177c        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000177b        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.pos.9622  0x2000177c        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x2000177d        0x3 
- .bss.pp.12448  0x20001780        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .bss.pp.12448  0x20001780        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.pre_suspend_enabled
-                0x20001784        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001784        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20001785        0x1 
  .bss.raw_matrix
-                0x20001786        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001786        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.real_mods
-                0x20001790        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001790        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x20001791        0x3 
  .bss.report.10445
-                0x20001794       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001794       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.report.10482
-                0x200017e0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200017e0       0x4c /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x2000182c        0x4 
  .bss.rgblight_config
-                0x20001830        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001830        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.rgblight_status
-                0x20001838        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001838        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.run_idle_task
-                0x2000183a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.sc_last   0x2000183b        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
- .bss.sc_timer  0x2000183c        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000183a        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.sc_last   0x2000183b        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+ .bss.sc_timer  0x2000183c        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x2000183e        0x2 
  .bss.set_report_buf
-                0x20001840        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001840        0x2 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.source_layers_cache
-                0x20001842       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001842       0x1e /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.tapping_key
-                0x20001860        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001860        0x8 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ticks_offset
-                0x20001868        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001868        0x4 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.waiting_buffer
-                0x2000186c       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x2000186c       0x40 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.waiting_buffer_head
-                0x200018ac        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200018ac        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.waiting_buffer_tail
-                0x200018ad        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200018ad        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.wakeup_matrix
-                0x200018ae        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200018ae        0xa /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.weak_mods
-                0x200018b8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200018b8        0x1 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *fill*         0x200018b9        0x3 
  .bss.wear_leveling
-                0x200018bc      0x408 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x200018bc      0x408 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .bss.ws2812_leds
-                0x20001cc4        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x20001cc4        0xc /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  *(COMMON)
  COMMON         0x20001cd0       0x21 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
                 0x20001cd0                __lock___atexit_recursive_mutex
@@ -1875,13 +1875,13 @@ OUTPUT(.build/falcon_hs_r2_falcon.elf elf32-littlearm)
 LOAD linker stubs
 
 .comment        0x00000000       0x26
- .comment       0x00000000       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+ .comment       0x00000000       0x26 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                  0x27 (size before relaxing)
 
 .ARM.attributes
                 0x00000000       0x31
  .ARM.attributes
-                0x00000000       0x29 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                0x00000000       0x29 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
  .ARM.attributes
                 0x00000029       0x21 .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
  .ARM.attributes
@@ -2019,13 +2019,13 @@ RGBLED_SNAKE_INTERVALS                            .build/obj_falcon_hs_r2_falcon
 RGBLED_TWINKLE_INTERVALS                          .build/obj_falcon_hs_r2_falcon/quantum/rgblight/rgblight.o (symbol from plugin)
 RawReport                                         .build/obj_falcon_hs_r2_falcon/usb_descriptor.o (symbol from plugin)
 Reset_Handler                                     .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
-SVC_Handler                                       /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+SVC_Handler                                       /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/ports/ARMv7-M/chcore.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 SecureFault_Handler                               .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 SerialNumberString                                .build/obj_falcon_hs_r2_falcon/usb_descriptor.o (symbol from plugin)
 SharedReport                                      .build/obj_falcon_hs_r2_falcon/usb_descriptor.o (symbol from plugin)
-SysTick_Handler                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+SysTick_Handler                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/SYSTICKv1/hal_st_lld.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 SystemCoreClock                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_lld.o (symbol from plugin)
@@ -2083,7 +2083,7 @@ Vector80                                          .build/obj_falcon_hs_r2_falcon
 Vector84                                          .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 Vector88                                          .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 Vector8C                                          .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
-Vector90                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+Vector90                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 Vector94                                          .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
@@ -2118,9 +2118,9 @@ __aeabi_ldiv0                                     /opt/homebrew/Cellar/arm-none-
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_uldivmod.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_ldivmod.o)
 __aeabi_ldivmod                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_ldivmod.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 __aeabi_uldivmod                                  /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/thumb/v7-m/nofp/libgcc.a(_aeabi_uldivmod.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 __assert                                          /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-assert.o)
 __assert_func                                     /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-assert.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-rand.o)
@@ -2132,19 +2132,19 @@ __chibios_override_boardInit                      .build/obj_falcon_hs_r2_falcon
                                                   .build/obj_falcon_hs_r2_falcon/protocol/chibios/chibios.o (symbol from plugin)
 __core_init                                       .build/obj_falcon_hs_r2_falcon/lib/chibios/os/oslib/src/chmemcore.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chsys.o (symbol from plugin)
-__cpu_init                                        /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__cpu_init                                        /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__cxa_pure_virtual                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__cxa_pure_virtual                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
 __data_base__                                     .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __data_end__                                      .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__default_exit                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__default_exit                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__dso_handle                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__dso_handle                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
-__early_init                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__early_init                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/protocol/chibios/chibios.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __errno                                           /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-errno.o)
@@ -2153,16 +2153,16 @@ __fini_array_base__                               .build/obj_falcon_hs_r2_falcon
 __fini_array_end__                                .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __fp_lock_all                                     /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
 __fp_unlock_all                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
-__heap_base__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__heap_base__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/oslib/src/chmemcore.o (symbol from plugin)
-__heap_end__                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__heap_end__                                      /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/oslib/src/chmemcore.o (symbol from plugin)
 __init_array_base__                               .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __init_array_end__                                .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__init_ram_areas                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__init_ram_areas                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__late_init                                       /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__late_init                                       /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __lock___arc4random_mutex                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
@@ -2190,85 +2190,85 @@ __malloc_unlock                                   /opt/homebrew/Cellar/arm-none-
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-mallocr.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-freer.o)
 __port_exit_from_isr                              .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/ports/ARMv7-M/chcore.o (symbol from plugin)
 __port_irq_epilogue                               .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/ports/ARMv7-M/chcore.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/SYSTICKv1/hal_st_lld.o (symbol from plugin)
 __port_switch                                     .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chschd.o (symbol from plugin)
 __port_switch_from_isr                            .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/ports/ARMv7-M/chcore.o (symbol from plugin)
 __port_thread_start                               .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chthreads.o (symbol from plugin)
 __process_stack_base__                            .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 __process_stack_end__                             .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
-__ram0_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram0_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram0_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram0_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram0_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram0_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram0_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram0_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram1_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram1_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram1_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram1_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram1_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram1_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram1_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram1_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram2_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram2_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram2_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram2_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram2_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram2_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram2_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram2_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram3_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram3_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram3_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram3_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram3_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram3_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram3_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram3_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram4_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram4_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram4_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram4_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram4_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram4_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram4_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram4_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram5_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram5_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram5_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram5_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram5_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram5_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram5_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram5_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram6_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram6_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram6_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram6_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram6_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram6_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram6_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram6_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram7_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram7_clear__                                    /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram7_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram7_init__                                     /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram7_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram7_init_text__                                /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
-__ram7_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+__ram7_noinit__                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt1.o (symbol from plugin)
 __retarget_lock_acquire                           /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
 __retarget_lock_acquire_recursive                 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
@@ -2353,22 +2353,22 @@ __udivmoddi4                                      /opt/homebrew/Cellar/arm-none-
 _cleanup                                          /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
 _cleanup_r                                        /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-makebuf.o)
-_close_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_close_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-stdio.o)
 _crt0_entry                                       .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
 _ctype_                                           /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-ctype_.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/lib/streams/chscanf.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/send_string/send_string.o (symbol from plugin)
-_exit                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_exit                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-abort.o)
 _fflush_r                                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fflush.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fvwrite.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-wbuf.o)
-_fini                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_fini                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
 _fiprintf_r                                       /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fprintf.o)
 _fprintf_r                                        /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fprintf.o)
@@ -2379,7 +2379,7 @@ _free_r                                           /opt/homebrew/Cellar/arm-none-
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fflush.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-wsetup.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-malloc.o)
-_fstat_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_fstat_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-makebuf.o)
 _fwalk                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fwalk.o)
@@ -2387,12 +2387,12 @@ _fwalk                                            /opt/homebrew/Cellar/arm-none-
 _fwalk_reent                                      /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fwalk.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fflush.o)
-_getpid                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_getpid                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signalr.o)
 _getpid_r                                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signalr.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-_gettimeofday_r                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_gettimeofday_r                                   /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
 _global_impure_ptr                                /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-impure.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
@@ -2412,17 +2412,17 @@ _impure_ptr                                       /opt/homebrew/Cellar/arm-none-
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-errno.o)
 _init_signal                                      /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
 _init_signal_r                                    /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-_isatty_r                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_isatty_r                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-makebuf.o)
-_kill                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_kill                                             /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signalr.o)
 _kill_r                                           /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signalr.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-_link_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_link_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
-_lseek_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_lseek_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-stdio.o)
 _malloc_r                                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-mallocr.o)
@@ -2434,7 +2434,7 @@ _malloc_r                                         /opt/homebrew/Cellar/arm-none-
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-malloc.o)
 _malloc_usable_size_r                             /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-msizer.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-reallocr.o)
-_open_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_open_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
 _pal_lld_init                                     .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/GPIOv1/hal_pal_lld.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal.o (symbol from plugin)
@@ -2449,20 +2449,20 @@ _printf_float                                     /opt/homebrew/Cellar/arm-none-
 _printf_i                                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf_i.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf.o)
 _raise_r                                          /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-_read_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_read_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-stdio.o)
 _realloc_r                                        /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-reallocr.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fvwrite.o)
 _reclaim_reent                                    /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-reent.o)
-_sbrk_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_sbrk_r                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-mallocr.o)
 _signal_r                                         /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-_times_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_times_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
 _unhandled_exception                              .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/vectors.o
-_unlink_r                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_unlink_r                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/platforms/chibios/syscall-fallbacks.o (symbol from plugin)
 _usb_ep0in                                        .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal_usb.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o (symbol from plugin)
@@ -2481,7 +2481,7 @@ _vectors                                          .build/obj_falcon_hs_r2_falcon
 _vfiprintf_r                                      /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf.o)
 _vfprintf_r                                       /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fprintf.o)
-_write_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+_write_r                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/various/newlib_bindings/syscalls.o (symbol from plugin)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-stdio.o)
 abort                                             /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-abort.o)
@@ -2602,7 +2602,7 @@ chMtxUnlockAllS                                   .build/obj_falcon_hs_r2_falcon
 chMtxUnlockS                                      .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chmtx.o (symbol from plugin)
 chRFCUCollectFaultsI                              .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chrfcu.o (symbol from plugin)
 chRFCUGetAndClearFaultsI                          .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chrfcu.o (symbol from plugin)
-chSchDoPreemption                                 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+chSchDoPreemption                                 /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chschd.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
 chSchDoYieldS                                     .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chschd.o (symbol from plugin)
@@ -2681,7 +2681,7 @@ chThdDequeueNextI                                 .build/obj_falcon_hs_r2_falcon
 chThdEnqueueTimeoutS                              .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chthreads.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal_queues.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal_buffers.o (symbol from plugin)
-chThdExit                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+chThdExit                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chthreads.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/ports/ARMv7-M/compilers/GCC/chcoreasm.o
 chThdExitS                                        .build/obj_falcon_hs_r2_falcon/lib/chibios/os/rt/src/chthreads.o (symbol from plugin)
@@ -3215,7 +3215,7 @@ led_update_ports                                  .build/obj_falcon_hs_r2_falcon
 led_update_user                                   .build/obj_falcon_hs_r2_falcon/quantum/led.o (symbol from plugin)
 led_wakeup                                        .build/obj_falcon_hs_r2_falcon/quantum/led.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/quantum.o (symbol from plugin)
-main                                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+main                                              /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/quantum/main.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/./lib/chibios/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.o
 malloc                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-malloc.o)
@@ -3263,20 +3263,20 @@ matrix_setup                                      .build/obj_falcon_hs_r2_falcon
 mcu_reset                                         .build/obj_falcon_hs_r2_falcon/platforms/chibios/bootloaders/stm32duino.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/quantum.o (symbol from plugin)
 memchr                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memchr-stub.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fvwrite.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf_i.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-vfprintf.o)
 memcmp                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memcmp.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 memcpy                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memcpy.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-reallocr.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fvwrite.o)
 memmove                                           /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memmove.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-fvwrite.o)
 memset                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memset.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-findfp.o)
 mk_delay                                          .build/obj_falcon_hs_r2_falcon/quantum/mousekey.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/command.o (symbol from plugin)
@@ -3515,7 +3515,7 @@ quantum_task                                      .build/obj_falcon_hs_r2_falcon
 raise                                             /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
                                                   /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-abort.o)
 rand                                              /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-rand.o)
-                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+                                                  /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
                                                   .build/obj_falcon_hs_r2_falcon/quantum/send_string/send_string.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/rgblight/rgblight.o (symbol from plugin)
 raw_hid_receive                                   .build/obj_falcon_hs_r2_falcon/quantum/via.o (symbol from plugin)
@@ -3738,11 +3738,11 @@ shutdown_modules                                  .build/obj_falcon_hs_r2_falcon
 shutdown_quantum                                  .build/obj_falcon_hs_r2_falcon/quantum/quantum.o (symbol from plugin)
 shutdown_user                                     .build/obj_falcon_hs_r2_falcon/quantum/quantum.o (symbol from plugin)
 signal                                            /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-signal.o)
-snprintf                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+snprintf                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 soft_reset_keyboard                               .build/obj_falcon_hs_r2_falcon/quantum/quantum.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/process_keycode/process_quantum.o (symbol from plugin)
 source_layers_cache                               .build/obj_falcon_hs_r2_falcon/quantum/action_layer.o (symbol from plugin)
-sprintf                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+sprintf                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 srand                                             /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-rand.o)
 stInit                                            .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal_st.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/lib/chibios/os/hal/src/hal.o (symbol from plugin)
@@ -4009,9 +4009,9 @@ via_qmk_rgblight_set_value                        .build/obj_falcon_hs_r2_falcon
 via_set_device_indication                         .build/obj_falcon_hs_r2_falcon/quantum/via.o (symbol from plugin)
 via_set_layout_options                            .build/obj_falcon_hs_r2_falcon/quantum/via.o (symbol from plugin)
 via_set_layout_options_kb                         .build/obj_falcon_hs_r2_falcon/quantum/via.o (symbol from plugin)
-vprintf                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
-vsnprintf                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
-vsprintf                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//ccwMVLag.ltrans0.ltrans.o
+vprintf                                           /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+vsnprintf                                         /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
+vsprintf                                          /var/folders/zr/rscy07jn29x06r790cxdls7m0000gn/T//cccMJ6gK.ltrans0.ltrans.o
 wakeup_matrix_handle_key_event                    .build/obj_falcon_hs_r2_falcon/platforms/suspend.o (symbol from plugin)
                                                   .build/obj_falcon_hs_r2_falcon/quantum/keyboard.o (symbol from plugin)
 wear_leveling_erase                               .build/obj_falcon_hs_r2_falcon/wear_leveling.o (symbol from plugin)
