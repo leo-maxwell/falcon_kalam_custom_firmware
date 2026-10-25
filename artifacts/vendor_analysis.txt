@@ -1,0 +1,95 @@
+# Falcon HS R2 vendor firmware analysis
+
+## 1. Artifact integrity
+  [PASS] falcon_flash_backup.bin sha256 4abf550ae7c093a28060ca7402fa3789366845ec8e72e65cb7e682a35e45d9f2
+  [PASS] manufacturer_firmware.bin sha256 90123fb1b6c1e9c20f10bae97fb0a2fa1ffbf8f1a5655cb8942251fd7b2cb60b
+  [PASS] manufacturer_jsonfile.json sha256 0c9a5b8e1877055c4b25a92b5b60b755942c9291df8d767914e1a38d63f0b754
+  [PASS] manufacturer BIN ends in a 16-byte DFU suffix (signature "UFD")
+  [PASS] DFU suffix targets VID:PID 1EAF:0003 (STM32duino/Maple bootloader)
+  [PASS] DFU suffix CRC32 0x327B2A81 is valid
+    suffix: bcdDevice=0xFFFF bcdDFU=0x0100
+  [PASS] application payload is 43940 bytes
+  [PASS] payload equals the first 43940 bytes of the DFU readback
+  [PASS] readback covers 0x08002000-0x0800FFFF (57344 bytes) => 64 KB part, 8 KB bootloader
+
+## 2. Vector table / runtime
+  [PASS] initial SP 0x20000400 is inside 20 KB SRAM
+  [PASS] reset vector 0x08002239 is Thumb code inside the image
+  [PASS] SVCall 0x0800A8C5 and SysTick 0x0800A8D9 have handlers, PendSV is the default handler (ChibiOS RT ARMv7-M port, periodic tick)
+
+## 3. USB descriptors
+  [PASS] device descriptor (USB 2.0, EP0=64, 9DD1:9D89, bcdDevice 0x0001, iSerial 0) at ['0x800bee5']
+  [PASS] string descriptor "Falcon" used for manufacturer and product at ['0x800bf3f', '0x800bf4f']
+  [PASS] raw HID report (usage page 0xFF60, usage 0x61) present => VIA protocol
+  [PASS] boot keyboard report present
+  [PASS] shared-EP NKRO report (report ID 6, bitmap) present => vendor firmware HAS NKRO compiled in
+  [PASS] report ID 2 (mouse) present in shared report descriptor
+  [PASS] report ID 3 (system control) present in shared report descriptor
+  [PASS] report ID 4 (consumer) present in shared report descriptor
+
+## 4. Matrix pins and diode direction
+  [PASS] row_pins @0x0800C464 (ChibiOS ioline_t = port|pad): B3 B4 B5 B6 A2
+  [PASS] col_pins @0x0800C10C: A9 A3 A4 A5 A6 A7 B0 B1 B10 B11 B12 B13 B14 B15 A8
+  [PASS] matrix scan @0x08006100 iterates row_pins in the outer loop and col_pins in the inner loop
+  [PASS] select: palSetLineMode(row, 6=OUTPUT_PUSHPULL) then GPIO->BRR (offset 0x14) => row driven LOW
+  [PASS] read: GPIO->IDR (offset 0x08) bit tested, key = bit==0 => columns are active-low inputs
+  [PASS] unselect @0x080056A4: palSetLineMode(row, 3=INPUT_PULLUP)
+    => rows are strobed, columns sensed: QMK DIODE_DIRECTION COL2ROW
+
+## 5. Clock tree (stm32_clock_init @0x080090AC)
+  [PASS] RCC_CR |= HSEON (0x10000), waits HSERDY => external crystal used
+  [PASS] RCC_CFGR |= 0x001D0000 => PLLSRC=HSE, PLLMUL=x9
+  [PASS] RCC_CFGR = 0x001D6400 => HPRE/1, PPRE1/2, PPRE2/2, ADCPRE/4, USBPRE=/1.5
+  [PASS] FLASH_ACR = 0x12 => 2 wait states + prefetch (72 MHz)
+  [PASS] SW = PLL
+  [PASS] matrix input delay is 18 NOPs = GPIO_INPUT_PIN_DELAY (CPU_CLOCK/1MHz/4) => CPU_CLOCK 72 MHz
+  [PASS] post-row wait is 0x870 = 2160 DWT cycles = 30 us (MATRIX_IO_DELAY) @ 72 MHz
+    => SYSCLK 72 MHz = HSE x 9 => HSE = 8 MHz; USB = 72/1.5 = 48 MHz
+
+## 6. Board init, JTAG/SWD, bootloader flags
+  [PASS] AFIO_MAPR |= 0x02000000 (SWJ_CFG=010): JTAG-DP off, SW-DP on => PB3/PB4/PA15 usable as GPIO
+  [PASS] boardInit writes BKP_DR10 = 0x424C (RTC_BOOTLOADER_FLAG)
+  [PASS] mcu_reset writes BKP_DR10 = 0x424D (RTC_BOOTLOADER_JUST_UPLOADED) before NVIC reset
+  [PASS] GPIOA CRH reset value 0x888884B8
+  [PASS] GPIOC CRH 0x88388888, GPIOD CRL 0x88888844 (PD0/PD1 = OSC_IN/OUT)
+    these equal VAL_GPIOxCRx in QMK platforms/chibios/boards/STM32_F103_STM32DUINO/board/board.h
+
+## 7. Flash layout and EEPROM (wear-leveling on embedded flash)
+  [PASS] ChibiOS EFL descriptor @0x0800C148: attrs=3 page=2 sectors=128 sector_size=1024 base=0x08000000 size=0x20000 (STM32F103xB registry)
+  [PASS] backing_store_init reads F_SIZE @0x1FFFF7E0 to place storage at the end of flash
+  [PASS] F_SIZE masked as (x & 0xFFFF) << 10 (QMK detect_flash_size)
+  [PASS] 0x0800CBA4-0x0800F7FF erased (unused application flash)
+  [PASS] 0x0800F800-0x0800FBFF (WL base image, 1 KB) erased
+  [PASS] 0x0800FC00-0x0800FFFF (WL write log) holds data
+    write log non-FF bytes at offsets [8, 9, 10, 11]: ff ff ff ff ff ff ff ff bf 00 be 00 ff ff ff ff
+    => F_SIZE reads 64 KB on this unit; EEPROM = 0x0800F800-0x0800FFFF (2 KB backing, 1 KB logical)
+
+## 8. RGB (WS2812 bit-bang, rgblight)
+  [PASS] ws2812_init: palSetGroupMode(GPIOA, mask 0x0002, 6=OUTPUT_PUSHPULL) => data pin PA1
+  [PASS] ws2812 bit writer toggles GPIOA BSRR/BRR with mask 0x0002 (PA1), MSB first
+  [PASS] reset latch loop 1344 x 15 cycles = 20160 cycles = 280 us @ 72 MHz (WS2812_TRST_US default)
+  [PASS] rgblight_set -> ws2812_setleds(led, 4) => RGBLIGHT_LED_COUNT 4
+  [PASS] rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB
+
+## 9. Vendor default keymap (2 layers @0x0800C18A)
+    layer 0:
+      r0 QK_GESC   1         2         3         4         5         6         7         8         9         0         MINS      EQL       GRV       BSPC     
+      r1 TAB       Q         W         E         R         T         Y         U         I         O         P         LBRC      RBRC      KC_NO     BSLS     
+      r2 LT(1,CAPS) A         S         D         F         G         H         J         K         L         SCLN      QUOT      KC_NO     KC_NO     ENT      
+      r3 LSFT      KC_TRNS   Z         X         C         V         B         N         M         COMM      DOT       SLSH      RSFT      KC_NO     MO(1)    
+      r4 LCTL      LGUI      LALT      KC_NO     KC_NO     KC_NO     KC_NO     SPC       KC_NO     KC_NO     KC_NO     RALT      MO(1)     RCTL      KC_NO    
+    layer 1:
+      r0 GRV       F1        F2        F3        F4        F5        F6        F7        F8        F9        F10       F11       F12       KC_NO     KC_NO    
+      r1 QK_BOOT   UG_TOGG   UG_NEXT   KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO    
+      r2 KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO    
+      r3 KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_TRNS  
+      r4 KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_NO     KC_TRNS   KC_NO     KC_NO    
+  [PASS] keycode values use QMK >= 0.19 numbering (QK_GESC = 0x7C16, QK_BOOT = 0x7C00, UG_TOGG = 0x7820)
+
+## 10. VIA JSON
+  [PASS] VID/PID match the device descriptor
+  [PASS] matrix 5 x 15
+    labels: ['Split Backspace', 'Split Left Shift', 'Split Spacebar']; menus: ['qmk_rgblight']
+    63 matrix positions referenced: 0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7 0,8 0,9 0,10 0,11 0,12 0,13 0,14 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7 1,8 1,9 1,10 1,11 1,12 1,14 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7 2,8 2,9 2,10 2,11 2,14 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7 3,8 3,9 3,10 3,11 3,12 3,14 4,1 4,2 4,5 4,7 4,9 4,11 4,12
+
+RESULT: PASS (0 failures)

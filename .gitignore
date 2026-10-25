@@ -1,0 +1,4 @@
+# Scratch output (disassembly, temporary builds). Release outputs live in artifacts/.
+/build/
+.DS_Store
+__pycache__/
