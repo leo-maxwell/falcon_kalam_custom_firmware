@@ -16,6 +16,7 @@ read-only inspection is allowed (docs/policy.md, POLICY-READONLY-DEVICE).
 | R1 decision: flash first and dump via FALCON_READ / SWD backup first | |
 | R10: POLICY-FLASHREAD code reviewed (`userspace/.../falcon/keymap.c`) | |
 | L-1 layout: settled / flashing while still open (accept) | |
+| R12: console + Command in release (keep / debug-only variant) | |
 
 ## A. Offline checks (no keyboard needed)
 
@@ -29,7 +30,7 @@ read-only inspection is allowed (docs/policy.md, POLICY-READONLY-DEVICE).
 
 ## B. Read-only, with the keyboard (allowed before approval)
 
-- [ ] Out of DFU (replug normally): `tools/falcon_probe.py info`, then `tools/falcon_probe.py dump-keymap artifacts/vendor_live_keymap.json` (captures the live layers).
+- [ ] Out of DFU (replug normally): `tools/falcon_probe.py info > artifacts/stock_probe_info.txt` (fills the **?** rows in `docs/parity.md`), then `tools/falcon_probe.py dump-keymap artifacts/vendor_live_keymap.json`.
 - [ ] Layout probe: `tools/falcon_probe.py matrix --log artifacts/layout_probe.csv` → fill in `docs/layout.md` (L-1).
 - [ ] Enter DFU (Bootmagic: hold Esc while plugging in; this erases the vendor EEPROM, which is accepted) → `dfu-util -l` shows `1eaf:0003` with alt 2 = "Upload to Flash 0x8002000".
 - [ ] Fresh upload equals the backup:
@@ -63,5 +64,6 @@ The first boot reinitialises EEPROM (R4, accepted).
 5. **Matrix and keymap**: VIA with `via/falcon_hs_r2.json` (it opens as HHKB) → key tester. Every key registers once at the expected position (L-1).
 6. **RGB**: Fn+Z toggles, Fn+X cycles modes, red/green/blue appear in the right order (R6). The VIA lighting menu works.
 7. **Persistence**: change a key in VIA, replug → the change survives.
-8. **Bootmagic reset**: hold Esc while plugging in → DFU. Replug → defaults are back.
-9. Record the results in `docs/hardware.md` and `docs/layout.md` ("Unverified" → "Verified"/"Refuted").
+8. **Parity extras**: LShift+RShift+B → DFU (Command); `qmk console` shows output after LShift+RShift+D; `tools/falcon_probe.py info` on our firmware → compare with `artifacts/stock_probe_info.txt`.
+9. **Bootmagic reset**: hold Esc while plugging in → DFU. Replug → defaults are back.
+10. Record the results in `docs/hardware.md` and `docs/layout.md` ("Unverified" → "Verified"/"Refuted").

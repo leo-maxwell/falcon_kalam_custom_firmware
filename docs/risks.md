@@ -19,12 +19,13 @@ a human decision or review before the first flash.
 | R8 | **The macOS Caps Lock/input-source fix is untested.** | Open | The release contains no NKRO code; the vendor had NKRO + Command "NKRO Toggle". Checklist §C4. |
 | R9 | **GCC 8.5 toolchain** (the vendor used 10.1). | Low | Versions are logged; the build is reproducible with this toolchain. |
 | R10 **HR** | **New custom firmware code: POLICY-FLASHREAD.** `via_command_kb` in the policy keymap reads memory for the host. | Needs code review | Only reads; whitelisted to the bootloader, option bytes and F_SIZE/UID; length ≤ 24; overflow-checked. Any host program can read those ranges, including the chip UID (a device identifier). Remove after the backup if not wanted. |
+| R12 **HR** | **Console + Command (POLICY-PARITY), as in stock.** While debug is toggled on (LShift+RShift+D), keypress reports go to the HID console, which any host program can read. LShift+RShift+Backspace clears EEPROM. | Accepted for parity, pending decision | Debug is off by default and not persisted across EEPROM resets. Alternative: move both to a debug-only variant (roadmap I5). |
 | R11 | **Wrong image flashed.** `falcon_hs_r2_default.bin` (base, with NKRO) sits next to the release. | Procedural | Only `falcon_hs_r2_falcon.bin` with the approved SHA-256 may be flashed (checklist §0). |
 
 ## Unsupported or intentionally omitted (release)
 
 * **NKRO**: off by policy (POLICY-NKRO). It is still on in the base, as in a normal QMK build.
-* **Console and Command**: the vendor had both (Command: LShift+RShift+key, including "NKRO Toggle" and "Jump to Bootloader"). They are omitted, as in normal QMK keyboards.
+* **Command "N" (NKRO toggle)** has no effect, because NKRO is not compiled in.
 * **Matrix positions `4,0`, `4,13`, `4,14`** are not in any layout until L-1 is settled.
 * **The vendor default keymap is not reproduced** (Caps = `LT(1,Caps)`, GESC, Fn+Tab = `QK_BOOT`). The release is HHKB as required. The vendor map is in `vendor_analysis.txt` §9.
 * **`QK_BOOT` is not on any default layer.** Use Bootmagic (Esc held while plugging in) or assign it in VIA.

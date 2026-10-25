@@ -5,7 +5,7 @@
 #   base    keyboards/falcon_hs_r2           normal QMK keyboard, keymap "default"
 #   policy  userspace/.../keymaps/falcon     project configuration -> RELEASE
 #
-#   scripts/build.sh            build + verify both
+#   scripts/build.sh            build + verify both, write the stock/release parity table
 #   scripts/build.sh --twice    additionally rebuild the release from clean and
 #                               require a byte-identical binary
 #
@@ -129,6 +129,10 @@ python3 -I "$ROOT/scripts/verify_firmware.py" --profile release \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
     --via-json "$ROOT/via/falcon_hs_r2.json" \
     --report "$ART/verification.txt"
+
+step "Stock vs release feature parity (from the binaries)"
+python3 -I "$ROOT/tools/feature_parity.py" "$ROOT/originals/manufacturer_firmware.bin" "$ART/$NAME.bin" \
+    --report "$ART/feature_parity.txt"
 
 step "Done -- artifacts NOT flashed"
 echo "release: $ART/$NAME.bin"

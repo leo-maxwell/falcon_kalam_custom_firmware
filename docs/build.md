@@ -51,15 +51,16 @@ scripts/negative_tests.sh
    - the **release** `falcon_hs_r2:falcon`: base plus the userspace policy layer (`QMK_USERSPACE=userspace/`). The build fails if this keymap is not taken from `userspace/`.
 7. Copies `.bin` (with DFU suffix), `.elf`, `.map`, compiler flags and generated `info_config.h` for both into `artifacts/`.
 8. With `--twice`, rebuilds the release from clean and requires an identical SHA-256.
-9. Verifies the base (`--profile base`: NKRO present, no VIA) and the release (`--profile release`: NKRO absent, VIA present, HHKB as VIA's default view, keymap from userspace).
+9. Verifies the base (`--profile base`: NKRO present, no VIA) and the release (`--profile release`: NKRO absent; VIA, console, Command and LTO present; HHKB as VIA's default view; keymap from userspace).
+10. Writes `artifacts/feature_parity.txt` (stock vs release, from the binaries).
 
 ## Results of this revision
 
 | | Release `falcon_hs_r2_falcon.bin` | Base `falcon_hs_r2_default.bin` |
 |---|---|---|
 | SHA-256 | see `artifacts/falcon_hs_r2_falcon.bin.sha256` | see `artifacts/falcon_hs_r2_default.bin.sha256` |
-| Payload | 42,320 B (76.5% of 55,296), 12,976 B free | 38,152 B |
-| NKRO / VIA | absent / present | present / absent |
+| Payload | 44,092 B (79.7% of 55,296), 11,204 B free; stock is 43,940 B | 38,152 B |
+| NKRO / VIA / console+Command+LTO | absent / present / present | present / absent / absent |
 | Flash? | the only image that may be flashed after approval | **never**: reference only |
 
 Reproducibility: identical hash across independent clean builds. Lint, both

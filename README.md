@@ -15,17 +15,18 @@ originals/             immutable vendor artifacts + SHA256SUMS (read-only)
 qmk_firmware/          upstream QMK, submodule, always the latest release (docs/policy.md)
 keyboards/falcon_hs_r2/  BASE: a normal QMK keyboard (hardware facts, NKRO on, keymap "default" = HHKB)
 userspace/             POLICY: QMK External Userspace
-  keyboards/falcon_hs_r2/keymaps/falcon/   NKRO off, VIA on, HHKB keymap, FALCON_READ
+  keyboards/falcon_hs_r2/keymaps/falcon/   NKRO off; VIA, console, Command, LTO on; HHKB keymap; FALCON_READ
 via/falcon_hs_r2.json  VIA definition (vendor JSON; HHKB is the default layout option)
 bootloader/STM32duino-bootloader/  MIT bootloader source, pinned reference (never built or flashed here)
-tools/                 vendor analysis, disassembly, read-only USB probe
+tools/                 vendor analysis, stock/release parity table, disassembly, read-only USB probe
 scripts/               build.sh, verify_firmware.py, negative_tests.sh, qmk_policy.sh
-docs/                  architecture, policy, hardware, bootloader, layout, RGB cross-check,
-                       build, recovery, pre-flash checklist, risks
+docs/                  policy, architecture, parity (progress vs stock), hardware, bootloader,
+                       layout, RGB cross-check, build, recovery, pre-flash checklist, risks
 artifacts/             built images, logs, verification reports, device inspection
 ```
 
-Project policy lives only in the userspace layer, tagged `POLICY-*`. To lift
+Progress against the stock firmware: [`docs/parity.md`](docs/parity.md). Policies:
+[`docs/policy.md`](docs/policy.md). Project policy lives only in the userspace layer, tagged `POLICY-*`. To lift
 the NKRO policy, edit two lines there; the base stays untouched
 ([`docs/architecture.md`](docs/architecture.md)).
 

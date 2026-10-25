@@ -144,13 +144,15 @@ def main():
         c.check(not nkro_bitmap.search(payload), 'POLICY-NKRO: no keyboard bitmap (NKRO) report in any HID descriptor')
         stub = sizes.get('send_nkro')
         stub_ok = stub is not None and stub[1] == 2 and img.u16(stub[0] & ~1) == 0x4770
-        c.check(nk_syms == ['send_nkro'] and stub_ok,
-                'POLICY-NKRO: only NKRO symbol is the empty send_nkro stub (2 bytes, bx lr): %s' % nk_syms)
+        c.check(nk_syms == [] or (nk_syms == ['send_nkro'] and stub_ok),
+                'POLICY-NKRO: no NKRO code (at most the empty send_nkro stub, 2 bytes, bx lr): %s' % nk_syms)
         c.check('-DNKRO_ENABLE' not in flags, 'POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags')
         c.check(any('userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c' in f for f in flags),
                 'keymap comes from the userspace policy layer')
-        c.check('falcon_read_allowed' in syms or 'via_command_kb' in syms, 'POLICY-FLASHREAD: read-only via_command_kb handler linked')
-        want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE')
+        c.check(any(n.split('.')[0] == 'via_command_kb' for n in syms), 'POLICY-FLASHREAD: read-only via_command_kb handler linked')
+        want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
+                '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
+        c.check(bool(img.find(bytes.fromhex('0631ff0974'))), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
     else:
         c.check(bool(nkro_bitmap.search(payload)), 'base is a normal QMK build: NKRO bitmap report present')
         c.check('-DNKRO_ENABLE' in flags and '-DVIA_ENABLE' not in flags, 'base flags: NKRO_ENABLE on, VIA_ENABLE off')
@@ -171,8 +173,10 @@ def main():
     c.check(kb.get('diode_direction') == 'COL2ROW', 'diode_direction COL2ROW')
     efl = struct.pack('<IIIIIII', 3, 2, 128, 0, 1024, 0x08000000, 0x20000)
     c.check(bool(img.find(efl)), 'ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)')
-    c.check(not img.find(struct.pack('<I', 0x1FFFF000)) and not img.find(struct.pack('<I', 0x1FFFF7E0)),
-            'no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)')
+    if not release:
+        # Base only: the release legitimately reads 0x1FFFF7E0 (POLICY-FLASHREAD); both share config.h.
+        c.check(not img.find(struct.pack('<I', 0x1FFFF000)) and not img.find(struct.pack('<I', 0x1FFFF7E0)),
+                'no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)')
     c.check(bool(img.find(struct.pack('<I', 0x001D6400))), 'RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor')
     c.check(bool(img.find(struct.pack('<HH', 0xF442, 0x12E8))), 'PLLSRC=HSE / PLLMUL x9 instruction (orr 0x1D0000) present')
     c.check(bool(img.find(struct.pack('<HH', 0xF244, 0x224C))) and bool(img.find(struct.pack('<HH', 0xF244, 0x224D))),

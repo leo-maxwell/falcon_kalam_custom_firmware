@@ -1,0 +1,18 @@
+# Stock vs release, extracted from the binaries
+
+item                                   stock                        release                      same
+size (bytes)                           43940                        44092                        *
+USB VID:PID / bcdDevice                9DD1:9D89 / 0001             9DD1:9D89 / 0001             =
+HID interfaces                         4                            4                            =
+endpoints (addr/size/interval ms)      81/8/1 82/32/1 03/32/1 84/32/1 85/32/1 81/8/1 82/32/1 03/32/1 84/32/1 85/32/1 =
+bMaxPower / remote wakeup              500 mA / yes                 500 mA / yes                 =
+HID: boot keyboard (6KRO)              yes                          yes                          =
+HID: VIA raw HID 0xFF60                yes                          yes                          =
+HID: console 0xFF31                    yes                          yes                          =
+HID: mouse (ID 2)                      yes                          yes                          =
+HID: system control (ID 3)             yes                          yes                          =
+HID: consumer (ID 4)                   yes                          yes                          =
+HID: NKRO bitmap (ID 6)                yes                          no                           *
+matrix pins (vendor tables)            yes                          yes                          =
+clock RCC_CFGR 0x001D6400              yes                          yes                          =
+rgblight: all 43 effects               yes                          yes                          =

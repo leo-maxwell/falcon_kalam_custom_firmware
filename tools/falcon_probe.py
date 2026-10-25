@@ -32,10 +32,16 @@ REPORT = 32
 # VIA command ids (quantum/via.h); everything not listed here is refused.
 GET_PROTOCOL_VERSION = 0x01
 GET_KEYBOARD_VALUE = 0x02
+CUSTOM_GET_VALUE = 0x08  # protocol >= 12: channel/value; older: lighting_get_value
+MACRO_GET_COUNT = 0x0C
+MACRO_GET_BUFFER_SIZE = 0x0D
 DYNAMIC_KEYMAP_GET_LAYER_COUNT = 0x11
 DYNAMIC_KEYMAP_GET_BUFFER = 0x12
 FALCON_READ = 0xF0
-READ_ONLY_COMMANDS = {GET_PROTOCOL_VERSION, GET_KEYBOARD_VALUE, DYNAMIC_KEYMAP_GET_LAYER_COUNT, DYNAMIC_KEYMAP_GET_BUFFER, FALCON_READ}
+READ_ONLY_COMMANDS = {GET_PROTOCOL_VERSION, GET_KEYBOARD_VALUE, CUSTOM_GET_VALUE, MACRO_GET_COUNT, MACRO_GET_BUFFER_SIZE,
+                      DYNAMIC_KEYMAP_GET_LAYER_COUNT, DYNAMIC_KEYMAP_GET_BUFFER, FALCON_READ}
+RGBLIGHT_CHANNEL = 0x02  # id_qmk_rgblight_channel (protocol >= 12)
+RGB_VALUES = (('brightness', 1, 0x80), ('effect', 2, 0x81), ('effect_speed', 3, 0x82), ('color(h,s)', 4, 0x83))
 # Sub-ids of GET_KEYBOARD_VALUE (all reads).
 KV_UPTIME, KV_LAYOUT_OPTIONS, KV_SWITCH_MATRIX_STATE, KV_FIRMWARE_VERSION = 0x01, 0x02, 0x03, 0x04
 UNHANDLED = 0xFF
@@ -72,6 +78,28 @@ class Probe:
         r = self.send(GET_KEYBOARD_VALUE, KV_LAYOUT_OPTIONS)
         return int.from_bytes(r[2:6], 'big') if r[0] != UNHANDLED else None
 
+    def macros(self):
+        count = self.send(MACRO_GET_COUNT)
+        size = self.send(MACRO_GET_BUFFER_SIZE)
+        if UNHANDLED in (count[0], size[0]):
+            return None
+        return count[1], (size[1] << 8) | size[2]
+
+    def rgblight(self, protocol):
+        """Current rgblight state via VIA's lighting values (read-only)."""
+        out = {}
+        for name, new_id, legacy_id in RGB_VALUES:
+            if protocol >= 0x000C:
+                r = self.send(CUSTOM_GET_VALUE, RGBLIGHT_CHANNEL, new_id)
+                data = r[3:5]
+            else:
+                r = self.send(CUSTOM_GET_VALUE, legacy_id)
+                data = r[2:4]
+            if r[0] == UNHANDLED:
+                return None
+            out[name] = list(data) if name.startswith('color') else data[0]
+        return out
+
     def matrix(self):
         r = self.send(GET_KEYBOARD_VALUE, KV_SWITCH_MATRIX_STATE, 0)
         if r[0] == UNHANDLED:
@@ -95,9 +123,14 @@ class Probe:
         return bytes(r[6:6 + n])
 
 
-def cmd_info(p, _):
-    print('VIA protocol:      0x%04X' % p.protocol())
+def cmd_info(p, a):
+    proto = p.protocol()
+    print('product:           %s / %s' % (p.dev.manufacturer, p.dev.product))
+    print('VIA protocol:      0x%04X' % proto)
     print('dynamic layers:    %d' % p.layers())
+    m = p.macros()
+    print('macros:            %s' % ('unsupported' if m is None else '%d, buffer %d bytes' % m))
+    print('rgblight now:      %s' % (p.rgblight(proto) or 'unsupported'))
     lo = p.layout_options()
     print('layout options:    %s' % ('unsupported' if lo is None else '0x%08X' % lo))
     m = p.matrix()
@@ -165,7 +198,7 @@ def cmd_dump_bootloader(p, a):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd', required=True)
-    sub.add_parser('info')
+    sub.add_parser('info', help='read-only summary; run it once on the stock firmware for docs/parity.md')
     s = sub.add_parser('dump-keymap')
     s.add_argument('out')
     s = sub.add_parser('matrix')

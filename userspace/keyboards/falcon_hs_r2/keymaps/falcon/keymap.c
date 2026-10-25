@@ -80,7 +80,8 @@ static bool falcon_read_allowed(uint32_t addr, uint8_t len) {
     return false;
 }
 
-bool via_command_kb(uint8_t *data, uint8_t length) {
+// noinline: keeps the handler a distinct symbol under LTO so scripts/verify_firmware.py can find it.
+__attribute__((noinline)) bool via_command_kb(uint8_t *data, uint8_t length) {
     if (data[0] != FALCON_CMD_READ || length < 6 + FALCON_READ_MAX) {
         return false;
     }
