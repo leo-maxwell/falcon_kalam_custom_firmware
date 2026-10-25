@@ -1,6 +1,9 @@
 # Falcon HS R2 vendor firmware analysis
 
 ## 1. Artifact integrity
+  [PASS] device_dump_2026-10-26/bootloader_0x08000000.bin sha256 55dce2dd777c7a8286295d4f5920c3d4a815506771f1fafb5e541845695933cf
+  [PASS] device_dump_2026-10-26/fsize_uid_0x1FFFF7E0.bin sha256 ce7b06db5536adc52639a19ba7adc95e60d98c5426e8f95127e6ef0766cd6452
+  [PASS] device_dump_2026-10-26/option_bytes_0x1FFFF800.bin sha256 639f516bcf4cef4efe1ac4c1353b0c79d332c378f1d2cf6ba7f3f2c65e857f91
   [PASS] falcon_flash_backup.bin sha256 4abf550ae7c093a28060ca7402fa3789366845ec8e72e65cb7e682a35e45d9f2
   [PASS] manufacturer_firmware.bin sha256 90123fb1b6c1e9c20f10bae97fb0a2fa1ffbf8f1a5655cb8942251fd7b2cb60b
   [PASS] manufacturer_jsonfile.json sha256 0c9a5b8e1877055c4b25a92b5b60b755942c9291df8d767914e1a38d63f0b754
@@ -75,6 +78,12 @@
   [PASS] rgblight_set -> ws2812_setleds(led, 4) => RGBLIGHT_LED_COUNT 4
   [PASS] rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB
   [PASS] rgblight mode_base_table @0x0800C2B6 has all 43 modes: static, breathing x4, rainbow mood x3, swirl x6, snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled
+
+## 8a. Caps Lock indicator LED
+  [PASS] led init @0x08009BE4: palSetGroupMode(GPIOA, mask 0x0400, 6=OUTPUT_PUSHPULL) => PA10 output
+  [PASS] led_set @0x08003E10: host LED bit 0x02 (Caps Lock) set -> GPIOA BRR (PA10 low), clear -> BSRR (high) => active-low
+    => QMK LED_CAPS_LOCK_PIN A10, LED_PIN_ON_STATE 0 (indicators.caps_lock / on_state 0)
+    constant GPIO setups in stock: PA1 (WS2812), PA10 (Caps LED), PA12 (USB re-enumeration, board.h); rows/cols via matrix code
 
 ## 8b. Vendor build identity (QMK Command/console strings)
   [PASS] @0x0800B746 "BUILD:  (Mar 14 2025)"

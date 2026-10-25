@@ -2,20 +2,20 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0x965B8E43 valid
-    file 38168 bytes, payload 38152 bytes
+  [PASS] DFU suffix CRC32 0xC274CA3D valid
+    file 38216 bytes, payload 38200 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800B158 inside application flash
-  [PASS] LOAD lma 0x0800B158-0x0800B508 inside application flash
+  [PASS] LOAD lma 0x08002000-0x0800B188 inside application flash
+  [PASS] LOAD lma 0x0800B188-0x0800B538 inside application flash
   [PASS] RAM segment 0x20000C00-0x20001970 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800B508 (< 0x0800F800)
+  [PASS] image ends at 0x0800B538 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 38152 / 55296 bytes (69.0%), 17144 bytes free
+    application flash used 38200 / 55296 bytes (69.1%), 17096 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -54,6 +54,7 @@
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
   [PASS] LAYOUT_60_hhkb is the first (default) layout
+  [PASS] Caps Lock LED on A10, active-low, compiled in (stock: PA10 active-low)
   [PASS] WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)
 
 RESULT: PASS (0 failures)

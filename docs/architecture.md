@@ -26,7 +26,7 @@ something (e.g. NKRO on macOS), only L2 changes.
 
 | File | Layer | Purpose |
 |---|---|---|
-| `keyboards/falcon_hs_r2/keyboard.json` | L1 | MCU `STM32F103` + `stm32duino` bootloader; USB IDs; matrix pins, `COL2ROW`; features (bootmagic, extrakey, mousekey, nkro, rgblight); wear-leveling 2048/1024; WS2812 on A1; rgblight 4 LEDs, all effects, sleep; layouts `LAYOUT_60_hhkb` (first = default) and `LAYOUT_all` (63 VIA positions) |
+| `keyboards/falcon_hs_r2/keyboard.json` | L1 | MCU `STM32F103` + `stm32duino` bootloader; USB IDs; matrix pins, `COL2ROW`; features (bootmagic, extrakey, mousekey, nkro, rgblight); Caps Lock LED A10 active-low; wear-leveling 2048/1024; WS2812 on A1; rgblight 4 LEDs, all effects, sleep; layouts `LAYOUT_60_hhkb` (first = default) and `LAYOUT_all` (63 VIA positions) |
 | `keyboards/falcon_hs_r2/config.h` | L1 | `WEAR_LEVELING_EFL_FLASH_SIZE = 64 KB` (EEPROM placement independent of GD32 F_SIZE) |
 | `keyboards/falcon_hs_r2/rules.mk` | L1 | selects the keyboard-local linker script |
 | `keyboards/falcon_hs_r2/ld/STM32F103x8_stm32duino_falcon_hs_r2.ld` | L1 | memory map: app `0x08002000–0x0800F7FF`. Excludes the bootloader and the 2 KB EEPROM, so an oversized image fails to link. Exports `__falcon_app_start/limit__` for the verifier |

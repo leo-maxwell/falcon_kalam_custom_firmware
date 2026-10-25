@@ -163,6 +163,17 @@ contains no user configuration**.
 | Brightness cap | — | Unverified | not reconstructed |
 | Cross-check with the second agent's notes | agree, except their table addresses | — | `docs/rgb-crosscheck.md` |
 
+## 7a. Caps Lock indicator
+
+| Item | Value | Status | Evidence |
+|---|---|---|---|
+| Pin / polarity | PA10, active-low | Verified (code); LED seen by the user | init `palSetGroupMode(GPIOA, 0x0400, OUTPUT_PUSHPULL)` at `0x08009BE4`; `led_set` at `0x08003E10` writes BRR (low) when Caps Lock is on |
+| QMK config | `indicators: {caps_lock: A10, on_state: 0}` (base) | Built 2026-10-26 | `LED_CAPS_LOCK_PIN A10`, `LED_PIN_ON_STATE 0` in `info_config.h` |
+
+All constant GPIO setups in the stock image: PA1 (WS2812), PA10 (Caps LED),
+PA12 (USB re-enumeration pulse from `board.h`, same in our build), and the
+matrix pins.
+
 ## 8. HID interfaces
 
 | Interface | Vendor | This firmware |

@@ -275,6 +275,16 @@ def analyse(c):
             'snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled')
 
     # ------------------------------------------------------------------
+    c.section('8a. Caps Lock indicator LED')
+    c.check(img.thumb(0x08009BE4, '2206') and img.thumb(0x08009BE8, 'f44f 6180') and img.u32(0x08009E80) == 0x40010800
+            and img.thumb(0x08009BEE, 'f7fb fd29'),
+            'led init @0x08009BE4: palSetGroupMode(GPIOA, mask 0x0400, 6=OUTPUT_PUSHPULL) => PA10 output')
+    c.check(img.thumb(0x08003E10, 'f44f 6280 4b03 f010 0f02 bf0c 611a 615a') and img.u32(0x08003E24) == 0x40010800,
+            'led_set @0x08003E10: host LED bit 0x02 (Caps Lock) set -> GPIOA BRR (PA10 low), clear -> BSRR (high) => active-low')
+    c.info('=> QMK LED_CAPS_LOCK_PIN A10, LED_PIN_ON_STATE 0 (indicators.caps_lock / on_state 0)')
+    c.info('constant GPIO setups in stock: PA1 (WS2812), PA10 (Caps LED), PA12 (USB re-enumeration, board.h); rows/cols via matrix code')
+
+    # ------------------------------------------------------------------
     c.section('8b. Vendor build identity (QMK Command/console strings)')
     for addr, text in ((0x0800B746, b'BUILD:  (Mar 14 2025)'), (0x0800B75C, b'CHIBIOS: "be44b3", CONTRIB: "develop_2021_q3-455-g77cb0a"'),
                        (0x0800B796, b'OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND NKRO LTO BOOTLOADER_SIZE'),

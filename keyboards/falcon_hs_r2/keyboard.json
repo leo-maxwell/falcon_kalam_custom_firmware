@@ -36,6 +36,10 @@
         ]
     },
     "diode_direction": "COL2ROW",
+    "indicators": {
+        "caps_lock": "A10",
+        "on_state": 0
+    },
     "features": {
         "bootmagic": true,
         "extrakey": true,

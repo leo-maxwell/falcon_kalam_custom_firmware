@@ -51,6 +51,7 @@ Nothing here is hardware-tested yet.
 | VIA dynamic keymap layers | 4 (probe) | 4 | **=** |
 | VIA macros | 16, 384-byte buffer (probe) | 16, 383-byte buffer (newer eeconfig is 1 B larger) | **=** |
 | VIA layout options | 3 options; default view = 2u backspace | same 3; default view = **HHKB** | **+** |
+| Caps Lock indicator LED | PA10, active-low (`led_set` `0x08003E10`) | same (base `indicators`), since 2026-10-26 | **=** (was missing in the first flashed image `9b61141e…`; found when the user reported the dark Caps Lock LED) |
 | RGB underglow | rgblight, 4 × WS2812 on PA1, GRB, bit-bang, all 43 effects | identical | **=** |
 | RGB off on USB suspend | unknown | yes (`RGBLIGHT_SLEEP`) | **?**/+ |
 | RGB defaults | mode 9 rainbow swirl, brightness 127, hue 0, sat 255, speed 0 (probe, right after the stock EEPROM reset); no brightness cap in code | same defaults (POLICY-PARITY in `falcon/config.h`); no cap | **=** |
@@ -73,7 +74,7 @@ required. Every stock capability is still reachable:
 
 ### Phase 1 summary
 
-* **Done:** every stock firmware feature. NKRO is implemented in the base and switched off by the release configuration (POLICY-NKRO); removing two lines there re-enables it.
+* **Done:** every stock firmware feature. One gap, the Caps Lock LED, was found only on hardware; afterwards every constant GPIO setup in the stock image was inventoried (`vendor_analysis.txt` §8a: PA1, PA10, PA12, matrix), and no other output is unaccounted for. NKRO is implemented in the base and switched off by the release configuration (POLICY-NKRO); removing two lines there re-enables it.
 * **Stock probe done** (2026-10-26, read-only): VIA protocol, layers, macros and RGB defaults are filled in above; parity was reached for all of them. The physical layout is settled (HHKB classic).
 * **Waiting on hardware:** everything. Nothing has been flashed.
 

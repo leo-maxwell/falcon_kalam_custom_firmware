@@ -203,6 +203,11 @@ def main():
                         default_view.add(tuple(int(x) for x in legend[0].split(',')))
         c.check(default_view == hhkb_pos, '%s: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb' % args.via_json.name)
         c.check(set(tuple(p) for p in vendor.via_positions(vj)) == via_pos, '%s: same matrix positions as the vendor VIA JSON' % args.via_json.name)
+    info_cfg = args.bin.with_name(args.bin.stem + '.info_config.h')
+    cfg_text = info_cfg.read_text() if info_cfg.exists() else ''
+    c.check(kb.get('indicators') == {'caps_lock': 'A10', 'on_state': 0}
+            and re.search(r'define LED_CAPS_LOCK_PIN A10\b', cfg_text) and re.search(r'define LED_PIN_ON_STATE 0\b', cfg_text),
+            'Caps Lock LED on A10, active-low, compiled in (stock: PA10 active-low)')
     c.check(kb['ws2812']['pin'] == 'A1' and kb['rgblight']['led_count'] == 4, 'WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)')
 
     c.lines.append('')
