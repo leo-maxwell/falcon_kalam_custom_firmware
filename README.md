@@ -5,8 +5,10 @@ A reproducible, independently maintained QMK firmware for the Falcon HS R2
 by default, VIA-configurable. NKRO is supported by the base keyboard and disabled
 by the release configuration (POLICY-NKRO).
 
-> **Status: built and verified offline. Not flashed.** Flashing needs the
-> separate review in [`docs/preflash-checklist.md`](docs/preflash-checklist.md).
+> **Status (2026-10-26):** release `9b61141e…` is flashed and running (bootloader
+> backed up, Esc→DFU verified). The Caps Lock LED fix `dd580803…` is built and
+> verified but **not flashed yet**. Every flash follows
+> [`docs/preflash-checklist.md`](docs/preflash-checklist.md).
 > Physical layout settled: HHKB classic ([`docs/layout.md`](docs/layout.md)).
 
 ## Structure: normal base + policy layer

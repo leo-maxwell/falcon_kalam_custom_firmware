@@ -1,8 +1,16 @@
 # Pre-flash validation checklist and first hardware test plan
 
-**Nothing has been flashed.** Nobody flashes, erases, resets persistent
-configuration or modifies the keyboard until a separate review has approved
-the first hardware test and filled in section 0. Before approval, only
+Applies to **every** flash. A flash needs an approval naming the image hash.
+
+## Test log
+
+| Date | Image | Result |
+|---|---|---|
+| 2026-10-26 | `9b61141e…` (first flash, approved by the user) | Pre-flash readback = backup. Flash OK; the app started by itself. Bootloader dumped (= upstream `generic-none`, RDP off). Esc→DFU OK; readback = image. VIA values = stock. Caps Lock works; **the Caps Lock LED stays dark** (missing PA10 indicator). Console/Command, RGB, persistence and suspend not yet tested. |
+| — | `dd580803…` (Caps Lock LED fix) | built and verified; **not flashed** |
+
+Nobody flashes, erases, resets persistent configuration or modifies the
+keyboard without an approval filled in under section 0. Before approval, only
 read-only inspection is allowed (docs/policy.md, POLICY-READONLY-DEVICE).
 
 ## 0. Approval (human review)

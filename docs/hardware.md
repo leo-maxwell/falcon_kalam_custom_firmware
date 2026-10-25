@@ -118,8 +118,8 @@ the vendor's.
 Physical key positions come from the VIA JSON (63 positions). The vendor's
 compiled default keymap (2 layers at `0x0800C18A`) is a generic 60% map and also
 assigns `4,0` (LCtrl), `4,13` (RCtrl) and `4,14` — positions the VIA JSON draws
-as blockers. Whether switches exist at those positions is **unverified**; this
-project does not use them.
+as blockers. On this unit there are no switches there: the layout was settled
+as HHKB classic and the matrix probe never saw those positions (`docs/layout.md`).
 
 | Variant (VIA option) | Positions |
 |---|---|
@@ -160,7 +160,7 @@ contains no user configuration**.
 | Physical form | separate, detachable RGB module on a connector | Verified (user, 2026-10-26) | the module was disconnected and reconnected before the stock probe |
 | Physical placement (underglow vs. indicators) | — | Unverified | — |
 | Enabled effects | all 43 rgblight modes | Verified | `mode_base_table` at `0x0800C2B6` |
-| Brightness cap | — | Unverified | not reconstructed |
+| Brightness cap | none | Verified (code) | no clamp below 255 in the rgblight paths; the stock default is brightness 127 (probe) |
 | Cross-check with the second agent's notes | agree, except their table addresses | — | `docs/rgb-crosscheck.md` |
 
 ## 7a. Caps Lock indicator
@@ -187,5 +187,6 @@ matrix pins.
 
 See `docs/risks.md` for impact and mitigation. Briefly: HSE frequency only
 inferred; LED part and
-placement; bootloader binary variant (not dumped yet) and option-byte/RDP state;
-GD32 behaviour under the newer QMK/ChibiOS (intended by policy).
+placement; GD32 behaviour under the newer QMK/ChibiOS (intended by policy),
+which first-flash tests partly cover. Bootloader variant and RDP: resolved
+(`docs/bootloader.md`).

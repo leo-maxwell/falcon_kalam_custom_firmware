@@ -22,5 +22,5 @@ below was re-checked here directly against the binary
 | NK_OFF fixes Caps Lock until replug | **Consistent** | the vendor has NKRO + Command ("NKRO Toggle") compiled in. Reverting on replug matches NKRO being forced on at start-up; the exact mechanism is not proven. Our release has no NKRO code at all. |
 | "Preserve original dynamic-keymap mapping and four layers" | **Not possible from the backup** | the backup's EEPROM is the result of `eeconfig_disable()` (Bootmagic); no user mapping survives. The vendor's *compiled* keymap (2 layers) is documented; the release uses HHKB as the user requires. `tools/falcon_probe.py dump-keymap` can capture the live layers before flashing. |
 
-Still open on hardware: the LED part, its physical position (underglow vs.
+Known since: the LEDs sit on a separate, detachable RGB module. Still open on hardware: the LED part, its physical position (underglow vs.
 indicator), and a colour test for R/G/B order (checklist §C6).

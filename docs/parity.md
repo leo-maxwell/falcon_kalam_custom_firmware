@@ -10,7 +10,7 @@ Status key: **=** same as stock · **+** same function, done better ·
 
 Evidence: `artifacts/feature_parity.txt` (generated from both binaries on
 every build), `artifacts/vendor_analysis.txt`, `artifacts/verification.txt`.
-Nothing here is hardware-tested yet.
+Hardware state: `9b61141e…` flashed and partly tested on 2026-10-26 (see the checklist's test log); the fix `dd580803…` is not flashed yet.
 
 ## Phase 1: feature parity
 
@@ -91,7 +91,7 @@ required. Every stock capability is still reachable:
 
 * **Done:** every stock firmware feature. One gap, the Caps Lock LED, was found only on hardware; afterwards every constant GPIO setup in the stock image was inventoried (`vendor_analysis.txt` §8a: PA1, PA10, PA12, matrix), and no other output is unaccounted for. NKRO is implemented in the base and switched off by the release configuration (POLICY-NKRO); removing two lines there re-enables it.
 * **Stock probe done** (2026-10-26, read-only): VIA protocol, layers, macros and RGB defaults are filled in above; parity was reached for all of them. The physical layout is settled (HHKB classic).
-* **Waiting on hardware:** everything. Nothing has been flashed.
+* **Hardware tests on `9b61141e…`:** enumeration, VIA values, bootloader dump, Esc→DFU and readback passed. Caps Lock toggles but the Caps Lock LED stayed dark (gap, fixed in `dd580803…`). Still to run: console/Command traces, RGB colours, persistence, suspend.
 
 ## Phase 2: improvements (roadmap)
 
