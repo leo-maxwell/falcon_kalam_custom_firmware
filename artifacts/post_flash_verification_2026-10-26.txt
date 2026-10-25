@@ -1,0 +1,9 @@
+# Post-flash verification, 2026-10-26 (read-only)
+flashed:        artifacts/falcon_hs_r2_falcon.bin sha256 9b61141e383bfd5aad74f66c48be2b40cf2decc0073225454897d1dde117de63 (DFU alt 2)
+after download: app started by itself; enumerated 9DD1:9D89 "Falcon HS R2", 4 HID interfaces (kbd, VIA, shared, console)
+probe:          artifacts/release_probe_info.txt (VIA 0x000D, 4 layers, 16 macros/383 B, rgb mode 9 val 127, layout opt 0)
+bootloader:     dumped twice via FALCON_READ, identical; == upstream generic-none_bootloader.bin; RDP off
+DFU re-entry:   user held Esc while plugging in -> 1EAF:0003 present (our firmware's Bootmagic works; RGB dark in DFU)
+readback:       alt-2 upload; first 44092 bytes == release payload; rest of 0x08002000-0x0800F7FF erased;
+                EEPROM 4 non-FF bytes = Bootmagic footprint (eeconfig_disable)
+=> R13 mitigated: with a working firmware, DFU is reachable without pads.
