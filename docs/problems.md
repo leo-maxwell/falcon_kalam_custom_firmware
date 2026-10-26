@@ -20,7 +20,7 @@ owner's decision. Closed items move to the ledger as one line.
 | ID | Limitation |
 |---|---|
 | L1 | In **ship** the VIA key tester and `falcon_kalam_probe.py matrix` see an all-zero matrix (QMK hides it unless built with `VIA_INSECURE`). Use dev, or the console (Shift+Shift+X) |
-| L2 | Fn+Esc = Power in Mac mode, sent as Keyboard Power `0x66` like the real HHKB Classic. This Mac ignores it (dev release 4, 2026-10-27): the key does nothing |
+| L2 | Fn+Esc = Power in Mac mode, sent as Keyboard Power `0x66` like the real HHKB Classic. This Mac ignores it (dev release 4, 2026-10-27): the key does nothing. Kept on purpose: the Classic sends the same code (POLICY-HHKB) |
 | L3 | `QK_BOOT` is on no default layer: use Esc at plug-in, Shift+Shift+B, or assign it in VIA |
 | L4 | Command N ("NKRO toggle") does nothing in dev (no NKRO); in ship it types N |
 | L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |
