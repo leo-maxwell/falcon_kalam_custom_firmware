@@ -16,12 +16,4 @@
 #    error "POLICY-VARIANTS: debug traces (keycode strings, scan rate, action, wear-leveling) are dev-only"
 #endif
 
-// POLICY-RGB: the ship image has no decorative effects and no dev RGB tools.
-#if defined(FALCON_RGB_DEV) || defined(RGBLIGHT_EFFECT_ALTERNATING) || defined(RGBLIGHT_EFFECT_BREATHING) ||         \
-    defined(RGBLIGHT_EFFECT_CHRISTMAS) || defined(RGBLIGHT_EFFECT_KNIGHT) || defined(RGBLIGHT_EFFECT_RAINBOW_MOOD) || \
-    defined(RGBLIGHT_EFFECT_RAINBOW_SWIRL) || defined(RGBLIGHT_EFFECT_RGB_TEST) || defined(RGBLIGHT_EFFECT_SNAKE) ||  \
-    defined(RGBLIGHT_EFFECT_STATIC_GRADIENT) || defined(RGBLIGHT_EFFECT_TWINKLE)
-#    error "POLICY-RGB: decorative RGB effects and dev RGB tools are dev-only"
-#endif
-
 #include "falcon_keymap.h"

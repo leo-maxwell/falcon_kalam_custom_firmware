@@ -3,7 +3,7 @@
 #   1. NKRO cannot be re-enabled in the release keymap (shared users/falcon config.h #error).
 #   2. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F800 in the keyboard-local linker script).
-#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces, dev RGB tools) are refused by the ship variant.
+#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces) are refused by the ship variant.
 # Uses throw-away keymaps inside the staged copy; restores it afterwards.
 set -euo pipefail
 
@@ -39,7 +39,6 @@ expect_failure falcon "POLICY-NKRO: NKRO must stay disabled" NKRO_ENABLE=yes
 expect_failure falcon "POLICY-VARIANTS: FLASHREAD is dev-only" FALCON_FLASHREAD=yes
 expect_failure falcon "POLICY-VARIANTS: VIA_INSECURE is dev-only" EXTRAFLAGS=-DVIA_INSECURE
 expect_failure falcon "POLICY-VARIANTS: debug traces" EXTRAFLAGS=-DACTION_DEBUG
-expect_failure falcon "POLICY-RGB: decorative RGB effects and dev RGB tools are dev-only" EXTRAFLAGS=-DFALCON_RGB_DEV
 
 # 2. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F800.
 mkdir -p "$STAGED/keymaps/neg_oversize"

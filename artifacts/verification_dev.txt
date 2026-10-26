@@ -2,20 +2,20 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0xE79B67BF valid
-    file 50456 bytes, payload 50440 bytes
+  [PASS] DFU suffix CRC32 0xC109CF47 valid
+    file 41540 bytes, payload 41524 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800DF30 inside application flash
-  [PASS] LOAD lma 0x0800DF30-0x0800E508 inside application flash
-  [PASS] RAM segment 0x20000C00-0x20001D10 inside 20 KB SRAM
+  [PASS] LOAD lma 0x08002000-0x0800BCCC inside application flash
+  [PASS] LOAD lma 0x0800BCCC-0x0800C234 inside application flash
+  [PASS] RAM segment 0x20000C00-0x20001C58 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800E508 (< 0x0800F800)
+  [PASS] image ends at 0x0800C234 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 50440 / 55296 bytes (91.2%), 4856 bytes free
+    application flash used 41524 / 55296 bytes (75.1%), 13772 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -36,9 +36,8 @@
   [PASS] keymap comes from the userspace variant keymaps/falcon_dev
   [PASS] POLICY-PARITY: HID console interface (0xFF31) present, as in stock
   [PASS] POLICY-RGB: indicator layer table (falcon_rgb_layers) linked
-  [PASS] POLICY-RGB: decorative effect table (all 43 rgblight modes) present (dev)
-  [PASS] POLICY-RGB: LED identify tool (Shift+Shift+L) present (dev)
-  [PASS] POLICY-RGB: falcon_hs_r2_dev.json lighting menu present (dev)
+  [PASS] POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)
+  [PASS] POLICY-RGB: falcon_hs_r2.json has no lighting menu
   [PASS] POLICY-VARIANTS dev: FLASHREAD handler (via_command_kb) linked
   [PASS] POLICY-VARIANTS dev: -DFALCON_FLASHREAD_ENABLE present
   [PASS] POLICY-VARIANTS dev: -DKEYCODE_STRING_ENABLE present
@@ -74,8 +73,8 @@
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
   [PASS] LAYOUT_60_hhkb is the first (default) layout
-  [PASS] falcon_hs_r2_dev.json: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb
-  [PASS] falcon_hs_r2_dev.json: same matrix positions as the vendor VIA JSON
+  [PASS] falcon_hs_r2.json: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb
+  [PASS] falcon_hs_r2.json: same matrix positions as the vendor VIA JSON
   [PASS] Caps Lock LED on A10, active-low, compiled in (stock: PA10 active-low)
   [PASS] WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)
 

@@ -33,7 +33,7 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-VIA | both variants are VIA-configurable | `users/falcon/rules.mk` | verifier |
 | POLICY-PARITY | both variants provide every stock feature: console, Command, LTO, on top of L1 (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B (decided 2026-10-26); dev keeps the full set | `users/falcon/rules.mk`, `users/falcon/config.h`, `falcon/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only features. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code lives only in `users/falcon/`; no git branches are used for configuration | variant `rules.mk`/`config.h`; `#error` guards in `falcon/keymap.c` | `build.sh` builds and verifies both every time; verifier profiles `release` (ship) / `dev`; negative tests inject each debug feature into ship |
-| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1) | `users/falcon/rgb_indicators.c`, `users/falcon/config.h`; ship `config.h` removes every effect | verifier (indicator table in both; effect table and identify tool only in dev; lighting menu only in the dev VIA JSON); ship `#error` guard + negative test |
+| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon/rgb_indicators.c`; `users/falcon/config.h` (`#undef` of every effect) | verifier: L1 image has all 43 effects, ship and dev have none, the indicator table is in both, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Removed from ship by the user's decision (2026-10-26) | `users/falcon/flashread.c`, compiled when `FALCON_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
 | POLICY-HHKB | HHKB is the default everywhere: keymaps, first layout, VIA layout option 0 | `keyboard.json`, keymaps, `via/falcon_hs_r2.json` | verifier |
 
@@ -56,12 +56,20 @@ LED-order test.
 | 6 | non-default layer locked on | green | B | layer ≥ 2 active, or default layer ≠ 0 |
 | — | Fn held, Caps Lock | no RGB change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
-| — | dev only: FLASHREAD request served | cyan blink | all | `falcon_rgb_activity()` |
-| — | dev only: LED-order identify | one white LED at a time | all | Shift+Shift+L steps LED 0 → 3 → off |
+| — | dev only (with FLASHREAD): request served | cyan blink | all | `falcon_rgb_activity()` |
 
-Variants:
-* **Ship:** every rgblight effect is compiled out. The base is enforced to static white every main-loop pass (old EEPROM values and VIA commands cannot change it). The VIA definition has no lighting menu. Fn+Z switches the white base light off/on (persisted); indicators still show. Fn+X–B do nothing.
-* **Dev:** the same indicators. The base defaults to white but is not enforced: every effect (including RGB test mode) stays selectable via Fn+Z–B and VIA's lighting menu (`via/falcon_hs_r2_dev.json`), for LED tests. Adds the identify tool and the activity blink.
+Both variants behave the same. Every rgblight effect is compiled out, and the
+base is enforced to static white on every main-loop pass, so old EEPROM values
+and VIA commands can't change it. The VIA definition has no lighting menu.
+Fn+Z switches the white base light off/on (persisted); indicators still show.
+Fn+X–B do nothing. No separate LED test tools are needed:
+- the indicator colours (red, yellow, magenta, blue, green) also check the WS2812 colour order;
+- triggering a channel (Shift+Shift+D → channel A) shows which physical LEDs it uses.
+
+Blue ("powered but not configured") is kept for: charge-only cables,
+power-only ports (charger, power bank, some hubs and monitors), a host that
+doesn't enumerate, and a short flash at every plug-in. Pending the user's
+decision (devnotes).
 
 ### Project
 
@@ -82,8 +90,7 @@ Variants:
 |---|---|
 | `keyboards/falcon_hs_r2/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 2048/1024, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_hs_r2.ld` (app region `0x08002000–0x0800F7FF`, exports `__falcon_app_*`); `keymaps/default/` (HHKB); `readme.md` |
 | `userspace/` | L2: `qmk.json` (targets `falcon_hs_r2:falcon`, `falcon_hs_r2:falcon_dev`); `users/falcon/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB layer settings, `falcon_keymap.h` the keymap, `rgb_indicators.c/.h` POLICY-RGB, `flashread.c`); `userspace/keyboards/falcon_hs_r2/keymaps/falcon/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
-| `via/falcon_hs_r2.json` | VIA definition for **ship**: the stock JSON with HHKB as layout option 0, without the lighting menu |
-| `via/falcon_hs_r2_dev.json` | VIA definition for **dev**: the same plus the `qmk_rgblight` menu |
+| `via/falcon_hs_r2.json` | VIA definition (both variants): the stock JSON with HHKB as layout option 0, without the lighting menu (POLICY-RGB) |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
 | `originals/` | stock BIN, readback, VIA JSON, `device_dump_2026-10-26/` (bootloader, F_SIZE/UID, option bytes), `SHA256SUMS` |
@@ -151,7 +158,7 @@ there is no later main-loop pass before the reset. `eeconfig_init_user` runs
 before the LEDs exist, so it only sets a flag (keeping QMK's default
 `eeconfig_update_user(0)`); the blink starts in `keyboard_post_init_user`.
 Note: rgblight blinks share one repeat timer, so overlapping blinks interfere
-(only possible in dev). Layer changes are applied in `rgblight_task()`, which
+(only possible in dev, during a FLASHREAD dump at boot). Layer changes are applied in `rgblight_task()`, which
 exists because `RGBLIGHT_LAYERS` forces `RGBLIGHT_USE_TIMER` even with no
 effects compiled.
 

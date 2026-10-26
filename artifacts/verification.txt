@@ -36,9 +36,8 @@
   [PASS] keymap comes from the userspace variant keymaps/falcon
   [PASS] POLICY-PARITY: HID console interface (0xFF31) present, as in stock
   [PASS] POLICY-RGB: indicator layer table (falcon_rgb_layers) linked
-  [PASS] POLICY-RGB: decorative effect table (all 43 rgblight modes) absent (ship)
-  [PASS] POLICY-RGB: LED identify tool (Shift+Shift+L) absent (ship)
-  [PASS] POLICY-RGB: falcon_hs_r2.json lighting menu absent (ship)
+  [PASS] POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)
+  [PASS] POLICY-RGB: falcon_hs_r2.json has no lighting menu
   [PASS] POLICY-VARIANTS ship: no FLASHREAD handler (via_command_kb absent)
   [PASS] POLICY-VARIANTS ship: -DFALCON_FLASHREAD_ENABLE absent
   [PASS] POLICY-VARIANTS ship: -DKEYCODE_STRING_ENABLE absent

@@ -178,14 +178,13 @@ def main():
         debug_flags = ('-DFALCON_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
         traces = {'ACTION_DEBUG': b'action_exec: start', 'WEAR_LEVELING_DEBUG_OUTPUT': b'Backing store: ',
                   'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
-        # POLICY-RGB: status-indicator module in both variants; effects and dev RGB tools only in dev.
+        # POLICY-RGB: status-indicator module in both variants; decorative effects in neither.
         all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
         c.check(any(n.split('.')[0] == 'falcon_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_rgb_layers) linked')
-        c.check((all_modes in payload) == dev, 'POLICY-RGB: decorative effect table (all 43 rgblight modes) %s' % ('present (dev)' if dev else 'absent (ship)'))
-        c.check((b'RGB identify' in payload) == dev, 'POLICY-RGB: LED identify tool (Shift+Shift+L) %s' % ('present (dev)' if dev else 'absent (ship)'))
+        c.check(all_modes not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
         if args.via_json:
             menus = json.loads(args.via_json.read_text()).get('menus', [])
-            c.check(('qmk_rgblight' in menus) == dev, 'POLICY-RGB: %s lighting menu %s' % (args.via_json.name, 'present (dev)' if dev else 'absent (ship)'))
+            c.check('qmk_rgblight' not in menus, 'POLICY-RGB: %s has no lighting menu' % args.via_json.name)
         if dev:
             c.check(flashread, 'POLICY-VARIANTS dev: FLASHREAD handler (via_command_kb) linked')
             for f in debug_flags:
@@ -201,6 +200,8 @@ def main():
     else:
         c.check(bool(nkro_bitmap.search(payload)), 'base is a normal QMK build: NKRO bitmap report present')
         c.check('-DNKRO_ENABLE' in flags and '-DVIA_ENABLE' not in flags, 'base flags: NKRO_ENABLE on, VIA_ENABLE off')
+        all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
+        c.check(all_modes in payload, 'POLICY-RGB: L1 keeps every decorative effect (all 43 rgblight modes, as stock)')
         want = ()
     for w in want + ('-DEEPROM_WEAR_LEVELING', '-DRGBLIGHT_ENABLE', '-DRGBLIGHT_WS2812',
                      '-DBOOTLOADER_STM32DUINO', '-DQMK_BOARD_STM32_F103_STM32DUINO'):

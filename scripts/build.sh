@@ -137,7 +137,7 @@ step "Verify dev image (POLICY-VARIANTS: every debug feature present)"
 python3 -I "$ROOT/scripts/verify_firmware.py" --profile dev \
     --bin "$ART/$DEV_NAME.bin" --elf "$ART/$DEV_NAME.elf" \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
-    --via-json "$ROOT/via/falcon_hs_r2_dev.json" \
+    --via-json "$ROOT/via/falcon_hs_r2.json" \
     --report "$ART/verification_dev.txt" | tail -1
 
 step "Verify ship image (POLICY-VARIANTS: no debug-only features; NKRO absent, VIA present)"

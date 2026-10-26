@@ -32,6 +32,7 @@
   [PASS] compiler flags read from falcon_hs_r2_default.cflags.txt
   [PASS] base is a normal QMK build: NKRO bitmap report present
   [PASS] base flags: NKRO_ENABLE on, VIA_ENABLE off
+  [PASS] POLICY-RGB: L1 keeps every decorative effect (all 43 rgblight modes, as stock)
   [PASS] -DEEPROM_WEAR_LEVELING present
   [PASS] -DRGBLIGHT_ENABLE present
   [PASS] -DRGBLIGHT_WS2812 present

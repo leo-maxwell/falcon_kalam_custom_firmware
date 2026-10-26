@@ -69,8 +69,8 @@ and the decisions on any open **HR** problems. The daily image is always ship.
   Command combos: hold **both Shifts** and tap the key. D = debug on/off,
   X = matrix print, K = keyboard reports. Turn them off in reverse order. Dev
   adds traces (key actions, EEPROM, scan rate) while debug is on, the full
-  Command set, and Shift+Shift+L (RGB LED identify, prints `RGB identify: LED n lit`).
-* **VIA**: load `via/falcon_hs_r2.json` for ship, `via/falcon_hs_r2_dev.json` for dev (adds the lighting menu).
+  Command set.
+* **VIA**: load `via/falcon_hs_r2.json` (both variants).
 * **Passive USB log**: `tools/usb_watch.py --seconds 60 --log FILE`.
 
 ## 4. Recovery

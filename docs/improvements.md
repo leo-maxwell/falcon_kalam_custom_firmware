@@ -12,7 +12,7 @@ IDs are permanent.
 | I13 | **Automated hardware tests**: script the probe, console traces and readback compare | repeatable post-flash checks | console parsing |
 | I4 | **RGB brightness cap** from a measured LED-module current (relevant now: POLICY-RGB runs full white continuously, R14) | USB power and heat margin | measurement; `RGBLIGHT_LIMIT_VAL` in L2 |
 | I19 | **Red also for Bootmagic DFU entry**: initialise the WS2812 and paint red in a Bootmagic hook before `bootloader_jump()` | removes most of the "dark" ambiguity (R15) | override `bootmagic_reset_eeprom` or `bootmagic_scan` in L2 |
-| I20 | **Physical channel mapping**: after the LED-order test, give channels A/B meaningful positions (e.g. left pair / right pair) | readability | edit `FALCON_RGB_CH_A/B` in `rgb_indicators.h` |
+| I20 | **Physical channel mapping**: once Shift+Shift+D shows where channel A sits, give the channels meaningful positions if needed (e.g. left pair / right pair) | readability | edit `FALCON_RGB_CH_A/B` in `rgb_indicators.h` |
 | I21 | **Boot-protocol indicator**: show when the host uses the HID boot protocol (BIOS/firmware setup screens) | diagnosis | `usb_device_state_get_protocol()`; a channel-B colour |
 | I6 | **Newer toolchain** (GCC ≥ 10, as stock used) | modern compiler | must stay reproducible; re-verify RGB timing |
 | I7 | **Submit L1 upstream** to QMK | maintenance by upstream | L1 already passes upstream lint |

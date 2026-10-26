@@ -8,28 +8,13 @@
 // KC_NO and can still be assigned in VIA. Layers 2 and 3 are transparent for
 // VIA (DYNAMIC_KEYMAP_LAYER_COUNT 4, as stock).
 //
+// Fn+Z switches the white base light on/off (POLICY-RGB; indicators still show).
+//
 // This header DEFINES the keymaps array. Include it exactly once, from a
 // variant's keymap.c: QMK's keymap introspection compiles keymap.c itself and
 // derives the layer count from this array.
 
 #pragma once
-
-// Fn+Z..B (unused on a real HHKB). Ship (POLICY-RGB): Fn+Z switches the white
-// base light on/off (indicators still show); X..B do nothing. Dev: effect
-// controls for LED tests.
-#ifdef FALCON_RGB_DEV
-#    define FALCON_FN_Z UG_TOGG
-#    define FALCON_FN_X UG_NEXT
-#    define FALCON_FN_C UG_HUEU
-#    define FALCON_FN_V UG_SATU
-#    define FALCON_FN_B UG_VALU
-#else
-#    define FALCON_FN_Z UG_TOGG
-#    define FALCON_FN_X _______
-#    define FALCON_FN_C _______
-#    define FALCON_FN_V _______
-#    define FALCON_FN_B _______
-#endif
 
 enum layers {
     _BASE,
@@ -51,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_PWR,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_INS,  KC_DEL,
         KC_CAPS, _______, _______, _______, _______, _______, _______, _______, KC_PSCR, KC_SCRL, KC_PAUS, KC_UP,   _______,          _______,
         _______, KC_VOLD, KC_VOLU, KC_MUTE, _______, _______, KC_PAST, KC_PSLS, KC_HOME, KC_PGUP, KC_LEFT, KC_RGHT,                   KC_PENT,
-        _______,          FALCON_FN_Z, FALCON_FN_X, FALCON_FN_C, FALCON_FN_V, FALCON_FN_B, KC_PPLS, KC_PMNS, KC_END,  KC_PGDN, KC_DOWN, _______,          _______,
+        _______,          UG_TOGG, _______, _______, _______, _______, KC_PPLS, KC_PMNS, KC_END,  KC_PGDN, KC_DOWN, _______,          _______,
                  _______, _______,                            _______,                            _______, _______
     ),
     [_L2] = LAYOUT_60_hhkb(

@@ -2,6 +2,5 @@ PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/users/falcon/
 PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c:10:6: error: #error "POLICY-VARIANTS: FLASHREAD is)
 PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c:13:6: error: #error "POLICY-VARIANTS: VIA_INSECURE)
 PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c:16:6: error: #error "POLICY-VARIANTS: debug traces)
-PASS  falcon: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c:24:6: error: #error "POLICY-RGB: decorative RGB ef)
 PASS  neg_oversize: rejected (| /opt/homebrew/opt/arm-none-eabi-binutils/bin/arm-none-eabi-ld: .build/falcon_hs_r2_neg_oversize.elf section `.rodata' will not fit in regi)
 RESULT: PASS

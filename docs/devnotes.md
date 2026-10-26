@@ -20,12 +20,13 @@ delete it here.
    - Caps Lock LED follows Caps Lock, also after a replug;
    - all 60 keys in VIA's key tester (works in dev thanks to `VIA_INSECURE`), or the console with Shift+Shift+D then X; includes the 7 positions the stock probe missed: `0,7 1,7 2,7 3,7 4,1 4,2 4,7`;
    - Caps Lock trace: Shift+Shift+D, then K, then hold Fn+Tab → Caps stays in the report for the whole hold;
-   - RGB hardware: **LED-order test** (Shift+Shift+L steps LED 0→3; note where each lights; then map channels A/B in `rgb_indicators.h`); GRB order via RGB test mode (Fn+X to it, or VIA lighting menu with `via/falcon_hs_r2_dev.json`);
+   - RGB channels and colour order: Shift+Shift+D → note which two LEDs turn yellow (channel A); the other two are channel B. Check that red, yellow, magenta, blue and green look right (this also proves the GRB order); adjust `rgb_indicators.h` only if another split reads better (I20);
    - RGB indicators (POLICY-RGB): white base; Shift+Shift+D → yellow on channel A; then K → magenta; layer lock → green on B; blue while unplugged-and-replugged before enumeration; Shift+Shift+B → **red, and does it stay red in DFU** (WS2812 latch, unverified); Bootmagic → orange blinks on the next boot (settings reset);
    - persistence: change a key in VIA, replug, compare `falcon_probe.py dump-keymap` with `artifacts/release_keymap_baseline.json`, then revert;
    - RGB off while the Mac sleeps;
    - spot-check the dev traces (action, wear-leveling, scan rate) in `qmk console`.
-2. **Ship image acceptance**: flash it, run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, effects and lighting menu absent). Keep it as the daily image.
+2. **Ship image acceptance**: flash it, run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.
+3. **Decide** whether to keep blue = "powered but not configured by a host" (`policy.md` §2.1). For: it diagnoses charge-only cables and power-only ports, and flashes briefly at plug-in. Against: it glows blue permanently on a port that stays powered while the computer is off.
 
 ## Before shipping (leaving alpha)
 
