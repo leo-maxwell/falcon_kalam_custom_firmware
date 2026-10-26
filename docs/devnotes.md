@@ -8,8 +8,8 @@ here.
 
 | | |
 |---|---|
-| On the device | `9b61141e383bfd5aad74f66c48be2b40cf2decc0073225454897d1dde117de63`, flashed 2026-10-26: a pre-variant build (FLASHREAD, full Command, no Caps Lock LED, one HHKB Fn layer instead of the three modes) |
-| Next to flash | the **dev** image (`docs/firmware.md` §1) for the test round below, then **ship** as the acceptance test; no hurry. Each flash needs an approval naming the variant and its hash |
+| On the device | dev release 2, `3621ae1ef0893fdf14a34aff759f04b3f1cace3f1e9b94c31cfb54a531e2766e`, flashed 2026-10-27 (readback = image); release 1 (`485d3e67…`) ran before it, readback = image |
+| Next to flash | dev release 3 (`docs/firmware.md` §1: quarter brightness, B5 fix) to continue the session, then **ship** as the acceptance test. Each flash needs an approval naming the variant and its hash |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 
@@ -18,7 +18,7 @@ here.
 1. **Dev image test session** (about 30 min, 7 plug-ins; record results in `firmware.md`). Ordered so that each plug-in and each DFU entry serves several checks. A console log (`qmk console`) and a USB log (`tools/usb_watch.py`) run in the background throughout. **U** = done at the keyboard, **C** = done at the computer. Debug output stays on from step 6 to step 15 (Shift+Shift+D, then K).
    - **A. Flash** (plug-in 1)
      1. U: unplug, hold Esc, plug in (the old image stays dark in DFU). C: `scripts/flash.sh flash dev <sha256>`.
-     2. U: the new image starts by itself: orange ×3 (schema reset after the EEPROM move), then white. C: `falcon_kalam_probe.py info` → release 2, VIA `0x000D`, 6 layers, 16 macros / 1,107 B.
+     2. U: the new image starts by itself: orange ×3 (schema reset after the EEPROM move), then white. C: `falcon_kalam_probe.py info` → the release in `firmware.md`, VIA `0x000D`, 6 layers, 16 macros / 1,107 B.
    - **B. Esc→DFU test** (plug-ins 2–3; required after every flash)
      3. U: unplug, hold Esc, plug in → **red, and does it stay red in DFU?** (Bootmagic red, R15). C: `scripts/flash.sh verify dev` (readback = image).
      4. U: replug normally → orange ×3 (Bootmagic cleared the settings), white; note any blue flash before enumeration.
@@ -45,7 +45,7 @@ here.
 2. **Ship image acceptance.** Flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check:
    - selective Command: H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally, and in HHK mode so does Shift+Shift+left-◇;
    - POLICY-HHKB as in dev (modes and virtual DIP switches);
-   - RGB: white at half brightness, indicators as in dev, Fn+Z–B do nothing special, no lighting menu in VIA.
+   - RGB: white at the cap, indicators as in dev, Fn+Z–B do nothing special, no lighting menu in VIA.
 
    Then keep ship as the daily image.
 
@@ -62,5 +62,6 @@ FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
 
 ## Results awaiting a milestone
 
+* Session 2026-10-27, so far (dev releases 1–2): flash, enumeration, probe (release, 6 layers, 1,107 B macros) and both readbacks OK. Debug is on from boot in dev (QMK's `DEBUG_MATRIX_SCAN_RATE` sets it), so channel A shows yellow at once: **channel A = LEDs 1–2** (counted left to right); LED 4 white, LED 3's colour hard to judge next to the yellow (check with debug off). In DFU: LED 1 yellow, LEDs 2–4 red (R15). At plug-in LED 1 lights a moment before the others (Inferred: the same undriven-line noise). No orange after the DFU entry (B5). Scan rate ≈ 3,677 Hz. Brightness 127 still too bright → release 3. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`.
 * Image `9b61141e…`: the console connects (`artifacts/functional_console_2026-10-26.log`); no debug traces captured yet. Everything else from that session is recorded in `firmware.md` (✓) or `problems.md` (B1).
 * `artifacts/release_keymap_baseline.json` is a 4-layer dump of image `9b61141e…`; it does not apply to the 6-layer images (the persistence test makes its own dumps).

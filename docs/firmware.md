@@ -5,13 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 2** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 3** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `e110a2f1c06a343f5fd3c691d4f8e3f0f3466677b191e1a328810aeda2a01c07` | 37,784 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `3621ae1ef0893fdf14a34aff759f04b3f1cace3f1e9b94c31cfb54a531e2766e` | 43,272 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `1be146c6aff3967db0cb47313ed304be23117c6fa7c31c63dde1f270a25a9f2b` | 37,812 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `a89f6e7adab2f5868ee0823e9e028df2addca3b92853c7b49ecde49e77f1ebe3` | 43,292 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -41,7 +41,7 @@ same feature code · **pending** = see devnotes.
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
 | Caps Lock LED | A10, active-low | same | = | pending |
-| RGB (POLICY-RGB) | **status indicator**: white at the brightness cap (half of full scale) = normal; every colour is capped, the bootloader red included; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped, mode colours = mode flash and settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
+| RGB (POLICY-RGB) | **status indicator**: white at the brightness cap (63, a quarter of full scale) = normal; every colour is capped, the bootloader red included; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped, mode colours = mode flash and settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |

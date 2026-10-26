@@ -3,7 +3,7 @@
 //
 // POLICY-RGB: the RGB module shows state, not decoration (docs/policy.md).
 //
-// Normal state: every LED white at the brightness cap (half of full scale).
+// Normal state: every LED white at the brightness cap (a quarter of full scale).
 // Indicator states are QMK rgblight layers drawn on top: a higher layer index
 // wins where layers overlap.
 // Safety/debug states use channel A, connection/layer states channel B, so one
@@ -87,7 +87,7 @@ static uint16_t show_timer;
 static uint8_t  show_now, show_next; // packed settings, see rgb_indicators.h
 
 // EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
-// and blink once rgblight is running.
+// and blink later (falcon_kalam_rgb_task).
 void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
@@ -106,9 +106,6 @@ static void enforce_white_base(void) {
 void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
     enforce_white_base();
-    if (settings_were_reset) {
-        rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, 250, 3);
-    }
 }
 
 // Draws one settings value (on = true): the mode colour on all LEDs, the
@@ -152,6 +149,14 @@ void falcon_kalam_rgb_task(void) {
     // default layer, is not.
     layer_state_t base   = default_layer_state ? default_layer_state : (layer_state_t)1;
     bool          locked = (layer_state & ~FALCON_KALAM_FN_LAYERS) || (base & ~FALCON_KALAM_BASE_LAYERS);
+
+    // Settings-reset blink: only once the host has configured the keyboard.
+    // During enumeration the host suspends and resumes the bus, and
+    // rgblight_suspend() cancels every running blink.
+    if (settings_were_reset && usb == USB_DEVICE_STATE_CONFIGURED) {
+        settings_were_reset = false;
+        rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, 250, 3);
+    }
 
     uint8_t want = 0;
     if (locked) want |= 1u << FALCON_KALAM_RGB_LAYER_LOCKED;

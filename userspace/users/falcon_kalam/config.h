@@ -16,7 +16,7 @@
 // Release number of the ship and dev images, readable over VIA
 // (`falcon_kalam_probe.py info`). Bump it whenever the images change; must
 // equal the release in docs/firmware.md (scripts/check_docs.py).
-#define VIA_FIRMWARE_VERSION 2
+#define VIA_FIRMWARE_VERSION 3
 
 // POLICY-HHKB: HHK, Mac and Win mode, each a base layer and an Fn layer
 // (falcon_kalam_keymap.h). L1's EEPROM is sized for six layers plus VIA
@@ -26,9 +26,10 @@
 // POLICY-RGB: the RGB module is a status indicator (rgb_indicators.c). The base
 // is static white at the brightness cap; indicator states are rgblight layers.
 // Supersedes the stock rgblight defaults (rainbow swirl, brightness 127).
-// Brightness cap: half of full scale. Full brightness was too bright to look
-// at; rgblight clamps every colour, the base and the indicators, to this.
-#define RGBLIGHT_LIMIT_VAL 127
+// Brightness cap: a quarter of full scale (255). Full scale and half (127)
+// were too bright to look at; rgblight clamps every colour, the base and the
+// indicators, to this.
+#define RGBLIGHT_LIMIT_VAL 63
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // indicators show even with the base light off
 #define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, dev activity)

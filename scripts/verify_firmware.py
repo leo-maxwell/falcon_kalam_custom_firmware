@@ -246,7 +246,7 @@ def main():
         all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
         c.check(any(n.split('.')[0] == 'falcon_kalam_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_kalam_rgb_layers) linked')
         c.check(all_modes not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
-        c.check(re.search(r'define RGBLIGHT_LIMIT_VAL 127\b', (ROOT / 'userspace' / 'users' / 'falcon_kalam' / 'config.h').read_text()) is not None, 'POLICY-RGB: brightness cap RGBLIGHT_LIMIT_VAL = 127 (half of full scale)')
+        c.check(re.search(r'define RGBLIGHT_LIMIT_VAL 63\b', (ROOT / 'userspace' / 'users' / 'falcon_kalam' / 'config.h').read_text()) is not None, 'POLICY-RGB: brightness cap RGBLIGHT_LIMIT_VAL = 63 (a quarter of full scale 255)')
         if args.via_json:
             menus = json.loads(args.via_json.read_text()).get('menus', [])
             c.check('qmk_rgblight' not in menus, 'POLICY-RGB: %s has no lighting menu' % args.via_json.name)
