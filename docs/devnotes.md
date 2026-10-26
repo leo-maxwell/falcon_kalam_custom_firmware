@@ -8,8 +8,8 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 11 (`a04a7115…`), flashed 2026-10-27. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–10, each read back equal to its image (release 5 was never flashed) |
-| Next | ship release 12 (`docs/firmware.md` §1: dark frame at pre-init): flash, readback, normal plug-in (LED 1 flash shorter or gone), reset boot; VIA check; then ship is the daily image |
+| On the device | **ship** release 12 (`62072341…`), flashed 2026-10-27. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–11, each read back equal to its image (release 5 was never flashed) |
+| Next | ship release 12: normal plug-in (LED 1 flash shorter or gone), Esc→DFU test and readback, reset boot; VIA check; then ship is the daily image |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 
