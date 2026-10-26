@@ -24,6 +24,8 @@ owner's decision. Closed items move to the ledger as one line.
 | L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting; Fn+Ctrl+M (until the next plug-in) or SW2 (from the next plug-in) selects Mac mode |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
 | L11 | Deviations from the HHKB Classic, all accepted (`policy.md` §2.3). Noticeable in use: no SW6, so a key press always wakes a sleeping host; 6KRO only until upstream fixes NKRO on macOS (POLICY-NKRO, I8); SW1/SW2 both on acts as HHK mode |
+| L12 | At plug-in LED 1 can light in a dim random colour for a moment: the bootloader runs first and leaves the LED data line undriven (`hardware.md` §6). The firmware drives it and sends a dark frame at `keyboard_pre_init`, its earliest point (release 12); the bootloader's own time stays, as the bootloader is upstream. Hardware fix: a pull-down resistor on A1 |
+
 
 ## Ledger (closed)
 

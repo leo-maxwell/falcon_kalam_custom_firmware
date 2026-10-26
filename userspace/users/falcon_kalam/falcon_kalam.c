@@ -18,6 +18,7 @@
 // them invalid, and QMK re-initialises all of them (VIA keymaps and macros
 // included) right after.
 void keyboard_pre_init_user(void) {
+    falcon_kalam_rgb_pre_init();
     falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
     if (eeconfig_is_enabled() && cfg.schema != FALCON_KALAM_EEPROM_SCHEMA) {
         eeconfig_disable();

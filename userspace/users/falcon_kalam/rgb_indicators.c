@@ -260,6 +260,18 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
     }
 }
 
+// keyboard_pre_init_user: the earliest point this firmware reaches. Until the
+// data pin is driven, the first LED can pick up noise and light in a random
+// colour (docs/hardware.md §6). Drive it and send a dark frame now (twice, as
+// the first frame after set-up is garbled), long before rgblight starts.
+void falcon_kalam_rgb_pre_init(void) {
+    ws2812_init();
+    wait_ms(1);
+    ws2812_set_color_all(0, 0, 0);
+    ws2812_flush();
+    ws2812_flush();
+}
+
 // Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
 // directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
 // rgblight also bypasses its cap and brightness curve, so apply both here.
