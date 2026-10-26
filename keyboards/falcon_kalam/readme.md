@@ -23,5 +23,6 @@ The project's release firmware adds a policy layer from `userspace/`
 
 * **Bootmagic reset**: hold the top-left key (Esc, matrix 0,0) while plugging
   in. This jumps to the bootloader *and clears the persistent configuration*.
-* **Power-on window**: the Maple bootloader enumerates as `1EAF:0003` for a
-  short time after every power-on, before starting the application.
+* **No power-on window**: this unit's bootloader starts the application
+  straight away, so a plain replug never shows `1EAF:0003`. Other ways in:
+  `QK_BOOT`, or shorting the reset/boot pads as a last resort.

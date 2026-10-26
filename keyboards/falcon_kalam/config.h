@@ -11,7 +11,8 @@
 // The vendor image locates its wear-leveling area at runtime from the F_SIZE
 // register and its data sits at 0x0800F800-0x0800FFFF in the flash readback,
 // i.e. F_SIZE reads 64 KB on this unit. Pin the size so the location does not
-// depend on GD32 F_SIZE semantics. Must match the linker script
-// (ld/STM32F103x8_stm32duino_falcon_kalam.ld) and eeprom.wear_leveling in
-// keyboard.json.
+// depend on GD32 F_SIZE semantics. The area itself is larger than stock's:
+// 4 KB backing / 2 KB logical at 0x0800F000 (keyboard.json eeprom.wear_leveling,
+// docs/hardware.md §2). Must match the linker script
+// (ld/STM32F103x8_stm32duino_falcon_kalam.ld).
 #define WEAR_LEVELING_EFL_FLASH_SIZE (64 * 1024)

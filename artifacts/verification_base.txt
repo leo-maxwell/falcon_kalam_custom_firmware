@@ -2,21 +2,21 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0x4DB18E97 valid
+  [PASS] DFU suffix CRC32 0x4FD7EA9A valid
     file 38204 bytes, payload 38188 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
-  [PASS] linker script app limit 0x0800F800 == EEPROM start
+  [PASS] linker script app limit 0x0800F000 == EEPROM start
   [PASS] LOAD lma 0x08002000-0x0800B17C inside application flash
   [PASS] LOAD lma 0x0800B17C-0x0800B52C inside application flash
-  [PASS] RAM segment 0x20000C00-0x20001970 inside 20 KB SRAM
+  [PASS] RAM segment 0x20000C00-0x20001D70 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800B52C (< 0x0800F800)
+  [PASS] image ends at 0x0800B52C (< 0x0800F000)
   [PASS] binary length agrees with ELF load segments
-    application flash used 38188 / 55296 bytes (69.1%), 17108 bytes free
-    bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
+    application flash used 38188 / 53248 bytes (71.7%), 15060 bytes free
+    bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F000-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
 ## 3. Vector table
@@ -57,7 +57,7 @@
   [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present
   [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)
   [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)
-  [PASS] wear-leveling 2048/1024 at 0x0800F800-0x0800FFFF matches vendor readback
+  [PASS] wear-leveling 4096/2048 at 0x0800F000-0x0800FFFF (stock 2048/1024 at 0x0800F800, enlarged for POLICY-HHKB)
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
   [PASS] LAYOUT_60_hhkb is the first (default) layout

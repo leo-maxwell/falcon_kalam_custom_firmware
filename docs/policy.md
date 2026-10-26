@@ -36,7 +36,7 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `users/falcon_kalam/config.h` (`#undef` of every effect) | verifier: L1 image has all 43 effects, ship and dev have none, the indicator table is in both, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c` (both variants); dev Shift+Shift+F fault test | verifier: all four fault vectors → the stack-free reset routine in ship and dev; base keeps ChibiOS defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Removed from ship by the user's decision (2026-10-26) | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
-| POLICY-HHKB | HHKB is the default everywhere: keymaps, first layout, VIA layout option 0 | `keyboard.json`, keymaps, `via/falcon_kalam.json` | verifier |
+| POLICY-HHKB | the keyboard is an **HHKB Professional Classic copy** (§2.3): HHKB physical layout everywhere (first layout, VIA layout option 0), and in L2 all three setting modes with the real keyboard's keys and HID codes, Mac mode by default | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual, and no ship Command key appears in any layer |
 
 ### 2.1 RGB policy (POLICY-RGB)
 
@@ -54,7 +54,7 @@ LED-order test.
 | 3 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
 | 4 | debug output on | yellow | A | Shift+Shift+D / X |
 | 5 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
-| 6 | non-default layer locked on | green | B | layer ≥ 2 active, or default layer ≠ 0 |
+| 6 | layer locked on | green | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
 | — | Fn held, Caps Lock | no RGB change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
 | — | dev only (with FLASHREAD): request served | cyan blink | all | `falcon_kalam_rgb_activity()` |
@@ -62,8 +62,8 @@ LED-order test.
 Both variants behave the same. Every rgblight effect is compiled out, and the
 base is enforced to static white on every main-loop pass, so old EEPROM values
 and VIA commands can't change it. The VIA definition has no lighting menu.
-Fn+Z switches the white base light off/on (persisted); indicators still show.
-Fn+X–B do nothing. No separate LED test tools are needed:
+No key switches the white base off (Fn+Z removed by user decision,
+2026-10-26). No separate LED test tools are needed:
 - the indicator colours (red, yellow, magenta, blue, green) also check the WS2812 colour order;
 - triggering a channel (Shift+Shift+D → channel A) shows which physical LEDs it uses.
 
@@ -99,13 +99,27 @@ id was `falcon_hs_r2`, the product string "Falcon HS R2", and the variant
 keymaps `keymaps/falcon/` (ship) and `keymaps/falcon_dev` (dev); before that
 the release keymap was `hhkb_via`.
 
+### 2.3 HHKB policy (POLICY-HHKB)
+
+**The default layout is a copy of the HHKB Professional Classic**
+(`hardware.md` §7), including its special keys. Decisions:
+
+| Point | Decision |
+|---|---|
+| Modes | all three setting modes, as the manual defines them: base layer + Fn layer each; unsupported Fn keys send the plain key, as on the HHKB |
+| Default | **Mac mode** (user, 2026-10-26: the HHKB layout is built for the Mac). The HHKB's own factory default is HHK mode |
+| HID codes | as the real keyboard sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
+| DIP switches | none on this unit. SW1/SW2 → the stored mode; SW3 → factory setting (Delete sends Delete in Win/HHK mode); SW4–SW6 not emulated (I22) |
+| Additions | allowed where the HHKB has nothing: Fn+Ctrl+H selects HHK mode (the HHKB reaches it through its DIPs); the mode survives replugging. Nothing else is added; Fn+Z (white light) was removed |
+| Layer | L2 (the keymap is a choice). L1 holds the physical layout, and sizes the EEPROM for six layers; its own default keymap stays a plain QMK-style HHKB reference |
+
 ### Project
 
 | ID | Rule | Enforced by |
 |---|---|---|
 | POLICY-QMK-LATEST | `qmk_firmware` sits exactly on the newest upstream QMK release tag; being newer than stock is intended | `scripts/qmk_policy.sh` (offline in every build, fatal; `--online` before each flash) |
 | POLICY-ORIGINALS | `originals/` is immutable evidence: mode 444, hashes in `SHA256SUMS`. New device dumps may be **added**, never changed | `build.sh` hash check |
-| POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time) | `build.sh --twice`; the verifier checks the embedded build date |
+| POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time). Why not the real date: an approved SHA-256 must be re-derivable, and VIA wipes the saved keymap whenever the build date changes; pinned, that happens only with a QMK update, and our own layout changes use the schema stamp (§5) | `build.sh --twice`; the verifier checks the embedded build date |
 | POLICY-EVIDENCE | hardware parameters come only from verified evidence; anything unproven is marked so, never invented | analysis tool (exact-address checks); status column in `hardware.md` |
 | POLICY-READONLY-DEVICE | without an approval, only read the device: enumeration, DFU **upload**, whitelisted VIA queries | `falcon_kalam_probe.py` whitelist |
 | POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU. The daily image is always ship | `scripts/flash.sh` (refuses other images, wrong hashes, devices not in DFU; alt 2 hard-coded; pre-flash readback) + its negative tests; `operations.md` §2 |
@@ -117,8 +131,8 @@ the release keymap was `hhkb_via`.
 
 | Path | Content |
 |---|---|
-| `keyboards/falcon_kalam/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 2048/1024, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_kalam.ld` (app region `0x08002000–0x0800F7FF`, exports `__falcon_kalam_app_*`); `keymaps/default/` (HHKB); `readme.md` |
-| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB layer settings, `falcon_kalam_keymap.h` the keymap, `falcon_kalam.c` the only file defining QMK hooks, `rgb_indicators.c/.h` POLICY-RGB, `recovery.c` POLICY-RECOVERY, `flashread.c`); `userspace/keyboards/falcon_kalam/keymaps/ship/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
+| `keyboards/falcon_kalam/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 4096/2048 (stock 2048/1024, enlarged for POLICY-HHKB), WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_kalam.ld` (app region `0x08002000–0x0800EFFF`, exports `__falcon_kalam_app_*`); `keymaps/default/` (QMK-style HHKB, reference); `readme.md` |
+| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards, RGB layer settings and the layer count, `falcon_kalam_keymap.h` the keymap, `hhkb_modes.c/.h` POLICY-HHKB layers and mode switching, `falcon_kalam.c` the only file defining QMK hooks, `rgb_indicators.c/.h` POLICY-RGB, `recovery.c` POLICY-RECOVERY, `flashread.c`); `userspace/keyboards/falcon_kalam/keymaps/ship/` (ship: selective Command, debug guards) and `…/dev/` (dev: all debug features) |
 | `via/falcon_kalam.json` | VIA definition (both variants): the stock JSON with HHKB as layout option 0, without the lighting menu (POLICY-RGB) |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
@@ -169,9 +183,11 @@ It can't live in a `.c` under `users/`: QMK's keymap introspection compiles
 the variant's `keymap.c` itself and derives the layer count from that array.
 
 **Selective Command (ship `config.h`).** Unwanted `MAGIC_KEY_*` commands are
-re-pointed at keys a US HHKB doesn't have (`INTERNATIONAL_1`–`9`,
-`LANGUAGE_1`), so LShift+RShift+that-key reaches no case in `command.c`'s
-switch and types normally. Each needs a distinct key (duplicate cases don't
+re-pointed at keys no layer sends (`INTERNATIONAL_1`–`3` and `6`–`9`,
+`LANGUAGE_1`–`3`; HHK mode's ◇ keys send `INTERNATIONAL_4`/`5`, which would
+otherwise have made Shift+Shift+◇ jump to the bootloader), so
+LShift+RShift+that-key reaches no case in `command.c`'s switch and types
+normally. The verifier checks that no layer contains them. Each needs a distinct key (duplicate cases don't
 compile). Names such as `F13` are unusable: QMK defines `F13` as a pin macro
 (GPIOF pin 13), which breaks the `KC_##key` paste. Layer switching is turned
 off with `MAGIC_KEY_SWITCH_LAYER_WITH_{FKEYS,NKEYS} false`.
@@ -179,7 +195,14 @@ off with `MAGIC_KEY_SWITCH_LAYER_WITH_{FKEYS,NKEYS} false`.
 **`falcon_kalam.c` (hook dispatcher).** QMK's `*_user` hooks and weak hooks
 (`bootmagic_reset_eeprom`, `command_extra`) can each be defined only once per
 firmware. They all live here and call module functions
-(`falcon_kalam_rgb_init/task/shutdown/...`), so modules never collide.
+(`falcon_kalam_rgb_init/task/shutdown/...`, `falcon_kalam_hhkb_mode_process`),
+so modules never collide. It also owns the **settings schema stamp**:
+`eeconfig_init_user` writes `FALCON_KALAM_EEPROM_SCHEMA` into the eeconfig user
+word, and `keyboard_pre_init_user` (after the EEPROM driver starts, before QMK
+reads the settings) marks the settings invalid when the stamp differs. QMK
+then re-initialises everything, VIA keymaps and macros included. Bump the
+stamp whenever stored data changes meaning (layer count, layer order). VIA's
+own check can't do this: it keys on the build date, which is pinned.
 
 **`recovery.c` (POLICY-RECOVERY).** QMK writes `BKP_DR10 = 0x424C` (stay in
 DFU) at every boot, and the bootloader honours it after any reset. The four
@@ -204,8 +227,9 @@ directly, since there is no later main-loop pass before the reset. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, `set_color_all(RGB_RED)`, `flush`).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag
-(the dispatcher keeps QMK's default `eeconfig_update_user(0)`); the blink
-starts at post-init.
+(the dispatcher writes the schema stamp); the blink starts at post-init.
+The green lock state treats the mode bases (default layers 0/2/4, or an
+empty default state = 0) and a held Fn layer (1/3/5) as normal.
 Note: rgblight blinks share one repeat timer, so overlapping blinks interfere
 (only possible in dev, during a FLASHREAD dump at boot). Layer changes are applied in `rgblight_task()`, which
 exists because `RGBLIGHT_LAYERS` forces `RGBLIGHT_USE_TIMER` even with no
@@ -213,9 +237,23 @@ effects compiled.
 
 **EEPROM placement.** ChibiOS describes the F103 flash as 128 × 1 KB sectors
 (the xB registry). QMK drops the sectors at or above the flash size, then takes
-sectors from the top until it has 2 KB, which gives `0x0800F800`. L1 pins the
-flash size, so a GD32's F_SIZE cannot move it; the linker script reserves the
-same 2 KB.
+sectors from the top until it has the backing size: 4 KB gives `0x0800F000`
+(stock: 2 KB at `0x0800F800`). L1 pins the flash size, so a GD32's F_SIZE
+cannot move it; the linker script reserves the same 4 KB. Why 4 KB: six
+layers × 150 B leave under 100 B of a 1 KB settings area for macros, and QMK
+refuses that. On the first boot after the move, the old 2 KB sits where the
+new write log starts; the new base image is erased, so its checksum fails and
+wear-leveling clears its cache, QMK's settings magic fails, and the schema
+stamp forces a clean re-initialisation anyway.
+
+**`hhkb_modes.c` (POLICY-HHKB).** Each mode is a base layer (0 Mac, 2 Win,
+4 HHK) whose Fn key is `MO()` of its own Fn layer (1, 3, 5). The mode is QMK's
+persistent default layer (`set_single_persistent_default_layer`), so it is
+restored at boot and an EEPROM reset gives layer 0 = Mac. A key press with any
+Fn layer on and Ctrl held is judged by its **base-layer** keycode: M, W, H
+switch mode and are swallowed (on the Fn layers M and H are keypad keys). The
+Fn layer held during the switch belongs to the old mode until Fn is released;
+QMK caches each key's source layer, so the `MO()` release still turns it off.
 
 **`analyze_vendor_firmware.py`.** The stock image has no symbols. Each check
 names an address and the exact instruction/data bytes expected there
@@ -226,11 +264,12 @@ the 2-bit entry type from the address and value.
 
 **`verify_firmware.py`.**
 - Container: the DFU suffix (CRC32) is valid, and the payload equals `objcopy -O binary` of the ELF.
-- Placement: every `LOAD` segment lies in `[0x08002000, 0x0800F800)`, and RAM in 20 KB.
+- Placement: every `LOAD` segment lies in `[0x08002000, 0x0800F000)`, and RAM in 20 KB.
 - Vector table: SP = `__main_stack_end__`, reset = `Reset_Handler`, every vector points into the image.
 - Profiles: base = NKRO present, no VIA. Release (ship) and dev = no NKRO (only ChibiOS's empty `send_nkro` stub may exist); VIA, console, Command and LTO present; keymap from the right variant directory. Ship = none of the dev features. Dev = all of them: the FLASHREAD symbol, the `-D` flags, and the trace strings of `ACTION_DEBUG`, `WEAR_LEVELING_DEBUG_OUTPUT` and the scan rate. `VIA_INSECURE` leaves no binary trace, so it is enforced only by the ship guard and its negative test.
 - Instruction checks (`thumb2_find`, `movw_find`) match the opcode and immediate but ignore register fields, because each variant allocates registers differently. They are validated against the stock image, and against constants that must not match.
-- Stock equivalence: pin tables, flash descriptor, clock literal and PLL instruction, BKP flags, JTAG-disable instruction, Caps LED config; VIA's default view = `LAYOUT_60_hhkb`.
+- Stock equivalence: pin tables, flash descriptor, clock literal and PLL instruction, BKP flags, JTAG-disable instruction, Caps LED config; VIA's default view = `LAYOUT_60_hhkb`. The EEPROM size is checked as the enlarged 4096/2048.
+- POLICY-HHKB (ship and dev): reads the `keymaps` array from the ELF and compares all six layers with `hhkb_expected()`, built from the manual's Fn table (`HHKB_FN`, with modes) and the base differences (`HHKB_MODES`). The table is written independently of the C source. Keycode values come from the pinned `quantum/keycodes.h`. Ship: the Command keys in `ship/config.h` must appear in no layer.
 
 **`feature_parity.py`.** `config_descriptor()` finds a USB configuration
 descriptor by its header and accepts it only if walking the length-prefixed

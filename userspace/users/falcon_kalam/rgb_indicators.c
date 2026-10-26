@@ -15,6 +15,7 @@
 #include "usb_device_state.h"
 #include "ws2812.h"
 #include "rgb_indicators.h"
+#include "hhkb_modes.h"
 
 #if defined(RGBLIGHT_EFFECT_ALTERNATING) || defined(RGBLIGHT_EFFECT_BREATHING) || defined(RGBLIGHT_EFFECT_CHRISTMAS) ||   \
     defined(RGBLIGHT_EFFECT_KNIGHT) || defined(RGBLIGHT_EFFECT_RAINBOW_MOOD) || defined(RGBLIGHT_EFFECT_RAINBOW_SWIRL) || \
@@ -25,7 +26,7 @@
 
 // Layer indices = priority (low to high). Keep in sync with docs/policy.md §2.1.
 enum falcon_kalam_rgb_layer {
-    FALCON_KALAM_RGB_LAYER_LOCKED, // B green:   a non-default layer is locked on
+    FALCON_KALAM_RGB_LAYER_LOCKED, // B green:   a layer other than the mode base / held Fn is on
     FALCON_KALAM_RGB_USB,          // B blue:    powered, but not configured by a USB host
     FALCON_KALAM_RGB_DEBUG,        // A yellow:  debug output on
     FALCON_KALAM_RGB_KEYLOG,       // A magenta: keystroke printout on (privacy warning)
@@ -90,10 +91,13 @@ void falcon_kalam_rgb_task(void) {
     static uint8_t shown; // bit n = indicator layer n currently on (n < 8)
 
     usb_configure_state_t usb    = usb_device_state_get_configure_state();
-    layer_state_t         locked = (layer_state & ~((layer_state_t)1 << 1)) | default_layer_state; // ignore momentary Fn (layer 1)
+    // POLICY-HHKB: a mode base (default layer, 0 = Mac) and a held Fn layer are
+    // normal; any other layer switched on, or another default layer, is not.
+    layer_state_t base   = default_layer_state ? default_layer_state : (layer_state_t)1 << _MAC;
+    bool          locked = (layer_state & ~FALCON_KALAM_FN_LAYERS) || (base & ~FALCON_KALAM_BASE_LAYERS);
 
     uint8_t want = 0;
-    if (get_highest_layer(locked) >= 2 || get_highest_layer(default_layer_state) != 0) want |= 1u << FALCON_KALAM_RGB_LAYER_LOCKED;
+    if (locked) want |= 1u << FALCON_KALAM_RGB_LAYER_LOCKED;
     if (usb != USB_DEVICE_STATE_CONFIGURED && usb != USB_DEVICE_STATE_SUSPEND) want |= 1u << FALCON_KALAM_RGB_USB;
     if (debug_config.enable) want |= 1u << FALCON_KALAM_RGB_DEBUG;
     if (debug_config.enable && debug_config.keyboard) want |= 1u << FALCON_KALAM_RGB_KEYLOG;

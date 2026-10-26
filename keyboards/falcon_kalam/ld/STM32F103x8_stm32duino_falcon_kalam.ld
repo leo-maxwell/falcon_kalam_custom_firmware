@@ -10,8 +10,12 @@
  * instead of silently overlapping persistent storage.
  *
  *   0x08000000 - 0x08001FFF   8 KB   STM32duino/Maple bootloader (never written)
- *   0x08002000 - 0x0800F7FF  54 KB   application (this region)
- *   0x0800F800 - 0x0800FFFF   2 KB   wear-leveling EEPROM (WEAR_LEVELING_BACKING_SIZE)
+ *   0x08002000 - 0x0800EFFF  52 KB   application (this region)
+ *   0x0800F000 - 0x0800FFFF   4 KB   wear-leveling EEPROM (WEAR_LEVELING_BACKING_SIZE)
+ *
+ * Stock used 2 KB at 0x0800F800 (1 KB of settings). This keyboard reserves
+ * 4 KB (2 KB of settings) so the six HHKB mode layers fit next to VIA macros
+ * (POLICY-HHKB, docs/policy.md).
  *
  * Keep FALCON_KALAM_EEPROM_BYTES in sync with WEAR_LEVELING_BACKING_SIZE and
  * WEAR_LEVELING_EFL_FLASH_SIZE in config.h / keyboard.json.
@@ -20,11 +24,11 @@
 falcon_kalam_flash_size    = 64k;
 falcon_kalam_ram_size      = 20k;
 falcon_kalam_boot_bytes    = 0x2000;
-falcon_kalam_eeprom_bytes  = 2k;
+falcon_kalam_eeprom_bytes  = 4k;
 
 MEMORY
 {
-    flash0  : org = 0x08002000, len = 64k - 0x2000 - 2k
+    flash0  : org = 0x08002000, len = 64k - 0x2000 - 4k
     flash1  : org = 0x00000000, len = 0
     flash2  : org = 0x00000000, len = 0
     flash3  : org = 0x00000000, len = 0

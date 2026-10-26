@@ -7,9 +7,27 @@
 
 #include QMK_KEYBOARD_H
 #include "rgb_indicators.h"
+#include "hhkb_modes.h"
 #ifdef FALCON_KALAM_DEV
 #    include "print.h"
 #endif
+
+// Layout of the saved settings (eeconfig user word). Bump it whenever the
+// keymap layers or anything else stored in EEPROM changes meaning: a keyboard
+// with an older stamp then resets its settings once, so the new defaults take
+// effect even if DFU was entered without the Esc reset. VIA's own check cannot
+// do this, because it keys on the build date, which is pinned (reproducible
+// builds). 1 = six HHKB mode layers (POLICY-HHKB).
+#define FALCON_KALAM_EEPROM_SCHEMA 0x464B0001UL // "FK" + version
+
+// Runs after the EEPROM driver starts and before QMK reads the settings: a
+// wrong stamp marks them invalid, and QMK re-initialises all of them (VIA
+// keymaps and macros included) right after.
+void keyboard_pre_init_user(void) {
+    if (eeconfig_is_enabled() && eeconfig_read_user() != FALCON_KALAM_EEPROM_SCHEMA) {
+        eeconfig_disable();
+    }
+}
 
 void keyboard_post_init_user(void) {
     falcon_kalam_rgb_init();
@@ -19,6 +37,10 @@ void housekeeping_task_user(void) {
     falcon_kalam_rgb_task();
 }
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    return falcon_kalam_hhkb_mode_process(record);
+}
+
 bool shutdown_user(bool jump_to_bootloader) {
     falcon_kalam_rgb_shutdown(jump_to_bootloader);
     return true;
@@ -26,9 +48,7 @@ bool shutdown_user(bool jump_to_bootloader) {
 
 // Called by QMK while (re)initialising EEPROM, before the LEDs exist.
 void eeconfig_init_user(void) {
-#if (EECONFIG_USER_DATA_SIZE) == 0
-    eeconfig_update_user(0); // what QMK's default implementation does
-#endif
+    eeconfig_update_user(FALCON_KALAM_EEPROM_SCHEMA);
     falcon_kalam_rgb_note_settings_reset();
 }
 

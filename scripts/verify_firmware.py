@@ -25,7 +25,7 @@ import analyze_vendor_firmware as vendor  # noqa: E402
 
 FLASH_BASE = 0x08000000
 APP_START = 0x08002000      # end of the 8 KB STM32duino bootloader
-EEPROM_START = 0x0800F800   # 2 KB wear-leveling backing store
+EEPROM_START = 0x0800F000   # 4 KB wear-leveling backing store (stock: 2 KB at 0x0800F800)
 FLASH_END = 0x08010000      # 64 KB part
 RAM_START, RAM_END = 0x20000000, 0x20005000  # 20 KB
 
@@ -56,6 +56,61 @@ def movw_find(payload, imm16):
 
 def ioline_bytes(pins):
     return b''.join(struct.pack('<I', PORT_BASE[p[0]] | int(p[1:])) for p in pins)
+
+
+# POLICY-HHKB reference: the Fn table of the HHKB Professional Classic User's
+# Guide (P3PC-6661-01EN, "How to Use the [Fn] Key"), with the codes the real
+# keyboard sends (docs/hardware.md §7). Written independently of the keymap
+# source so the compiled table is checked against the manual, not against itself.
+HHKB_KEYS = ('Esc 1 2 3 4 5 6 7 8 9 0 - = \\ ` '
+             'Tab Q W E R T Y U I O P [ ] Delete '
+             'Control A S D F G H J K L ; \' Return '
+             'LShift Z X C V B N M , . / RShift Fn '
+             'LAlt L◇ Space R◇ RAlt').split()   # LAYOUT_60_hhkb argument order
+HHKB_BASE = ('ESC 1 2 3 4 5 6 7 8 9 0 MINS EQL BSLS GRV '
+             'TAB Q W E R T Y U I O P LBRC RBRC BSPC '
+             'LCTL A S D F G H J K L SCLN QUOT ENT '
+             'LSFT Z X C V B N M COMM DOT SLSH RSFT FN '
+             'LALT LGUI SPC RGUI RALT').split()
+HHKB_FN = [  # (key, code, modes: H = HHK, W = Win, M = Mac)
+    *[(k, 'F%d' % (i + 1), 'HWM') for i, k in enumerate('1 2 3 4 5 6 7 8 9 0 - ='.split())],
+    ('\\', 'INS', 'HWM'), ('`', 'DEL', 'HWM'), ('Delete', 'BSPC', 'HW'), ('Delete', 'NUM', 'M'),
+    ('I', 'PSCR', 'HWM'), ('O', 'SCRL', 'HWM'), ('P', 'PAUS', 'HWM'), ('K', 'HOME', 'HWM'), ('L', 'PGUP', 'HWM'),
+    (',', 'END', 'HWM'), ('.', 'PGDN', 'HWM'), ('Tab', 'CAPS', 'WM'), ('Return', 'PENT', 'M'),
+    ('N', 'PPLS', 'WM'), ('M', 'PMNS', 'WM'), ('H', 'PAST', 'WM'), ('J', 'PSLS', 'WM'),
+    ('[', 'UP', 'HWM'), ('/', 'DOWN', 'HWM'), (';', 'LEFT', 'HWM'), ("'", 'RGHT', 'HWM'),
+    ('A', 'VOLD', 'M'), ('S', 'VOLU', 'M'), ('D', 'MUTE', 'M'), ('F', 'EJCT', 'M'),
+    ('Esc', 'KB_POWER', 'M'), ('R◇', 'STOP', 'H'),
+]
+# Mode -> (base layer, Fn layer, base-layer differences from Mac mode). DIP SW3
+# off (factory): Delete sends Delete outside Mac mode. HHK mode: ◇ = Muhenkan/Henkan.
+HHKB_MODES = {'M': (0, 1, {}), 'W': (2, 3, {'Delete': 'DEL'}), 'H': (4, 5, {'Delete': 'DEL', 'L◇': 'INT5', 'R◇': 'INT4'})}
+
+
+def qmk_keycodes():
+    vals = {}
+    text = (ROOT / 'qmk_firmware' / 'quantum' / 'keycodes.h').read_text()
+    for name, v in re.findall(r'^\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+|\w+)\s*,', text, re.M):
+        vals[name] = int(v, 16) if v.startswith('0x') else vals.get(v)
+    return vals
+
+
+def hhkb_expected(kc, positions, rows, cols):
+    """The six layers POLICY-HHKB requires, as [layer][row][col] keycodes."""
+    layers = []
+    for mode, (base, fn, diff) in sorted(HHKB_MODES.items(), key=lambda m: m[1][0]):
+        b = [[kc['KC_NO']] * cols for _ in range(rows)]
+        f = [[kc['KC_NO']] * cols for _ in range(rows)]
+        for key, name, (r, col) in zip(HHKB_KEYS, HHKB_BASE, positions):
+            name = diff.get(key, name)
+            b[r][col] = kc['QK_MOMENTARY'] | fn if name == 'FN' else kc['KC_' + name]
+            f[r][col] = kc['KC_TRANSPARENT']
+        for key, name, modes in HHKB_FN:
+            if mode in modes:
+                r, col = positions[HHKB_KEYS.index(key)]
+                f[r][col] = kc['KC_' + name]
+        layers += [b, f]
+    return layers
 
 
 def main():
@@ -274,8 +329,10 @@ def main():
     # ORR.W Rd, Rn, #0x02000000 (T1 modified immediate, any registers): AFIO_MAPR |= SWJ_CFG_JTAGDISABLE
     c.check(thumb2_find(payload, 0xFFF0, 0xF040, 0xF0FF, 0x7000), 'AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)')
     wl = kb['eeprom']['wear_leveling']
-    c.check((wl['backing_size'], wl['logical_size']) == (2048, 1024) and EEPROM_START + wl['backing_size'] == FLASH_END,
-            'wear-leveling 2048/1024 at 0x%08X-0x%08X matches vendor readback' % (EEPROM_START, FLASH_END - 1))
+    # Stock: 2048/1024 at 0x0800F800 (vendor readback). Enlarged on purpose for
+    # the six POLICY-HHKB layers; it still ends at the top of the 64 KB part.
+    c.check((wl['backing_size'], wl['logical_size']) == (4096, 2048) and EEPROM_START + wl['backing_size'] == FLASH_END,
+            'wear-leveling 4096/2048 at 0x%08X-0x%08X (stock 2048/1024 at 0x0800F800, enlarged for POLICY-HHKB)' % (EEPROM_START, FLASH_END - 1))
     via_pos = set(tuple(p) for p in vendor.via_positions(json.loads((vendor.ORIG / 'manufacturer_jsonfile.json').read_text())))
     all_pos = set(tuple(k['matrix']) for k in kb['layouts']['LAYOUT_all']['layout'])
     hhkb_pos = set(tuple(k['matrix']) for k in kb['layouts']['LAYOUT_60_hhkb']['layout'])
@@ -300,6 +357,36 @@ def main():
             and re.search(r'define LED_CAPS_LOCK_PIN A10\b', cfg_text) and re.search(r'define LED_PIN_ON_STATE 0\b', cfg_text),
             'Caps Lock LED on A10, active-low, compiled in (stock: PA10 active-low)')
     c.check(kb['ws2812']['pin'] == 'A1' and kb['rgblight']['led_count'] == 4, 'WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)')
+
+    # ------------------------------------------------------------------
+    if release:
+        c.section('6. POLICY-HHKB: keymap = HHKB Professional Classic setting modes')
+        kc = qmk_keycodes()
+        rows, cols = len(kb['matrix_pins']['rows']), len(kb['matrix_pins']['cols'])
+        positions = [tuple(k['matrix']) for k in kb['layouts']['LAYOUT_60_hhkb']['layout']]
+        km = next((v for n, v in sizes.items() if n.split('.')[0] == 'keymaps'), None)
+        c.check(km is not None, 'compiled keymaps table found')
+        if km:
+            addr, size = km
+            n_layers = size // (rows * cols * 2)
+            words = struct.unpack('<%dH' % (size // 2), payload[addr - APP_START:addr - APP_START + size])
+            got = [[list(words[(l * rows + r) * cols:(l * rows + r + 1) * cols]) for r in range(rows)] for l in range(n_layers)]
+            want = hhkb_expected(kc, positions, rows, cols)
+            c.check(n_layers == 6, 'six layers: Mac, Mac Fn, Win, Win Fn, HHK, HHK Fn (%d compiled)' % n_layers)
+            for l, name in enumerate(('Mac base', 'Mac Fn', 'Win base', 'Win Fn', 'HHK base', 'HHK Fn')):
+                if l >= n_layers:
+                    break
+                bad = ['%s=0x%04X (want 0x%04X)' % (HHKB_KEYS[positions.index((r, col))] if (r, col) in positions else '%d,%d' % (r, col),
+                                                    got[l][r][col], want[l][r][col])
+                       for r in range(rows) for col in range(cols) if got[l][r][col] != want[l][r][col]]
+                c.check(not bad, 'POLICY-HHKB %s matches the HHKB Classic manual%s' % (name, ': ' + ', '.join(bad) if bad else ''))
+            if ship:
+                # Selective Command keys must be keys no layer sends (ship config.h).
+                cfg = (ROOT / 'userspace' / 'keyboards' / 'falcon_kalam' / 'keymaps' / 'ship' / 'config.h').read_text()
+                magic = {v: kc.get('KC_' + v) for v in re.findall(r'#define MAGIC_KEY_\w+ ([A-Z_0-9]+)\b', cfg) if v not in ('true', 'false')}
+                used = {k for layer in got for row in layer for k in row}
+                clash = sorted(v for v, code in magic.items() if code is None or code in used)
+                c.check(len(magic) == 10 and not clash, 'ship Command keys are sent by no keymap layer%s' % (': %s' % clash if clash else ''))
 
     c.lines.append('')
     c.lines.append('RESULT: %s (%d failure%s)' % ('PASS' if c.failures == 0 else 'FAIL', c.failures, '' if c.failures == 1 else 's'))

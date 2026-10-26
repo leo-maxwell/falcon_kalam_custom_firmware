@@ -1670,7 +1670,7 @@ Discarded input sections
 Memory Configuration
 
 Name             Origin             Length             Attributes
-flash0           0x08002000         0x0000d800
+flash0           0x08002000         0x0000d000
 flash1           0x00000000         0x00000000
 flash2           0x00000000         0x00000000
 flash3           0x00000000         0x00000000
@@ -1864,10 +1864,10 @@ END GROUP
                 0x00010000                        falcon_kalam_flash_size = 0x10000
                 0x00005000                        falcon_kalam_ram_size = 0x5000
                 0x00002000                        falcon_kalam_boot_bytes = 0x2000
-                0x00000800                        falcon_kalam_eeprom_bytes = 0x800
+                0x00001000                        falcon_kalam_eeprom_bytes = 0x1000
                 0x08002000                        __falcon_kalam_app_start__ = ORIGIN (flash0)
-                0x0800f800                        __falcon_kalam_app_limit__ = (ORIGIN (flash0) + LENGTH (flash0))
-                0x0800f800                        __falcon_kalam_eeprom_start__ = ((0x8000000 + falcon_kalam_flash_size) - falcon_kalam_eeprom_bytes)
+                0x0800f000                        __falcon_kalam_app_limit__ = (ORIGIN (flash0) + LENGTH (flash0))
+                0x0800f000                        __falcon_kalam_eeprom_start__ = ((0x8000000 + falcon_kalam_flash_size) - falcon_kalam_eeprom_bytes)
                 0x00000001                        ASSERT ((ORIGIN (flash0) == (0x8000000 + falcon_kalam_boot_bytes)), flash0 must start right after the bootloader)
                 0x00000001                        ASSERT ((__falcon_kalam_app_limit__ == __falcon_kalam_eeprom_start__), flash0 must end where the EEPROM region begins)
 
@@ -4047,7 +4047,7 @@ END GROUP
 .igot.plt       0x20000fb0        0x0 load address 0x0800b52c
  .igot.plt      0x20000fb0        0x0 .build/obj_falcon_kalam_default/quantum/keymap_introspection.o
 
-.bss            0x20000fb0      0x9c0 load address 0x0800b52c
+.bss            0x20000fb0      0xdc0 load address 0x0800b52c
                 0x20000fb0                        __bss_base__ = .
  *(.bss)
  .bss           0x20000fb0        0x8 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-nano-mallocr.o)
@@ -4111,141 +4111,141 @@ END GROUP
  .bss.debouncing_time.7746
                 0x20001098        0x4 .build/obj_falcon_kalam_default/quantum/debounce/sym_defer_g.o
  .bss.wear_leveling
-                0x2000109c      0x408 .build/obj_falcon_kalam_default/wear_leveling.o
+                0x2000109c      0x808 .build/obj_falcon_kalam_default/wear_leveling.o
  .bss.ecc_error_occurred
-                0x200014a4        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
- *fill*         0x200014a5        0x3 
- .bss.flash     0x200014a8        0x4 .build/obj_falcon_kalam_default/wear_leveling_efl.o
+                0x200018a4        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
+ *fill*         0x200018a5        0x3 
+ .bss.flash     0x200018a8        0x4 .build/obj_falcon_kalam_default/wear_leveling_efl.o
  .bss.flash_erased_is_one
-                0x200014ac        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
+                0x200018ac        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
  .bss.is_issuing_read
-                0x200014ad        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
+                0x200018ad        0x1 .build/obj_falcon_kalam_default/wear_leveling_efl.o
  .bss.animation_status
-                0x200014ae        0x6 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
-                0x200014ae                animation_status
+                0x200018ae        0x6 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018ae                animation_status
  .bss.is_rgblight_initialized
-                0x200014b4        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
-                0x200014b4                is_rgblight_initialized
+                0x200018b4        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018b4                is_rgblight_initialized
  .bss.is_suspended
-                0x200014b5        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018b5        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
  .bss.led_twinkle_state
-                0x200014b6       0x14 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018b6       0x14 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
  .bss.low_bound.9586
-                0x200014ca        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
- .bss.pos.9571  0x200014cb        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018ca        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+ .bss.pos.9571  0x200018cb        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
  .bss.pre_suspend_enabled
-                0x200014cc        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018cc        0x1 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
  .bss.rgblight_status
-                0x200014cd        0x2 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
-                0x200014cd                rgblight_status
+                0x200018cd        0x2 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x200018cd                rgblight_status
  .bss.grave_esc_was_shifted
-                0x200014cf        0x1 .build/obj_falcon_kalam_default/quantum/process_keycode/process_grave_esc.o
+                0x200018cf        0x1 .build/obj_falcon_kalam_default/quantum/process_keycode/process_grave_esc.o
  .bss.last_timer_c
-                0x200014d0        0x2 .build/obj_falcon_kalam_default/quantum/mousekey.o
+                0x200018d0        0x2 .build/obj_falcon_kalam_default/quantum/mousekey.o
  .bss.last_timer_w
-                0x200014d2        0x2 .build/obj_falcon_kalam_default/quantum/mousekey.o
+                0x200018d2        0x2 .build/obj_falcon_kalam_default/quantum/mousekey.o
  .bss.mouse_report
-                0x200014d4        0x6 .build/obj_falcon_kalam_default/quantum/mousekey.o
+                0x200018d4        0x6 .build/obj_falcon_kalam_default/quantum/mousekey.o
  .bss.mousekey_accel
-                0x200014da        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
+                0x200018da        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
  .bss.mousekey_repeat
-                0x200014db        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
+                0x200018db        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
  .bss.mousekey_wheel_repeat
-                0x200014dc        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
- .bss.sc_last   0x200014dd        0x1 .build/obj_falcon_kalam_default/quantum/process_keycode/process_space_cadet.o
- .bss.sc_timer  0x200014de        0x2 .build/obj_falcon_kalam_default/quantum/process_keycode/process_space_cadet.o
- .bss.driver    0x200014e0        0x4 .build/obj_falcon_kalam_default/protocol/host.o
+                0x200018dc        0x1 .build/obj_falcon_kalam_default/quantum/mousekey.o
+ .bss.sc_last   0x200018dd        0x1 .build/obj_falcon_kalam_default/quantum/process_keycode/process_space_cadet.o
+ .bss.sc_timer  0x200018de        0x2 .build/obj_falcon_kalam_default/quantum/process_keycode/process_space_cadet.o
+ .bss.driver    0x200018e0        0x4 .build/obj_falcon_kalam_default/protocol/host.o
  .bss.last_consumer_usage
-                0x200014e4        0x2 .build/obj_falcon_kalam_default/protocol/host.o
+                0x200018e4        0x2 .build/obj_falcon_kalam_default/protocol/host.o
  .bss.last_system_usage
-                0x200014e6        0x2 .build/obj_falcon_kalam_default/protocol/host.o
+                0x200018e6        0x2 .build/obj_falcon_kalam_default/protocol/host.o
  .bss.wakeup_matrix
-                0x200014e8        0xa .build/obj_falcon_kalam_default/platforms/suspend.o
- *fill*         0x200014f2        0x2 
+                0x200018e8        0xa .build/obj_falcon_kalam_default/platforms/suspend.o
+ *fill*         0x200018f2        0x2 
  .bss.last_ticks
-                0x200014f4        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
+                0x200018f4        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
  .bss.ms_offset
-                0x200014f8        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
+                0x200018f8        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
  .bss.ticks_offset
-                0x200014fc        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
+                0x200018fc        0x4 .build/obj_falcon_kalam_default/platforms/chibios/timer.o
  .bss.descriptor.10952
-                0x20001500        0x8 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
+                0x20001900        0x8 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
  .bss.keyboard_protocol.11035
-                0x20001508        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
+                0x20001908        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
  .bss.last_suspend_state
-                0x20001509        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
-                0x20001509                last_suspend_state
- *fill*         0x2000150a        0x2 
+                0x20001909        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
+                0x20001909                last_suspend_state
+ *fill*         0x2000190a        0x2 
  .bss.set_report_buf
-                0x2000150c        0x2 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
+                0x2000190c        0x2 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
  .bss.SerialNumberString
-                0x2000150e       0x44 .build/obj_falcon_kalam_default/usb_descriptor.o
-                0x2000150e                SerialNumberString
+                0x2000190e       0x44 .build/obj_falcon_kalam_default/usb_descriptor.o
+                0x2000190e                SerialNumberString
  .bss.is_set.10152
-                0x20001552        0x1 .build/obj_falcon_kalam_default/usb_descriptor.o
- *fill*         0x20001553        0x1 
+                0x20001952        0x1 .build/obj_falcon_kalam_default/usb_descriptor.o
+ *fill*         0x20001953        0x1 
  .bss.__compound_literal.10
-                0x20001554       0x30 .build/obj_falcon_kalam_default/protocol/chibios/usb_endpoints.o
+                0x20001954       0x30 .build/obj_falcon_kalam_default/protocol/chibios/usb_endpoints.o
  .bss.__compound_literal.6
-                0x20001584       0x90 .build/obj_falcon_kalam_default/protocol/chibios/usb_endpoints.o
+                0x20001984       0x90 .build/obj_falcon_kalam_default/protocol/chibios/usb_endpoints.o
  .bss.idle_rate.10489
-                0x20001614        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
- *fill*         0x20001615        0x3 
+                0x20001a14        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
+ *fill*         0x20001a15        0x3 
  .bss.report.10434
-                0x20001618       0x4c .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
+                0x20001a18       0x4c .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
  .bss.report.10471
-                0x20001664       0x4c .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
+                0x20001a64       0x4c .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
  .bss.run_idle_task
-                0x200016b0        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
- *fill*         0x200016b1        0x7 
+                0x20001ab0        0x1 .build/obj_falcon_kalam_default/protocol/chibios/usb_report_handling.o
+ *fill*         0x20001ab1        0x7 
  .bss.ch_c0_idle_thread_wa
-                0x200016b8      0x110 .build/obj_falcon_kalam_default/lib/chibios/os/rt/src/chsys.o
+                0x20001ab8      0x110 .build/obj_falcon_kalam_default/lib/chibios/os/rt/src/chsys.o
  .bss.ep0_state
-                0x200017c8       0x14 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
+                0x20001bc8       0x14 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
  .bss.ep0setup_buffer
-                0x200017dc        0x8 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
+                0x20001bdc        0x8 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
  *(COMMON)
- COMMON         0x200017e4        0xa .build/obj_falcon_kalam_default/quantum/keyboard.o
-                0x200017e4                matrix_previous
- COMMON         0x200017ee        0x2 .build/obj_falcon_kalam_default/quantum/keycode_config.o
-                0x200017ee                keymap_config
- COMMON         0x200017f0       0x14 .build/obj_falcon_kalam_default/quantum/matrix_common.o
-                0x200017f0                raw_matrix
-                0x200017fa                matrix
- *fill*         0x20001804        0x4 
- COMMON         0x20001808        0x8 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
-                0x20001808                rgblight_config
- COMMON         0x20001810        0xc .build/obj_falcon_kalam_default/ws2812_bitbang.o
-                0x20001810                ws2812_leds
- COMMON         0x2000181c       0x12 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
-                0x2000181c                event_queue
-                0x2000182c                event_queue_head
-                0x2000182d                event_queue_tail
- *fill*         0x2000182e        0x2 
- COMMON         0x20001830       0x68 .build/obj_falcon_kalam_default/lib/chibios/os/rt/src/chsys.o
-                0x20001830                ch_system
-                0x20001838                ch0
- COMMON         0x20001898        0x8 .build/obj_falcon_kalam_default/lib/chibios/os/oslib/src/chmemcore.o
-                0x20001898                ch_memcore
- COMMON         0x200018a0       0x20 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_efl_lld.o
-                0x200018a0                EFLD1
- COMMON         0x200018c0       0x88 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
-                0x200018c0                USBD1
- COMMON         0x20001948        0x4 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-reent.o)
-                0x20001948                errno
- COMMON         0x2000194c       0x21 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
-                0x2000194c                __lock___atexit_recursive_mutex
-                0x20001950                __lock___arc4random_mutex
-                0x20001954                __lock___env_recursive_mutex
-                0x20001958                __lock___sinit_recursive_mutex
-                0x2000195c                __lock___malloc_recursive_mutex
-                0x20001960                __lock___at_quick_exit_mutex
-                0x20001964                __lock___dd_hash_mutex
-                0x20001968                __lock___tz_mutex
-                0x2000196c                __lock___sfp_recursive_mutex
-                0x20001970                        . = ALIGN (0x4)
- *fill*         0x2000196d        0x3 
-                0x20001970                        __bss_end__ = .
+ COMMON         0x20001be4        0xa .build/obj_falcon_kalam_default/quantum/keyboard.o
+                0x20001be4                matrix_previous
+ COMMON         0x20001bee        0x2 .build/obj_falcon_kalam_default/quantum/keycode_config.o
+                0x20001bee                keymap_config
+ COMMON         0x20001bf0       0x14 .build/obj_falcon_kalam_default/quantum/matrix_common.o
+                0x20001bf0                raw_matrix
+                0x20001bfa                matrix
+ *fill*         0x20001c04        0x4 
+ COMMON         0x20001c08        0x8 .build/obj_falcon_kalam_default/quantum/rgblight/rgblight.o
+                0x20001c08                rgblight_config
+ COMMON         0x20001c10        0xc .build/obj_falcon_kalam_default/ws2812_bitbang.o
+                0x20001c10                ws2812_leds
+ COMMON         0x20001c1c       0x12 .build/obj_falcon_kalam_default/protocol/chibios/usb_main.o
+                0x20001c1c                event_queue
+                0x20001c2c                event_queue_head
+                0x20001c2d                event_queue_tail
+ *fill*         0x20001c2e        0x2 
+ COMMON         0x20001c30       0x68 .build/obj_falcon_kalam_default/lib/chibios/os/rt/src/chsys.o
+                0x20001c30                ch_system
+                0x20001c38                ch0
+ COMMON         0x20001c98        0x8 .build/obj_falcon_kalam_default/lib/chibios/os/oslib/src/chmemcore.o
+                0x20001c98                ch_memcore
+ COMMON         0x20001ca0       0x20 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/STM32F1xx/hal_efl_lld.o
+                0x20001ca0                EFLD1
+ COMMON         0x20001cc0       0x88 .build/obj_falcon_kalam_default/lib/chibios/os/hal/ports/STM32/LLD/USBv1/hal_usb_lld.o
+                0x20001cc0                USBD1
+ COMMON         0x20001d48        0x4 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-reent.o)
+                0x20001d48                errno
+ COMMON         0x20001d4c       0x21 /opt/homebrew/Cellar/arm-none-eabi-gcc@8/8.5.0_2/lib/arm-none-eabi-gcc/8/gcc/arm-none-eabi/8.5.0/../../../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-lock.o)
+                0x20001d4c                __lock___atexit_recursive_mutex
+                0x20001d50                __lock___arc4random_mutex
+                0x20001d54                __lock___env_recursive_mutex
+                0x20001d58                __lock___sinit_recursive_mutex
+                0x20001d5c                __lock___malloc_recursive_mutex
+                0x20001d60                __lock___at_quick_exit_mutex
+                0x20001d64                __lock___dd_hash_mutex
+                0x20001d68                __lock___tz_mutex
+                0x20001d6c                __lock___sfp_recursive_mutex
+                0x20001d70                        . = ALIGN (0x4)
+ *fill*         0x20001d6d        0x3 
+                0x20001d70                        __bss_end__ = .
                 [!provide]                        PROVIDE (end = .)
                 0x20000000                        __ram0_base__ = ORIGIN (ram0)
                 0x00005000                        __ram0_size__ = LENGTH (ram0)
@@ -4272,8 +4272,8 @@ END GROUP
                 0x00000000                        __ram7_size__ = LENGTH (ram7)
                 0x00000000                        __ram7_end__ = (__ram7_base__ + __ram7_size__)
                 0x08002000                        __flash0_base__ = ORIGIN (flash0)
-                0x0000d800                        __flash0_size__ = LENGTH (flash0)
-                0x0800f800                        __flash0_end__ = (__flash0_base__ + __flash0_size__)
+                0x0000d000                        __flash0_size__ = LENGTH (flash0)
+                0x0800f000                        __flash0_end__ = (__flash0_base__ + __flash0_size__)
                 0x00000000                        __flash1_base__ = ORIGIN (flash1)
                 0x00000000                        __flash1_size__ = LENGTH (flash1)
                 0x00000000                        __flash1_end__ = (__flash1_base__ + __flash1_size__)
@@ -4296,23 +4296,23 @@ END GROUP
                 0x00000000                        __flash7_size__ = LENGTH (flash7)
                 0x00000000                        __flash7_end__ = (__flash7_base__ + __flash7_size__)
 
-.ram0_init      0x20001970        0x0 load address 0x0800b52c
+.ram0_init      0x20001d70        0x0 load address 0x0800b52c
                 0x0800b52c                        __ram0_init_text__ = LOADADDR (.ram0_init)
-                0x20001970                        __ram0_init__ = .
+                0x20001d70                        __ram0_init__ = .
  *(.ram0_init)
  *(.ram0_init.*)
-                0x20001970                        . = ALIGN (0x4)
+                0x20001d70                        . = ALIGN (0x4)
 
-.ram0           0x20001970        0x0 load address 0x0800b52c
-                0x20001970                        __ram0_clear__ = .
+.ram0           0x20001d70        0x0 load address 0x0800b52c
+                0x20001d70                        __ram0_clear__ = .
  *(.ram0_clear)
  *(.ram0_clear.*)
-                0x20001970                        . = ALIGN (0x4)
-                0x20001970                        __ram0_noinit__ = .
+                0x20001d70                        . = ALIGN (0x4)
+                0x20001d70                        __ram0_noinit__ = .
  *(.ram0)
  *(.ram0.*)
-                0x20001970                        . = ALIGN (0x4)
-                0x20001970                        __ram0_free__ = .
+                0x20001d70                        . = ALIGN (0x4)
+                0x20001d70                        __ram0_free__ = .
 
 .ram1_init      0x00000000        0x0 load address 0x0800b52c
                 0x0800b52c                        __ram1_init_text__ = LOADADDR (.ram1_init)
@@ -4488,11 +4488,11 @@ END GROUP
  *(.flash7_init.*)
                 0x00000000                        __flash7_free__ = .
 
-.heap           0x20001970     0x3690
-                0x20001970                        . = ALIGN (0x8)
-                0x20001970                        __heap_base__ = .
+.heap           0x20001d70     0x3290
+                0x20001d70                        . = ALIGN (0x8)
+                0x20001d70                        __heap_base__ = .
                 0x20005000                        . = (ORIGIN (HEAP_RAM) + LENGTH (HEAP_RAM))
- *fill*         0x20001970     0x3690 
+ *fill*         0x20001d70     0x3290 
                 0x20005000                        __heap_end__ = .
 OUTPUT(.build/falcon_kalam_default.elf elf32-littlearm)
 LOAD linker stubs

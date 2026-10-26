@@ -27,8 +27,10 @@ delete it here.
    - spot-check the dev traces (action, wear-leveling, scan rate) in `qmk console`.
    - Bootmagic (Esc at plug-in) → LEDs **red** in DFU (R15; same WS2812-latch question as Shift+Shift+B);
    - **fault recovery** (R13, POLICY-RECOVERY): Shift+Shift+F → `qmk console` shows "fault test", the keyboard drops into DFU (`dfu-util -l` shows `1eaf:0003`), and a replug brings it back;
-   - **wear-leveling** (R2): with Shift+Shift+D on, change several keys in VIA and replug a few times; the console shows backing-store writes, and the changes persist
-2. **Ship image acceptance**: flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.
+   - **wear-leveling** (R2): with Shift+Shift+D on, change several keys in VIA and replug a few times; the console shows backing-store writes, and the changes persist;
+   - **EEPROM move** (4 KB at `0x0800F000`): the first boot shows orange blinks (settings reset by the schema stamp); VIA then shows 6 layers and the macro buffer; the console wear-leveling trace shows no errors;
+   - **HHKB modes** (POLICY-HHKB): Mac mode at first boot; Fn+F Eject, Fn+Delete Clear, Fn+Return keypad Enter, Fn+A/S/D volume, Fn+H/J/N/M keypad; **Fn+Esc Power: note what macOS does** (Keyboard Power `0x66`; expect a shut-down/sleep prompt, so cancel it); Fn+Ctrl+W → Win mode (Delete deletes forward, Fn+Delete = Backspace, Fn+A types a); Fn+Ctrl+H → HHK mode (◇ is no longer Command, Fn+Tab types Tab, Fn+Right-◇ = Stop in the console trace); Fn+Ctrl+M → Mac; the mode survives a replug; Bootmagic → Mac mode; Shift+Shift+left-◇ in HHK mode types normally (ship)
+2. **Ship image acceptance**: flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z–B type nothing special, lighting menu absent). Keep it as the daily image.
 
 ## Before shipping (leaving alpha)
 

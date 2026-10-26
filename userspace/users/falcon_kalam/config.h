@@ -13,6 +13,11 @@
 #    error "POLICY-NKRO: NKRO must stay disabled in the falcon_kalam configuration (macOS Caps Lock / input-source issue)"
 #endif
 
+// POLICY-HHKB: Mac, Win and HHK mode, each a base layer and an Fn layer
+// (falcon_kalam_keymap.h). Six layers leave less EEPROM for VIA macros than
+// stock's four did (see docs/firmware.md).
+#define DYNAMIC_KEYMAP_LAYER_COUNT 6
+
 // POLICY-RGB: the RGB module is a status indicator (rgb_indicators.c). The base
 // is static white at full brightness; indicator states are rgblight layers.
 // Supersedes the stock rgblight defaults (rainbow swirl, brightness 127).

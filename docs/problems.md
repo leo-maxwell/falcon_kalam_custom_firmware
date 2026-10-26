@@ -8,7 +8,7 @@ user decision. Closed items move to the ledger at the end as one line.
 | ID | Problem | Status / impact | Mitigation / next step |
 |---|---|---|---|
 | B1 | **Caps Lock LED never lights** on image `9b61141e…` (the A10 indicator was not configured) | **fixed** in the ship and dev images (indicator compiled in, verified offline); not flashed | flash and confirm the LED (devnotes) |
-| R15 | **"Dark" is ambiguous** under POLICY-RGB | **fixed** in the images: Bootmagic now paints the LEDs red too, so dark = host asleep or white base switched off (Fn+Z). Red in DFU relies on the WS2812s latching the last frame (unverified) | confirm red in DFU (devnotes) |
+| R15 | **"Dark" is ambiguous** under POLICY-RGB | **fixed** in the images: Bootmagic now paints the LEDs red too, so dark = host asleep (no key switches the white base off any more). Red in DFU relies on the WS2812s latching the last frame (unverified) | confirm red in DFU (devnotes) |
 | R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads or SWD | **partly fixed** (POLICY-RECOVERY): any CPU fault now resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
 | R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash retired USB, matrix scan, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev round persistence test with the wear-leveling trace; repeat after each QMK update |
 
@@ -17,11 +17,13 @@ user decision. Closed items move to the ledger at the end as one line.
 | ID | Limitation |
 |---|---|
 | L1 | In the **ship** image the VIA key tester and `falcon_kalam_probe.py matrix` see an all-zero matrix (QMK hides it unless built with `VIA_INSECURE`). Use the dev image, or the console (Shift+Shift+X) |
-| L2 | Fn+Esc = Power (HHKB convention) opens the macOS shut-down dialog |
+| L2 | Fn+Esc = Power in Mac mode (HHKB Classic convention), sent as Keyboard Power `0x66` like the real keyboard. What macOS does with it is unverified (devnotes) |
 | L3 | `QK_BOOT` is not on any default layer: use Esc at plug-in, Shift+Shift+B, or assign it in VIA |
 | L4 | Command N ("NKRO toggle") does nothing in the dev image (no NKRO); in ship it types a normal N |
 | L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |
-| L6 | The first boot of a new image with a different EEPROM layout resets the configuration (`SKIP_VERSION` fixes the VIA magic; clear EEPROM with Bootmagic if a layout changes) |
+| L6 | The first boot of an image with a new settings schema resets the configuration (VIA keymaps and macros included): the schema stamp forces it (`policy.md` §5). VIA's own reset follows only QMK updates (pinned build date) |
+| L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). Fn+Ctrl+M returns to Mac mode |
+| L9 | All six VIA layers belong to the HHKB modes; stock left two spare (transparent) layers. Custom layers mean editing a mode's layers |
 | L7 | After a CPU fault the keyboard drops into DFU and stops typing until replugged. The LEDs keep their last colour (the fault handler must not touch them) |
 
 ## Ledger (closed)

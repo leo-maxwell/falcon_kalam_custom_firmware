@@ -7,10 +7,10 @@ Both are built from the same tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_k
 Both are reproducible, also across days (`SOURCE_DATE_EPOCH` = the pinned QMK
 commit time).
 
-| Variant | Image | SHA-256 | Size (of 55,296 B) | Use |
+| Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `4eddc2805a595428b297491cc92c8f12a0de5e0fa0c6292f2fa70f4a83be768f` | 36,148 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `46a6d48df5dff5b89b8a1e1e15074fbefea0edad6589b3d74c53c98535ca097d` | 41,660 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `c7997042fafa5639099f3a129fbda8fcd718031fdb8bfe24e410749001e738e9` | 36,588 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `373dee73d643d5407080c00b3dce17182d46df890512a704594087aa4128d024` | 42,092 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -30,34 +30,48 @@ feature code) · **pending** = see devnotes.
 | HID interfaces | keyboard 6KRO, VIA, shared mouse/system/consumer, console; 1 ms | same | = (no NKRO report) | ✓ 2026-10-26 |
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | Caps Lock and input switching OK (user, 2026-10-26) |
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | layout settled 2026-10-26; full key test pending |
-| Keymap | HHKB base + HHKB Fn (§3), 4 VIA layers | same | + (stock: generic 60%) | pending |
-| VIA | protocol `0x000D`, 4 layers, 16 macros (383-byte buffer), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ 2026-10-26 (probe) |
+| Keymap (POLICY-HHKB) | the HHKB Professional Classic's three setting modes, **Mac** (default), Win and HHK, each a base + Fn layer with the real keyboard's HID codes; Fn+Ctrl+M/W/H switch, the mode survives replugging (§3) | same | new (stock: generic 60%) | pending |
+| VIA | protocol `0x000D`, 6 layers (the three modes), 16 macros (about 1.1 KB buffer, stock 383 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ 2026-10-26 (probe) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ 2026-10-26 (red: pending) |
 | Fault recovery (POLICY-RECOVERY) | any CPU fault resets into DFU instead of hanging | same + Shift+Shift+F fault test | new | pending |
 | Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader. All other combos type normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, Caps/lock, E, M, C, N, Z, `` ` ``, 0–9, F1–F10) + F = fault test | = (ship: safer subset) | pending |
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ 2026-10-26 |
 | Caps Lock LED | A10, active-low | same | = | pending |
-| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked (`policy.md` §2.1); effects disabled (they remain in L1); Fn+Z = white base on/off; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
-| EEPROM | wear-leveling 2 KB at `0x0800F800`, flash size pinned | same | + | pending (persistence) |
+| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked (`policy.md` §2.1); effects disabled (they remain in L1); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
+| EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback 2026-10-26 |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |
 
-## 3. Keymap (ship, dev and the L1 default)
+## 3. Keymap (ship and dev)
+
+POLICY-HHKB: a copy of the HHKB Professional Classic (reference:
+`hardware.md` §7). The mode is stored; an EEPROM reset returns to Mac mode.
 
 ```
-Base:  Esc 1 2 3 4 5 6 7 8 9 0 - = \ `
-       Tab  Q W E R T Y U I O P [ ] Bspc
-       Ctrl  A S D F G H J K L ; ' Enter
-       Shift  Z X C V B N M , . / Shift Fn
-             Alt ◆      Space      ◆ Alt
-Fn:    Esc=Power  1–=:F1–F12  \=Ins  `=Del
-       Tab=Caps  I=PrtSc O=ScrLk P=Pause [=Up
-       A=Vol- S=Vol+ D=Mute  H=KP*  J=KP/  K=Home  L=PgUp  ;=Left  '=Right  Enter=KP Enter
-       Z=white light on/off  N=KP+  M=KP-  ,=End  .=PgDn  /=Down
-       (L1 default keymap: Z=RGB on/off X=mode C=hue V=sat B=brightness)
+Base (all modes):  Esc 1 2 3 4 5 6 7 8 9 0 - = \ `
+                   Tab  Q W E R T Y U I O P [ ] Delete
+                   Ctrl  A S D F G H J K L ; ' Return
+                   Shift  Z X C V B N M , . / Shift Fn
+                         Alt ◇      Space      ◇ Alt
+  Mac: Delete = Backspace, ◇ = Command, Alt = Option
+  Win: Delete = Delete,    ◇ = Windows key
+  HHK: Delete = Delete,    ◇ = Muhenkan (left) / Henkan (right)
+
+Fn, every mode:  1–= F1–F12  \ Ins  ` Del  I PrtSc  O ScrLk  P Pause
+                 [ Up  ; Left  ' Right  / Down  K Home  L PgUp  , End  . PgDn
+  Mac adds:  Esc Power  Tab Caps  Delete Clear  Return KP-Enter
+             A Vol-  S Vol+  D Mute  F Eject  H KP*  J KP/  N KP+  M KP-
+  Win adds:  Tab Caps  Delete Backspace  H KP*  J KP/  N KP+  M KP-
+  HHK adds:  Delete Backspace  Right-◇ Stop
+Fn+Ctrl+M Mac mode · Fn+Ctrl+W Win mode · Fn+Ctrl+H HHK mode (our addition)
 ```
 
-Layers 2–3 are transparent. Positions outside the HHKB layout are `KC_NO` and
-can be assigned in VIA. Fn+Esc sends Power, which opens the macOS shut-down
-dialog.
+Codes as the real keyboard sends them: Power = Keyboard Power (`0x66`), Stop
+= `0x78`, Clear = `0x53`, volume/mute/eject on the consumer page. Keys a mode
+does not support send the plain key. Positions outside the HHKB layout are
+`KC_NO` and can be assigned in VIA; all six VIA layers belong to the modes.
+
+The L1 reference image (`keymaps/default`, never flashed) keeps a simpler map:
+QMK's own HHKB layout (one Fn layer, as `qmk_firmware/keyboards/hhkb/ansi`) plus underglow
+keys on Fn+Z–B.
