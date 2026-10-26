@@ -64,6 +64,7 @@ testing), its full SHA-256 from `firmware.md` §1, and a decision on every open
   on/off, X = matrix print, K = keyboard reports; turn them off in reverse
   order. Dev has the full Command set and adds traces (key actions, EEPROM,
   scan rate) while debug is on.
+* **Key check** (offline): `tools/console_keycheck.py LOG` compares the key presses in a dev console log (`ACTION_DEBUG` + wear-leveling traces) with the POLICY-HHKB table.
 * **VIA**: load `via/falcon_kalam.json` (both variants).
 * **Passive USB log**: `tools/usb_watch.py --seconds 60 --log FILE`.
 

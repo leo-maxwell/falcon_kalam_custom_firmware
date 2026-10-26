@@ -9,27 +9,16 @@ here.
 | | |
 |---|---|
 | On the device | **ship** release 12 (`62072341…`), flashed 2026-10-27. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–11, each read back equal to its image (release 5 was never flashed) |
-| Next | ship release 12: normal plug-in (LED 1 flash shorter or gone), Esc→DFU test and readback, reset boot; VIA check; then ship is the daily image |
-| Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
+| Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
 | Phase | **alpha** |
 
 ## To do
 
-1. **Dev image test session**: done 2026-10-27 (results below; the ordered script is in the git history, commit `a374beb`).
-2. **Ship image acceptance.** Flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check:
-   - selective Command: H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally, and in HHK mode so does Shift+Shift+left-◇;
-   - POLICY-HHKB as in dev (modes and virtual DIP switches);
-   - RGB: green at the cap, indicators as in dev, Fn+Z–B do nothing special, no lighting menu in VIA.
-   - Bootmagic (Esc at plug-in) → all red; replug → dark, then red ×3 on dark, then green (release 8: no normal state before the blinks).
+1. **Finish the ship acceptance on release 12** (everything else passed on releases 8–11, `firmware.md`):
+   - Esc→DFU test and `scripts/flash.sh verify ship` (required after every flash);
+   - the VIA app: loads `via/falcon_kalam.json`, connects, shows no lighting menu.
 
-   Then keep ship as the daily image.
-
-## Before shipping (leaving alpha)
-
-* the ship image passes its acceptance test (To do 2);
-* every hardware test in To do 1 passed.
-
-FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
+   Then ship is the daily image and the project leaves alpha.
 
 ## In progress
 
@@ -37,6 +26,4 @@ FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
 
 ## Results awaiting a milestone
 
-* Ship acceptance 2026-10-27 (ship release 8): all green; Esc→DFU all red, readback = image; selective Command passes (`firmware.md`); modes, switches and settings display as in dev. Release 10: dark before the reset blinks. Release 11: a normal plug-in lights once, but LED 1 shows a dim random colour for a moment first (power-up noise, L12; release 12 drives the line at pre-init). Open: VIA without a lighting menu (not yet checked).
-* Dev round 2026-10-27: recorded in `firmware.md` (Hardware column) and the `problems.md` ledger. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`, key check `artifacts/dev_session_2026-10-27_keycheck.txt`. Open from it: dark-from-boot on a reset boot (release 8, ship acceptance) and the dim green before enumeration (too brief to judge).
-* `artifacts/release_keymap_baseline.json` is a 4-layer dump of the retired image `9b61141e…`; it does not apply to the 6-layer images.
+* Ship acceptance 2026-10-27 (ship releases 8–12): all green; Esc→DFU all red with an identical readback (release 8); selective Command passes; modes, switches and settings display as in dev; reset boot dark before the red blinks (release 10); normal plug-in lights once (release 11); LED 1's power-up flash accepted (L12; release 12 drives the line earlier). Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/ship_acceptance_2026-10-27_usb.txt`.

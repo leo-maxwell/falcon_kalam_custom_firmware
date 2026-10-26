@@ -7,8 +7,8 @@ owner's decision. Closed items move to the ledger as one line.
 
 | ID | Problem | Status / impact | Mitigation / next step |
 |---|---|---|---|
-| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY; verified on the device: Shift+Shift+F lands in DFU): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
-| R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev-round persistence test with the wear-leveling trace; repeat after each QMK update |
+| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY; verified on the device: Shift+Shift+F lands in DFU): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F |
+| R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Settings persisted across replugs in the dev round (2026-10-27); watch over weeks of use, and repeat the check after each QMK update |
 
 ## Known limitations
 
@@ -24,8 +24,7 @@ owner's decision. Closed items move to the ledger as one line.
 | L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting; Fn+Ctrl+M (until the next plug-in) or SW2 (from the next plug-in) selects Mac mode |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
 | L11 | Deviations from the HHKB Classic, all accepted (`policy.md` §2.3). Noticeable in use: no SW6, so a key press always wakes a sleeping host; 6KRO only until upstream fixes NKRO on macOS (POLICY-NKRO, I8); SW1/SW2 both on acts as HHK mode |
-| L12 | At plug-in LED 1 can light in a dim random colour for a moment: the bootloader runs first and leaves the LED data line undriven (`hardware.md` §6). The firmware drives it and sends a dark frame at `keyboard_pre_init`, its earliest point (release 12); the bootloader's own time stays, as the bootloader is upstream. Hardware fix: a pull-down resistor on A1 |
-
+| L12 | At plug-in LED 1 can light in a dim random colour for a moment: the bootloader runs first and leaves the LED data line undriven (`hardware.md` §6). The firmware drives it and sends a dark frame at `keyboard_pre_init`, its earliest point (release 12); the bootloader's own time stays, as the bootloader is upstream. Accepted: no further firmware work. Hardware fix: a pull-down resistor on A1 |
 
 ## Ledger (closed)
 
@@ -42,7 +41,7 @@ owner's decision. Closed items move to the ledger as one line.
 | R10 | 2026-10-26 | FLASHREAD exposes the chip UID, so it is dev-only, enforced by POLICY-VARIANTS (guard, verifier, negative test) |
 | R11 | 2026-10-26 | `scripts/flash.sh` accepts only `ship` or `dev`, with the full approved SHA-256 matching the file, its `.sha256` record and `firmware.md`; negative tests prove the refusals |
 | R12 | 2026-10-26 | console + Command stay in ship for stock parity; POLICY-RGB shows red on channel A while keystrokes go to the console |
-| R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). Since release 3 the cap is a quarter of full scale (POLICY-RGB), and with QMK's CIE 1931 curve the diodes run at most at 12/255 duty, one colour each: the LED share is now a few mA. A measurement stays optional (I4) |
+| R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). Since release 3 the cap is a quarter of full scale (POLICY-RGB), and with QMK's CIE 1931 curve the diodes run at most at 12/255 duty, one colour each: the LED share is now a few mA. No measurement is planned (I4 retired) |
 | R16 | 2026-10-27 | deviations from the HHKB Classic settled: each is listed with its reason in `policy.md` §2.3 and accepted (L11). Virtual switch flips take effect at the next plug-in and the factory setting is HHK mode, as on the Classic |
 | L10 | 2026-10-27 | the virtual DIP switches and the mode had no display; Fn+Ctrl+Shift+0 and the mode keys now show them (I23) |
 | B1 | 2026-10-27 | Caps Lock LED: the A10 indicator is compiled in since the variant images; on the device it follows the host's Caps Lock (dev release 4) |

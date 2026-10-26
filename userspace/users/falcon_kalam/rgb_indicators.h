@@ -7,16 +7,15 @@
 
 #include <stdint.h>
 
-// Indicator channels as "first LED, LED count" pairs. Which physical LEDs a
-// channel uses shows on the device itself: Shift+Shift+D lights channel A
-// yellow. Adjust here if another split reads better.
+// Indicator channels as "first LED, LED count" pairs. LED indices run left to
+// right (docs/hardware.md §6): channel A is the left pair, B the right pair.
 #define FALCON_KALAM_RGB_CH_A 0, 2 // safety / debug states
 #define FALCON_KALAM_RGB_CH_B 2, 2 // connection / layer states
 #define FALCON_KALAM_RGB_ALL 0, RGBLIGHT_LED_COUNT
 
-// POLICY-HHKB settings display (Fn+Ctrl+Shift+0, mode keys): LED 1 shows the
-// mode colour, the other three SW3, SW4, SW5 (blue = on, off = off). Map to
-// physical positions after the LED-order test, like the channels (I20).
+// POLICY-HHKB settings display (Fn+Ctrl+Shift+0, mode keys): LED 1 (leftmost)
+// shows the mode colour, the other three SW3, SW4, SW5 left to right (blue =
+// on, off = off).
 #define FALCON_KALAM_RGB_LEDS_SW 1, 3 // the three switch LEDs
 #define FALCON_KALAM_RGB_LED_SW3 1, 1
 #define FALCON_KALAM_RGB_LED_SW4 2, 1
