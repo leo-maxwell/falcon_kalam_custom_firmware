@@ -141,6 +141,11 @@ void falcon_kalam_rgb_init(void) {
     } else if (!rgblight_is_enabled()) {
         rgblight_enable(); // a reset boot lost power before its blinks ended
     }
+    // The first LED garbles the first frame after the data pin is set up
+    // (docs/hardware.md §6), and on a reset boot the next frame comes only
+    // with the blinks. Send the current frame twice now.
+    rgblight_set();
+    rgblight_set();
 }
 
 // Draws one settings value (on = true): the mode colour on LED 1, LEDs 2-4
@@ -244,8 +249,8 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
 // directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
 // rgblight also bypasses its cap and brightness curve, so apply both here.
 // This is the first frame after the data pin is set up, and the first LED
-// lost it on the device (it showed yellow): hold the line low for a reset
-// period, then send the frame twice, so a garbled first frame is overwritten.
+// garbles that (docs/hardware.md §6): hold the line low for a reset period,
+// then send the frame twice, so a garbled first frame is overwritten.
 void falcon_kalam_rgb_paint_bootloader(void) {
     rgb_t red = hsv_to_rgb((hsv_t){FK_RED, RGBLIGHT_LIMIT_VAL});
     ws2812_init();

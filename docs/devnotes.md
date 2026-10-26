@@ -8,8 +8,8 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 9 (`ce1a42a9…`), flashed 2026-10-27 via Esc→DFU (its first boot was a reset boot). Before it on the same day: dev releases 1–4, 6, 7 and ship release 8, each read back equal to its image (release 5 was never flashed) |
-| Next | Esc→DFU test and readback of ship release 9; VIA check; then ship is the daily image |
+| On the device | **ship** release 9 (`ce1a42a9…`), flashed 2026-10-27 via Esc→DFU; its reset boot still showed LED 1 green before the blinks. Before it on the same day: dev releases 1–4, 6, 7 and ship release 8, each read back equal to its image (release 5 was never flashed) |
+| Next | ship release 10 (`docs/firmware.md` §1: boot frame sent twice), flashed via Esc→DFU (the pre-flash readback checks release 9; its first boot is the reset-boot test); VIA check; then ship is the daily image |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 
@@ -37,6 +37,6 @@ FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
 
 ## Results awaiting a milestone
 
-* Ship acceptance 2026-10-27 (ship release 8): all green; Esc→DFU all red, readback = image; selective Command passes (`firmware.md`); modes, switches and settings display as in dev. Open: the green flash before the reset blinks (release 9), VIA without a lighting menu (not yet checked).
+* Ship acceptance 2026-10-27 (ship release 8): all green; Esc→DFU all red, readback = image; selective Command passes (`firmware.md`); modes, switches and settings display as in dev. Open: LED 1 green before the reset blinks (release 9: the rest stays dark now; release 10 sends the boot frame twice), VIA without a lighting menu (not yet checked).
 * Dev round 2026-10-27: recorded in `firmware.md` (Hardware column) and the `problems.md` ledger. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`, key check `artifacts/dev_session_2026-10-27_keycheck.txt`. Open from it: dark-from-boot on a reset boot (release 8, ship acceptance) and the dim green before enumeration (too brief to judge).
 * `artifacts/release_keymap_baseline.json` is a 4-layer dump of the retired image `9b61141e…`; it does not apply to the 6-layer images.

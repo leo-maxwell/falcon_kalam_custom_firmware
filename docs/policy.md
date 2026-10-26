@@ -285,7 +285,7 @@ calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, `set_color_all(cap, 0, 0)`, `flush`).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
-reset blink starts once the host has configured the keyboard, over the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks), which is on from post-init; `rgblight_init` runs earlier and would draw the base, so on a reset `eeconfig_init_user` stores rgblight off and the end of the blinks switches it on again (a normal boot that finds it off switches it on), because the
+reset blink starts once the host has configured the keyboard, over the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks), which is on from post-init; `rgblight_init` runs earlier and would draw the base, so on a reset `eeconfig_init_user` stores rgblight off and the end of the blinks switches it on again (a normal boot that finds it off switches it on); because LED 1 garbles the first frame after the data pin is set up, post-init and the Bootmagic red both send their frame twice, because the
 host suspends and resumes the bus during enumeration and `rgblight_suspend()`
 cancels running blinks. rgblight blinks share one repeat timer, so
 overlapping blinks interfere (only possible in dev, during a FLASHREAD dump at
