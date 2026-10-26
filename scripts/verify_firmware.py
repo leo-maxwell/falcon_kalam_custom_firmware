@@ -161,6 +161,15 @@ def main():
                      '-DBOOTLOADER_STM32DUINO', '-DQMK_BOARD_STM32_F103_STM32DUINO'):
         c.check(w in flags, '%s present' % w)
 
+    # Reproducibility: any compiler build date must come from SOURCE_DATE_EPOCH.
+    m = re.search(rb'BUILD: [^(]*\(([A-Z][a-z]{2} [ 0-9]\d \d{4})\)', payload)
+    if m:
+        import os, time
+        epoch = os.environ.get('SOURCE_DATE_EPOCH')
+        want = time.strftime('%b %e %Y', time.gmtime(int(epoch))) if epoch else None
+        c.check(want is not None and m.group(1).decode() == want,
+                'embedded build date "%s" == SOURCE_DATE_EPOCH date "%s" (day-independent build)' % (m.group(1).decode(), want))
+
     # ------------------------------------------------------------------
     c.section('5. Configuration matches the manufacturer firmware')
     vimg = vendor.Image((vendor.ORIG / 'falcon_flash_backup.bin').read_bytes())

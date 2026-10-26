@@ -11,12 +11,12 @@ bootloader.
 
 This is the normal (base) keyboard definition; its `default` keymap is HHKB.
 The project's release firmware adds a policy layer from `userspace/`
-(`falcon_hs_r2:falcon`); see `docs/architecture.md`. Make example (after
+(`falcon_hs_r2:falcon`); see `docs/policy.md`. Make example (after
 `scripts/build.sh` has staged this folder into `qmk_firmware/keyboards`):
 
     make falcon_hs_r2:default
 
-**Do not flash without completing `docs/preflash-checklist.md`.**
+**Flash only per `docs/operations.md`.**
 
 ## Bootloader
 

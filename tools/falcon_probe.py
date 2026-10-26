@@ -162,7 +162,7 @@ def cmd_matrix(p, a):
     if first is None:
         sys.exit('firmware does not answer the switch-matrix query')
     print('Press each key once, slowly. Ctrl-C to stop.')
-    print('(If nothing ever appears, the firmware gates matrix reads -- see docs/layout.md.)')
+    print('(If nothing ever appears, the firmware gates matrix reads -- see docs/problems.md L1.)')
     seen, prev = {}, first
     log = open(a.log, 'w') if a.log else None
     if log:
@@ -227,7 +227,7 @@ def cmd_dump_bootloader(p, a):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd', required=True)
-    sub.add_parser('info', help='read-only summary; run it once on the stock firmware for docs/parity.md')
+    sub.add_parser('info', help='read-only summary; run it once on the stock firmware for docs/stock-firmware.md')
     s = sub.add_parser('dump-keymap')
     s.add_argument('out')
     s = sub.add_parser('matrix')

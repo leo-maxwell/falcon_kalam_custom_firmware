@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Reproducible, offline build of the Falcon HS R2 firmware.
 #
-# Two layers (docs/architecture.md):
+# Two layers (docs/policy.md):
 #   base    keyboards/falcon_hs_r2           normal QMK keyboard, keymap "default"
 #   policy  userspace/.../keymaps/falcon     project configuration -> RELEASE
 #
@@ -29,6 +29,9 @@ export PATH="$GCC_BIN:$BINUTILS_BIN:$PATH"
 export LC_ALL=C TZ=UTC QMK_HOME="$QMK"
 export QMK_USERSPACE="$ROOT/userspace"   # policy layer (QMK External Userspace)
 export SKIP_VERSION=yes                  # fixed QMK_VERSION/QMK_BUILDDATE -> reproducible image
+# __DATE__/__TIME__ (embedded by QMK Command's version banner) follow the pinned
+# QMK commit time, so the image does not depend on the day of the build.
+export SOURCE_DATE_EPOCH="$(git -C "$QMK" log -1 --format=%ct HEAD)"
 
 mkdir -p "$ART"
 # Strip ANSI colour codes so the committed log is plain text.
@@ -133,6 +136,9 @@ python3 -I "$ROOT/scripts/verify_firmware.py" --profile release \
 step "Stock vs release feature parity (from the binaries)"
 python3 -I "$ROOT/tools/feature_parity.py" "$ROOT/originals/manufacturer_firmware.bin" "$ART/$NAME.bin" \
     --report "$ART/feature_parity.txt"
+
+step "Documentation consistency (POLICY-DOCS)"
+python3 -I "$ROOT/scripts/check_docs.py" || echo "WARNING: docs out of date -- update docs/firmware.md before flashing (docs/operations.md §2)"
 
 step "Done -- artifacts NOT flashed"
 echo "release: $ART/$NAME.bin"

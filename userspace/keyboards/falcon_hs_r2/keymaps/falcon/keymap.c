@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Falcon release keymap (policy layer). This unit is physically an HHKB
-// classic (settled 2026-10-26, docs/layout.md), so the keymap uses
+// classic (settled 2026-10-26, docs/hardware.md), so the keymap uses
 // LAYOUT_60_hhkb. The base keyboard keeps LAYOUT_all because the PCB also
 // supports split backspace / left shift / spacebar; matrix positions outside
 // LAYOUT_60_hhkb stay KC_NO here and can still be assigned in VIA.

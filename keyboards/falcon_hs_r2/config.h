@@ -4,7 +4,7 @@
 // Falcon HS R2 (GD32F103C8T6, STM32duino/Maple DFU bootloader).
 // Base keyboard definition: hardware facts only, no policy. Every value is
 // traced to the manufacturer firmware in docs/hardware.md. Project policy
-// (NKRO off, VIA, keymap) lives in the userspace layer, see docs/architecture.md.
+// (NKRO off, VIA, keymap) lives in the userspace layer, see docs/policy.md.
 
 #pragma once
 

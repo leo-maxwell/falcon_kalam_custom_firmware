@@ -5,7 +5,7 @@ Extracts, for each image: USB device/configuration descriptors (interfaces,
 endpoints, polling interval, power), which HID reports exist (boot keyboard,
 VIA raw, console, mouse/system/consumer/NKRO), matrix pin tables, the clock
 configuration literal and the rgblight effect table. Prints a side-by-side
-table; docs/parity.md interprets it.
+table; docs/firmware.md and docs/stock-firmware.md interpret it.
 
     python3 -I tools/feature_parity.py STOCK.bin RELEASE.bin [--report OUT]
 

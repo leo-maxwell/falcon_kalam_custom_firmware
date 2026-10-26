@@ -1,192 +1,107 @@
-# Falcon HS R2 — hardware configuration and reverse-engineering notes
+# Hardware facts and conventions
 
-Every fact below is re-checked by `tools/analyze_vendor_firmware.py` against the
-immutable originals (output: `artifacts/vendor_analysis.txt`). Addresses are
-absolute flash addresses in the vendor application (link base `0x08002000`); a
-listing is produced by `tools/disassemble_vendor.sh`.
+Facts about the physical Falcon HS R2 unit, as recovered from the stock image
+and the device. Every code-derived fact is re-checked on each build by
+`tools/analyze_vendor_firmware.py` (report: `artifacts/vendor_analysis.txt`).
+Addresses are flash addresses in the stock application (link base `0x08002000`).
 
-Status legend: **Verified** = read directly from vendor code/data and consistent
-with independent evidence. **Inferred** = derived from verified values by
-calculation. **Unverified** = no firmware evidence; needs hardware testing.
+Status: **Verified** = read from code/data or the device, consistent with
+independent evidence · **Inferred** = calculated from verified values ·
+**Unverified** = not established.
 
-## 1. Evidence base
+## 1. Conventions
 
-| Artifact | SHA-256 | Notes |
+* **Matrix position** `r,c` = row index (0–4, pins `B3 B4 B5 B6 A2`), column index
+  (0–14, pins `A9 A3 A4 A5 A6 A7 B0 B1 B10 B11 B12 B13 B14 B15 A8`).
+* **Pins** are written QMK style: `A10` = PA10.
+* Key names follow the HHKB legend; ◆ = GUI/Command.
+
+## 2. MCU and memory
+
+| Item | Value | Status / evidence |
 |---|---|---|
-| `originals/manufacturer_firmware.bin` | `90123fb1…2cb60b` | 43,956 B = 43,940 B application + 16 B DFU suffix (`UFD`, target `1EAF:0003`, CRC valid) |
-| `originals/falcon_flash_backup.bin` | `4abf550a…45d9f2` | 57,344 B DFU upload of `0x08002000–0x0800FFFF`; first 43,940 B equal the application |
-| `originals/manufacturer_jsonfile.json` | `0c9a5b8e…f0b754` | VIA v3 definition, 5×15, `9DD1:9D89`, `qmk_rgblight` menu |
-
-The bootloader region `0x08000000–0x08001FFF` was **not** read back and is not
-preserved (see `docs/risks.md`).
-
-**What the vendor firmware is.** The image is a QMK build on ChibiOS for the
-QMK board `STM32_F103_STM32DUINO`:
-ChibiOS `ioline_t` pin encoding, SVC/SysTick vectors of the ChibiOS RT ARMv7-M
-port, GPIO reset values identical to that board's `board.h`, the board's
-`BKP->DR10` bootloader flags, the ChibiOS STM32F103xB flash descriptor, QMK
-wear-leveling, QMK's HID report layout (report IDs 2/3/4/6), a VIA raw-HID
-interface, and QMK ≥ 0.19 keycode numbering (`QK_GESC=0x7C16`, `QK_BOOT=0x7C00`,
-`UG_TOGG=0x7820`). The VIA JSON uses the v3 format (`menus`), so the vendor
-firmware speaks VIA protocol ≥ 12.
-
-QMK's Command/console strings identify the build (`vendor_analysis.txt` §8b):
-`BUILD: (Mar 14 2025)`, `CHIBIOS: "be44b3"`,
-`CONTRIB: "develop_2021_q3-455-g77cb0a"`, `GCC: 10.1.0`,
-`OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND NKRO LTO`. No QMK version
-string is embedded.
-
-That matters for GD32 compatibility: the vendor image demonstrates that this
-ChibiOS STM32F1 HAL configuration (RCC, GPIO/AFIO, USB FS device, flash
-programming, BKP/PWR, SysTick, DWT) works on *this* GD32F103C8T6 — but only for
-the HAL revision the vendor used.
-
-## 2. MCU, memory map, bootloader
-
-| Item | Value | Status | Evidence |
-|---|---|---|---|
-| MCU | GigaDevice GD32F103C8T6, Cortex-M3 | Given | — |
-| Flash | 64 KB, 1 KB pages | Verified | readback ends at `0x0800FFFF`; WL storage found in last 2 pages, placed via F_SIZE |
-| SRAM | 20 KB | Given (datasheet), not measured | vendor initial SP `0x20000400` is consistent; size not proven by firmware |
-| Bootloader | STM32duino-bootloader "boot20" (MIT, LeafLabs-derived), `1EAF:0003`, bcdDevice `0x0201`, alt 2, app at `0x08002000` | Verified (USB identity, 2026-10-26); variant unknown | `docs/bootloader.md`, `artifacts/device_inspection_2026-10-26.txt` |
-| Bootloader flags | `BKP_DR10 = 0x424C` at boot (`0x080094B0`); `0x424D` before `mcu_reset` (`0x08007876`) | Verified | identical to QMK `STM32_F103_STM32DUINO` `board.c` / `bootloaders/stm32duino.c` |
-| Flash descriptor | 128 × 1 KB sectors, base `0x08000000` (`0x0800C148`) | Verified | ChibiOS `STM32F103xB` registry — larger than the part; storage placement is clamped by flash size |
-
-Flash map used by this project (enforced by
-`keyboards/falcon_hs_r2/ld/STM32F103x8_stm32duino_falcon_hs_r2.ld`):
+| MCU | GigaDevice GD32F103C8T6, Cortex-M3, 72 MHz | given; clock Verified (§4) |
+| Flash | 64 KB, 1 KB pages | Verified: F_SIZE register reads 64 (dump 2026-10-26) |
+| SRAM | 20 KB | datasheet; not measured |
+| Read-out protection | **off** (`RDP = 0xA5`), no write protection, USER `0xFF` | Verified: option-byte dump |
+| Debug | SWD on PA13/PA14 enabled, JTAG off (`AFIO_MAPR.SWJ_CFG=010`, which frees PB3/PB4 for rows) | Verified (`0x080094AA`); pads not located |
 
 ```
 0x08000000 ┌──────────────────────────┐
-           │ Maple/STM32duino bootldr │  8 KB   never written by this project
+           │ STM32duino bootloader    │  8 KB  (6,960 B used)   never written by this project
 0x08002000 ├──────────────────────────┤
-           │ application (flash0)     │ 54 KB   link fails if exceeded
+           │ application              │ 54 KB  the linker refuses to exceed it
 0x0800F800 ├──────────────────────────┤
-           │ wear-leveling EEPROM     │  2 KB   1 KB base image + 1 KB write log
+           │ wear-leveling EEPROM     │  2 KB  1 KB base image + 1 KB write log
 0x08010000 └──────────────────────────┘
 ```
 
-## 3. Clocks and USB
+EEPROM: QMK wear-leveling on ChibiOS embedded flash. Writes are 16-bit and the
+flash stores `~value` (erased = 1). It occupies the top 2 KB: the stock image
+computes that from F_SIZE, ours pins it to 64 KB.
 
-`stm32_clock_init` at `0x080090AC`:
+## 3. Bootloader
 
-| Register write | Meaning | Status |
-|---|---|---|
-| `RCC_CR \|= HSEON`, wait HSERDY | external crystal in use | Verified |
-| `RCC_CFGR \|= 0x001D0000` | PLLSRC = HSE, PLLXTPRE = /1, PLLMUL = ×9 | Verified |
-| `RCC_CFGR = 0x001D6400` | AHB /1, APB1 /2, APB2 /2, ADC /4, USBPRE = /1.5 | Verified |
-| `FLASH_ACR = 0x12` | 2 wait states + prefetch | Verified |
-| SW = PLL | SYSCLK from PLL | Verified |
-
-SYSCLK = 72 MHz is shown independently twice: the matrix input delay is 18 NOPs
-(`GPIO_INPUT_PIN_DELAY = CPU_CLOCK / 1 MHz / 4`, `0x08006146`) and the
-post-row wait compares DWT `CYCCNT` against 2,160 cycles = 30 µs
-(`MATRIX_IO_DELAY`, `0x080061B6`). With PLL ×9 this **infers HSE = 8 MHz**, and
-USB = 72 MHz / 1.5 = 48 MHz. These are exactly the values in QMK's
-`STM32_F103_STM32DUINO/configs/mcuconf.h`, which this build uses unchanged; the
-verifier finds the same `0x001D6400` literal and PLL instruction in our image.
-
-USB device descriptor (`0x0800BEE5`): USB 2.0, class 0, EP0 64 bytes, VID
-`0x9DD1`, PID `0x9D89`, bcdDevice `0x0001`, manufacturer and product string
-"Falcon", no serial. Our firmware reproduces the same 18-byte device descriptor.
-
-## 4. JTAG / SWD
-
-`boardInit` sets `AFIO_MAPR.SWJ_CFG = 010` (`0x080094AA`): JTAG-DP disabled,
-**SW-DP kept enabled**. This releases PA15/PB3/PB4 — PB3 and PB4 are matrix rows,
-so this remap is required — while PA13 (SWDIO) and PA14 (SWCLK) stay available
-for SWD recovery. Our build uses the same `board.c`. **Verified.**
-
-## 5. Matrix
-
-| Item | Value | Status | Evidence |
-|---|---|---|---|
-| Rows (5) | `B3 B4 B5 B6 A2` | Verified | `row_pins[]` at `0x0800C464` |
-| Cols (15) | `A9 A3 A4 A5 A6 A7 B0 B1 B10 B11 B12 B13 B14 B15 A8` | Verified | `col_pins[]` at `0x0800C10C` |
-| Diode direction | `COL2ROW` | Verified | scan loop `0x08006100` (below) |
-| Debounce | 5 ms, symmetric deferred (QMK default) | Inferred | `memcmp` of 10-byte raw matrix + "elapsed > 4 ms" at `0x08006208` |
-
-Scan loop at `0x08006100`: for each entry of `row_pins` it calls
-`palSetLineMode(row, 6)` (PAL_MODE_OUTPUT_PUSHPULL) and writes the pin mask to
-`GPIOx->BRR` (drives the row **low**); it then reads `GPIOx->IDR` for each of the
-15 `col_pins` and records a key when the bit reads **0**; afterwards
-`unselect_row` (`0x080056A4`) returns the row to mode 3 (PAL_MODE_INPUT_PULLUP).
-Rows are strobed low and columns are pulled-up inputs, which is QMK's `COL2ROW`.
-The tentative pinout and direction supplied with the task are therefore
-confirmed. Our compiled image contains both pin tables byte-for-byte identical to
-the vendor's.
-
-Physical key positions come from the VIA JSON (63 positions). The vendor's
-compiled default keymap (2 layers at `0x0800C18A`) is a generic 60% map and also
-assigns `4,0` (LCtrl), `4,13` (RCtrl) and `4,14` — positions the VIA JSON draws
-as blockers. On this unit there are no switches there: the layout was settled
-as HHKB classic and the matrix probe never saw those positions (`docs/layout.md`).
-
-| Variant (VIA option) | Positions |
+| Item | Value |
 |---|---|
-| Split backspace: off / on | `0,14` 2u / `0,13` + `0,14` |
-| Split left shift: off / on | `3,0` 2.25u / `3,0` 1.25u + `3,1` |
-| Split spacebar: off / on | `4,7` 7u / `4,5` 3u + `4,7` 1u + `4,9` 3u |
+| Identity | Roger Clark's **STM32duino-bootloader**, byte-identical to upstream `generic-none_bootloader.bin` (no LED, no button) at the pinned commit `df689808` (`bootloader/STM32duino-bootloader/`). **MIT licence** (LeafLabs). Dump: `originals/device_dump_2026-10-26/bootloader_0x08000000.bin` |
+| USB | `1EAF:0003`, bcdDevice `0x0201`, "LeafLabs" / "Maple 003" / serial "LLM 003"; DFU 1.1, 1024-byte transfers, 100 mA |
+| DFU alts | **2** = flash at `0x08002000` (ours) · 1 = flash at `0x08005000`: **a download to alt 1 erases `0x08002000`, never use it** · 0 = RAM, unsupported |
+| Upload limit | uploads end at F_SIZE × 1 KB (`0x08010000`). The bootloader cannot read itself, the option bytes or the UID over DFU |
+| Power-on DFU window | **none**: a watched replug shows the app directly (`artifacts/usb_watch_replug.txt`) |
+| Flags (`BKP_DR10`) | `0x424C` = stay in DFU; the app writes it at every boot, so any reset into the bootloader stays there. `0x424D` = just uploaded, start the app. Observed: after a download the app starts by itself |
 
-## 6. Persistent storage (EEPROM emulation)
+**Entering DFU** (LEDs dark = DFU):
 
-| Item | Value | Status |
+| Method | Works on |
+|---|---|
+| Hold **Esc** (`0,0`) while plugging in (Bootmagic; also clears EEPROM) | stock (verified in code at `0x08009B40`) and ours (verified on the device) |
+| LShift+RShift+B (Command) | stock and ours |
+| Fn+Tab (`QK_BOOT`) | stock default keymap only |
+| VIA host command | nowhere: QMK removed it in 2021 |
+| Shorting the reset/boot pads, or SWD | always; last resort |
+
+## 4. Clock and USB
+
+`RCC_CFGR = 0x001D6400`, HSE on, PLL ×9, `FLASH_ACR = 0x12` → SYSCLK 72 MHz,
+APB1/APB2 ÷2, ADC ÷4, USB = 72 ÷ 1.5 = 48 MHz (Verified, `0x080090AC`).
+**HSE = 8 MHz** is Inferred: two independent 72 MHz timing constants (an
+18-NOP input delay and a 2,160-cycle = 30 µs DWT wait) combined with PLL ×9.
+Working USB confirms it. USB D+ re-enumeration: PA12 is driven low, then
+released (`board.h`).
+
+## 5. Matrix and physical layout
+
+* **`COL2ROW`**: rows are driven low one at a time; columns are pulled-up,
+  active-low inputs (Verified, scan loop `0x08006100`). Debounce: 5 ms,
+  symmetric deferred (Inferred).
+* **Physical layout: HHKB classic, 60 keys.** Settled by the user on
+  2026-10-26. The read-only probe confirmed 53 of 60 positions
+  (`artifacts/layout_probe_decoded.txt`); the other 7 were invisible to a
+  since-fixed probe decoder.
+
+```
+row 0  Esc 0,0 │ 1 0,1 │ 2 0,2 … 9 0,9 │ 0 0,10 │ - 0,11 │ = 0,12 │ \ 0,13 │ ` 0,14
+row 1  Tab 1,0 │ Q 1,1 … P 1,10 │ [ 1,11 │ ] 1,12 │ Bspc 1,14
+row 2  Ctrl 2,0 │ A 2,1 … L 2,9 │ ; 2,10 │ ' 2,11 │ Enter 2,14
+row 3  Shift 3,0 │ Z 3,2 … M 3,8 │ , 3,9 │ . 3,10 │ / 3,11 │ Shift 3,12 │ Fn 3,14
+row 4        Alt 4,1 │ ◆ 4,2 │ Space 4,7 │ ◆ 4,11 │ Alt 4,12
+```
+
+The VIA JSON names PCB variants that are not fitted on this unit: a 2u
+backspace on `0,14`; split left shift `3,0`+`3,1`; split space
+`4,5`/`4,7`/`4,9`. The stock keymap also maps `4,0`, `4,13` and `4,14`; these
+positions never fired on the probe.
+
+## 6. Lights
+
+There are exactly two:
+
+| Light | Pin / drive | Details |
 |---|---|---|
-| Driver | QMK wear-leveling on ChibiOS EFL (embedded flash) | Verified (`backing_store_init` at `0x080095xx`) |
-| Placement | end of flash, from F_SIZE (`0x1FFFF7E0`, masked `(x & 0xFFFF) << 10`) | Verified |
-| Region | `0x0800F800–0x0800FFFF` (2 KB backing, 1 KB logical) | Verified (readback: `0x0800F800–0x0800FBFF` erased, write log data at `0x0800FC08`) |
-| F_SIZE on this unit | reads 64 KB | Inferred (storage landed at the 64 KB boundary) |
-| Write width | 16-bit half-words (STM32F1 FPEC-compatible) | Verified indirectly: the vendor firmware wrote the log on this chip |
+| **Caps Lock LED** | `A10`, push-pull, **active-low** | on whenever the host's Caps Lock is on (`led_set` at `0x08003E10`); off (high) at init |
+| **RGB module** | `A1`, bit-banged WS2812, **GRB**, 4 LEDs, 280 µs reset | a separate, **detachable module** on a connector; dark while in DFU. Placement (underglow vs. indicator) and LED part: Unverified |
 
-Our build pins `WEAR_LEVELING_EFL_FLASH_SIZE = 64 KB` (`config.h`), so placement
-no longer depends on how a GD32 reports F_SIZE; the verifier confirms the image
-does not read F_SIZE at all. Backing/logical sizes stay 2048/1024 as in the
-vendor image, and the linker script keeps code out of those pages.
-
-The write log decodes (flash stores `~value`) to two `OPTIMIZED_64` entries,
-logical addresses 0 and 1 = `0xFF`, right after a full erase. That is exactly
-QMK's `nvm_eeconfig_disable()`: format, then EECONFIG magic = `0xFFFF`. In other
-words, Bootmagic (or Clear-EEPROM) ran just before the backup, and **the backup
-contains no user configuration**.
-
-## 7. RGB
-
-| Item | Value | Status | Evidence |
-|---|---|---|---|
-| Driver | QMK WS2812 bit-bang | Verified | `0x08004AE8`: BSRR/BRR toggles with NOP-loop timing |
-| Data pin | PA1 | Verified | `ws2812_init` sets GPIOA mask `0x0002` to output (`0x080056C8`); writer uses mask `0x0002` |
-| LED count | 4 | Verified | `rgblight_set` → `ws2812_setleds(led, 4)` (`0x08004776`) |
-| Byte order | GRB | Verified | `rgblight_setrgb` stores r→[1], g→[0], b→[2] (`0x080049F6`) |
-| Reset time | 280 µs (QMK default) | Verified | 1,344 × 15-cycle loop at 72 MHz |
-| Physical form | separate, detachable RGB module on a connector | Verified (user, 2026-10-26) | the module was disconnected and reconnected before the stock probe |
-| Physical placement (underglow vs. indicators) | — | Unverified | — |
-| Enabled effects | all 43 rgblight modes | Verified | `mode_base_table` at `0x0800C2B6` |
-| Brightness cap | none | Verified (code) | no clamp below 255 in the rgblight paths; the stock default is brightness 127 (probe) |
-| Cross-check with the second agent's notes | agree, except their table addresses | — | `docs/rgb-crosscheck.md` |
-
-## 7a. Caps Lock indicator
-
-| Item | Value | Status | Evidence |
-|---|---|---|---|
-| Pin / polarity | PA10, active-low | Verified (code); LED seen by the user | init `palSetGroupMode(GPIOA, 0x0400, OUTPUT_PUSHPULL)` at `0x08009BE4`; `led_set` at `0x08003E10` writes BRR (low) when Caps Lock is on |
-| QMK config | `indicators: {caps_lock: A10, on_state: 0}` (base) | Built 2026-10-26 | `LED_CAPS_LOCK_PIN A10`, `LED_PIN_ON_STATE 0` in `info_config.h` |
-
-All constant GPIO setups in the stock image: PA1 (WS2812), PA10 (Caps LED),
-PA12 (USB re-enumeration pulse from `board.h`, same in our build), and the
-matrix pins.
-
-## 8. HID interfaces
-
-| Interface | Vendor | This firmware |
-|---|---|---|
-| Boot keyboard (6KRO) | yes | yes |
-| Shared EP: mouse (ID 2), system (ID 3), consumer (ID 4) | yes | yes |
-| Shared EP: **NKRO bitmap (ID 6)** | **yes** | base: **yes**; release: **no**, disabled by configuration (POLICY-NKRO) |
-| VIA raw HID (`0xFF60`/`0x61`, 32 B) | yes | yes (protocol `0x000D`) |
-
-## 9. Unresolved assumptions (summary)
-
-See `docs/risks.md` for impact and mitigation. Briefly: HSE frequency only
-inferred; LED part and
-placement; GD32 behaviour under the newer QMK/ChibiOS (intended by policy),
-which first-flash tests partly cover. Bootloader variant and RDP: resolved
-(`docs/bootloader.md`).
+How "nothing else" was established: in the stock image, the only constant pin
+setups and GPIO writes are A1, A10, A12 (USB) and the `board.h` defaults. No
+timer, SPI, I2C, ADC, UART, DMA, or GPIO port C–E is referenced.

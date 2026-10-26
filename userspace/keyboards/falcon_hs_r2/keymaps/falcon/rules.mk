@@ -1,5 +1,5 @@
 # Falcon project policy layer (on top of the normal base keyboard).
-# Each block is a deliberate deviation from the base; see docs/architecture.md.
+# Each block is a deliberate deviation from the base; see docs/policy.md.
 
 # POLICY-NKRO: NKRO off. With NKRO the stock firmware breaks the macOS Caps
 # Lock / input-source toggle (NK_OFF fixes it until replug). Remove this line and
