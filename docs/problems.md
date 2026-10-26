@@ -12,7 +12,7 @@ user decision. Closed items move to the ledger at the end as one line.
 | R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST); GD32F103 ≠ STM32F103 | largely retired by the first flash (USB, scan, EEPROM init, DFU path) | open: long-term EEPROM writes; re-test after each QMK update |
 | R6 | **WS2812 bit-bang timing / colour order** on hardware | untested | RGB test in devnotes; failure = wrong colours or flicker, no damage |
 | R8 | **macOS Caps Lock / input-source fix** | user reports it working, also after a replug | close after the console Caps trace (devnotes) |
-| R10 **HR** | **FLASHREAD exposes the chip UID** (a device identifier) and the bootloader to any host program | accepted so far | decide: keep, or remove now that the dump exists (improvement I16) |
+| R10 | **FLASHREAD exposes the chip UID** (a device identifier) and the bootloader to any host program | **decided** (user, 2026-10-26): keep during alpha | removed for the ship image (devnotes, "Before shipping") |
 | R12 **HR** | **Console + Command in the daily image** (stock parity): while debug is on (Shift+Shift+D) keypresses go to the HID console, readable by any host program; Shift+Shift+Backspace clears EEPROM | accepted for parity | decide: keep, or move to a debug image (I5) |
 | R9 | **GCC 8.5** (stock used 10.1) | low | I6 |
 | R11 | **Wrong image flashed** (`falcon_hs_r2_default.bin` sits next to the release) | procedural | approval names the SHA-256 (`operations.md` §2) |

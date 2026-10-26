@@ -22,7 +22,15 @@ delete it here.
    - persistence: change a key in VIA, replug, compare with `artifacts/release_keymap_baseline.json` (`falcon_probe.py dump-keymap`), then revert;
    - RGB off while the Mac sleeps;
    - LShift+RShift+B → DFU.
-3. **Decide** R12 (console + Command in the daily image) and R10 (keep or remove FLASHREAD now that the dump exists); see `problems.md`.
+3. **Decide** R12: which Command keys stay (selective Command, improvement I5) and which states the RGB module should show (I11).
+
+## Before shipping (daily-use release)
+
+The project is in **alpha** until these are done:
+
+* remove POLICY-FLASHREAD from the release (user decision 2026-10-26, R10); keep the dump tooling for debug builds only;
+* settle R12 (Command/console in the shipped image);
+* all hardware tests in "To do" passed.
 
 ## In progress
 
