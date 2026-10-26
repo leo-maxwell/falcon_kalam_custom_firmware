@@ -29,8 +29,20 @@ void keyboard_post_init_user(void) {
     falcon_kalam_rgb_init();
 }
 
+#ifdef FALCON_KALAM_DEV
+static bool     fault_pending;
+static uint16_t fault_timer;
+#endif
+
 void housekeeping_task_user(void) {
     falcon_kalam_rgb_task();
+#ifdef FALCON_KALAM_DEV
+    // Dev fault test (command_extra): fault from the main loop once the
+    // console report has had time to go out (the console is sent from here).
+    if (fault_pending && timer_elapsed(fault_timer) >= 200) {
+        __asm__ volatile("udf #0");
+    }
+#endif
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -64,8 +76,8 @@ bool command_extra(uint8_t code) {
         return false;
     }
     uprintf("falcon_kalam: fault test, expect DFU\n");
-    wait_ms(50); // let the console report go out
-    __asm__ volatile("udf #0");
+    fault_pending = true; // faults from housekeeping_task_user after 200 ms
+    fault_timer   = timer_read();
     return true;
 }
 #endif

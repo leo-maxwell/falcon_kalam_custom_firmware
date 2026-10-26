@@ -44,7 +44,7 @@ enum falcon_kalam_rgb_layer {
     FALCON_KALAM_RGB_SHOW_SW3, // switch LED blue: SW3 on
     FALCON_KALAM_RGB_SHOW_SW4, // switch LED blue: SW4 on
     FALCON_KALAM_RGB_SHOW_SW5, // switch LED blue: SW5 on
-    FALCON_KALAM_RGB_DIP,      // all off, 1 blink = a virtual DIP switch turned off, 2 = on
+    FALCON_KALAM_RGB_DARK,     // all off: DIP-flip blinks (1 = turned off, 2 = on); background of the reset blinks
     FALCON_KALAM_RGB_RESET,    // all red, 3 blinks once configured: settings were reset
     FALCON_KALAM_RGB_BOOT,     // all red: jumping to the bootloader (WS2812 keeps it in DFU)
 };
@@ -73,7 +73,7 @@ static const rgblight_segment_t PROGMEM seg_show_bg[]  = RGBLIGHT_LAYER_SEGMENTS
 static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, FK_BLUE, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, FK_BLUE, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_dip[]      = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
+static const rgblight_segment_t PROGMEM seg_dark[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_reset[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_boot[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
 
@@ -83,12 +83,19 @@ __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_l
                                                                                                           seg_activity,
 #endif
                                                                                                           seg_mode_hhk, seg_mode_mac, seg_mode_win, seg_show_gap, seg_show_bg, seg_show_sw3, seg_show_sw4, seg_show_sw5,
-                                                                                                          seg_dip, seg_reset, seg_boot);
+                                                                                                          seg_dark, seg_reset, seg_boot);
 
 _Static_assert(FALCON_KALAM_RGB_BOOT < RGBLIGHT_MAX_LAYERS, "raise RGBLIGHT_MAX_LAYERS");
 _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED module");
 
 static bool settings_were_reset;
+
+// Reset blinks: 3 x (250 ms red + 250 ms off) over the dark layer, so the
+// normal state does not show between the red flashes.
+#define RESET_BLINK_MS 250
+#define RESET_BLINKS 3
+static bool     reset_dark;
+static uint16_t reset_dark_timer;
 
 // POLICY-HHKB settings display: the settings now, then (if different) the
 // settings after the next plug-in, separated by a dark gap.
@@ -180,7 +187,14 @@ void falcon_kalam_rgb_task(void) {
     // rgblight_suspend() cancels every running blink.
     if (settings_were_reset && usb == USB_DEVICE_STATE_CONFIGURED) {
         settings_were_reset = false;
-        rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, 250, 3);
+        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
+        reset_dark       = true;
+        reset_dark_timer = timer_read();
+        rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, RESET_BLINK_MS, RESET_BLINKS);
+    }
+    if (reset_dark && timer_elapsed(reset_dark_timer) >= 2 * RESET_BLINK_MS * RESET_BLINKS) {
+        reset_dark = false;
+        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
     }
 
     uint8_t want = 0;
@@ -228,7 +242,7 @@ void falcon_kalam_rgb_paint_bootloader(void) {
 
 // POLICY-HHKB virtual DIP switch flipped: all LEDs blink off.
 void falcon_kalam_rgb_dip_feedback(bool on) {
-    rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DIP, 150, on ? 2 : 1);
+    rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DARK, 150, on ? 2 : 1);
 }
 
 // POLICY-HHKB settings display (Fn+Ctrl+Shift+0 and the mode keys); a new

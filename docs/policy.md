@@ -61,7 +61,7 @@ something.
 | Priority | State | Shown as | LEDs | Trigger |
 |---|---|---|---|---|
 | 1 | bootloader (about to jump; kept while in DFU) | red, bright, steady | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
-| 2 | settings were reset | red, bright, 3 blinks | all | `eeconfig_init_user`; shown once the host has configured the keyboard |
+| 2 | settings were reset | red, bright, 3 blinks on an all-off background | all | `eeconfig_init_user`; shown once the host has configured the keyboard |
 | 3 | virtual DIP switch flipped | off-blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
 | 4 | settings display | LED 1 = mode: HHK red, Mac blue, Win green; LEDs 2–4 = SW3–SW5: blue = on, off = off; 1.5 s now, an off gap, 1.5 s after the next plug-in if different | all | Fn+Ctrl+Shift+0 and the mode keys Fn+Ctrl+M/W (POLICY-HHKB) |
 | 5 | keystroke printout on (privacy warning) | red, bright | A | debug + Shift+Shift+K |
@@ -285,7 +285,7 @@ calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, `set_color_all(cap, 0, 0)`, `flush`).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
-reset blink starts once the host has configured the keyboard, because the
+reset blink starts once the host has configured the keyboard, over the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks) for its 1.5 s, because the
 host suspends and resumes the bus during enumeration and `rgblight_suspend()`
 cancels running blinks. rgblight blinks share one repeat timer, so
 overlapping blinks interfere (only possible in dev, during a FLASHREAD dump at

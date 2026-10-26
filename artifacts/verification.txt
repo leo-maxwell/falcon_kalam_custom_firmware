@@ -2,21 +2,21 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0x5F4058B5 valid
-    file 37936 bytes, payload 37920 bytes
+  [PASS] DFU suffix CRC32 0x018109DF valid
+    file 37996 bytes, payload 37980 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F000 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800AEB8 inside application flash
-  [PASS] LOAD lma 0x0800AEB8-0x0800B420 inside application flash
+  [PASS] LOAD lma 0x08002000-0x0800AEF4 inside application flash
+  [PASS] LOAD lma 0x0800AEF4-0x0800B45C inside application flash
   [PASS] RAM segment 0x20000C00-0x200020EC inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20000C00 inside 20 KB SRAM
   [PASS] RAM segment 0x200020EC-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800B420 (< 0x0800F000)
+  [PASS] image ends at 0x0800B45C (< 0x0800F000)
   [PASS] binary length agrees with ELF load segments
-    application flash used 37920 / 53248 bytes (71.2%), 15328 bytes free
+    application flash used 37980 / 53248 bytes (71.3%), 15268 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F000-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -65,7 +65,7 @@
   [PASS] embedded build date "Oct 16 2026" == SOURCE_DATE_EPOCH date "Oct 16 2026" (day-independent build)
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in stock
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in falcon_kalam_ship.bin
-  [PASS] POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x08009804
+  [PASS] POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x08009840
   [PASS] POLICY-RECOVERY: Shift+Shift+F fault test absent (ship)
 
 ## 5. Configuration matches the manufacturer firmware
