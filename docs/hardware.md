@@ -9,6 +9,17 @@ Status: **Verified** = read from code/data or the device, consistent with
 independent evidence · **Inferred** = calculated from verified values ·
 **Unverified** = not established.
 
+## 0. Provenance
+
+* Reported by the gifter (2026-10-26, not independently verified): a **clone** of
+  MatrixLAB's Falcon, made by the 迦蓝 (Jialan) team. Stock strings say "Falcon";
+  the VIA JSON says "Falcon_HS".
+* It is **not** compatible with the genuine MatrixLAB Falcon in QMK
+  (`qmk_firmware/keyboards/matrix/falcon`): that one is an AVR ATmega32U4 with
+  the Atmel DFU bootloader and USB `4D58:474E`. This unit is a GD32F103 (ARM)
+  with the STM32duino bootloader and USB `9DD1:9D89`. Never flash `matrix/falcon`
+  firmware onto it.
+
 ## 1. Conventions
 
 * **Matrix position** `r,c` = row index (0–4, pins `B3 B4 B5 B6 A2`), column index
