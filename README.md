@@ -2,8 +2,8 @@
 
 Independent, reproducible QMK firmware for **falcon_kalam**, the 迦蓝 clone of
 MatrixLAB's Falcon (GD32F103C8T6, STM32duino DFU bootloader, USB
-`9DD1:9D89`). It is a copy of the HHKB Professional Classic (all three setting
-modes, Mac mode by default), keeps every stock feature, adds VIA, and leaves
+`9DD1:9D89`). It mimics the HHKB Professional Classic in every way possible
+(setting modes, keys, HID codes, DIP switches; Mac mode by default), keeps every stock feature, adds VIA, and leaves
 NKRO off for macOS. Users see it as "Falcon" (POLICY-NAMING in
 `docs/policy.md`).
 

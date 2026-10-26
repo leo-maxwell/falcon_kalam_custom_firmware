@@ -84,7 +84,8 @@ HHKB_FN = [  # (key, code, modes: H = HHK, W = Win, M = Mac)
 ]
 # Mode -> (base layer, Fn layer, base-layer differences from Mac mode). DIP SW3
 # off (factory): Delete sends Delete outside Mac mode. HHK mode: ◇ = Muhenkan/Henkan.
-HHKB_MODES = {'M': (0, 1, {}), 'W': (2, 3, {'Delete': 'DEL'}), 'H': (4, 5, {'Delete': 'DEL', 'L◇': 'INT5', 'R◇': 'INT4'})}
+# Layers in the order the Classic stores them (HHK, Mac, Win).
+HHKB_MODES = {'H': (0, 1, {'Delete': 'DEL', 'L◇': 'INT5', 'R◇': 'INT4'}), 'M': (2, 3, {}), 'W': (4, 5, {'Delete': 'DEL'})}
 
 
 def qmk_keycodes():
@@ -372,8 +373,8 @@ def main():
             words = struct.unpack('<%dH' % (size // 2), payload[addr - APP_START:addr - APP_START + size])
             got = [[list(words[(l * rows + r) * cols:(l * rows + r + 1) * cols]) for r in range(rows)] for l in range(n_layers)]
             want = hhkb_expected(kc, positions, rows, cols)
-            c.check(n_layers == 6, 'six layers: Mac, Mac Fn, Win, Win Fn, HHK, HHK Fn (%d compiled)' % n_layers)
-            for l, name in enumerate(('Mac base', 'Mac Fn', 'Win base', 'Win Fn', 'HHK base', 'HHK Fn')):
+            c.check(n_layers == 6, 'six layers in the Classic\'s order: HHK, HHK Fn, Mac, Mac Fn, Win, Win Fn (%d compiled)' % n_layers)
+            for l, name in enumerate(('HHK base', 'HHK Fn', 'Mac base', 'Mac Fn', 'Win base', 'Win Fn')):
                 if l >= n_layers:
                     break
                 bad = ['%s=0x%04X (want 0x%04X)' % (HHKB_KEYS[positions.index((r, col))] if (r, col) in positions else '%d,%d' % (r, col),

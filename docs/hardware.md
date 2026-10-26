@@ -125,10 +125,13 @@ The convention our keymap copies (POLICY-HHKB). It describes PFU's keyboard;
 this unit shares only its physical layout (§5). Sources: PFU's *HHKB
 Professional Classic User's Guide* (P3PC-6661-01EN), and tmk's dumps of a
 real Classic (USB `04FE:0020`, STM32L072) of its USB descriptors and EEPROM
-keymap (gists linked from geekhack topic 106213).
+keymap (gists linked from geekhack topic 106213). The Classic stores six
+128-byte keymap layers: HHK base/Fn, Mac base/Fn, Win base/Fn, and its DIP
+switches act on that stored keymap.
 
 **Setting modes.** DIP SW1/SW2: OFF/OFF = **HHK mode** (factory default),
-ON/OFF = **Win mode**, OFF/ON = **Mac mode**. Fn+Control+W switches to Win
+ON/OFF = **Win mode**, OFF/ON = **Mac mode**; the manual leaves ON/ON
+undefined. DIP changes made while plugged in apply at the next plug-in. Fn+Control+W switches to Win
 mode (to HHK mode when the DIPs select HHK), Fn+Control+M to Mac mode, keys
 pressed in that order. Other DIPs: SW3 = Delete key sends Backspace;
 SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇; SW6 = power saving.
@@ -165,7 +168,7 @@ An unsupported combination sends the plain key (the HHK-mode Fn dump holds
 | Power = Keyboard Power `0x66` | Inferred: the Classic has only keyboard, consumer and vendor reports (no system-control collection), so `0x66` is the only HID code it can send |
 | Clear = `0x53` (Keypad Num Lock and Clear) | Inferred: the manual says "Clear (keypad)"; community notes call Fn+Delete Num Lock in Mac mode |
 | Win and Mac base/Fn bytes | manual only (not dumped) |
-| Whether a key-selected mode survives a power cycle | Unverified |
+| Whether a key-selected mode survives a power cycle | Unverified (the manual implies the DIPs decide the power-on mode) |
 
 The Classic's USB interfaces: boot keyboard (6KRO); NKRO bitmap plus consumer
 reports; a vendor interface for its keymap tool.

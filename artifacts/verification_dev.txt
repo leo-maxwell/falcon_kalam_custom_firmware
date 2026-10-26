@@ -2,21 +2,21 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0xBB6C29CC valid
-    file 42108 bytes, payload 42092 bytes
+  [PASS] DFU suffix CRC32 0x0EE728C1 valid
+    file 42708 bytes, payload 42692 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F000 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800BF04 inside application flash
-  [PASS] LOAD lma 0x0800BF04-0x0800C46C inside application flash
-  [PASS] RAM segment 0x20000C00-0x20002058 inside 20 KB SRAM
+  [PASS] LOAD lma 0x08002000-0x0800C15C inside application flash
+  [PASS] LOAD lma 0x0800C15C-0x0800C6C4 inside application flash
+  [PASS] RAM segment 0x20000C00-0x200020F0 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20000C00 inside 20 KB SRAM
-  [PASS] RAM segment 0x20002058-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800C46C (< 0x0800F000)
+  [PASS] RAM segment 0x200020F0-0x20005000 inside 20 KB SRAM
+  [PASS] image ends at 0x0800C6C4 (< 0x0800F000)
   [PASS] binary length agrees with ELF load segments
-    application flash used 42092 / 53248 bytes (79.0%), 11156 bytes free
+    application flash used 42692 / 53248 bytes (80.2%), 10556 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F000-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -64,7 +64,7 @@
   [PASS] embedded build date "Oct 16 2026" == SOURCE_DATE_EPOCH date "Oct 16 2026" (day-independent build)
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in stock
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in falcon_kalam_dev.bin
-  [PASS] POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x08009EE0
+  [PASS] POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x0800A12C
   [PASS] POLICY-RECOVERY: Shift+Shift+F fault test present (dev)
 
 ## 5. Configuration matches the manufacturer firmware
@@ -89,13 +89,13 @@
 
 ## 6. POLICY-HHKB: keymap = HHKB Professional Classic setting modes
   [PASS] compiled keymaps table found
-  [PASS] six layers: Mac, Mac Fn, Win, Win Fn, HHK, HHK Fn (6 compiled)
+  [PASS] six layers in the Classic's order: HHK, HHK Fn, Mac, Mac Fn, Win, Win Fn (6 compiled)
+  [PASS] POLICY-HHKB HHK base matches the HHKB Classic manual
+  [PASS] POLICY-HHKB HHK Fn matches the HHKB Classic manual
   [PASS] POLICY-HHKB Mac base matches the HHKB Classic manual
   [PASS] POLICY-HHKB Mac Fn matches the HHKB Classic manual
   [PASS] POLICY-HHKB Win base matches the HHKB Classic manual
   [PASS] POLICY-HHKB Win Fn matches the HHKB Classic manual
-  [PASS] POLICY-HHKB HHK base matches the HHKB Classic manual
-  [PASS] POLICY-HHKB HHK Fn matches the HHKB Classic manual
 
 RESULT: PASS (0 failures)
 NOTE: offline checks only. Compilation and these checks do not establish hardware compatibility.

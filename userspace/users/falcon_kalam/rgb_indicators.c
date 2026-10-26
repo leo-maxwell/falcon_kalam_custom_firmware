@@ -33,6 +33,7 @@ enum falcon_kalam_rgb_layer {
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
     FALCON_KALAM_RGB_ACTIVITY, // all cyan blink: FLASHREAD request served (dev)
 #endif
+    FALCON_KALAM_RGB_DIP,   // all dark, 1 blink = a virtual DIP switch turned off, 2 = on
     FALCON_KALAM_RGB_RESET, // all orange, 3 blinks at boot: settings were reset
     FALCON_KALAM_RGB_BOOT,  // all red: jumping to the bootloader (WS2812 keeps it in DFU)
 };
@@ -44,6 +45,7 @@ static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
 static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_CYAN});
 #endif
+static const rgblight_segment_t PROGMEM seg_dip[]   = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_reset[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_ORANGE});
 static const rgblight_segment_t PROGMEM seg_boot[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_RED});
 
@@ -52,7 +54,7 @@ __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_l
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
                                                                                                           seg_activity,
 #endif
-                                                                                                          seg_reset, seg_boot);
+                                                                                                          seg_dip, seg_reset, seg_boot);
 
 _Static_assert(FALCON_KALAM_RGB_BOOT < RGBLIGHT_MAX_LAYERS, "raise RGBLIGHT_MAX_LAYERS");
 _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED module");
@@ -91,9 +93,10 @@ void falcon_kalam_rgb_task(void) {
     static uint8_t shown; // bit n = indicator layer n currently on (n < 8)
 
     usb_configure_state_t usb    = usb_device_state_get_configure_state();
-    // POLICY-HHKB: a mode base (default layer, 0 = Mac) and a held Fn layer are
-    // normal; any other layer switched on, or another default layer, is not.
-    layer_state_t base   = default_layer_state ? default_layer_state : (layer_state_t)1 << _MAC;
+    // POLICY-HHKB: a mode base (default layer; an empty state means layer 0)
+    // and a held Fn layer are normal; any other layer switched on, or another
+    // default layer, is not.
+    layer_state_t base   = default_layer_state ? default_layer_state : (layer_state_t)1;
     bool          locked = (layer_state & ~FALCON_KALAM_FN_LAYERS) || (base & ~FALCON_KALAM_BASE_LAYERS);
 
     uint8_t want = 0;
@@ -129,6 +132,11 @@ void falcon_kalam_rgb_paint_bootloader(void) {
     ws2812_init();
     ws2812_set_color_all(RGB_RED);
     ws2812_flush();
+}
+
+// POLICY-HHKB virtual DIP switch toggled: the white base blinks dark.
+void falcon_kalam_rgb_dip_feedback(bool on) {
+    rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DIP, 150, on ? 2 : 1);
 }
 
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE

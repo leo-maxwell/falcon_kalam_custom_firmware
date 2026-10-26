@@ -23,8 +23,9 @@ owner's decision. Closed items move to the ledger as one line.
 | L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |
 | L6 | The first boot of an image with a new settings schema resets the configuration, VIA keymaps and macros included (schema stamp, `policy.md` §5). VIA's own reset follows only QMK updates (pinned build date) |
 | L7 | After a CPU fault the keyboard drops into DFU and stops typing until replugged. The LEDs keep their last colour (the fault handler must not touch them) |
-| L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). Fn+Ctrl+M returns to Mac mode |
+| L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). Fn+Ctrl+M returns to Mac mode; the switches set the power-on mode |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
+| L10 | The virtual DIP switches have no display: their state shows only as the blink when one is toggled, and through the keys' behaviour (I23) |
 
 ## Ledger (closed)
 

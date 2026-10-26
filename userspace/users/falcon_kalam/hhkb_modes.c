@@ -1,37 +1,136 @@
 // Copyright 2026 Leo Maxwell
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
-// POLICY-HHKB: switching between the HHKB setting modes (docs/policy.md).
+// POLICY-HHKB: setting modes and DIP switches of the HHKB Professional Classic
+// (docs/policy.md §2.3, docs/hardware.md §7).
 //
-// The HHKB Classic switches with Fn+Control+W (Win mode) and Fn+Control+M
-// (Mac mode), pressed in that order; its DIP switches pick the power-on mode.
-// Without DIP switches the mode is stored instead (persistent default layer),
-// and Fn+Control+H is added to reach HHK mode.
+// As on the Classic: SW1/SW2 select the mode at power-on; Fn+Control+M
+// switches to Mac mode and Fn+Control+W to Win mode (to HHK mode when SW1/SW2
+// select HHK), until the next power-on; SW3-SW5 change keys on top of the
+// keymap, as the Classic's DIP switches act on its stored keymap. This unit has
+// no switches, so they are virtual: saved in EEPROM and toggled with
+// Fn+Control+Shift+1..5, effective at once.
 
 #include "hhkb_modes.h"
+#include "rgb_indicators.h"
+#include "user_config.h"
 
-bool falcon_kalam_hhkb_mode_process(keyrecord_t *record) {
-    if (!record->event.pressed || !(layer_state & FALCON_KALAM_FN_LAYERS) || !(get_mods() & MOD_MASK_CTRL)) {
+static uint8_t dip; // copy of the saved virtual DIP switches
+
+// SW1/SW2 -> base layer. ON/ON is not a setting the manual defines; it acts as HHK mode.
+static uint8_t dip_mode(void) {
+    switch (dip & (FALCON_KALAM_SW1 | FALCON_KALAM_SW2)) {
+        case FALCON_KALAM_SW1:
+            return _WIN;
+        case FALCON_KALAM_SW2:
+            return _MAC;
+        default:
+            return _HHK;
+    }
+}
+
+static uint8_t current_mode(void) {
+    return get_highest_layer(default_layer_state);
+}
+
+static void set_mode(uint8_t base_layer) {
+    default_layer_set((layer_state_t)1 << base_layer);
+}
+
+void falcon_kalam_hhkb_init(void) {
+    falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
+    dip                            = cfg.dip;
+    set_mode(dip_mode());
+}
+
+static void toggle_dip(uint8_t index) {
+    falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
+    dip ^= 1u << index;
+    cfg.dip = dip;
+    eeconfig_update_user(cfg.raw);
+    if (index < 2) {
+        set_mode(dip_mode()); // SW1/SW2: the Classic applies them at the next plug-in; here at once
+    }
+    falcon_kalam_rgb_dip_feedback(dip & (1u << index));
+}
+
+// What a held key was turned into at press, so the release matches it even if
+// a switch or the mode changes in between. 0 = not substituted.
+#define HELD_AS_FN 0x8000u // | Fn layer: the key acts as Fn (SW4)
+static uint16_t held[MATRIX_ROWS][MATRIX_COLS];
+
+// SW3-SW5 applied to a base-layer keycode. The ◇ keys send GUI in Mac/Win
+// mode and Muhenkan (left) / Henkan (right) in HHK mode.
+static uint16_t dip_substitute(uint16_t keycode) {
+    uint8_t mode       = current_mode();
+    bool    left_dia   = keycode == KC_LGUI || keycode == KC_INT5;
+    bool    right_dia  = keycode == KC_RGUI || keycode == KC_INT4;
+    if ((dip & FALCON_KALAM_SW4) && left_dia) {
+        return HELD_AS_FN | (mode + 1); // each mode's Fn layer follows its base layer
+    }
+    if (dip & FALCON_KALAM_SW5) {
+        if (keycode == KC_LALT) return mode == _HHK ? KC_INT5 : KC_LGUI;
+        if (left_dia) return KC_LALT;
+        if (keycode == KC_RALT) return mode == _HHK ? KC_INT4 : KC_RGUI;
+        if (right_dia) return KC_RALT;
+    }
+    if ((dip & FALCON_KALAM_SW3) && keycode == KC_DEL && mode != _MAC) {
+        return KC_BSPC;
+    }
+    return 0;
+}
+
+bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
+    keypos_t key = record->event.key;
+    if (key.row >= MATRIX_ROWS || key.col >= MATRIX_COLS) {
+        return true; // not a matrix key (combo, encoder)
+    }
+
+    if (!record->event.pressed) {
+        uint16_t sub = held[key.row][key.col];
+        if (!sub) {
+            return true;
+        }
+        held[key.row][key.col] = 0;
+        if (sub & HELD_AS_FN) {
+            layer_off(sub & 0xFF);
+        } else {
+            unregister_code16(sub);
+        }
+        return false;
+    }
+
+    // Fn+Control(+Shift)+key, judged by the key's base-layer legend: on the
+    // Fn layers M is keypad minus and 1-5 are F1-F5.
+    if ((layer_state & FALCON_KALAM_FN_LAYERS) && (get_mods() & MOD_MASK_CTRL)) {
+        uint16_t legend = keymap_key_to_keycode(current_mode(), key);
+        if (get_mods() & MOD_MASK_SHIFT) {
+            if (legend >= KC_1 && legend <= KC_5) {
+                toggle_dip(legend - KC_1);
+                return false;
+            }
+        } else if (legend == KC_M) {
+            set_mode(_MAC);
+            return false;
+        } else if (legend == KC_W) {
+            set_mode(dip_mode() == _HHK ? _HHK : _WIN);
+            return false;
+        }
+    }
+
+    // DIP switches act on base-layer keys only (Fn+` stays Delete, for instance).
+    if (!(((layer_state_t)1 << layer_switch_get_layer(key)) & FALCON_KALAM_BASE_LAYERS)) {
         return true;
     }
-    // Judge the key by its base-layer legend: on the Fn layers M and H are
-    // keypad keys in Mac/Win mode.
-    uint8_t mode;
-    switch (keymap_key_to_keycode(get_highest_layer(default_layer_state), record->event.key)) {
-        case KC_M:
-            mode = _MAC;
-            break;
-        case KC_W:
-            mode = _WIN;
-            break;
-        case KC_H:
-            mode = _HHK;
-            break;
-        default:
-            return true;
+    uint16_t sub = dip_substitute(keycode);
+    if (!sub) {
+        return true;
     }
-    // The held Fn layer belongs to the old mode until Fn is released; its MO()
-    // release still turns it off (QMK caches the source layer of each press).
-    set_single_persistent_default_layer(mode);
+    held[key.row][key.col] = sub;
+    if (sub & HELD_AS_FN) {
+        layer_on(sub & 0xFF);
+    } else {
+        register_code16(sub);
+    }
     return false;
 }
