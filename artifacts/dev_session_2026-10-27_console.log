@@ -27159,3 +27159,465 @@ Looking for devices...
 Ψ Bootloader Connected: stm32duino: Maple 003
 Ψ Bootloader Disconnected: stm32duino: Maple 003
 Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Bootloader Connected: stm32duino: Maple 003
+Ψ Bootloader Disconnected: stm32duino: Maple 003
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+2026-10-27 01:53:54 Falcon:Falcon:1: 
+2026-10-27 01:53:54 Falcon:Falcon:1: 	- Magic -
+2026-10-27 01:53:54 Falcon:Falcon:1: D:	Debug Message Toggle
+2026-10-27 01:53:54 Falcon:Falcon:1: X:	Matrix Debug Mode Toggle - Show keypresses in matrix grid
+2026-10-27 01:53:54 Falcon:Falcon:1: K:	Keyboard Debug Toggle - Show keypress report
+2026-10-27 01:53:54 Falcon:Falcon:1: INTERNATIONAL_2:	Debug Mouse Toggle
+2026-10-27 01:53:54 Falcon:Falcon:1: V:	Version
+2026-10-27 01:53:54 Falcon:Falcon:1: S:	Status
+2026-10-27 01:53:54 Falcon:Falcon:1: INTERNATIONAL_3:	Activate Console Mode
+2026-10-27 01:53:54 Falcon:Falcon:1: INTERNATIONAL_6:	Switch to Layer 0 (alternate)
+2026-10-27 01:53:54 Falcon:Falcon:1: B:	Jump to Bootloader
+2026-10-27 01:53:54 Falcon:Falcon:1: INTERNATIONAL_7:	Jump to Bootloader (alternate)
+2026-10-27 01:53:54 Falcon:Falcon:1: INTERNATIONAL_9:	Print EEPROM Settings
+2026-10-27 01:53:54 Falcon:Falcon:1: LANGUAGE_2:	Clear EEPROM
+2026-10-27 01:53:57 Falcon:Falcon:1: 
+2026-10-27 01:53:57 Falcon:Falcon:1: debug: on
+2026-10-27 01:53:57 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:53:57 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:53:57 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:00 Falcon:Falcon:1: 
+2026-10-27 01:54:00 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:00 Falcon:Falcon:1: 
+2026-10-27 01:54:00 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:00 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:00 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 
+2026-10-27 01:54:00 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:00 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 03: 1000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 
+2026-10-27 01:54:00 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:00 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 03: 0000000000000000
+2026-10-27 01:54:00 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 
+2026-10-27 01:54:02 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:02 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 03: 1000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 
+2026-10-27 01:54:02 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:02 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:02 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 
+2026-10-27 01:54:02 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:02 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 03: 1001000000001000
+2026-10-27 01:54:02 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:02 Falcon:Falcon:1: 
+2026-10-27 01:54:02 Falcon:Falcon:1: matrix: off
+2026-10-27 01:54:03 Falcon:Falcon:1: 
+2026-10-27 01:54:03 Falcon:Falcon:1: keyboard: on
+2026-10-27 01:54:03 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:03 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:03 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:03 Falcon:Falcon:1: keyboard_report: 20 | 00 00 00 00 00 00 
+2026-10-27 01:54:03 Falcon:Falcon:1: keyboard_report: 00 | 00 00 00 00 00 00 
+2026-10-27 01:54:04 Falcon:Falcon:1: keyboard_report: 02 | 00 00 00 00 00 00 
+2026-10-27 01:54:04 Falcon:Falcon:1: keyboard_report: 22 | 00 00 00 00 00 00 
+2026-10-27 01:54:06 Falcon:Falcon:1: 
+2026-10-27 01:54:06 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:06 Falcon:Falcon:1: 
+2026-10-27 01:54:06 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:06 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:06 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 
+2026-10-27 01:54:06 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:06 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 03: 1000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: keyboard_report: 02 | 00 00 00 00 00 00 
+2026-10-27 01:54:06 Falcon:Falcon:1: 
+2026-10-27 01:54:06 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:06 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 03: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:06 Falcon:Falcon:1: keyboard_report: 00 | 00 00 00 00 00 00 
+2026-10-27 01:54:20 Falcon:Falcon:1: 
+2026-10-27 01:54:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 03: 1000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: keyboard_report: 02 | 00 00 00 00 00 00 
+2026-10-27 01:54:20 Falcon:Falcon:1: 
+2026-10-27 01:54:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:20 Falcon:Falcon:1: keyboard_report: 22 | 00 00 00 00 00 00 
+2026-10-27 01:54:21 Falcon:Falcon:1: 
+2026-10-27 01:54:21 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:21 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:21 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:21 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:21 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:21 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:21 Falcon:Falcon:1: 
+2026-10-27 01:54:21 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:22 Falcon:Falcon:1: 
+2026-10-27 01:54:22 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:22 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:22 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:22 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:22 Falcon:Falcon:1: 
+2026-10-27 01:54:22 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:22 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:22 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:22 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:22 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:22 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 
+2026-10-27 01:54:23 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:23 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:23 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 
+2026-10-27 01:54:23 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:23 Falcon:Falcon:1: 
+2026-10-27 01:54:23 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:23 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:23 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:23 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:23 Falcon:Falcon:1: 
+2026-10-27 01:54:23 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:23 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:23 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:23 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 
+2026-10-27 01:54:24 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:24 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:24 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 
+2026-10-27 01:54:24 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:24 Falcon:Falcon:1: 
+2026-10-27 01:54:24 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:24 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:24 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:24 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:24 Falcon:Falcon:1: 
+2026-10-27 01:54:24 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:24 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:24 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:24 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:27 Falcon:Falcon:1: 
+2026-10-27 01:54:27 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:27 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:27 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:27 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:27 Falcon:Falcon:1: 03: 0000000000000000
+2026-10-27 01:54:27 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 
+2026-10-27 01:54:30 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:30 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 03: 1000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 
+2026-10-27 01:54:30 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:30 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:30 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:30 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:32 Falcon:Falcon:1: 
+2026-10-27 01:54:32 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:32 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:32 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:32 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:32 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:32 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:32 Falcon:Falcon:1: 
+2026-10-27 01:54:32 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:39 Falcon:Falcon:1: 
+2026-10-27 01:54:39 Falcon:Falcon:1: 	- Magic -
+2026-10-27 01:54:39 Falcon:Falcon:1: D:	Debug Message Toggle
+2026-10-27 01:54:39 Falcon:Falcon:1: X:	Matrix Debug Mode Toggle - Show keypresses in matrix grid
+2026-10-27 01:54:39 Falcon:Falcon:1: K:	Keyboard Debug Toggle - Show keypress report
+2026-10-27 01:54:39 Falcon:Falcon:1: INTERNATIONAL_2:	Debug Mouse Toggle
+2026-10-27 01:54:39 Falcon:Falcon:1: V:	Version
+2026-10-27 01:54:39 Falcon:Falcon:1: S:	Status
+2026-10-27 01:54:39 Falcon:Falcon:1: INTERNATIONAL_3:	Activate Console Mode
+2026-10-27 01:54:39 Falcon:Falcon:1: INTERNATIONAL_6:	Switch to Layer 0 (alternate)
+2026-10-27 01:54:39 Falcon:Falcon:1: B:	Jump to Bootloader
+2026-10-27 01:54:39 Falcon:Falcon:1: INTERNATIONAL_7:	Jump to Bootloader (alternate)
+2026-10-27 01:54:39 Falcon:Falcon:1: INTERNATIONAL_9:	Print EEPROM Settings
+2026-10-27 01:54:39 Falcon:Falcon:1: LANGUAGE_2:	Clear EEPROM
+2026-10-27 01:54:42 Falcon:Falcon:1: 
+2026-10-27 01:54:42 Falcon:Falcon:1: debug: on
+2026-10-27 01:54:42 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:42 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:42 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:45 Falcon:Falcon:1: 
+2026-10-27 01:54:45 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:45 Falcon:Falcon:1: 
+2026-10-27 01:54:45 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:45 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:45 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:45 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:45 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:45 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:46 Falcon:Falcon:1: 
+2026-10-27 01:54:46 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:46 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:46 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:46 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:46 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:46 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:46 Falcon:Falcon:1: 
+2026-10-27 01:54:46 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:46 Falcon:Falcon:1: 
+2026-10-27 01:54:46 Falcon:Falcon:1: debug: on
+2026-10-27 01:54:46 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:46 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:46 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:46 Falcon:Falcon:1: 
+2026-10-27 01:54:46 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:47 Falcon:Falcon:1: 
+2026-10-27 01:54:47 Falcon:Falcon:1: debug: on
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:47 Falcon:Falcon:1: 
+2026-10-27 01:54:47 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:47 Falcon:Falcon:1: 
+2026-10-27 01:54:47 Falcon:Falcon:1: debug: on
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:47 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:51 Falcon:Falcon:1: 
+2026-10-27 01:54:51 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:52 Falcon:Falcon:1: 
+2026-10-27 01:54:52 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:52 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:52 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:52 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:52 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:52 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 
+2026-10-27 01:54:56 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:56 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:56 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 
+2026-10-27 01:54:56 Falcon:Falcon:1: debug: off
+2026-10-27 01:54:56 Falcon:Falcon:1: 
+2026-10-27 01:54:56 Falcon:Falcon:1: matrix: on
+2026-10-27 01:54:56 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:54:56 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:54:56 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:54:56 Falcon:Falcon:1: 
+2026-10-27 01:54:56 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:56 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:56 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:54:56 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:57 Falcon:Falcon:1: 
+2026-10-27 01:54:57 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:54:57 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:54:57 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:54:57 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:54:57 Falcon:Falcon:1: 03: 1001000000001000
+2026-10-27 01:54:57 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:54:57 Falcon:Falcon:1: 
+2026-10-27 01:54:57 Falcon:Falcon:1: matrix: off
+2026-10-27 01:55:18 Falcon:Falcon:1: 
+2026-10-27 01:55:18 Falcon:Falcon:1: debug: off
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: matrix: on
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:19 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:19 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:19 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:19 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: debug: off
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: matrix: on
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:55:19 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:55:19 Falcon:Falcon:1: 
+2026-10-27 01:55:19 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:19 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:19 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:19 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: debug: off
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: matrix: on
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 02: 0001000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: debug: off
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: matrix: on
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:55:20 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:55:20 Falcon:Falcon:1: 
+2026-10-27 01:55:20 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:20 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:20 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:20 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:21 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 03: 1001000000001000
+2026-10-27 01:55:21 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: matrix: off
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: matrix: on
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:21 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 03: 1000000000001000
+2026-10-27 01:55:21 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: r/c 0123456789ABCDEF
+2026-10-27 01:55:21 Falcon:Falcon:1: 00: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 01: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 02: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 03: 1001000000001000
+2026-10-27 01:55:21 Falcon:Falcon:1: 04: 0000000000000000
+2026-10-27 01:55:21 Falcon:Falcon:1: 
+2026-10-27 01:55:21 Falcon:Falcon:1: matrix: off
+2026-10-27 01:55:24 Falcon:Falcon:1: 
+2026-10-27 01:55:24 Falcon:Falcon:1: keyboard: on
+2026-10-27 01:55:24 Falcon:Falcon:1: rgblight mode [NOEEPROM]: 1
+2026-10-27 01:55:24 Falcon:Falcon:1: rgblight timer disable.
+2026-10-27 01:55:24 Falcon:Falcon:1: rgblight set hsv [NOEEPROM]: 85,255,63
+2026-10-27 01:55:26 Falcon:Falcon:1: 
+2026-10-27 01:55:26 Falcon:Falcon:1: 	- Version -
+2026-10-27 01:55:26 Falcon:Falcon:1: VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001
+2026-10-27 01:55:26 Falcon:Falcon:1: BUILD:  (Oct 16 2026)
+2026-10-27 01:55:26 Falcon:Falcon:1: OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND LTO BOOTLOADER_SIZE
+2026-10-27 01:55:26 Falcon:Falcon:1: GCC: 8.5.0
+2026-10-27 01:55:27 Falcon:Falcon:1: 
+2026-10-27 01:55:27 Falcon:Falcon:1: 	- Version -
+2026-10-27 01:55:27 Falcon:Falcon:1: VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001
+2026-10-27 01:55:27 Falcon:Falcon:1: BUILD:  (Oct 16 2026)
+2026-10-27 01:55:27 Falcon:Falcon:1: OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND LTO BOOTLOADER_SIZE
+2026-10-27 01:55:27 Falcon:Falcon:1: GCC: 8.5.0
+2026-10-27 01:55:28 Falcon:Falcon:1: 
+2026-10-27 01:55:28 Falcon:Falcon:1: debug: off
+2026-10-27 01:55:28 Falcon:Falcon:1: 
+2026-10-27 01:55:28 Falcon:Falcon:1: 	- Version -
+2026-10-27 01:55:28 Falcon:Falcon:1: VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001
+2026-10-27 01:55:28 Falcon:Falcon:1: BUILD:  (Oct 16 2026)
+2026-10-27 01:55:28 Falcon:Falcon:1: OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND LTO BOOTLOADER_SIZE
+2026-10-27 01:55:28 Falcon:Falcon:1: GCC: 8.5.0
+2026-10-27 01:55:31 Falcon:Falcon:1: 
+2026-10-27 01:55:31 Falcon:Falcon:1: 	- Version -
+2026-10-27 01:55:31 Falcon:Falcon:1: VID: 0x9DD1("Falcon") PID: 0x9D89("Falcon") VER: 0x0001
+2026-10-27 01:55:31 Falcon:Falcon:1: BUILD:  (Oct 16 2026)
+2026-10-27 01:55:31 Falcon:Falcon:1: OPTIONS: BOOTMAGIC MOUSEKEY EXTRAKEY CONSOLE COMMAND LTO BOOTLOADER_SIZE
+2026-10-27 01:55:31 Falcon:Falcon:1: GCC: 8.5.0
+2026-10-27 01:55:33 Falcon:Falcon:1: 
+2026-10-27 01:55:33 Falcon:Falcon:1: 	- Status -
+2026-10-27 01:55:33 Falcon:Falcon:1: host_keyboard_leds(): 00
+2026-10-27 01:55:33 Falcon:Falcon:1: keyboard_protocol: 01
+2026-10-27 01:55:33 Falcon:Falcon:1: keyboard_idle: 06
+2026-10-27 01:55:33 Falcon:Falcon:1: timer_read32(): 0001F3E5
+2026-10-27 01:58:17 Falcon:Falcon:1: ?????????????????????????
+2026-10-27 01:58:17 Falcon:Falcon:1: 	- Magic -
+2026-10-27 01:58:17 Falcon:Falcon:1: D:	Debug Message Toggle
+2026-10-27 01:58:17 Falcon:Falcon:1: X:	Matrix Debug Mode Toggle - Show keypresses in matrix grid
+2026-10-27 01:58:17 Falcon:Falcon:1: K:	Keyboard Debug Toggle - Show keypress report
+2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_2:	Debug Mouse Toggle
+2026-10-27 01:58:17 Falcon:Falcon:1: V:	Version
+2026-10-27 01:58:17 Falcon:Falcon:1: S:	Status
+2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_3:	Activate Console Mode
+2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_6:	Switch to Layer 0 (alternate)
+2026-10-27 01:58:17 Falcon:Falcon:1: B:	Jump to Bootloader
+2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_7:	Jump to Bootloader (alternate)
+2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_9:	Print EEPROM Settings
+2026-10-27 01:58:17 Falcon:Falcon:1: LANGUAGE_2:	Clear EEPROM

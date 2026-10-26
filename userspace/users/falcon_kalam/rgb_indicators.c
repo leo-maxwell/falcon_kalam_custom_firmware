@@ -109,8 +109,15 @@ static uint8_t  show_now, show_next; // packed settings, see rgb_indicators.h
 
 // EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
 // and blink later (falcon_kalam_rgb_task).
+// Also stores rgblight as off: QMK has just written its defaults (on), and
+// rgblight_init would draw the base before falcon_kalam_rgb_init can cover it.
+// The reset blinks switch it back on (and save that) when they end.
 void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
+    rgblight_config_t cfg;
+    eeconfig_read_rgblight(&cfg);
+    cfg.enable = false;
+    eeconfig_update_rgblight(&cfg);
 }
 
 // The base is always static green at the brightness cap. Only touches rgblight
@@ -128,9 +135,11 @@ void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
     enforce_green_base();
     if (settings_were_reset) {
-        // Dark from boot until the reset blinks end, so the normal state does
-        // not flash up while the host is still configuring the keyboard.
+        // Dark from boot until the reset blinks end, so no indicator flashes
+        // up while the host is still configuring the keyboard.
         rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
+    } else if (!rgblight_is_enabled()) {
+        rgblight_enable(); // a reset boot lost power before its blinks ended
     }
 }
 
@@ -200,6 +209,7 @@ void falcon_kalam_rgb_task(void) {
     if (reset_dark && timer_elapsed(reset_dark_timer) >= 2 * RESET_BLINK_MS * RESET_BLINKS) {
         reset_dark = false;
         rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
+        rgblight_enable(); // saved on; falcon_kalam_rgb_note_settings_reset stored it off
     }
 
     uint8_t want = 0;
