@@ -54,6 +54,11 @@ something.
   active, dim = waiting. These are rgblight values; QMK's CIE 1931 brightness
   curve turns them into diode duty 12/255 and 2/255. rgblight clamps every
   colour to the cap, and the Bootmagic red passes the same cap and curve.
+* **Boot:** dark until the host has configured the keyboard (at most 2 s),
+  then the base lights once (or the reset blinks run first). rgblight is
+  stored off (`RGBLIGHT_DEFAULT_ON false`) and switched on for the session
+  only, so neither QMK's start-up drawing nor the host's suspend/resume
+  during enumeration makes the LEDs flicker.
 * States are rgblight layers over the base; the higher priority wins where
   they overlap. Channels A (LEDs 1–2) and B (LEDs 3–4) let one safety state
   and one connection state show together. LEDs are counted left to right.
@@ -61,12 +66,12 @@ something.
 | Priority | State | Shown as | LEDs | Trigger |
 |---|---|---|---|---|
 | 1 | bootloader (about to jump; kept while in DFU) | red, bright, steady | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
-| 2 | settings were reset | red, bright, 3 blinks on an all-off background | all | `eeconfig_init_user`; shown once the host has configured the keyboard |
+| 2 | settings were reset | red, bright, 3 blinks on an all-off background, then the base | all | `eeconfig_init_user`; shown at the end of the dark boot start |
 | 3 | virtual DIP switch flipped | off-blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
 | 4 | settings display | LED 1 = mode: HHK red, Mac blue, Win green; LEDs 2–4 = SW3–SW5: blue = on, off = off; 1.5 s now, an off gap, 1.5 s after the next plug-in if different | all | Fn+Ctrl+Shift+0 and the mode keys Fn+Ctrl+M/W (POLICY-HHKB) |
 | 5 | keystroke printout on (privacy warning) | red, bright | A | debug + Shift+Shift+K |
 | 6 | debug output on | blue, bright | A | Shift+Shift+D / X; always on from boot in dev (QMK's scan-rate option) |
-| 7 | USB not configured by a host | green, dim | B | USB state ≠ configured/suspended |
+| 7 | USB not configured by a host | green, dim | B | USB state ≠ configured/suspended; visible once the dark boot start ends (after 2 s without a host) |
 | 8 | layer locked on | blue, bright | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
 | — | Fn held, Caps Lock | no change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
@@ -285,11 +290,7 @@ calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, `set_color_all(cap, 0, 0)`, `flush`).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
-reset blink starts once the host has configured the keyboard, over the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks), which is on from post-init; `rgblight_init` runs earlier and would draw the base, so on a reset `eeconfig_init_user` stores rgblight off and the end of the blinks switches it on again (a normal boot that finds it off switches it on); because LED 1 garbles the first frame after the data pin is set up, post-init and the Bootmagic red both send their frame twice, because the
-host suspends and resumes the bus during enumeration and `rgblight_suspend()`
-cancels running blinks. rgblight blinks share one repeat timer, so
-overlapping blinks interfere (only possible in dev, during a FLASHREAD dump at
-boot). Layer changes are applied in `rgblight_task()`, which exists because
+boot is dark: rgblight is stored off, so `rgblight_init` draws nothing, the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks) is on from post-init, and the dark frame is sent twice (LED 1 garbles the first frame after the data pin is set up; the Bootmagic red is sent twice for the same reason). When the host has configured the keyboard, or after 2 s, the base is switched on with `rgblight_enable_noeeprom()` (the stored setting stays off), or on a reset the red blinks run first. A stored "on" from older images is rewritten once. rgblight blinks share one repeat timer, so overlapping blinks interfere (only possible in dev, during a FLASHREAD dump at boot). Layer changes are applied in `rgblight_task()`, which exists because
 `RGBLIGHT_LAYERS` forces `RGBLIGHT_USE_TIMER` even with no effects compiled.
 
 **EEPROM placement.** ChibiOS describes the F103 flash as 128 × 1 KB sectors

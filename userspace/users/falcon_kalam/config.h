@@ -16,7 +16,7 @@
 // Release number of the ship and dev images, readable over VIA
 // (`falcon_kalam_probe.py info`). Bump it whenever the images change; must
 // equal the release in docs/firmware.md (scripts/check_docs.py).
-#define VIA_FIRMWARE_VERSION 10
+#define VIA_FIRMWARE_VERSION 11
 
 // POLICY-HHKB: HHK, Mac and Win mode, each a base layer and an Fn layer
 // (falcon_kalam_keymap.h). L1's EEPROM is sized for six layers plus VIA
@@ -40,6 +40,7 @@
 #define RGBLIGHT_DEFAULT_HUE 85 // green
 #define RGBLIGHT_DEFAULT_SAT 255
 #define RGBLIGHT_DEFAULT_VAL RGBLIGHT_LIMIT_VAL
+#define RGBLIGHT_DEFAULT_ON false // stored off: the base comes on once the host is ready (rgb_indicators.c)
 
 // POLICY-RGB: L1 keeps every decorative effect (normal QMK keyboard, stock
 // parity); the configuration layer disables them for all variants.

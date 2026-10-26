@@ -5,13 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 10** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 11** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `f30b9865c5f1b3ae700829380163f2f1b4bc0bdb5af79da31e7030f01fe1ec4a` | 38,076 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `0bfe0ce5d02a99a415f64ff2af8144679b40590e87347eae13f6a45353857cec` | 43,608 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `a04a7115af8e9105a438a5d42854eb5c64cd7b64c09fa9ecc408eb0aeebd6c4d` | 38,084 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `9014f2aa948e269e108c238d303a4308441c050551059e70e836ecb2300368f1` | 43,632 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -41,7 +41,7 @@ same feature code · **pending** = see devnotes.
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
 | Caps Lock LED | A10, active-low | same | = | ✓ follows the host's Caps Lock. On macOS a short Caps Lock press (Fn+Tab) switches the input source and a long press toggles Caps Lock, as intended (the macOS setting this firmware was built to keep working) |
-| RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 63, a quarter of full scale) or dim (a quarter of the cap): all green bright = normal; all red = bootloader; red ×3 on dark = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | ✓ green base, channel A blue/red, channel B blue (layer lock), red in DFU (both routes, dev and ship), red ×3 on dark, off while the Mac sleeps; pending: no wrong colour on LED 1 before the reset blinks (release 10), dim green before enumeration (too brief to judge) |
+| RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 63, a quarter of full scale) or dim (a quarter of the cap): all green bright = normal; all red = bootloader; red ×3 on dark = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | ✓ green base, channel A blue/red, channel B blue (layer lock), red in DFU (both routes, dev and ship), red ×3 on dark, off while the Mac sleeps; ✓ dark before the reset blinks (release 10); pending: one clean light-up at a normal plug-in (release 11), dim green before enumeration (too brief to judge) |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | ✓ switch flips persist across replugs; long-term wear-leveling: R2 |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |

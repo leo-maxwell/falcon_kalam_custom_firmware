@@ -90,13 +90,30 @@ _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED m
 
 static bool settings_were_reset;
 
-// Reset blinks: 3 x (250 ms red + 250 ms off) over the dark layer, which is
-// on from boot (falcon_kalam_rgb_init), so the normal state shows only after
-// the blinks.
+// Boot: rgblight is stored off (RGBLIGHT_DEFAULT_ON false), so rgblight_init
+// draws nothing, and the dark layer is on from post-init. The base comes on
+// once the host has configured the keyboard: during enumeration the host
+// suspends and resumes the bus, and the LEDs would flicker with it. If no host
+// configures it within BOOT_WAIT_MS (charger, power bank), the base and the
+// not-configured indicator come on anyway.
+#define BOOT_WAIT_MS 2000
+static bool     booting = true;
+static uint16_t boot_timer;
+
+// Reset blinks: 3 x (250 ms red + 250 ms off) over the dark layer, in place
+// of the boot's first base frame. rgblight_suspend() cancels running blinks,
+// which is another reason to wait for the configured state.
 #define RESET_BLINK_MS 250
 #define RESET_BLINKS 3
 static bool     reset_dark;
 static uint16_t reset_dark_timer;
+
+// Ends the dark start: switch the base on for this session only, so the
+// stored setting stays off for the next boot.
+static void boot_light_up(void) {
+    rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
+    rgblight_enable_noeeprom();
+}
 
 // POLICY-HHKB settings display: the settings now, then (if different) the
 // settings after the next plug-in, separated by a dark gap.
@@ -109,15 +126,8 @@ static uint8_t  show_now, show_next; // packed settings, see rgb_indicators.h
 
 // EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
 // and blink later (falcon_kalam_rgb_task).
-// Also stores rgblight as off: QMK has just written its defaults (on), and
-// rgblight_init would draw the base before falcon_kalam_rgb_init can cover it.
-// The reset blinks switch it back on (and save that) when they end.
 void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
-    rgblight_config_t cfg;
-    eeconfig_read_rgblight(&cfg);
-    cfg.enable = false;
-    eeconfig_update_rgblight(&cfg);
 }
 
 // The base is always static green at the brightness cap. Only touches rgblight
@@ -133,17 +143,20 @@ static void enforce_green_base(void) {
 
 void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
-    enforce_green_base();
-    if (settings_were_reset) {
-        // Dark from boot until the reset blinks end, so no indicator flashes
-        // up while the host is still configuring the keyboard.
-        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
-    } else if (!rgblight_is_enabled()) {
-        rgblight_enable(); // a reset boot lost power before its blinks ended
+    // Settings from older images store rgblight on: store it off once.
+    rgblight_config_t cfg;
+    eeconfig_read_rgblight(&cfg);
+    if (cfg.enable) {
+        cfg.enable = false;
+        eeconfig_update_rgblight(&cfg);
+        rgblight_disable_noeeprom();
     }
+    enforce_green_base();
+    rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
+    boot_timer = timer_read();
     // The first LED garbles the first frame after the data pin is set up
-    // (docs/hardware.md §6), and on a reset boot the next frame comes only
-    // with the blinks. Send the current frame twice now.
+    // (docs/hardware.md §6), and the next frame comes only when the host is
+    // ready. Send the dark frame twice now.
     rgblight_set();
     rgblight_set();
 }
@@ -202,19 +215,21 @@ void falcon_kalam_rgb_task(void) {
     layer_state_t base   = default_layer_state ? default_layer_state : (layer_state_t)1;
     bool          locked = (layer_state & ~FALCON_KALAM_FN_LAYERS) || (base & ~FALCON_KALAM_BASE_LAYERS);
 
-    // Settings-reset blink: only once the host has configured the keyboard.
-    // During enumeration the host suspends and resumes the bus, and
-    // rgblight_suspend() cancels every running blink.
-    if (settings_were_reset && usb == USB_DEVICE_STATE_CONFIGURED) {
-        settings_were_reset = false;
-        reset_dark       = true;
-        reset_dark_timer = timer_read();
-        rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, RESET_BLINK_MS, RESET_BLINKS);
+    // End of the dark start: the host is ready (or BOOT_WAIT_MS passed).
+    if (booting && (usb == USB_DEVICE_STATE_CONFIGURED || timer_elapsed(boot_timer) >= BOOT_WAIT_MS)) {
+        booting = false;
+        if (settings_were_reset) {
+            settings_were_reset = false;
+            reset_dark          = true;
+            reset_dark_timer    = timer_read();
+            rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, RESET_BLINK_MS, RESET_BLINKS);
+        } else {
+            boot_light_up();
+        }
     }
     if (reset_dark && timer_elapsed(reset_dark_timer) >= 2 * RESET_BLINK_MS * RESET_BLINKS) {
         reset_dark = false;
-        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
-        rgblight_enable(); // saved on; falcon_kalam_rgb_note_settings_reset stored it off
+        boot_light_up();
     }
 
     uint8_t want = 0;
