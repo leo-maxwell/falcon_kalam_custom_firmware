@@ -1,5 +1,13 @@
 # Our firmware: features
 
+At a glance: QMK 0.34.7 firmware for this GD32F103 unit that copies the HHKB
+Professional Classic (three setting modes, its HID codes, mode keys and
+virtual DIP switches; HHK mode from the factory), keeps every stock feature
+(console, selective Command, Bootmagic), adds VIA, crash-to-DFU recovery and
+a red/green/blue status light, and leaves NKRO off for macOS. Two images,
+ship (daily) and dev (diagnosis), are bit-reproducible and verified offline
+on every build; nearly every feature is also verified on the device (§2).
+
 ## 1. Current images (POLICY-VARIANTS)
 
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
@@ -94,3 +102,24 @@ until the next plug-in, or with SW2 (Fn+Ctrl+Shift+2, then replug) for good.
 The L1 reference image (`keymaps/default`, never flashed) has a simpler map:
 QMK's own HHKB layout (one Fn layer, as
 `qmk_firmware/keyboards/hhkb/ansi`) plus underglow keys on Fn+Z–B.
+
+## 4. Release history
+
+Release = `VIA_FIRMWARE_VERSION` (POLICY-RELEASE); ship and dev are rebuilt
+together. Each release changed only what is listed; earlier rounds used
+unnumbered images (`devnotes.md` history, `problems.md` ledger).
+
+| Release | Commit | Change |
+|---|---|---|
+| 1 | `71e9252` | settings display (Fn+Ctrl+Shift+0, mode-key feedback), release number |
+| 2 | `742c7dc` | brightness cap half of full scale |
+| 3 | `8a1041e` | cap a quarter of full scale (63); settings-reset blink waits for the configured host (B5) |
+| 4 | `77b2fb6` | indicators in pure red, green and blue only; green normal |
+| 5 | `a02b9f6` | Bootmagic red: line held low, frame sent twice (R15); never flashed |
+| 6 | `5087a01` | Eject sends `0xB8` (B6); settings-display gap dark (B7) |
+| 7 | `d82e0b7` | reset blinks on a dark background; dev fault test faults from the main loop (B8) |
+| 8 | `e64abde` | dark from post-init on a reset boot |
+| 9 | `1ee19b1` | rgblight stored off on a reset, so `rgblight_init` draws nothing |
+| 10 | `666a24a` | boot frame sent twice (LED 1 garbles the first frame) |
+| 11 | `ff0538d` | dark until the host is ready at every boot; base lit once (B9) |
+| 12 | `cd83517` | dark frame at `keyboard_pre_init` (L12) |

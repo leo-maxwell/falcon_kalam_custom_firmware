@@ -10,6 +10,7 @@ here.
 |---|---|
 | On the device | **ship** release 12 (`62072341…`), flashed 2026-10-27. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–11, each read back equal to its image (release 5 was never flashed) |
 | Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
+| Note | Release 10 entered DFU 6 s after its flash, without an unplug: that was a deliberate Shift+Shift+B, not a crash. No image has entered DFU on its own |
 | Phase | **alpha** |
 
 ## To do
@@ -19,6 +20,7 @@ here.
    - the VIA app: loads `via/falcon_kalam.json`, connects, shows no lighting menu.
 
    Then ship is the daily image and the project leaves alpha.
+2. **Independent review** of the baseline (code, scripts, docs): handled in a separate review session; its findings come back here or in `problems.md`.
 
 ## In progress
 
