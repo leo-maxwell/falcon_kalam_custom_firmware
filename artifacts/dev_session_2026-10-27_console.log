@@ -19479,3 +19479,35 @@ Looking for devices...
 2026-10-27 01:24:28 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
 Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
 Ψ Bootloader Connected: stm32duino: Maple 003
+Ψ Bootloader Disconnected: stm32duino: Maple 003
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+2026-10-27 01:28:35 Falcon:Falcon:1: matrix scan frequency: 3486
+2026-10-27 01:28:36 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:37 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:38 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:38 Falcon:Falcon:1: Wear leveling: Read  [0x0028]:  00
+2026-10-27 01:28:39 Falcon:Falcon:1: matrix scan frequency: 3671
+2026-10-27 01:28:40 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:41 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:42 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:43 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:44 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:45 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:46 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:47 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:48 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:49 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:50 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:51 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:52 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:53 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:54 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:55 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:56 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:57 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:28:58 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:28:59 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:29:00 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:29:01 Falcon:Falcon:1: matrix scan frequency: 3673
+2026-10-27 01:29:02 Falcon:Falcon:1: matrix scan frequency: 3672
+2026-10-27 01:29:03 Falcon:Falcon:1: matrix scan frequency: 3673

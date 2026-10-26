@@ -24,3 +24,5 @@
 2997.541 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)
 3253.943 s  - 9DD1:9D89 keyboard application (stock or falcon_kalam) (was present 256.402 s)
 3253.990 s  + 1EAF:0003 bootloader (DFU)
+3499.022 s  - 1EAF:0003 bootloader (DFU) (was present 245.032 s)
+3499.339 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)
