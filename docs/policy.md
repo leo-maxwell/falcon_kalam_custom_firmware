@@ -34,14 +34,16 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-VIA | both variants are VIA-configurable | `users/falcon_kalam/rules.mk` | verifier |
 | POLICY-PARITY | both variants keep every stock feature on top of L1: console, Command, LTO (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B; dev keeps the full set | `users/falcon_kalam/rules.mk`, `users/falcon_kalam/config.h`, `ship/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only feature. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code only in `users/falcon_kalam/`; no git branches for configuration | variant `rules.mk`/`config.h`; `#error` guards in `ship/keymap.c` | `build.sh` builds and verifies both every time (verifier profiles `release` = ship, `dev`); negative tests inject each debug feature into ship |
-| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 43 effects, ship and dev none, the indicator table is in both, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
+| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1), capped at **half brightness** (`RGBLIGHT_LIMIT_VAL 127`): full brightness is too bright to look at. Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 43 effects, ship and dev none, the indicator table is in both, the cap is 127, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c`; dev Shift+Shift+F fault test | verifier: in ship and dev all four fault vectors lead to the stack-free reset routine; base keeps ChibiOS's defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Not in ship, because it exposes the chip UID | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
 | POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; HHK mode from the factory, as the Classic | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
 
 ### 2.1 RGB policy (POLICY-RGB)
 
-**Normal = all 4 LEDs white, full brightness.** Anything else means
+**Normal = all 4 LEDs white at the brightness cap**, half of full scale
+(`RGBLIGHT_LIMIT_VAL 127` in `users/falcon_kalam/config.h`; rgblight clamps
+every colour to it, and the Bootmagic red is scaled the same way). Anything else means
 something. States are rgblight layers over the base; the higher priority wins
 where they overlap. Channels A and B are two LEDs each, so one safety state
 and one connection state can show together. Their LED ranges are in

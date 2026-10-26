@@ -15,7 +15,6 @@ days, or needs the device) · high (needs extra hardware or tooling).
 | I8 | **NKRO re-test**: with each QMK update, check upstream for a fix of the macOS Caps Lock / input-source problem; only then consider lifting POLICY-NKRO | watch | trivial once fixed: two L2 lines, flip the verifier checks | low: 6KRO is enough for typing, and the Classic declares an NKRO report but does not use it | nothing indicates a fix so far; not investigated here (POLICY-UPSTREAM) |
 | I13 | **Automated hardware tests**: script the probe, console traces and readback compare | deferred | high: console parsing; key presses still need a person | **high** for maintenance: repeatable checks after each flash and QMK update | — |
 | I14 | **Remote repository + CI** (build, verify, docs check on every push) | deferred | low for a private repository; medium for CI, which must reproduce the gcc@8 hashes on a hosted runner | medium: the only copy is local; every change re-verified | needs a hosting decision |
-| I4 | **RGB brightness cap** from a measured LED-module current | deferred: no current meter available | low in code; needs a USB current meter | low: the worst case (≈ 290 mA) is within the 500 mA budget (R14) | `RGBLIGHT_LIMIT_VAL` in L2 |
 | I7 | **Submit L1 upstream** to QMK | deferred | medium: upstream review, naming of a clone, and the enlarged EEPROM is a project choice upstream may not accept | low: one unit; upstream would maintain L1 only | L1 already passes upstream lint |
 
 Retired: I6 (newer toolchain: QMK's own toolchain is GCC 8, and POLICY-UPSTREAM

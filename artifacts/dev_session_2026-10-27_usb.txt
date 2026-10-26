@@ -1,0 +1,8 @@
+   0.026 s  watching (now present: bootloader (DFU))
+   0.027 s  + 1EAF:0003 bootloader (DFU)
+  37.116 s  - 1EAF:0003 bootloader (DFU) (was present 37.090 s)
+  37.411 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)
+ 367.580 s  - 9DD1:9D89 keyboard application (stock or falcon_kalam) (was present 330.169 s)
+ 379.967 s  + 1EAF:0003 bootloader (DFU)
+ 386.193 s  - 1EAF:0003 bootloader (DFU) (was present 6.226 s)
+ 386.488 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)

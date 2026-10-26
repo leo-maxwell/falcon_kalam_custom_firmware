@@ -3,8 +3,9 @@
 //
 // POLICY-RGB: the RGB module shows state, not decoration (docs/policy.md).
 //
-// Normal state: every LED white at full brightness. Indicator states are QMK
-// rgblight layers drawn on top: a higher layer index wins where layers overlap.
+// Normal state: every LED white at the brightness cap (half of full scale).
+// Indicator states are QMK rgblight layers drawn on top: a higher layer index
+// wins where layers overlap.
 // Safety/debug states use channel A, connection/layer states channel B, so one
 // of each can show at the same time; one-off events use all LEDs. The base is
 // enforced every main-loop pass, so EEPROM contents or VIA lighting commands
@@ -91,7 +92,7 @@ void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
 
-// The base is always static white at full brightness. Only touches rgblight
+// The base is always static white at the brightness cap. Only touches rgblight
 // when something differs, because each call redraws the LEDs.
 static void enforce_white_base(void) {
     if (rgblight_get_mode() != RGBLIGHT_MODE_STATIC_LIGHT) {
@@ -181,10 +182,11 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
 }
 
 // Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
-// directly: all LEDs red, latched while the bootloader runs (R15).
+// directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
+// rgblight also bypasses its brightness cap, so apply it here.
 void falcon_kalam_rgb_paint_bootloader(void) {
     ws2812_init();
-    ws2812_set_color_all(RGB_RED);
+    ws2812_set_color_all(RGBLIGHT_LIMIT_VAL, 0, 0);
     ws2812_flush();
 }
 

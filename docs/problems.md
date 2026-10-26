@@ -42,7 +42,7 @@ owner's decision. Closed items move to the ledger as one line.
 | R10 | 2026-10-26 | FLASHREAD exposes the chip UID, so it is dev-only, enforced by POLICY-VARIANTS (guard, verifier, negative test) |
 | R11 | 2026-10-26 | `scripts/flash.sh` accepts only `ship` or `dev`, with the full approved SHA-256 matching the file, its `.sha256` record and `firmware.md`; negative tests prove the refusals |
 | R12 | 2026-10-26 | console + Command stay in ship for stock parity; POLICY-RGB shows magenta on channel A while keystrokes go to the console |
-| R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). A measurement stays optional (I4) |
+| R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). Since release 2 the brightness cap is half of full scale (POLICY-RGB), roughly halving the LED share. A measurement stays optional (I4) |
 | R16 | 2026-10-27 | deviations from the HHKB Classic settled: each is listed with its reason in `policy.md` §2.3 and accepted (L11). Virtual switch flips take effect at the next plug-in and the factory setting is HHK mode, as on the Classic |
 | L10 | 2026-10-27 | the virtual DIP switches and the mode had no display; Fn+Ctrl+Shift+0 now shows them, and mode keys flash the mode colour (I23) |
 | B2 | 2026-10-26 | `falcon_kalam_probe.py matrix` read VIA ≥ 12 replies one byte early; fixed; `decode-log` re-maps the affected log |

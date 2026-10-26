@@ -18,7 +18,7 @@ here.
 1. **Dev image test session** (about 30 min, 7 plug-ins; record results in `firmware.md`). Ordered so that each plug-in and each DFU entry serves several checks. A console log (`qmk console`) and a USB log (`tools/usb_watch.py`) run in the background throughout. **U** = done at the keyboard, **C** = done at the computer. Debug output stays on from step 6 to step 15 (Shift+Shift+D, then K).
    - **A. Flash** (plug-in 1)
      1. U: unplug, hold Esc, plug in (the old image stays dark in DFU). C: `scripts/flash.sh flash dev <sha256>`.
-     2. U: the new image starts by itself: orange ×3 (schema reset after the EEPROM move), then white. C: `falcon_kalam_probe.py info` → release 1, VIA `0x000D`, 6 layers, 16 macros / 1,107 B.
+     2. U: the new image starts by itself: orange ×3 (schema reset after the EEPROM move), then white. C: `falcon_kalam_probe.py info` → release 2, VIA `0x000D`, 6 layers, 16 macros / 1,107 B.
    - **B. Esc→DFU test** (plug-ins 2–3; required after every flash)
      3. U: unplug, hold Esc, plug in → **red, and does it stay red in DFU?** (Bootmagic red, R15). C: `scripts/flash.sh verify dev` (readback = image).
      4. U: replug normally → orange ×3 (Bootmagic cleared the settings), white; note any blue flash before enumeration.
@@ -45,7 +45,7 @@ here.
 2. **Ship image acceptance.** Flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check:
    - selective Command: H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally, and in HHK mode so does Shift+Shift+left-◇;
    - POLICY-HHKB as in dev (modes and virtual DIP switches);
-   - RGB: white at full brightness, indicators as in dev, Fn+Z–B do nothing special, no lighting menu in VIA.
+   - RGB: white at half brightness, indicators as in dev, Fn+Z–B do nothing special, no lighting menu in VIA.
 
    Then keep ship as the daily image.
 
