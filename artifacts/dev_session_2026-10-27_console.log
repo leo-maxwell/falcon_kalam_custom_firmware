@@ -27621,3 +27621,7 @@ Looking for devices...
 2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_7:	Jump to Bootloader (alternate)
 2026-10-27 01:58:17 Falcon:Falcon:1: INTERNATIONAL_9:	Print EEPROM Settings
 2026-10-27 01:58:17 Falcon:Falcon:1: LANGUAGE_2:	Clear EEPROM
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Bootloader Connected: stm32duino: Maple 003
+Ψ Bootloader Disconnected: stm32duino: Maple 003
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)

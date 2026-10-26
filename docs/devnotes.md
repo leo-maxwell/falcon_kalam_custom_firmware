@@ -8,8 +8,8 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 8 (`90d022ac…`), flashed 2026-10-27; readback = image. Before it on the same day: dev releases 1–4, 6 and 7, each read back equal to its image (release 5 was never flashed) |
-| Next to flash | ship release 9 (`docs/firmware.md` §1): no green before the reset blinks. Flashing it through Esc→DFU makes its first boot a reset boot, which is the test |
+| On the device | **ship** release 9 (`ce1a42a9…`), flashed 2026-10-27 via Esc→DFU (its first boot was a reset boot). Before it on the same day: dev releases 1–4, 6, 7 and ship release 8, each read back equal to its image (release 5 was never flashed) |
+| Next | Esc→DFU test and readback of ship release 9; VIA check; then ship is the daily image |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 
