@@ -119,7 +119,7 @@ copy, the closest equivalent is used, and every deviation is listed here.
 |---|---|
 | Physical layout | HHKB classic 60 keys (`LAYOUT_60_hhkb`, VIA layout option 0) |
 | Keymap | the Classic's six layers in its own storage order: HHK base/Fn, Mac base/Fn, Win base/Fn; unsupported Fn keys send the plain key, as on the Classic |
-| HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
+| HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute and Eject `0xB8` on the consumer page (QMK's `KC_EJCT` sends `0xCC`; `hhkb_modes.c` sends `0xB8` through `process_record_user`, an upstream hook) |
 | Mode keys | Fn+Control+M → Mac mode; Fn+Control+W → Win mode, or HHK mode when SW1/SW2 select HHK; effective until the next plug-in, as SW1/SW2 decide the power-on mode |
 | DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, flipped with Fn+Control+Shift+1…5 (acknowledged by an off-blink, POLICY-RGB) and, as on the Classic, effective from the next plug-in. SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
 | Display (additions) | the Classic has none; on the RGB module (itself a deviation): Fn+Control+Shift+0 and the mode keys show the settings in effect and after the next plug-in |
@@ -227,7 +227,9 @@ once at post-init, so a flip waits for the next plug-in, as on the Classic. SW3�
 a base layer (`layer_switch_get_layer`), so Fn+\` stays Delete: SW4 turns the
 left ◇ (`KC_LGUI`, or `KC_INT5` in HHK mode) into the mode's Fn layer, SW5
 swaps Alt with the mode's ◇ code, SW3 turns base-layer Delete into Backspace
-outside Mac mode. SW4 is applied before SW5, so with both on the left Alt
+outside Mac mode. `KC_EJCT` is sent as consumer `0xB8` (the
+Classic's Eject) with `host_consumer_send()`; its release falls through to
+QMK, which clears the consumer report. SW4 is applied before SW5, so with both on the left Alt
 becomes ◇. Each substituted key's replacement is stored per matrix position
 at press and replayed at release, so a release matches its press even if the
 mode changed in between. A Fn layer held during a mode switch

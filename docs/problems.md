@@ -7,8 +7,10 @@ owner's decision. Closed items move to the ledger as one line.
 
 | ID | Problem | Status / impact | Mitigation / next step |
 |---|---|---|---|
-| B1 | **Caps Lock LED never lights** on image `9b61141e…` (the A10 indicator was not configured) | **fixed** in the ship and dev images (indicator compiled in, verified offline); not flashed | flash and confirm the LED (devnotes) |
+| B1 | **Caps Lock LED never lights** on image `9b61141e…` (the A10 indicator was not configured) | **fixed and verified** on dev release 4: the LED follows the host's Caps Lock | — (close at the next ledger pass) |
 | R15 | **"Dark" is ambiguous** under POLICY-RGB | **fixed**: Bootmagic and Command B paint the LEDs red, so dark = host asleep. On the device the WS2812s keep their frame in DFU: via Shift+Shift+B all four stay red (release 3); via Bootmagic LED 1 showed yellow, LEDs 2–4 red (release 2). Bootmagic sends its frame right after the data pin is set up, and the first LED lost it; release 5 holds the line low, then sends the frame twice | confirm all four red after Bootmagic on release 5 (session step 19) |
+| B6 | **Fn+F (Eject) does nothing on macOS** (release 4): QMK's `KC_EJCT` sends consumer `0xCC` (Stop/Eject); the Classic sends `0xB8` (Eject) | **fixed** in release 6: `0xB8` is sent instead | confirm the eject overlay (devnotes) |
+| B7 | **Settings-display gap not dark** (release 4): the gap only removed the display layers, so the normal state showed through and looked like part of the display | **fixed** in release 6: an all-off layer covers the gap | confirm (devnotes) |
 | B5 | **Settings-reset blink never shows** (release 1–2): the host suspends and resumes the bus during enumeration, and `rgblight_suspend()` cancels running blinks | **fixed** in release 3: the blink starts once the host has configured the keyboard | confirm the reset blink (red ×3 since release 4) after Bootmagic (devnotes) |
 | R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
 | R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev-round persistence test with the wear-leveling trace; repeat after each QMK update |
@@ -18,7 +20,7 @@ owner's decision. Closed items move to the ledger as one line.
 | ID | Limitation |
 |---|---|
 | L1 | In **ship** the VIA key tester and `falcon_kalam_probe.py matrix` see an all-zero matrix (QMK hides it unless built with `VIA_INSECURE`). Use dev, or the console (Shift+Shift+X) |
-| L2 | Fn+Esc = Power in Mac mode, sent as Keyboard Power `0x66` like the real HHKB. What macOS does with it is unverified (devnotes) |
+| L2 | Fn+Esc = Power in Mac mode, sent as Keyboard Power `0x66` like the real HHKB Classic. This Mac ignores it (dev release 4, 2026-10-27): the key does nothing |
 | L3 | `QK_BOOT` is on no default layer: use Esc at plug-in, Shift+Shift+B, or assign it in VIA |
 | L4 | Command N ("NKRO toggle") does nothing in dev (no NKRO); in ship it types N |
 | L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |

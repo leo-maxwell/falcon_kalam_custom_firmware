@@ -145,6 +145,13 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
         }
     }
 
+    // Eject: the Classic sends consumer usage 0xB8 (Eject), which macOS acts on;
+    // QMK's KC_EJCT sends 0xCC (Stop/Eject). Send the Classic's code instead.
+    if (keycode == KC_EJCT) {
+        host_consumer_send(record->event.pressed ? TRANSPORT_EJECT : 0);
+        return false;
+    }
+
     // DIP switches act on base-layer keys only (Fn+` stays Delete, for instance).
     if (!(((layer_state_t)1 << layer_switch_get_layer(key)) & FALCON_KALAM_BASE_LAYERS)) {
         return true;

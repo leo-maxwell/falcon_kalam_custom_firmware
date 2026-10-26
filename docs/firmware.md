@@ -5,13 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 5** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 6** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `2e9282afc7c405ed8ec5f3bd455fc39dca8039814c43348123e626bd63f4a0bf` | 37,808 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `13cdd6fa7dc896302e3749db4b128bcae15107ec229a1b5dc7ea65675286f696` | 43,272 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `71262b454aa38c918a2540de8fa331e3bed7c8c5cc8b46a14c7e36b9f629e668` | 37,920 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `bdb6441c0eba70dbee648c84ed2c81cd6bfbc67a98740b009eeffd61bc83fe80` | 43,388 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -40,7 +40,7 @@ same feature code · **pending** = see devnotes.
 | Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader; every other combination types normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, Caps/lock, E, M, C, N, Z, `` ` ``, 0–9, F1–F10) + F fault test | = (ship: safer subset) | pending |
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
-| Caps Lock LED | A10, active-low | same | = | pending |
+| Caps Lock LED | A10, active-low | same | = | ✓ follows the host's Caps Lock (macOS ignores a very short Caps Lock press, so Fn+Tab needs a brief hold) |
 | RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 63, a quarter of full scale) or dim (a quarter of the cap): all green bright = normal; all red = bootloader; red ×3 = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
@@ -81,7 +81,9 @@ Settings display:                    Fn+Ctrl+Shift+0 (and every mode key) → 1.
 ```
 
 Codes as the Classic sends them: Power = Keyboard Power (`0x66`), Stop
-`0x78`, Clear `0x53`, volume/mute/eject on the consumer page. Keys a mode does
+`0x78`, Clear `0x53`, volume/mute and Eject (`0xB8`) on the consumer page.
+QMK's `KC_EJCT` would send `0xCC` (Stop/Eject), so `hhkb_modes.c` sends
+`0xB8` for it. Keys a mode does
 not support send the plain key. The switches act on top of the keymap, so VIA
 shows the unchanged layers. Positions outside the HHKB layout are `KC_NO` and
 can be assigned in VIA; all six VIA layers belong to the modes. An EEPROM

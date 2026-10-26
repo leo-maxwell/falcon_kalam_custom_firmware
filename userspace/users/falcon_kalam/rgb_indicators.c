@@ -39,6 +39,7 @@ enum falcon_kalam_rgb_layer {
     FALCON_KALAM_RGB_MODE_HHK, // LED 1 red:   settings display, HHK mode
     FALCON_KALAM_RGB_MODE_MAC, // LED 1 blue:  Mac mode
     FALCON_KALAM_RGB_MODE_WIN, // LED 1 green: Win mode
+    FALCON_KALAM_RGB_SHOW_GAP, // LED 1 off:   settings display gap (with SHOW_BG: all off)
     FALCON_KALAM_RGB_SHOW_BG,  // LEDs 2-4 off: settings display background
     FALCON_KALAM_RGB_SHOW_SW3, // switch LED blue: SW3 on
     FALCON_KALAM_RGB_SHOW_SW4, // switch LED blue: SW4 on
@@ -67,6 +68,7 @@ static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS
 static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_RED, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_BLUE, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_GREEN, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_gap[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_show_bg[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LEDS_SW, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, FK_BLUE, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, FK_BLUE, FK_BRIGHT});
@@ -80,7 +82,7 @@ __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_l
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
                                                                                                           seg_activity,
 #endif
-                                                                                                          seg_mode_hhk, seg_mode_mac, seg_mode_win, seg_show_bg, seg_show_sw3, seg_show_sw4, seg_show_sw5,
+                                                                                                          seg_mode_hhk, seg_mode_mac, seg_mode_win, seg_show_gap, seg_show_bg, seg_show_sw3, seg_show_sw4, seg_show_sw5,
                                                                                                           seg_dip, seg_reset, seg_boot);
 
 _Static_assert(FALCON_KALAM_RGB_BOOT < RGBLIGHT_MAX_LAYERS, "raise RGBLIGHT_MAX_LAYERS");
@@ -131,6 +133,13 @@ static void show_draw(uint8_t settings, bool on) {
     }
 }
 
+// The gap between the two phases: every LED off, so the normal state does not
+// show through and read as part of the display.
+static void show_gap(bool on) {
+    rgblight_set_layer_state(FALCON_KALAM_RGB_SHOW_GAP, on);
+    rgblight_set_layer_state(FALCON_KALAM_RGB_SHOW_BG, on);
+}
+
 static void show_task(void) {
     if (show_phase == SHOW_IDLE || timer_elapsed(show_timer) < (show_phase == SHOW_GAP ? SHOW_GAP_MS : SHOW_MS)) {
         return;
@@ -138,8 +147,13 @@ static void show_task(void) {
     show_timer = timer_read();
     if (show_phase == SHOW_NOW) {
         show_draw(show_now, false);
-        show_phase = show_next != show_now ? SHOW_GAP : SHOW_IDLE;
+        show_phase = SHOW_IDLE;
+        if (show_next != show_now) {
+            show_gap(true);
+            show_phase = SHOW_GAP;
+        }
     } else if (show_phase == SHOW_GAP) {
+        show_gap(false);
         show_draw(show_next, true);
         show_phase = SHOW_NEXT;
     } else {
@@ -220,6 +234,7 @@ void falcon_kalam_rgb_dip_feedback(bool on) {
 // POLICY-HHKB settings display (Fn+Ctrl+Shift+0 and the mode keys); a new
 // request restarts it.
 void falcon_kalam_rgb_show_settings(uint8_t now, uint8_t next) {
+    show_gap(false);
     show_draw(0, false);
     show_now   = now;
     show_next  = next;

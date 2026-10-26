@@ -9,7 +9,7 @@ here.
 | | |
 |---|---|
 | On the device | dev release 4 (`531c45ce…`, R/G/B-only indicators), flashed 2026-10-27. Before it on the same day: releases 1–3, each read back equal to its image |
-| Next to flash | dev release 5 (`docs/firmware.md` §1: Bootmagic red sent twice) at the session's next DFU entry (step 18), so step 19 tests it |
+| Next to flash | dev release 6 (`docs/firmware.md` §1: Bootmagic red sent twice, Eject `0xB8`, dark display gap) at the session's next DFU entry (step 18), so step 19 tests it |
 | Then | **ship** as the acceptance test, after the dev session. Each flash needs an approval naming the variant and its hash |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
@@ -31,7 +31,7 @@ here.
      9. U: Fn+Ctrl+M → display: Mac now, then HHK after a replug. Fn+Tab → Caps Lock on, **Caps Lock LED lit?** (B1); hold Fn+Tab 2 s (C: Caps stays in the report); Fn+Tab again → off. Fn+A/S/D (volume overlay), Fn+F (eject overlay), Fn+Delete (Clear), Fn+Return (keypad Enter), Fn+H/J/N/M (keypad). **Fn+Esc: note what macOS does** (Power `0x66`), then cancel (L2).
      10. U: Fn+Ctrl+Shift+0 → Mac, an off gap, then HHK (after a replug the switches give HHK).
      11. U: Fn+Ctrl+Shift+2, 3, 4, 5 → two off-blinks each, mode unchanged. C: wear-leveling writes in the log (R2). Fn+Ctrl+Shift+0 → Mac with LEDs 2–4 off, then Mac with LEDs 2–4 blue.
-     12. U: hold a key while pressing Fn+Ctrl+M: no stuck key.
+     12. U: hold **1** while pressing Fn+Ctrl+M, then release it: no stuck key (not a letter: macOS text fields bind Control+letter, e.g. Control+H deletes backward).
      13. U (optional, VIA at hand): change one key in VIA. C: `dump-keymap` before and after.
      14. U: put the Mac to sleep → LEDs off; press a key → the Mac wakes (no SW6), the normal base again.
      15. U: Shift+Shift+1 → **layer-locked on the other two LEDs** (channel B; dev Command makes layer 1 the default layer). The keymap is now odd until the replug.
@@ -63,6 +63,7 @@ FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
 
 ## Results awaiting a milestone
 
+* Session 2026-10-27, steps 8–15 (dev release 4): LED 1 = the leftmost LED. Settings display: LED 1 blue 1.5 s, then the gap showed the normal state (B7), then LED 1 red. Caps Lock LED follows the host (B1 verified; macOS needs a brief hold). Volume keys work; Fn+F sent `0xCC` (B6); Fn+Esc sent `0x66` and macOS did nothing (L2). Switch flips alternate 2/1 blinks as expected; after the replug at 01:20 SW3 and SW4 are on, SW2 off (HHK). The "Backspace" in step 12 was macOS treating the held H plus Control as Control+H (delete backward), not a stuck key: every press has its release in the log. Sleep: the Mac's sleep was delayed 30 s by CloudflareWARP, slept at 01:19:15 and woke by a key press a second later, so LEDs-off-during-sleep is still unverified (waking by key works). Shift+Shift+1 switched the default layer to 1 (the log shows `1` → F1) before and after the replug; what LEDs 3–4 showed is not recorded.
 * Session 2026-10-27, steps 1–7 done (dev releases 1–4). Release 4: green base, channel A blue (debug from boot); at plug-in the LEDs light, go off and come back once (USB suspend/resume during enumeration, `RGBLIGHT_SLEEP`). Key passes (steps 6–7, `artifacts/dev_session_2026-10-27_keycheck.txt`): all 60 base positions with the HHK codes, all 27 HHK Fn keys incl. Stop `0x78`, no mismatch. Shift+Shift+B (release 3): all four red in DFU. Earlier (dev releases 1–3; release 3 entered DFU by Esc): flash, enumeration, probe (release, 6 layers, 1,107 B macros) and both readbacks OK. Debug is on from boot in dev (QMK's `DEBUG_MATRIX_SCAN_RATE` sets it), so channel A shows yellow at once: **channel A = LEDs 1–2** (counted left to right); LED 4 white, LED 3's colour hard to judge next to the yellow (check with debug off). In DFU: LED 1 yellow, LEDs 2–4 red (R15). At plug-in LED 1 lights a moment before the others (Inferred: the same undriven-line noise). No orange after the DFU entry (B5). Scan rate ≈ 3,677 Hz. Brightness 127 still too bright → release 3 (63, comfortable). Mixed colours (white, yellow, magenta, …) blend poorly on this module → release 4 uses pure red, green and blue only. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`.
 * Image `9b61141e…`: the console connects (`artifacts/functional_console_2026-10-26.log`); no debug traces captured yet. Everything else from that session is recorded in `firmware.md` (✓) or `problems.md` (B1).
 * `artifacts/release_keymap_baseline.json` is a 4-layer dump of image `9b61141e…`; it does not apply to the 6-layer images (the persistence test makes its own dumps).
