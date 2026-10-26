@@ -8,8 +8,7 @@ here.
 
 | | |
 |---|---|
-| On the device | dev release 6 (`bdb6441c…`), flashed 2026-10-27 after Shift+Shift+B. Before it on the same day: releases 1–4, each read back equal to its image (release 5 was never flashed) |
-| Next to flash | dev release 7 (`docs/firmware.md` §1: reset blink on dark, fault-test console line) |
+| On the device | dev release 7 (`aef490d2…`), flashed 2026-10-27. Before it on the same day: releases 1–4 and 6, each read back equal to its image (release 5 was never flashed) |
 | Then | **ship** as the acceptance test, after the dev session. Each flash needs an approval naming the variant and its hash |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
