@@ -93,9 +93,10 @@ confirms it. USB re-enumeration: PA12 (D+) is driven low, then released
 * **`COL2ROW`**: rows are driven low one at a time; columns are pulled-up,
   active-low inputs (Verified, scan loop `0x08006100`). Debounce: 5 ms,
   symmetric deferred (Inferred).
-* **Physical layout: HHKB classic, 60 keys.** The read-only probe saw 53 of
-  the 60 positions (`artifacts/layout_probe_decoded.txt`); the other 7 were
-  hidden by a since-fixed probe decoder.
+* **Physical layout: HHKB classic, 60 keys.** Verified: all 60 positions
+  pressed and decoded on the dev image's console (2026-10-27,
+  `artifacts/dev_session_2026-10-27_keycheck.txt`). The earlier read-only probe
+  saw 53 (`artifacts/layout_probe_decoded.txt`).
 
 ```
 row 0  Esc 0,0 │ 1 0,1 │ 2 0,2 … 9 0,9 │ 0 0,10 │ - 0,11 │ = 0,12 │ \ 0,13 │ ` 0,14

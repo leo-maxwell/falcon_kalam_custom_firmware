@@ -8,8 +8,9 @@ here.
 
 | | |
 |---|---|
-| On the device | dev release 4 (`docs/firmware.md` §1: R/G/B-only indicators), flashed 2026-10-27. Before it on the same day: releases 1–3, each read back equal to its image |
-| Next to flash | **ship** as the acceptance test, after the dev session. Each flash needs an approval naming the variant and its hash |
+| On the device | dev release 4 (`531c45ce…`, R/G/B-only indicators), flashed 2026-10-27. Before it on the same day: releases 1–3, each read back equal to its image |
+| Next to flash | dev release 5 (`docs/firmware.md` §1: Bootmagic red sent twice) at the session's next DFU entry (step 18), so step 19 tests it |
+| Then | **ship** as the acceptance test, after the dev session. Each flash needs an approval naming the variant and its hash |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 
@@ -62,6 +63,6 @@ FLASHREAD is already out of ship (POLICY-VARIANTS, enforced by the build).
 
 ## Results awaiting a milestone
 
-* Session 2026-10-27, so far (dev releases 1–3; release 3 entered DFU by Esc): flash, enumeration, probe (release, 6 layers, 1,107 B macros) and both readbacks OK. Debug is on from boot in dev (QMK's `DEBUG_MATRIX_SCAN_RATE` sets it), so channel A shows yellow at once: **channel A = LEDs 1–2** (counted left to right); LED 4 white, LED 3's colour hard to judge next to the yellow (check with debug off). In DFU: LED 1 yellow, LEDs 2–4 red (R15). At plug-in LED 1 lights a moment before the others (Inferred: the same undriven-line noise). No orange after the DFU entry (B5). Scan rate ≈ 3,677 Hz. Brightness 127 still too bright → release 3 (63, comfortable). Mixed colours (white, yellow, magenta, …) blend poorly on this module → release 4 uses pure red, green and blue only. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`.
+* Session 2026-10-27, steps 1–7 done (dev releases 1–4). Release 4: green base, channel A blue (debug from boot); at plug-in the LEDs light, go off and come back once (USB suspend/resume during enumeration, `RGBLIGHT_SLEEP`). Key passes (steps 6–7, `artifacts/dev_session_2026-10-27_keycheck.txt`): all 60 base positions with the HHK codes, all 27 HHK Fn keys incl. Stop `0x78`, no mismatch. Shift+Shift+B (release 3): all four red in DFU. Earlier (dev releases 1–3; release 3 entered DFU by Esc): flash, enumeration, probe (release, 6 layers, 1,107 B macros) and both readbacks OK. Debug is on from boot in dev (QMK's `DEBUG_MATRIX_SCAN_RATE` sets it), so channel A shows yellow at once: **channel A = LEDs 1–2** (counted left to right); LED 4 white, LED 3's colour hard to judge next to the yellow (check with debug off). In DFU: LED 1 yellow, LEDs 2–4 red (R15). At plug-in LED 1 lights a moment before the others (Inferred: the same undriven-line noise). No orange after the DFU entry (B5). Scan rate ≈ 3,677 Hz. Brightness 127 still too bright → release 3 (63, comfortable). Mixed colours (white, yellow, magenta, …) blend poorly on this module → release 4 uses pure red, green and blue only. Logs: `artifacts/dev_session_2026-10-27_console.log`, `artifacts/dev_session_2026-10-27_usb.txt`.
 * Image `9b61141e…`: the console connects (`artifacts/functional_console_2026-10-26.log`); no debug traces captured yet. Everything else from that session is recorded in `firmware.md` (✓) or `problems.md` (B1).
 * `artifacts/release_keymap_baseline.json` is a 4-layer dump of image `9b61141e…`; it does not apply to the 6-layer images (the persistence test makes its own dumps).

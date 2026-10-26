@@ -1,0 +1,130 @@
+ok  01:04:11 layer 0  LShift  (3, 0)  0x00E1 KC_LSFT
+ok  01:04:11 layer 0  RShift  (3,12)  0x00E5 KC_RSFT
+ok  01:04:12 layer 0  K       (2, 8)  0x000E KC_K
+ok  01:04:30 layer 0  Esc     (0, 0)  0x0029 KC_ESC
+ok  01:04:30 layer 0  1       (0, 1)  0x001E KC_1
+ok  01:04:30 layer 0  2       (0, 2)  0x001F KC_2
+ok  01:04:30 layer 0  3       (0, 3)  0x0020 KC_3
+ok  01:04:31 layer 0  4       (0, 4)  0x0021 KC_4
+ok  01:04:31 layer 0  5       (0, 5)  0x0022 KC_5
+ok  01:04:31 layer 0  6       (0, 6)  0x0023 KC_6
+ok  01:04:31 layer 0  7       (0, 7)  0x0024 KC_7
+ok  01:04:32 layer 0  8       (0, 8)  0x0025 KC_8
+ok  01:04:32 layer 0  9       (0, 9)  0x0026 KC_9
+ok  01:04:32 layer 0  0       (0,10)  0x0027 KC_0
+ok  01:04:32 layer 0  -       (0,11)  0x002D KC_MINS
+ok  01:04:32 layer 0  =       (0,12)  0x002E KC_EQL
+ok  01:04:33 layer 0  \       (0,13)  0x0031 KC_BSLS
+ok  01:04:33 layer 0  `       (0,14)  0x0035 KC_GRV
+ok  01:04:34 layer 0  Tab     (1, 0)  0x002B KC_TAB
+ok  01:04:34 layer 0  Q       (1, 1)  0x0014 KC_Q
+ok  01:04:34 layer 0  W       (1, 2)  0x001A KC_W
+ok  01:04:34 layer 0  E       (1, 3)  0x0008 KC_E
+ok  01:04:34 layer 0  R       (1, 4)  0x0015 KC_R
+ok  01:04:35 layer 0  T       (1, 5)  0x0017 KC_T
+ok  01:04:35 layer 0  Y       (1, 6)  0x001C KC_Y
+ok  01:04:35 layer 0  U       (1, 7)  0x0018 KC_U
+ok  01:04:35 layer 0  I       (1, 8)  0x000C KC_I
+ok  01:04:36 layer 0  O       (1, 9)  0x0012 KC_O
+ok  01:04:36 layer 0  P       (1,10)  0x0013 KC_P
+ok  01:04:36 layer 0  [       (1,11)  0x002F KC_LBRC
+ok  01:04:36 layer 0  ]       (1,12)  0x0030 KC_RBRC
+ok  01:04:36 layer 0  Delete  (1,14)  0x004C KC_DEL
+ok  01:04:37 layer 0  Control (2, 0)  0x00E0 KC_LCTL
+ok  01:04:37 layer 0  A       (2, 1)  0x0004 KC_A
+ok  01:04:37 layer 0  S       (2, 2)  0x0016 KC_S
+ok  01:04:37 layer 0  D       (2, 3)  0x0007 KC_D
+ok  01:04:38 layer 0  F       (2, 4)  0x0009 KC_F
+ok  01:04:38 layer 0  G       (2, 5)  0x000A KC_G
+ok  01:04:38 layer 0  H       (2, 6)  0x000B KC_H
+ok  01:04:38 layer 0  J       (2, 7)  0x000D KC_J
+ok  01:04:39 layer 0  K       (2, 8)  0x000E KC_K
+ok  01:04:39 layer 0  L       (2, 9)  0x000F KC_L
+ok  01:04:39 layer 0  ;       (2,10)  0x0033 KC_SCLN
+ok  01:04:39 layer 0  '       (2,11)  0x0034 KC_QUOT
+ok  01:04:39 layer 0  Return  (2,14)  0x0028 KC_ENT
+ok  01:04:40 layer 0  LShift  (3, 0)  0x00E1 KC_LSFT
+ok  01:04:40 layer 0  Z       (3, 2)  0x001D KC_Z
+ok  01:04:40 layer 0  X       (3, 3)  0x001B KC_X
+ok  01:04:41 layer 0  C       (3, 4)  0x0006 KC_C
+ok  01:04:41 layer 0  V       (3, 5)  0x0019 KC_V
+ok  01:04:41 layer 0  B       (3, 6)  0x0005 KC_B
+ok  01:04:41 layer 0  N       (3, 7)  0x0011 KC_N
+ok  01:04:42 layer 0  M       (3, 8)  0x0010 KC_M
+ok  01:04:42 layer 0  ,       (3, 9)  0x0036 KC_COMM
+ok  01:04:42 layer 0  .       (3,10)  0x0037 KC_DOT
+ok  01:04:42 layer 0  /       (3,11)  0x0038 KC_SLSH
+ok  01:04:43 layer 0  RShift  (3,12)  0x00E5 KC_RSFT
+ok  01:04:43 layer 0  Fn      (3,14)  0x5221 
+ok  01:04:43 layer 0  LAlt    (4, 1)  0x00E2 KC_LALT
+ok  01:04:44 layer 0  L◇      (4, 2)  0x008B KC_INT5
+ok  01:04:44 layer 0  Space   (4, 7)  0x002C KC_SPC
+ok  01:04:44 layer 0  R◇      (4,11)  0x008A KC_INT4
+ok  01:04:45 layer 0  RAlt    (4,12)  0x00E6 KC_RALT
+ok  01:04:45 layer 0  Fn      (3,14)  0x5221 
+ok  01:04:45 layer 0  Esc     (0, 0)  0x0029 KC_ESC
+ok  01:04:46 layer 1  1       (0, 1)  0x003A KC_F1
+ok  01:04:46 layer 1  2       (0, 2)  0x003B KC_F2
+ok  01:04:47 layer 1  3       (0, 3)  0x003C KC_F3
+ok  01:04:47 layer 1  4       (0, 4)  0x003D KC_F4
+ok  01:04:47 layer 1  5       (0, 5)  0x003E KC_F5
+ok  01:04:48 layer 1  6       (0, 6)  0x003F KC_F6
+ok  01:04:48 layer 1  7       (0, 7)  0x0040 KC_F7
+ok  01:04:48 layer 1  8       (0, 8)  0x0041 KC_F8
+ok  01:04:48 layer 1  9       (0, 9)  0x0042 KC_F9
+ok  01:04:49 layer 1  0       (0,10)  0x0043 KC_F10
+ok  01:04:49 layer 1  -       (0,11)  0x0044 KC_F11
+ok  01:04:49 layer 1  =       (0,12)  0x0045 KC_F12
+ok  01:04:49 layer 1  \       (0,13)  0x0049 KC_INS
+ok  01:04:50 layer 1  `       (0,14)  0x004C KC_DEL
+ok  01:04:51 layer 0  Tab     (1, 0)  0x002B KC_TAB
+ok  01:04:51 layer 0  Q       (1, 1)  0x0014 KC_Q
+ok  01:04:51 layer 0  W       (1, 2)  0x001A KC_W
+ok  01:04:51 layer 0  E       (1, 3)  0x0008 KC_E
+ok  01:04:52 layer 0  R       (1, 4)  0x0015 KC_R
+ok  01:04:52 layer 0  T       (1, 5)  0x0017 KC_T
+ok  01:04:52 layer 0  Y       (1, 6)  0x001C KC_Y
+ok  01:04:52 layer 0  U       (1, 7)  0x0018 KC_U
+ok  01:04:53 layer 1  I       (1, 8)  0x0046 KC_PSCR
+ok  01:04:53 layer 1  O       (1, 9)  0x0047 KC_SCRL
+ok  01:04:53 layer 1  P       (1,10)  0x0048 KC_BRK
+ok  01:04:54 layer 1  [       (1,11)  0x0052 KC_UP
+ok  01:04:54 layer 0  ]       (1,12)  0x0030 KC_RBRC
+ok  01:04:54 layer 1  Delete  (1,14)  0x002A KC_BSPC
+ok  01:04:55 layer 0  Control (2, 0)  0x00E0 KC_LCTL
+ok  01:04:55 layer 0  A       (2, 1)  0x0004 KC_A
+ok  01:04:55 layer 0  S       (2, 2)  0x0016 KC_S
+ok  01:04:55 layer 0  D       (2, 3)  0x0007 KC_D
+ok  01:04:56 layer 0  F       (2, 4)  0x0009 KC_F
+ok  01:04:56 layer 0  G       (2, 5)  0x000A KC_G
+ok  01:04:56 layer 0  H       (2, 6)  0x000B KC_H
+ok  01:04:56 layer 0  J       (2, 7)  0x000D KC_J
+ok  01:04:57 layer 1  K       (2, 8)  0x004A KC_HOME
+ok  01:04:57 layer 1  L       (2, 9)  0x004B KC_PGUP
+ok  01:04:57 layer 1  ;       (2,10)  0x0050 KC_LEFT
+ok  01:04:57 layer 1  '       (2,11)  0x004F KC_RGHT
+ok  01:04:58 layer 0  Return  (2,14)  0x0028 KC_ENT
+ok  01:04:58 layer 0  LShift  (3, 0)  0x00E1 KC_LSFT
+ok  01:04:58 layer 0  Z       (3, 2)  0x001D KC_Z
+ok  01:04:59 layer 0  X       (3, 3)  0x001B KC_X
+ok  01:04:59 layer 0  C       (3, 4)  0x0006 KC_C
+ok  01:04:59 layer 0  V       (3, 5)  0x0019 KC_V
+ok  01:04:59 layer 0  B       (3, 6)  0x0005 KC_B
+ok  01:05:00 layer 0  N       (3, 7)  0x0011 KC_N
+ok  01:05:00 layer 0  M       (3, 8)  0x0010 KC_M
+ok  01:05:00 layer 1  ,       (3, 9)  0x004D KC_END
+ok  01:05:00 layer 1  .       (3,10)  0x004E KC_PGDN
+ok  01:05:01 layer 1  /       (3,11)  0x0051 KC_DOWN
+ok  01:05:01 layer 0  RShift  (3,12)  0x00E5 KC_RSFT
+ok  01:05:02 layer 0  LAlt    (4, 1)  0x00E2 KC_LALT
+ok  01:05:02 layer 0  L◇      (4, 2)  0x008B KC_INT5
+ok  01:05:02 layer 0  Space   (4, 7)  0x002C KC_SPC
+ok  01:05:03 layer 1  R◇      (4,11)  0x0078 KC_STOP
+ok  01:05:03 layer 0  RAlt    (4,12)  0x00E6 KC_RALT
+ok  01:05:09 layer 0  LShift  (3, 0)  0x00E1 KC_LSFT
+ok  01:05:09 layer 0  Return  (2,14)  0x0028 KC_ENT
+ok  01:05:09 layer 0  Return  (2,14)  0x0028 KC_ENT
+ok  01:05:10 layer 0  Return  (2,14)  0x0028 KC_ENT
+layer 0: 60 of 60 HHKB positions pressed
+layer 1: 27 of 60 HHKB positions pressed; missing: Esc Tab Q W E R T Y U ] Control A S D F G H J Return LShift Z X C V B N M RShift Fn LAlt L◇ Space RAlt
+mismatches: 0

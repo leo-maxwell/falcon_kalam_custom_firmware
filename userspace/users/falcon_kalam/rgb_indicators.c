@@ -200,10 +200,15 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
 // Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
 // directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
 // rgblight also bypasses its cap and brightness curve, so apply both here.
+// This is the first frame after the data pin is set up, and the first LED
+// lost it on the device (it showed yellow): hold the line low for a reset
+// period, then send the frame twice, so a garbled first frame is overwritten.
 void falcon_kalam_rgb_paint_bootloader(void) {
     rgb_t red = hsv_to_rgb((hsv_t){FK_RED, RGBLIGHT_LIMIT_VAL});
     ws2812_init();
+    wait_ms(1);
     ws2812_set_color_all(red.r, red.g, red.b);
+    ws2812_flush();
     ws2812_flush();
 }
 

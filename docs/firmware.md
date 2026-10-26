@@ -5,13 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 4** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 5** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `de8368b23702285b3e14cea226ad2f1f06b0205f5d8dc427d191fb15bd5b5d82` | 37,800 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `531c45cec130560b1b7653c891596fba1aec4791f7e62e95f94f589b5401b7fa` | 43,264 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `2e9282afc7c405ed8ec5f3bd455fc39dca8039814c43348123e626bd63f4a0bf` | 37,808 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `13cdd6fa7dc896302e3749db4b128bcae15107ec229a1b5dc7ea65675286f696` | 43,272 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -30,7 +30,7 @@ same feature code · **pending** = see devnotes.
 | USB identity | `9DD1:9D89`, bcdDevice `0x0001`, "Falcon" / "Falcon" (POLICY-NAMING), 500 mA, remote wakeup | same | = | ✓ |
 | HID interfaces | keyboard 6KRO, VIA, shared mouse/system/consumer, console; 1 ms | same | = (no NKRO report) | ✓ |
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | ✓ Caps Lock and input-source switching work on macOS, also after a replug |
-| Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | pending: full key test |
+| Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | ✓ all 60 keys (2026-10-27, dev console, `artifacts/dev_session_2026-10-27_keycheck.txt`) |
 | Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); HHK mode from the factory, as the Classic (§3) | same | new (stock: generic 60%) | pending |
 | Settings display (additions) | Fn+Ctrl+Shift+0 and the mode keys show the mode on LED 1 (HHK red, Mac blue, Win green) and SW3–SW5 on LEDs 2–4 (blue = on), first as in effect, then as after the next plug-in if different (§3) | same | new | pending |
 | Release number | `VIA_FIRMWARE_VERSION`, readable over VIA | same | new | pending |
