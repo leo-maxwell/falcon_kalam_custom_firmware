@@ -1,5 +1,5 @@
 #!/opt/homebrew/opt/qmk/libexec/bin/python
-"""Log USB arrivals/departures of the Falcon (bootloader and app) with timestamps.
+"""Log USB arrivals/departures of falcon_kalam (bootloader and app) with timestamps.
 
 Purely passive: it only lists the USB bus (no open, no requests). Start it,
 then unplug and replug the keyboard normally; Ctrl-C (or --seconds) to stop.
@@ -16,7 +16,7 @@ import time
 
 import usb.core
 
-WATCH = {(0x1EAF, 0x0003): 'bootloader (DFU)', (0x9DD1, 0x9D89): 'Falcon application'}
+WATCH = {(0x1EAF, 0x0003): 'bootloader (DFU)', (0x9DD1, 0x9D89): 'keyboard application (stock or falcon_kalam)'}
 
 
 def present():

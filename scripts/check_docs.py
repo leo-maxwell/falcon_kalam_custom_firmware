@@ -8,6 +8,8 @@
 4. docs/firmware.md states the current ship and dev SHA-256 and size from artifacts/.
 5. Device status (hashes of flashed images) appears only in docs/devnotes.md,
    and the current release hash only in docs/firmware.md (plus devnotes).
+6. Retired names (falcon_hs_r2, "Falcon HS R2", ...) appear nowhere except the
+   naming history in docs/policy.md (POLICY-NAMING).
 """
 
 import re
@@ -66,13 +68,13 @@ if not missing:
 # 4. release identity: both L2 variants (POLICY-VARIANTS)
 fw = (DOCS / 'firmware.md').read_text()
 hashes = []
-for variant in ('falcon', 'falcon_dev'):
-    sha_file = ROOT / 'artifacts' / ('falcon_hs_r2_%s.bin.sha256' % variant)
+for variant in ('ship', 'dev'):
+    sha_file = ROOT / 'artifacts' / ('falcon_kalam_%s.bin.sha256' % variant)
     if not sha_file.exists():
         fail('%s missing (run scripts/build.sh)' % sha_file.relative_to(ROOT))
         continue
     sha = sha_file.read_text().split()[0]
-    size = (ROOT / 'artifacts' / ('falcon_hs_r2_%s.bin' % variant)).stat().st_size - 16
+    size = (ROOT / 'artifacts' / ('falcon_kalam_%s.bin' % variant)).stat().st_size - 16
     hashes.append(sha)
     if sha in fw:
         ok('firmware.md %s hash = artifacts (%s…)' % (variant, sha[:8]))
@@ -91,6 +93,15 @@ for doc in DOCS.glob('*.md'):
     for sha in hashes:
         if sha in text or sha[:8] in text:
             fail('%s repeats a current image hash (belongs in firmware.md/devnotes.md)' % doc.name)
+
+# 6. POLICY-NAMING: retired names may appear only in the naming history (docs/policy.md).
+RETIRED = ('falcon_hs_r2', 'Falcon HS R2', 'hhkb_via', 'keymaps/falcon/', 'keymaps/falcon_dev')
+hits = sorted({'%s: %s' % (f.relative_to(ROOT), name) for f in files + sorted(DOCS.glob('*.md'))
+               for name in RETIRED if name in f.read_text(errors='ignore') and f not in (DOCS / 'policy.md', Path(__file__).resolve())})
+for h in hits:
+    fail('retired name outside the policy naming history: ' + h)
+if not hits:
+    ok('no retired names (POLICY-NAMING)')
 
 print('RESULT: %s' % ('PASS' if not failures else 'FAIL (%d)' % len(failures)))
 sys.exit(1 if failures else 0)

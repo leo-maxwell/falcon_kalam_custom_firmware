@@ -1,6 +1,6 @@
 # Hardware facts and conventions
 
-Facts about the physical Falcon HS R2 unit, as recovered from the stock image
+Facts about the physical falcon_kalam unit, as recovered from the stock image
 and the device. Every code-derived fact is re-checked on each build by
 `tools/analyze_vendor_firmware.py` (report: `artifacts/vendor_analysis.txt`).
 Addresses are flash addresses in the stock application (link base `0x08002000`).
@@ -12,7 +12,7 @@ independent evidence · **Inferred** = calculated from verified values ·
 ## 0. Provenance
 
 * Reported by the gifter (2026-10-26, not independently verified): a **clone** of
-  MatrixLAB's Falcon, made by the 迦蓝 (Jialan) team. Stock strings say "Falcon";
+  MatrixLAB's Falcon, made by the 迦蓝 team ("kalam" in this project's dev names, POLICY-NAMING). Stock strings say "Falcon";
   the VIA JSON says "Falcon_HS".
 * It is **not** compatible with the genuine MatrixLAB Falcon in QMK
   (`qmk_firmware/keyboards/matrix/falcon`): that one is an AVR ATmega32U4 with

@@ -2,16 +2,16 @@
 
 ## 1. Current images (POLICY-VARIANTS)
 
-Both are built from the same tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_hs_r2`
-(L1) + `userspace/` (L2: shared `users/falcon/` plus one keymap per variant).
+Both are built from the same tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam`
+(L1) + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per variant).
 Both are reproducible, also across days (`SOURCE_DATE_EPOCH` = the pinned QMK
 commit time).
 
 | Variant | Image | SHA-256 | Size (of 55,296 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_hs_r2_falcon.bin` | `faf2c16979cd9edbd9717878672bfcdfeebe7dd937c66fd80da490d6e15e6a96` | 36,084 B | the daily image |
-| **dev** | `artifacts/falcon_hs_r2_falcon_dev.bin` | `1aa56ea383dd8fe34a521d5e1b7035c84f70eec40302c380d993d58a721d184a` | 41,524 B | testing and diagnosis only; never the daily image |
-| (base) | `artifacts/falcon_hs_r2_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `6322403635075315940fe958441f26b985b0972c5f97ff5dd78bcd779768df0b` | 36,064 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `c7383224a62df2d4405fc4893959c868277b4a79f87ea34436bf912b777b2b79` | 41,504 B | testing and diagnosis only; never the daily image |
+| (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
 `docs/devnotes.md`.
@@ -26,16 +26,16 @@ feature code) · **pending** = see devnotes.
 | Feature | Ship | Dev | vs stock | Hardware |
 |---|---|---|---|---|
 | Platform | QMK 0.34.7, ChibiOS (pinned), GCC 8.5, LTO | same | + newer QMK | ✓ 2026-10-26 |
-| USB identity | `9DD1:9D89`, bcdDevice `0x0001`, "Falcon" / "Falcon HS R2", 500 mA, remote wakeup | same | = (product string differs) | ✓ 2026-10-26 |
+| USB identity | `9DD1:9D89`, bcdDevice `0x0001`, "Falcon" / "Falcon" (POLICY-NAMING), 500 mA, remote wakeup | same | = | ✓ 2026-10-26 |
 | HID interfaces | keyboard 6KRO, VIA, shared mouse/system/consumer, console; 1 ms | same | = (no NKRO report) | ✓ 2026-10-26 |
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | Caps Lock and input switching OK (user, 2026-10-26) |
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | layout settled 2026-10-26; full key test pending |
 | Keymap | HHKB base + HHKB Fn (§3), 4 VIA layers | same | + (stock: generic 60%) | pending |
-| VIA | protocol `0x000D`, 4 layers, 16 macros (383-byte buffer), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_probe.py matrix` work) | + | ✓ 2026-10-26 (probe) |
+| VIA | protocol `0x000D`, 4 layers, 16 macros (383-byte buffer), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ 2026-10-26 (probe) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU | same | = | ✓ 2026-10-26 |
 | Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader. All other combos type normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, Caps/lock, E, M, C, N, Z, `` ` ``, 0–9, F1–F10) | = (ship: safer subset) | pending |
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
-| Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_probe.py dump-bootloader`) | new | ✓ 2026-10-26 |
+| Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ 2026-10-26 |
 | Caps Lock LED | A10, active-low | same | = | pending |
 | RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked (`policy.md` §2.1); effects disabled (they remain in L1); Fn+Z = white base on/off; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 2 KB at `0x0800F800`, flash size pinned | same | + | pending (persistence) |

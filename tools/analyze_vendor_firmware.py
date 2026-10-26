@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-derive every hardware fact used by the Falcon HS R2 port from the
+"""Re-derive every hardware fact used by the falcon_kalam port from the
 manufacturer firmware, its DFU readback and the vendor VIA JSON.
 
 Each check states the address it inspects, the bytes it expects, and why.
@@ -319,7 +319,7 @@ def main():
     ap.add_argument('--report', type=Path, help='also write the report to this file')
     args = ap.parse_args()
     c = Checker()
-    c.lines.append('# Falcon HS R2 vendor firmware analysis')
+    c.lines.append('# falcon_kalam stock firmware analysis')
     analyse(c)
     c.lines.append('')
     c.lines.append('RESULT: %s (%d failure%s)' % ('PASS' if c.failures == 0 else 'FAIL', c.failures, '' if c.failures == 1 else 's'))

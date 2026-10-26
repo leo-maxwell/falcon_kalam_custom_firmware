@@ -7,7 +7,7 @@ Commands marked **[WRITES DEVICE]** change the keyboard and need an approval
 
 Prerequisites (installed): Homebrew `arm-none-eabi-gcc@8` (8.5.0) and
 `arm-none-eabi-binutils` (2.41), keg-only, put on `PATH` by the scripts
-(override with `FALCON_GCC_BIN` / `FALCON_BINUTILS_BIN`); QMK CLI 1.1.8;
+(override with `FALCON_KALAM_GCC_BIN` / `FALCON_KALAM_BINUTILS_BIN`); QMK CLI 1.1.8;
 GNU Make 3.81; Python 3 (standard library); rsync, shasum, dfu-util 0.11,
 dfu-suffix. No network access is needed.
 
@@ -25,7 +25,7 @@ scripts/negative_tests.sh
 2. checks `originals/SHA256SUMS` and re-runs the stock analysis;
 3. checks the QMK pin, its submodules, a clean tree, and POLICY-QMK-LATEST offline;
 4. stages L1 and runs `qmk lint`;
-5. builds base (`falcon_hs_r2:default`), ship (`falcon_hs_r2:falcon`) and dev (`falcon_hs_r2:falcon_dev`) from clean with `SKIP_VERSION=yes LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=<QMK commit time>`, and asserts each variant's keymap comes from its `userspace/` directory;
+5. builds base (`falcon_kalam:default`), ship (`falcon_kalam:ship`) and dev (`falcon_kalam:dev`) from clean with `SKIP_VERSION=yes LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=<QMK commit time>`, and asserts each variant's keymap comes from its `userspace/` directory;
 6. with `--twice`, rebuilds ship and dev and requires identical hashes;
 7. verifies the three images (`verification_base.txt`, `verification.txt` = ship, `verification_dev.txt`), writes `feature_parity.txt` (stock vs ship), and runs `check_docs.py`.
 
@@ -35,8 +35,8 @@ FLASHREAD, `VIA_INSECURE` and debug traces (POLICY-VARIANTS).
 
 ## 2. Flash
 
-**Approval** (in chat or `devnotes.md`): the variant (`falcon_hs_r2_falcon.bin`
-= ship, or `falcon_hs_r2_falcon_dev.bin` = dev for testing), its full SHA-256,
+**Approval** (in chat or `devnotes.md`): the variant (`falcon_kalam_ship.bin`
+= ship, or `falcon_kalam_dev.bin` = dev for testing), its full SHA-256,
 and the decisions on any open **HR** problems. The daily image is always ship.
 
 1. Offline: `cd originals && shasum -a 256 -c SHA256SUMS`; `scripts/qmk_policy.sh --online`; `scripts/build.sh --twice`; `scripts/negative_tests.sh`; all reports `RESULT: PASS`; `scripts/check_docs.py` passes; the hash equals the approved one.
@@ -45,12 +45,12 @@ and the decisions on any open **HR** problems. The daily image is always ship.
    ```bash
    dfu-util -d 1EAF:0003 -a 2 -U build/readback_pre_flash.bin -Z 57344
    ```
-4. **[WRITES DEVICE]** flash the approved variant, alt 2 only (dev: `falcon_hs_r2_falcon_dev.bin`):
+4. **[WRITES DEVICE]** flash the approved variant, alt 2 only (dev: `falcon_kalam_dev.bin`):
    ```bash
-   dfu-util -d 1EAF:0003 -a 2 -D artifacts/falcon_hs_r2_falcon.bin -R
+   dfu-util -d 1EAF:0003 -a 2 -D artifacts/falcon_kalam_ship.bin -R
    ```
    A `LIBUSB_ERROR_TIMEOUT` on reset is normal. The app starts by itself.
-5. Check `9DD1:9D89` "Falcon HS R2" enumerates, then run `tools/falcon_probe.py info`.
+5. Check `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info`.
 6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU; read back and compare (step 7); replug normally.
 7. Verify the write (read-only):
    ```bash
@@ -61,7 +61,7 @@ and the decisions on any open **HR** problems. The daily image is always ship.
 
 ## 3. Hardware test procedures
 
-* **Probe** (VIA, read-only): `tools/falcon_probe.py info | dump-keymap OUT.json`. `matrix` works on stock and dev (not ship, problems L1); `dump-bootloader DIR` works on dev only (FLASHREAD).
+* **Probe** (VIA, read-only): `tools/falcon_kalam_probe.py info | dump-keymap OUT.json`. `matrix` works on stock and dev (not ship, problems L1); `dump-bootloader DIR` works on dev only (FLASHREAD).
 * **Console** (keep a listener running):
   ```bash
   qmk console -t -d 9DD1:9D89
@@ -70,7 +70,7 @@ and the decisions on any open **HR** problems. The daily image is always ship.
   X = matrix print, K = keyboard reports. Turn them off in reverse order. Dev
   adds traces (key actions, EEPROM, scan rate) while debug is on, the full
   Command set.
-* **VIA**: load `via/falcon_hs_r2.json` (both variants).
+* **VIA**: load `via/falcon_kalam.json` (both variants).
 * **Passive USB log**: `tools/usb_watch.py --seconds 60 --log FILE`.
 
 ## 4. Recovery

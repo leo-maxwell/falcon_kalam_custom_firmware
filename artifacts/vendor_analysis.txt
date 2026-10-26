@@ -1,4 +1,4 @@
-# Falcon HS R2 vendor firmware analysis
+# falcon_kalam stock firmware analysis
 
 ## 1. Artifact integrity
   [PASS] device_dump_2026-10-26/bootloader_0x08000000.bin sha256 55dce2dd777c7a8286295d4f5920c3d4a815506771f1fafb5e541845695933cf

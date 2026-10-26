@@ -1,21 +1,21 @@
-# Falcon HS R2 firmware verification: falcon_hs_r2_falcon.bin (profile: release)
+# falcon_kalam firmware verification: falcon_kalam_ship.bin (profile: release)
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0xC5CE5BD9 valid
-    file 36100 bytes, payload 36084 bytes
+  [PASS] DFU suffix CRC32 0x8922F4FB valid
+    file 36080 bytes, payload 36064 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800A78C inside application flash
-  [PASS] LOAD lma 0x0800A78C-0x0800ACF4 inside application flash
+  [PASS] LOAD lma 0x08002000-0x0800A778 inside application flash
+  [PASS] LOAD lma 0x0800A778-0x0800ACE0 inside application flash
   [PASS] RAM segment 0x20000C00-0x20001C50 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800ACF4 (< 0x0800F800)
+  [PASS] image ends at 0x0800ACE0 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 36084 / 55296 bytes (65.3%), 19212 bytes free
+    application flash used 36064 / 55296 bytes (65.2%), 19232 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -28,18 +28,22 @@
 
 ## 4. USB / HID
   [PASS] device descriptor USB 2.0 / EP0 64 / 9DD1:9D89 / bcdDevice 0x0001 (same as vendor)
+  [PASS] POLICY-NAMING: USB manufacturer and product string descriptors are both "Falcon"
+  [PASS] POLICY-NAMING: no dev or retired name in USB strings
+  [PASS] POLICY-NAMING: keyboard.json keyboard_name and manufacturer are "Falcon"
+  [PASS] POLICY-NAMING: falcon_kalam.json name is "Falcon"
   [PASS] raw HID usage page 0xFF60 / usage 0x61 (VIA) present
-  [PASS] compiler flags read from falcon_hs_r2_falcon.cflags.txt
+  [PASS] compiler flags read from falcon_kalam_ship.cflags.txt
   [PASS] POLICY-NKRO: no keyboard bitmap (NKRO) report in any HID descriptor
   [PASS] POLICY-NKRO: no NKRO code (at most the empty send_nkro stub, 2 bytes, bx lr): ['send_nkro']
   [PASS] POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags
-  [PASS] keymap comes from the userspace variant keymaps/falcon
+  [PASS] keymap comes from the userspace variant keymaps/ship
   [PASS] POLICY-PARITY: HID console interface (0xFF31) present, as in stock
-  [PASS] POLICY-RGB: indicator layer table (falcon_rgb_layers) linked
+  [PASS] POLICY-RGB: indicator layer table (falcon_kalam_rgb_layers) linked
   [PASS] POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)
-  [PASS] POLICY-RGB: falcon_hs_r2.json has no lighting menu
+  [PASS] POLICY-RGB: falcon_kalam.json has no lighting menu
   [PASS] POLICY-VARIANTS ship: no FLASHREAD handler (via_command_kb absent)
-  [PASS] POLICY-VARIANTS ship: -DFALCON_FLASHREAD_ENABLE absent
+  [PASS] POLICY-VARIANTS ship: -DFALCON_KALAM_FLASHREAD_ENABLE absent
   [PASS] POLICY-VARIANTS ship: -DKEYCODE_STRING_ENABLE absent
   [PASS] POLICY-VARIANTS ship: -DDEBUG_MATRIX_SCAN_RATE absent
   [PASS] POLICY-VARIANTS ship: no ACTION_DEBUG trace strings
@@ -74,8 +78,8 @@
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions
   [PASS] LAYOUT_60_hhkb is the first (default) layout
-  [PASS] falcon_hs_r2.json: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb
-  [PASS] falcon_hs_r2.json: same matrix positions as the vendor VIA JSON
+  [PASS] falcon_kalam.json: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb
+  [PASS] falcon_kalam.json: same matrix positions as the vendor VIA JSON
   [PASS] Caps Lock LED on A10, active-low, compiled in (stock: PA10 active-low)
   [PASS] WS2812 on A1, 4 LEDs (vendor: PA1, 4 LEDs, GRB)
 

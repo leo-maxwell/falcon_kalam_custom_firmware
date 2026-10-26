@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Reproducible, offline build of the Falcon HS R2 firmware.
+# Reproducible, offline build of the falcon_kalam firmware.
 #
 # Layers and variants (docs/policy.md):
-#   base  keyboards/falcon_hs_r2                normal QMK keyboard, keymap "default" (reference)
-#   ship  userspace/.../keymaps/falcon          daily image (POLICY-VARIANTS)
-#   dev   userspace/.../keymaps/falcon_dev      every debug feature; both share userspace/users/falcon
+#   base  keyboards/falcon_kalam                normal QMK keyboard, keymap "default" (reference)
+#   ship  userspace/.../keymaps/ship          daily image (POLICY-VARIANTS)
+#   dev   userspace/.../keymaps/dev      every debug feature; both share userspace/users/falcon_kalam
 #
 #   scripts/build.sh            build + verify all three, write the stock/ship parity table
 #   scripts/build.sh --twice    additionally rebuild ship and dev from clean and
@@ -15,18 +15,18 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QMK="$ROOT/qmk_firmware"
-KB=falcon_hs_r2
+KB=falcon_kalam
 BASE_KM=default
-RELEASE_KM=falcon        # ship variant (POLICY-VARIANTS)
-DEV_KM=falcon_dev        # dev variant: every debug feature, never the daily image
+RELEASE_KM=ship          # ship variant (POLICY-VARIANTS)
+DEV_KM=dev               # dev variant: every debug feature, never the daily image
 ART="$ROOT/artifacts"
 LOG="$ART/build.log"
 TWICE=no
 [[ "${1:-}" == "--twice" ]] && TWICE=yes
 
 # Pinned toolchain (Homebrew, keg-only) -- prepend so nothing else on PATH wins.
-GCC_BIN="${FALCON_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}"
-BINUTILS_BIN="${FALCON_BINUTILS_BIN:-/opt/homebrew/opt/arm-none-eabi-binutils/bin}"
+GCC_BIN="${FALCON_KALAM_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}"
+BINUTILS_BIN="${FALCON_KALAM_BINUTILS_BIN:-/opt/homebrew/opt/arm-none-eabi-binutils/bin}"
 export PATH="$GCC_BIN:$BINUTILS_BIN:$PATH"
 export LC_ALL=C TZ=UTC QMK_HOME="$QMK"
 export QMK_USERSPACE="$ROOT/userspace"   # policy layer (QMK External Userspace)
@@ -137,14 +137,14 @@ step "Verify dev image (POLICY-VARIANTS: every debug feature present)"
 python3 -I "$ROOT/scripts/verify_firmware.py" --profile dev \
     --bin "$ART/$DEV_NAME.bin" --elf "$ART/$DEV_NAME.elf" \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
-    --via-json "$ROOT/via/falcon_hs_r2.json" \
+    --via-json "$ROOT/via/falcon_kalam.json" \
     --report "$ART/verification_dev.txt" | tail -1
 
 step "Verify ship image (POLICY-VARIANTS: no debug-only features; NKRO absent, VIA present)"
 python3 -I "$ROOT/scripts/verify_firmware.py" --profile release \
     --bin "$ART/$NAME.bin" --elf "$ART/$NAME.elf" \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
-    --via-json "$ROOT/via/falcon_hs_r2.json" \
+    --via-json "$ROOT/via/falcon_kalam.json" \
     --report "$ART/verification.txt"
 
 step "Stock vs release feature parity (from the binaries)"

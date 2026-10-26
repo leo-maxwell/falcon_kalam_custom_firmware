@@ -22,7 +22,7 @@ delete it here.
    - Caps Lock trace: Shift+Shift+D, then K, then hold Fn+Tab → Caps stays in the report for the whole hold;
    - RGB channels and colour order: Shift+Shift+D → note which two LEDs turn yellow (channel A); the other two are channel B. Check that red, yellow, magenta, blue and green look right (this also proves the GRB order); adjust `rgb_indicators.h` only if another split reads better (I20);
    - RGB indicators (POLICY-RGB): white base; Shift+Shift+D → yellow on channel A; then K → magenta; layer lock → green on B; blue while unplugged-and-replugged before enumeration; Shift+Shift+B → **red, and does it stay red in DFU** (WS2812 latch, unverified); Bootmagic → orange blinks on the next boot (settings reset);
-   - persistence: change a key in VIA, replug, compare `falcon_probe.py dump-keymap` with `artifacts/release_keymap_baseline.json`, then revert;
+   - persistence: change a key in VIA, replug, compare `falcon_kalam_probe.py dump-keymap` with `artifacts/release_keymap_baseline.json`, then revert;
    - RGB off while the Mac sleeps;
    - spot-check the dev traces (action, wear-leveling, scan rate) in `qmk console`.
 2. **Ship image acceptance**: flash it, run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline verification of a built Falcon HS R2 image. Flashes nothing.
+"""Offline verification of a built falcon_kalam image. Flashes nothing.
 
 Checks that the image fits between the bootloader and the EEPROM pages, that
 the binary is exactly the ELF's load image, that NKRO is absent and VIA is
@@ -72,10 +72,10 @@ def main():
     args = ap.parse_args()
 
     c = vendor.Checker()
-    c.lines.append('# Falcon HS R2 firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
+    c.lines.append('# falcon_kalam firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
     release = args.profile in ('release', 'dev')   # built from the L2 configuration
     ship, dev = args.profile == 'release', args.profile == 'dev'
-    keymap_dir = {'release': 'falcon', 'dev': 'falcon_dev'}.get(args.profile)
+    keymap_dir = {'release': 'ship', 'dev': 'dev'}.get(args.profile)
     kb = json.loads(args.keyboard_json.read_text())
     raw = args.bin.read_bytes()
 
@@ -104,8 +104,8 @@ def main():
         parts = line.split()
         if len(parts) == 3:
             syms[parts[2]] = int(parts[0], 16)
-    c.check(syms.get('__falcon_app_start__') == APP_START, 'linker script app start 0x%08X' % syms.get('__falcon_app_start__', 0))
-    c.check(syms.get('__falcon_app_limit__') == EEPROM_START, 'linker script app limit 0x%08X == EEPROM start' % syms.get('__falcon_app_limit__', 0))
+    c.check(syms.get('__falcon_kalam_app_start__') == APP_START, 'linker script app start 0x%08X' % syms.get('__falcon_kalam_app_start__', 0))
+    c.check(syms.get('__falcon_kalam_app_limit__') == EEPROM_START, 'linker script app limit 0x%08X == EEPROM start' % syms.get('__falcon_kalam_app_limit__', 0))
 
     segs = []
     for line in run('arm-none-eabi-readelf', '-lW', str(args.elf)).splitlines():
@@ -147,6 +147,14 @@ def main():
     vid, pid = int(kb['usb']['vid'], 16), int(kb['usb']['pid'], 16)
     devdesc = struct.pack('<BBHBBBBHHH', 18, 1, 0x0200, 0, 0, 0, 64, vid, pid, 0x0001)
     c.check(len(img.find(devdesc)) == 1, 'device descriptor USB 2.0 / EP0 64 / %04X:%04X / bcdDevice 0x0001 (same as vendor)' % (vid, pid))
+    # POLICY-NAMING: users see "Falcon"; dev names (falcon_kalam) and retired names never reach USB strings.
+    falcon_str = bytes([2 + 2 * len('Falcon'), 3]) + 'Falcon'.encode('utf-16le')
+    c.check(len(img.find(falcon_str)) == 2, 'POLICY-NAMING: USB manufacturer and product string descriptors are both "Falcon"')
+    leaked = [n for n in ('kalam', 'falcon_', 'HS R2') if n.encode('utf-16le') in payload]
+    c.check(not leaked, 'POLICY-NAMING: no dev or retired name in USB strings%s' % (': %s' % leaked if leaked else ''))
+    c.check(kb.get('keyboard_name') == 'Falcon' and kb.get('manufacturer') == 'Falcon', 'POLICY-NAMING: keyboard.json keyboard_name and manufacturer are "Falcon"')
+    if args.via_json:
+        c.check(json.loads(args.via_json.read_text()).get('name') == 'Falcon', 'POLICY-NAMING: %s name is "Falcon"' % args.via_json.name)
     via_hid = bool(img.find(bytes.fromhex('0660ff0961')))
     c.check(via_hid == release, 'raw HID usage page 0xFF60 / usage 0x61 (VIA) %s' % ('present' if release else 'absent'))
     nkro_bitmap = re.compile(rb'\x05\x07\x19\x00\x29[\x00-\xff]\x15\x00\x25\x01')
@@ -168,19 +176,19 @@ def main():
         c.check(nk_syms == [] or (nk_syms == ['send_nkro'] and stub_ok),
                 'POLICY-NKRO: no NKRO code (at most the empty send_nkro stub, 2 bytes, bx lr): %s' % nk_syms)
         c.check('-DNKRO_ENABLE' not in flags, 'POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags')
-        c.check(any('userspace/keyboards/falcon_hs_r2/keymaps/%s/keymap.c' % keymap_dir in f for f in flags),
+        c.check(any('userspace/keyboards/falcon_kalam/keymaps/%s/keymap.c' % keymap_dir in f for f in flags),
                 'keymap comes from the userspace variant keymaps/%s' % keymap_dir)
         want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
                 '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
         c.check(bool(img.find(bytes.fromhex('0631ff0974'))), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
         # POLICY-VARIANTS: debug-only features are present in dev and absent in ship.
         flashread = any(n.split('.')[0] == 'via_command_kb' for n in syms)
-        debug_flags = ('-DFALCON_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
+        debug_flags = ('-DFALCON_KALAM_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
         traces = {'ACTION_DEBUG': b'action_exec: start', 'WEAR_LEVELING_DEBUG_OUTPUT': b'Backing store: ',
                   'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
         # POLICY-RGB: status-indicator module in both variants; decorative effects in neither.
         all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
-        c.check(any(n.split('.')[0] == 'falcon_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_rgb_layers) linked')
+        c.check(any(n.split('.')[0] == 'falcon_kalam_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_kalam_rgb_layers) linked')
         c.check(all_modes not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
         if args.via_json:
             menus = json.loads(args.via_json.read_text()).get('menus', [])

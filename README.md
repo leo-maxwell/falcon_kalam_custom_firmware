@@ -1,8 +1,10 @@
-# Falcon HS R2 — independent QMK firmware
+# falcon_kalam — independent QMK firmware
 
-Independent, reproducible QMK firmware for the Falcon HS R2 (GD32F103C8T6,
+Independent, reproducible QMK firmware for **falcon_kalam**: the 迦蓝 clone of
+MatrixLAB's Falcon (GD32F103C8T6,
 STM32duino DFU bootloader, USB `9DD1:9D89`): HHKB layout, VIA, stock feature
 parity, NKRO disabled by configuration for macOS.
+Users see it as "Falcon"; the naming rules are in `docs/policy.md` (POLICY-NAMING).
 
 **Current status:** [`docs/devnotes.md`](docs/devnotes.md).
 
@@ -25,6 +27,6 @@ parity, NKRO disabled by configuration for macOS.
 scripts/build.sh --twice
 ```
 
-Two images are built (POLICY-VARIANTS): **ship** `artifacts/falcon_hs_r2_falcon.bin`
-for daily use, and **dev** `artifacts/falcon_hs_r2_falcon_dev.bin` with every debug
+Two images are built (POLICY-VARIANTS): **ship** `artifacts/falcon_kalam_ship.bin`
+for daily use, and **dev** `artifacts/falcon_kalam_dev.bin` with every debug
 feature, for testing only. Flash only by following `docs/operations.md` §2.
