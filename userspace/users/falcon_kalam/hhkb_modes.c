@@ -9,14 +9,14 @@
 // select HHK), until the next power-on; SW3-SW5 change keys on top of the
 // keymap, as the Classic's DIP switches act on its stored keymap. All are off
 // from the factory (HHK mode). This unit has no switches, so they are
-// virtual: saved in EEPROM and toggled with Fn+Control+Shift+1..5, effective
-// at once.
+// virtual: saved in EEPROM and flipped with Fn+Control+Shift+1..5. As on the
+// Classic, a flip takes effect at the next plug-in.
 
 #include "hhkb_modes.h"
 #include "rgb_indicators.h"
 #include "user_config.h"
 
-static uint8_t dip; // copy of the saved virtual DIP switches
+static uint8_t dip; // the virtual DIP switches in effect: as saved at power-on
 
 // SW1/SW2 -> base layer. ON/ON is not a setting the manual defines; it acts as HHK mode.
 static uint8_t dip_mode(void) {
@@ -44,19 +44,17 @@ void falcon_kalam_hhkb_init(void) {
     set_mode(dip_mode());
 }
 
-static void toggle_dip(uint8_t index) {
+// Flips the saved switch only; `dip` keeps the power-on setting until the
+// next plug-in, as the Classic reads its switches only at power-on.
+static void flip_dip(uint8_t index) {
     falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
-    dip ^= 1u << index;
-    cfg.dip = dip;
+    cfg.dip ^= 1u << index;
     eeconfig_update_user(cfg.raw);
-    if (index < 2) {
-        set_mode(dip_mode()); // SW1/SW2: the Classic applies them at the next plug-in; here at once
-    }
-    falcon_kalam_rgb_dip_feedback(dip & (1u << index));
+    falcon_kalam_rgb_dip_feedback(cfg.dip & (1u << index));
 }
 
 // What a held key was turned into at press, so the release matches it even if
-// a switch or the mode changes in between. 0 = not substituted.
+// the mode changes in between. 0 = not substituted.
 #define HELD_AS_FN 0x8000u // | Fn layer: the key acts as Fn (SW4)
 static uint16_t held[MATRIX_ROWS][MATRIX_COLS];
 
@@ -107,7 +105,7 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
         uint16_t legend = keymap_key_to_keycode(current_mode(), key);
         if (get_mods() & MOD_MASK_SHIFT) {
             if (legend >= KC_1 && legend <= KC_5) {
-                toggle_dip(legend - KC_1);
+                flip_dip(legend - KC_1);
                 return false;
             }
         } else if (legend == KC_M) {

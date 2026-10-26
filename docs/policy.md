@@ -52,7 +52,7 @@ test.
 |---|---|---|---|---|
 | 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
 | 2 | settings were reset | orange, 3 blinks at boot | all | `eeconfig_init_user` |
-| 3 | virtual DIP switch toggled | dark blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
+| 3 | virtual DIP switch flipped | dark blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
 | 4 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
 | 5 | debug output on | yellow | A | Shift+Shift+D / X |
 | 6 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
@@ -111,13 +111,13 @@ copy, the closest equivalent is used, and every deviation is listed here.
 | Keymap | the Classic's six layers in its own storage order: HHK base/Fn, Mac base/Fn, Win base/Fn; unsupported Fn keys send the plain key, as on the Classic |
 | HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
 | Mode keys | Fn+Control+M → Mac mode; Fn+Control+W → Win mode, or HHK mode when SW1/SW2 select HHK; effective until the next plug-in, as SW1/SW2 decide the power-on mode |
-| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, toggled with Fn+Control+Shift+1…5, acknowledged by a dark blink (POLICY-RGB). SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
+| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, flipped with Fn+Control+Shift+1…5 (acknowledged by a dark blink, POLICY-RGB) and, as on the Classic, effective from the next plug-in. SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
 
-Deviations, each because a copy is impossible or conflicts with a policy:
+Deviations, each because a copy is impossible or conflicts with a policy;
+all are accepted:
 
 | Deviation | Reason |
 |---|---|
-| Virtual DIP changes apply at once; the Classic applies them at the next plug-in | there is nothing to unplug for; waiting would only hide the effect |
 | SW1/SW2 ON/ON acts as HHK mode | the manual defines no such setting |
 | No SW6 (power saving); the keyboard can always wake the host, as with SW6 on (the Classic ships with SW6 off: a key press cannot wake the host) | QMK's wake-up check (`suspend_wakeup_condition()`) has no configuration hook; emulating SW6 would mean patching QMK (POLICY-UPSTREAM) |
 | USB identity `9DD1:9D89` "Falcon", not PFU's `04FE:0020` "HHKB-Classic" | the board must not pass as PFU's product (POLICY-NAMING); VIA matches on our ID |
@@ -208,15 +208,16 @@ count from that array.
 is QMK's (non-persistent) default layer. At post-init the virtual SW1/SW2 pick
 it; the mode keys change it until the next plug-in. A press with any Fn layer
 on and Control held is judged by its **base-layer** keycode (on the Fn layers
-M is keypad minus, 1–5 are F1–F5): M and W switch mode, Shift+1…5 toggle a
-switch; these presses are swallowed. SW3–SW5 act only on keys that resolve on
+M is keypad minus, 1–5 are F1–F5): M and W switch mode, Shift+1…5 flip a
+saved switch; these presses are swallowed. The switches in effect are read
+once at post-init, so a flip waits for the next plug-in, as on the Classic. SW3–SW5 act only on keys that resolve on
 a base layer (`layer_switch_get_layer`), so Fn+\` stays Delete: SW4 turns the
 left ◇ (`KC_LGUI`, or `KC_INT5` in HHK mode) into the mode's Fn layer, SW5
 swaps Alt with the mode's ◇ code, SW3 turns base-layer Delete into Backspace
 outside Mac mode. SW4 is applied before SW5, so with both on the left Alt
 becomes ◇. Each substituted key's replacement is stored per matrix position
-at press and replayed at release, so a release matches its press even if a
-switch or the mode changed in between. A Fn layer held during a mode switch
+at press and replayed at release, so a release matches its press even if the
+mode changed in between. A Fn layer held during a mode switch
 belongs to the old mode until released; QMK caches each key's source layer,
 so the `MO()` release still turns it off.
 

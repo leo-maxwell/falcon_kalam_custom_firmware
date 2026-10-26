@@ -23,9 +23,10 @@ owner's decision. Closed items move to the ledger as one line.
 | L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |
 | L6 | The first boot of an image with a new settings schema resets the configuration, VIA keymaps and macros included (schema stamp, `policy.md` §5). VIA's own reset follows only QMK updates (pinned build date) |
 | L7 | After a CPU fault the keyboard drops into DFU and stops typing until replugged. The LEDs keep their last colour (the fault handler must not touch them) |
-| L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting; Fn+Ctrl+M (session) or SW2 (saved) selects Mac mode |
+| L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting; Fn+Ctrl+M (until the next plug-in) or SW2 (from the next plug-in) selects Mac mode |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
-| L10 | The virtual DIP switches have no display: their state shows only as the blink when one is toggled, and through the keys' behaviour (I23) |
+| L10 | The virtual DIP switches have no display: a flip shows only as its blink (1 = off, 2 = on), and the setting through the keys' behaviour after the next plug-in (I23) |
+| L11 | Deviations from the HHKB Classic, all accepted (`policy.md` §2.3). Noticeable in use: no SW6, so a key press always wakes a sleeping host; 6KRO only until upstream fixes NKRO on macOS (POLICY-NKRO, I8); SW1/SW2 both on acts as HHK mode |
 
 ## Ledger (closed)
 
@@ -43,6 +44,7 @@ owner's decision. Closed items move to the ledger as one line.
 | R11 | 2026-10-26 | `scripts/flash.sh` accepts only `ship` or `dev`, with the full approved SHA-256 matching the file, its `.sha256` record and `firmware.md`; negative tests prove the refusals |
 | R12 | 2026-10-26 | console + Command stay in ship for stock parity; POLICY-RGB shows magenta on channel A while keystrokes go to the console |
 | R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). A measurement stays optional (I4) |
+| R16 | 2026-10-27 | deviations from the HHKB Classic settled: each is listed with its reason in `policy.md` §2.3 and accepted (L11). Virtual switch flips take effect at the next plug-in and the factory setting is HHK mode, as on the Classic |
 | B2 | 2026-10-26 | `falcon_kalam_probe.py matrix` read VIA ≥ 12 replies one byte early; fixed; `decode-log` re-maps the affected log |
 | B3 | 2026-10-26 | builds were reproducible only within one day: QMK Command embeds `__DATE__`. Fixed: `SOURCE_DATE_EPOCH` = pinned QMK commit time; the verifier checks the embedded date. Images `9b61141e…` (flashed) and `dd580803…` carry their build-day date; nothing else differs |
 | B4 | 2026-10-26 | a macOS `.DS_Store` in `keyboards/falcon_kalam/` was staged into QMK and failed `qmk lint`; staging now uses `rsync --delete-excluded --exclude .DS_Store` |

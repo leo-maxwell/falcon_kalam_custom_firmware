@@ -22,7 +22,7 @@ void falcon_kalam_rgb_task(void);                          // housekeeping_task_
 void falcon_kalam_rgb_shutdown(bool jump_to_bootloader);   // shutdown_user
 void falcon_kalam_rgb_note_settings_reset(void);           // eeconfig_init_user
 void falcon_kalam_rgb_paint_bootloader(void);              // bootmagic_reset_eeprom
-void falcon_kalam_rgb_dip_feedback(bool on);               // hhkb_modes.c: virtual DIP switch toggled
+void falcon_kalam_rgb_dip_feedback(bool on);               // hhkb_modes.c: virtual DIP switch flipped
 
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
 // Dev only (FLASHREAD): brief all-LED blink when a request is served.

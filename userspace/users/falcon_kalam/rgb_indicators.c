@@ -134,7 +134,7 @@ void falcon_kalam_rgb_paint_bootloader(void) {
     ws2812_flush();
 }
 
-// POLICY-HHKB virtual DIP switch toggled: the white base blinks dark.
+// POLICY-HHKB virtual DIP switch flipped: the white base blinks dark.
 void falcon_kalam_rgb_dip_feedback(bool on) {
     rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DIP, 150, on ? 2 : 1);
 }

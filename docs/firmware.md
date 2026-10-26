@@ -9,8 +9,8 @@ the pinned QMK commit time).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `1e1d37e30b83b78ffc354fc44e28a3990c28a918b0c49f45ab6672f943910f28` | 37,208 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `a35092b0c687b37af6552b19fe18ddd3be6fe76d07b65cf4d3e6afb601d8b60e` | 42,676 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `5fc5deb33ad90bccb99bf9364fb5480559b04c4c1e1d4fe71054e6bd0272f681` | 37,184 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `b6480b715efd8177cc47f9178d3f3495014be7efe6d9171c0b52a6cddd03c295` | 42,660 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -38,7 +38,7 @@ same feature code · **pending** = see devnotes.
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
 | Caps Lock LED | A10, active-low | same | = | pending |
-| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch toggled (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
+| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |
@@ -66,7 +66,8 @@ Fn, every mode:  1–= F1–F12  \ Ins  ` Del  I PrtSc  O ScrLk  P Pause
   Win adds:  Tab Caps  Delete Backspace  H KP*  J KP/  N KP+  M KP-
 
 Mode keys (until the next plug-in):  Fn+Ctrl+M Mac · Fn+Ctrl+W Win (HHK when SW1/SW2 select HHK)
-Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 toggles SW1…SW5; dark blink ×1 = off, ×2 = on
+Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 flips SW1…SW5; dark blink ×1 = off, ×2 = on;
+                                     effective from the next plug-in, as on the Classic
   SW1/SW2  power-on mode: OFF/OFF HHK (factory) · ON/OFF Win · OFF/ON Mac · ON/ON acts as HHK
   SW3      Delete sends Backspace (Win/HHK)
   SW4      left ◇ = Fn
@@ -80,7 +81,7 @@ shows the unchanged layers. Positions outside the HHKB layout are `KC_NO` and
 can be assigned in VIA; all six VIA layers belong to the modes. An EEPROM
 reset restores the factory switches (all off: HHK mode). On a Mac, HHK mode
 has no Command key (◇ = Muhenkan/Henkan): switch to Mac mode with Fn+Ctrl+M
-for the session, or with SW2 (Fn+Ctrl+Shift+2) for good.
+until the next plug-in, or with SW2 (Fn+Ctrl+Shift+2, then replug) for good.
 
 The L1 reference image (`keymaps/default`, never flashed) has a simpler map:
 QMK's own HHKB layout (one Fn layer, as
