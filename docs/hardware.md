@@ -56,7 +56,7 @@ computes that from F_SIZE, ours pins it to 64 KB.
 | Method | Works on |
 |---|---|
 | Hold **Esc** (`0,0`) while plugging in (Bootmagic; also clears EEPROM) | stock (verified in code at `0x08009B40`) and ours (verified on the device) |
-| LShift+RShift+B (Command) | stock and ours |
+| LShift+RShift+B (Command) | stock and ours (ship and dev) |
 | Fn+Tab (`QK_BOOT`) | stock default keymap only |
 | VIA host command | nowhere: QMK removed it in 2021 |
 | Shorting the reset/boot pads, or SWD | always; last resort |

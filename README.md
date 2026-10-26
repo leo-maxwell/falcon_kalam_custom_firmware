@@ -25,5 +25,6 @@ parity, NKRO disabled by configuration for macOS.
 scripts/build.sh --twice
 ```
 
-The release image is `artifacts/falcon_hs_r2_falcon.bin`. Flash it only by
-following `docs/operations.md` §2.
+Two images are built (POLICY-VARIANTS): **ship** `artifacts/falcon_hs_r2_falcon.bin`
+for daily use, and **dev** `artifacts/falcon_hs_r2_falcon_dev.bin` with every debug
+feature, for testing only. Flash only by following `docs/operations.md` §2.

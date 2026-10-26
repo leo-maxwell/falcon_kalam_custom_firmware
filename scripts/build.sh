@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Reproducible, offline build of the Falcon HS R2 firmware.
 #
-# Two layers (docs/policy.md):
-#   base    keyboards/falcon_hs_r2           normal QMK keyboard, keymap "default"
-#   policy  userspace/.../keymaps/falcon     project configuration -> RELEASE
+# Layers and variants (docs/policy.md):
+#   base  keyboards/falcon_hs_r2                normal QMK keyboard, keymap "default" (reference)
+#   ship  userspace/.../keymaps/falcon          daily image (POLICY-VARIANTS)
+#   dev   userspace/.../keymaps/falcon_dev      every debug feature; both share userspace/users/falcon
 #
-#   scripts/build.sh            build + verify both, write the stock/release parity table
-#   scripts/build.sh --twice    additionally rebuild the release from clean and
-#                               require a byte-identical binary
+#   scripts/build.sh            build + verify all three, write the stock/ship parity table
+#   scripts/build.sh --twice    additionally rebuild ship and dev from clean and
+#                               require byte-identical binaries
 #
 # Never flashes anything. Outputs go to artifacts/.
 set -euo pipefail
@@ -16,7 +17,8 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QMK="$ROOT/qmk_firmware"
 KB=falcon_hs_r2
 BASE_KM=default
-RELEASE_KM=falcon
+RELEASE_KM=falcon        # ship variant (POLICY-VARIANTS)
+DEV_KM=falcon_dev        # dev variant: every debug feature, never the daily image
 ART="$ROOT/artifacts"
 LOG="$ART/build.log"
 TWICE=no
@@ -102,22 +104,27 @@ build_one "$BASE_KM"
 collect "$BASE_KM"
 grep -q "keymaps/$BASE_KM/keymap.c" "$ART/${KB}_$BASE_KM.cflags.txt" || die "base keymap not taken from the base keyboard"
 
-step "Build release $KB:$RELEASE_KM (base + policy layer)"
-build_one "$RELEASE_KM"
-collect "$RELEASE_KM"
-grep -q "$QMK_USERSPACE/keyboards/$KB/keymaps/$RELEASE_KM/keymap.c" "$ART/${KB}_$RELEASE_KM.cflags.txt" \
-    || die "release keymap was not taken from the userspace policy layer"
+for KM in "$RELEASE_KM" "$DEV_KM"; do
+    step "Build $KB:$KM (base + userspace configuration)"
+    build_one "$KM"
+    collect "$KM"
+    grep -q "$QMK_USERSPACE/keyboards/$KB/keymaps/$KM/keymap.c" "$ART/${KB}_$KM.cflags.txt" \
+        || die "$KM keymap was not taken from the userspace configuration"
+done
 
 NAME="${KB}_${RELEASE_KM}"
+DEV_NAME="${KB}_${DEV_KM}"
 if [[ "$TWICE" == yes ]]; then
-    step "Reproducibility: rebuild release from clean and compare"
-    FIRST="$(shasum -a 256 "$ART/$NAME.bin" | awk '{print $1}')"
-    build_one "$RELEASE_KM" >/dev/null
-    SECOND="$(shasum -a 256 "$QMK/.build/$NAME.bin" | awk '{print $1}')"
-    echo "first:  $FIRST"
-    echo "second: $SECOND"
-    [[ "$FIRST" == "$SECOND" ]] || die "build is not reproducible"
-    echo "reproducible: yes"
+    for KM in "$RELEASE_KM" "$DEV_KM"; do
+        step "Reproducibility: rebuild $KM from clean and compare"
+        FIRST="$(shasum -a 256 "$ART/${KB}_$KM.bin" | awk '{print $1}')"
+        build_one "$KM" >/dev/null
+        SECOND="$(shasum -a 256 "$QMK/.build/${KB}_$KM.bin" | awk '{print $1}')"
+        echo "first:  $FIRST"
+        echo "second: $SECOND"
+        [[ "$FIRST" == "$SECOND" ]] || die "$KM build is not reproducible"
+        echo "reproducible: yes"
+    done
 fi
 
 step "Verify base image (normal firmware: NKRO present, no VIA)"
@@ -126,7 +133,14 @@ python3 -I "$ROOT/scripts/verify_firmware.py" --profile base \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
     --report "$ART/verification_base.txt" | tail -1
 
-step "Verify release image (policy: NKRO absent, VIA present)"
+step "Verify dev image (POLICY-VARIANTS: every debug feature present)"
+python3 -I "$ROOT/scripts/verify_firmware.py" --profile dev \
+    --bin "$ART/$DEV_NAME.bin" --elf "$ART/$DEV_NAME.elf" \
+    --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
+    --via-json "$ROOT/via/falcon_hs_r2.json" \
+    --report "$ART/verification_dev.txt" | tail -1
+
+step "Verify ship image (POLICY-VARIANTS: no debug-only features; NKRO absent, VIA present)"
 python3 -I "$ROOT/scripts/verify_firmware.py" --profile release \
     --bin "$ART/$NAME.bin" --elf "$ART/$NAME.elf" \
     --keyboard-json "$ROOT/keyboards/$KB/keyboard.json" \
@@ -141,4 +155,5 @@ step "Documentation consistency (POLICY-DOCS)"
 python3 -I "$ROOT/scripts/check_docs.py" || echo "WARNING: docs out of date -- update docs/firmware.md before flashing (docs/operations.md §2)"
 
 step "Done -- artifacts NOT flashed"
-echo "release: $ART/$NAME.bin"
+echo "ship: $ART/$NAME.bin"
+echo "dev:  $ART/$DEV_NAME.bin"

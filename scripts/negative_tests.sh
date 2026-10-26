@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Prove the two safety nets actually fire (run after scripts/build.sh):
-#   1. NKRO cannot be re-enabled in the release keymap (policy-layer config.h #error).
+#   1. NKRO cannot be re-enabled in the release keymap (shared users/falcon config.h #error).
 #   2. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F800 in the keyboard-local linker script).
+#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces) are refused by the ship variant.
 # Uses throw-away keymaps inside the staged copy; restores it afterwards.
 set -euo pipefail
 
@@ -33,6 +34,11 @@ expect_failure() {
 
 # 1. POLICY-NKRO: NKRO forced on from the command line for the release keymap.
 expect_failure falcon "POLICY-NKRO: NKRO must stay disabled" NKRO_ENABLE=yes
+
+# 3. POLICY-VARIANTS: debug-only features are refused by the ship variant.
+expect_failure falcon "POLICY-VARIANTS: FLASHREAD is dev-only" FALCON_FLASHREAD=yes
+expect_failure falcon "POLICY-VARIANTS: VIA_INSECURE is dev-only" EXTRAFLAGS=-DVIA_INSECURE
+expect_failure falcon "POLICY-VARIANTS: debug traces" EXTRAFLAGS=-DACTION_DEBUG
 
 # 2. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F800.
 mkdir -p "$STAGED/keymaps/neg_oversize"

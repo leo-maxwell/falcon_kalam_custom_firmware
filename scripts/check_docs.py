@@ -5,7 +5,7 @@
 2. Every `docs/<name>.md` mentioned anywhere in the repo's own files exists.
 3. Every repo path written in backticks in README.md / docs/*.md exists
    (paths starting with a top-level project directory; glob/ellipsis forms skipped).
-4. docs/firmware.md states the current release SHA-256 and size from artifacts/.
+4. docs/firmware.md states the current ship and dev SHA-256 and size from artifacts/.
 5. Device status (hashes of flashed images) appears only in docs/devnotes.md,
    and the current release hash only in docs/firmware.md (plus devnotes).
 """
@@ -63,28 +63,34 @@ for m in missing:
 if not missing:
     ok('all backticked repo paths in the docs exist')
 
-# 4. release identity
-sha_file = ROOT / 'artifacts' / 'falcon_hs_r2_falcon.bin.sha256'
+# 4. release identity: both L2 variants (POLICY-VARIANTS)
 fw = (DOCS / 'firmware.md').read_text()
-if sha_file.exists():
+hashes = []
+for variant in ('falcon', 'falcon_dev'):
+    sha_file = ROOT / 'artifacts' / ('falcon_hs_r2_%s.bin.sha256' % variant)
+    if not sha_file.exists():
+        fail('%s missing (run scripts/build.sh)' % sha_file.relative_to(ROOT))
+        continue
     sha = sha_file.read_text().split()[0]
-    size = (ROOT / 'artifacts' / 'falcon_hs_r2_falcon.bin').stat().st_size - 16
+    size = (ROOT / 'artifacts' / ('falcon_hs_r2_%s.bin' % variant)).stat().st_size - 16
+    hashes.append(sha)
     if sha in fw:
-        ok('firmware.md release hash = artifacts (%s…)' % sha[:8])
+        ok('firmware.md %s hash = artifacts (%s…)' % (variant, sha[:8]))
     else:
-        fail('firmware.md does not contain the current release hash %s' % sha)
+        fail('firmware.md does not contain the current %s hash %s' % (variant, sha))
     if '{:,}'.format(size) in fw:
-        ok('firmware.md release size = %s B' % '{:,}'.format(size))
+        ok('firmware.md %s size = %s B' % (variant, '{:,}'.format(size)))
     else:
-        fail('firmware.md does not state the current payload size {:,} B'.format(size))
-    # 5. status lives in devnotes only
-    for doc in DOCS.glob('*.md'):
-        if doc.name in ('firmware.md', 'devnotes.md'):
-            continue
-        if sha in doc.read_text() or sha[:8] in doc.read_text():
-            fail('%s repeats the release hash (belongs in firmware.md/devnotes.md)' % doc.name)
-else:
-    fail('artifacts/falcon_hs_r2_falcon.bin.sha256 missing (run scripts/build.sh)')
+        fail('firmware.md does not state the current %s payload size {:,} B'.format(size) % variant)
+
+# 5. status lives in devnotes, release identity in firmware.md
+for doc in DOCS.glob('*.md'):
+    if doc.name in ('firmware.md', 'devnotes.md'):
+        continue
+    text = doc.read_text()
+    for sha in hashes:
+        if sha in text or sha[:8] in text:
+            fail('%s repeats a current image hash (belongs in firmware.md/devnotes.md)' % doc.name)
 
 print('RESULT: %s' % ('PASS' if not failures else 'FAIL (%d)' % len(failures)))
 sys.exit(1 if failures else 0)

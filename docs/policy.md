@@ -5,16 +5,20 @@
 ```
 qmk_firmware/                 L0 upstream QMK, latest release, never edited
 keyboards/falcon_hs_r2/       L1 BASE: a normal QMK keyboard = hardware facts + normal QMK features
-userspace/…/keymaps/falcon/   L2 CONFIGURATION: every project decision, tagged POLICY-* → release image
+userspace/                    L2 CONFIGURATION: every project decision, tagged POLICY-*
+  users/falcon/                 shared by both variants (policy + keymap + FLASHREAD module)
+  keyboards/…/keymaps/falcon/      ship variant  → falcon_hs_r2_falcon.bin (daily image)
+  keyboards/…/keymaps/falcon_dev/  dev variant   → falcon_hs_r2_falcon_dev.bin (debug image)
 ```
 
 * A hardware fact goes in L1; a choice goes in L2. When upstream fixes
   something (e.g. NKRO on macOS), only L2 changes.
 * L1 passes `qmk lint` with upstream rules and builds `falcon_hs_r2_default.bin`,
   a reference that is **never flashed**.
-* L2 is QMK External Userspace (`QMK_USERSPACE=userspace/`) and builds the
-  release `falcon_hs_r2_falcon.bin`. `grep -rn POLICY- userspace` lists every
-  decision.
+* L2 is QMK External Userspace (`QMK_USERSPACE=userspace/`). Each variant's
+  `rules.mk` sets `USER_NAME := falcon`, so QMK also builds `users/falcon/`.
+  A variant differs from the other **only** in its own three files.
+  `grep -rn POLICY- userspace` lists every decision.
 * The build copies L1 into `qmk_firmware/keyboards/` (hidden through the
   submodule's `info/exclude`, so the pinned tree stays clean). Edit the
   top-level copy only.
@@ -25,10 +29,11 @@ userspace/…/keymaps/falcon/   L2 CONFIGURATION: every project decision, tagged
 
 | ID | Rule | Implemented in | Enforced by |
 |---|---|---|---|
-| POLICY-NKRO | NKRO is a configuration decision: L1 supports it (`"nkro": true`), the release disables it at build time (stock NKRO breaks the macOS Caps Lock / input-source toggle) | `falcon/rules.mk` `NKRO_ENABLE = no` + `falcon/config.h` `#error` guard | verifier (no NKRO report, flag or code); negative test. To lift: delete both, flip the verifier checks |
-| POLICY-VIA | release is VIA-configurable | `falcon/rules.mk` | verifier |
-| POLICY-PARITY | release provides every stock feature: console, Command, LTO, stock RGB defaults (rainbow swirl, brightness 127), on top of L1 | `falcon/rules.mk`, `falcon/config.h` | verifier; `artifacts/feature_parity.txt` |
-| POLICY-FLASHREAD | release can **read** (never write) the bootloader, option bytes and F_SIZE/UID over raw HID | `falcon/keymap.c` `via_command_kb` | verifier symbol check |
+| POLICY-NKRO | NKRO is a configuration decision: L1 supports it (`"nkro": true`), both variants disable it at build time (stock NKRO breaks the macOS Caps Lock / input-source toggle) | `users/falcon/rules.mk` `NKRO_ENABLE = no` + `users/falcon/config.h` `#error` guard | verifier (no NKRO report, flag or code); negative test. To lift: delete both, flip the verifier checks |
+| POLICY-VIA | both variants are VIA-configurable | `users/falcon/rules.mk` | verifier |
+| POLICY-PARITY | both variants provide every stock feature: console, Command, LTO, stock RGB defaults (rainbow swirl, brightness 127), on top of L1. **Ship** restricts Command to H D X K V S B (decided 2026-10-26); dev keeps the full set | `users/falcon/rules.mk`, `users/falcon/config.h`, `falcon/config.h` | verifier; `artifacts/feature_parity.txt` |
+| POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only features. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code lives only in `users/falcon/`; no git branches are used for configuration | variant `rules.mk`/`config.h`; `#error` guards in `falcon/keymap.c` | `build.sh` builds and verifies both every time; verifier profiles `release` (ship) / `dev`; negative tests inject each debug feature into ship |
+| POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Removed from ship by the user's decision (2026-10-26) | `users/falcon/flashread.c`, compiled when `FALCON_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
 | POLICY-HHKB | HHKB is the default everywhere: keymaps, first layout, VIA layout option 0 | `keyboard.json`, keymaps, `via/falcon_hs_r2.json` | verifier |
 
 ### Project
@@ -40,7 +45,7 @@ userspace/…/keymaps/falcon/   L2 CONFIGURATION: every project decision, tagged
 | POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time) | `build.sh --twice`; the verifier checks the embedded build date |
 | POLICY-EVIDENCE | hardware parameters come only from verified evidence; anything unproven is marked so, never invented | analysis tool (exact-address checks); status column in `hardware.md` |
 | POLICY-READONLY-DEVICE | without an approval, only read the device: enumeration, DFU **upload**, whitelisted VIA queries | `falcon_probe.py` whitelist |
-| POLICY-FLASH-GATE | flash only `falcon_hs_r2_falcon.bin` with an approved SHA-256, via DFU **alt 2**, then test Esc→DFU | `operations.md` §2 |
+| POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU. The daily image is always ship | `operations.md` §2 |
 | POLICY-OPEN-ISSUES | an open issue stays open until the user settles it explicitly | `problems.md` |
 | POLICY-DOCS | §4 below | `scripts/check_docs.py` (run by `build.sh`) |
 
@@ -49,12 +54,12 @@ userspace/…/keymaps/falcon/   L2 CONFIGURATION: every project decision, tagged
 | Path | Content |
 |---|---|
 | `keyboards/falcon_hs_r2/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 2048/1024, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_hs_r2.ld` (app region `0x08002000–0x0800F7FF`, exports `__falcon_app_*`); `keymaps/default/` (HHKB); `readme.md` |
-| `userspace/` | L2: `qmk.json` (target `falcon_hs_r2:falcon`), `keyboards/falcon_hs_r2/keymaps/falcon/{rules.mk,config.h,keymap.c}` |
+| `userspace/` | L2: `qmk.json` (targets `falcon_hs_r2:falcon`, `falcon_hs_r2:falcon_dev`); `users/falcon/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB defaults, `falcon_keymap.h` the keymap, `flashread.c`); `userspace/keyboards/falcon_hs_r2/keymaps/falcon/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
 | `via/falcon_hs_r2.json` | VIA definition: the stock JSON with HHKB as layout option 0 |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
 | `originals/` | stock BIN, readback, VIA JSON, `device_dump_2026-10-26/` (bootloader, F_SIZE/UID, option bytes), `SHA256SUMS` |
-| `scripts/` | `build.sh` (only build entry), `verify_firmware.py` (`--profile base\|release`), `negative_tests.sh`, `qmk_policy.sh`, `check_docs.py` |
+| `scripts/` | `build.sh` (only build entry), `verify_firmware.py` (`--profile base\|release\|dev`), `negative_tests.sh`, `qmk_policy.sh`, `check_docs.py` |
 | `tools/` | `analyze_vendor_firmware.py`, `feature_parity.py`, `falcon_probe.py` (read-only VIA probe), `usb_watch.py` (passive USB log), `disassemble_vendor.sh` |
 | `artifacts/` | built images (`.bin` with DFU suffix, `.elf`, `.map`, cflags, `info_config.h`, `.sha256`), build/verification reports, device logs |
 | `build/` | scratch, git-ignored |
@@ -84,7 +89,7 @@ referenced repo path exists, and that the hash in `firmware.md` matches
 
 ## 5. Design notes (non-obvious code)
 
-**`via_command_kb()` / `falcon_read_allowed()`** (`falcon/keymap.c`).
+**`via_command_kb()` / `falcon_read_allowed()`** (`users/falcon/flashread.c`, dev only).
 QMK's VIA layer calls `via_command_kb()` first for every raw-HID packet; if it
 returns true, VIA skips its own dispatch and the handler must send the reply.
 The handler claims only command `0xF0`: it decodes a big-endian address and a
@@ -93,6 +98,19 @@ bytes with `volatile` reads. Allowed ranges: `0x08000000–0x08001FFF`,
 `0x1FFFF7E0–0x1FFFF7EF`, `0x1FFFF800–0x1FFFF80F`. `addr + len >= addr` rejects
 wrap-around; a refused range is answered with length 0. `noinline` keeps the
 symbol visible under LTO.
+
+**Shared keymap (`users/falcon/falcon_keymap.h`).** The header *defines* the
+`keymaps` array and is included exactly once, from each variant's `keymap.c`.
+It can't live in a `.c` under `users/`: QMK's keymap introspection compiles
+the variant's `keymap.c` itself and derives the layer count from that array.
+
+**Selective Command (ship `config.h`).** Unwanted `MAGIC_KEY_*` commands are
+re-pointed at keys a US HHKB doesn't have (`INTERNATIONAL_1`–`9`,
+`LANGUAGE_1`), so LShift+RShift+that-key reaches no case in `command.c`'s
+switch and types normally. Each needs a distinct key (duplicate cases don't
+compile). Names such as `F13` are unusable: QMK defines `F13` as a pin macro
+(GPIOF pin 13), which breaks the `KC_##key` paste. Layer switching is turned
+off with `MAGIC_KEY_SWITCH_LAYER_WITH_{FKEYS,NKEYS} false`.
 
 **EEPROM placement.** ChibiOS describes the F103 flash as 128 × 1 KB sectors
 (the xB registry). QMK drops the sectors at or above the flash size, then takes
@@ -111,7 +129,8 @@ the 2-bit entry type from the address and value.
 - Container: the DFU suffix (CRC32) is valid, and the payload equals `objcopy -O binary` of the ELF.
 - Placement: every `LOAD` segment lies in `[0x08002000, 0x0800F800)`, and RAM in 20 KB.
 - Vector table: SP = `__main_stack_end__`, reset = `Reset_Handler`, every vector points into the image.
-- Profiles: release = no NKRO (only ChibiOS's empty `send_nkro` stub may exist); VIA, console, Command, LTO, the userspace keymap and the FLASHREAD symbol are present. Base = NKRO present, no VIA.
+- Profiles: base = NKRO present, no VIA. Release (ship) and dev = no NKRO (only ChibiOS's empty `send_nkro` stub may exist); VIA, console, Command and LTO present; keymap from the right variant directory. Ship = none of the dev features. Dev = all of them: the FLASHREAD symbol, the `-D` flags, and the trace strings of `ACTION_DEBUG`, `WEAR_LEVELING_DEBUG_OUTPUT` and the scan rate. `VIA_INSECURE` leaves no binary trace, so it is enforced only by the ship guard and its negative test.
+- Instruction checks (`thumb2_find`, `movw_find`) match the opcode and immediate but ignore register fields, because each variant allocates registers differently. They are validated against the stock image, and against constants that must not match.
 - Stock equivalence: pin tables, flash descriptor, clock literal and PLL instruction, BKP flags, JTAG-disable instruction, Caps LED config; VIA's default view = `LAYOUT_60_hhkb`.
 
 **`feature_parity.py`.** `config_descriptor()` finds a USB configuration
@@ -127,4 +146,4 @@ and firmware version). `matrix()` reads row data from byte 3 on VIA protocol
 ≥ 12 (which echoes a row offset in byte 2) and from byte 2 on older ones.
 `legacy_to_actual()` re-maps logs recorded with the earlier off-by-one decoder.
 Current QMK returns an all-zero matrix to VIA unless built with `VIA_INSECURE`,
-so on our firmware the matrix is tested through the console instead.
+which only the dev variant sets. On ship the matrix is tested through the console.

@@ -11,10 +11,8 @@ IDs are permanent.
 | I8 | **NKRO without the macOS problem**: find the root cause, re-test on each QMK update, lift POLICY-NKRO | full NKRO | two-line change in L2 once fixed |
 | I12 | **Version traceability**: report the git commit through VIA's firmware-version query or `bcdDevice` without breaking reproducibility | identify what is flashed | — |
 | I13 | **Automated hardware tests**: script the probe, console traces and readback compare | repeatable post-flash checks | console parsing |
-| I5 | **Selective Command** (or a debug image): keep only chosen Shift+Shift commands. Options: point unwanted `MAGIC_KEY_*` defines at keys absent from the HHKB (then those combos type normally), disable layer switching (`MAGIC_KEY_SWITCH_LAYER_WITH_FKEYS/NKEYS false`), or whitelist in `command_extra()` (unwanted combos are swallowed) | closes R12 | user picks the keys; L2 |
 | I4 | **RGB brightness cap** from a measured LED-module current | USB power margin | measurement; `RGBLIGHT_LIMIT_VAL` in L2 |
 | I6 | **Newer toolchain** (GCC ≥ 10, as stock used) | modern compiler | must stay reproducible; re-verify RGB timing |
 | I7 | **Submit L1 upstream** to QMK | maintenance by upstream | L1 already passes upstream lint |
 | I14 | **Remote repository + CI** (build, verify, doc check) | protection against local loss | needs a hosting decision |
 | I15 | **Full-chip SWD backup** | complete image incl. option bytes via a second path | RDP is off; pads must be located |
-| I17 | **Matrix test build** with `VIA_INSECURE` so the VIA key tester works | convenience | test-only image; never the daily image |

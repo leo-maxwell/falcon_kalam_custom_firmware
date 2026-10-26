@@ -47,9 +47,9 @@
   [PASS] ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)
   [PASS] no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)
   [PASS] RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor
-  [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr 0x1D0000) present
-  [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (STM32duino board)
-  [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present
+  [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present
+  [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)
+  [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)
   [PASS] wear-leveling 2048/1024 at 0x0800F800-0x0800FFFF matches vendor readback
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions

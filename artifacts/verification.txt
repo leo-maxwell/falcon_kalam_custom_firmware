@@ -2,20 +2,20 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0xDAACBAC6 valid
-    file 44212 bytes, payload 44196 bytes
+  [PASS] DFU suffix CRC32 0x1DF2EB46 valid
+    file 43984 bytes, payload 43968 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800C6CC inside application flash
-  [PASS] LOAD lma 0x0800C6CC-0x0800CCA4 inside application flash
+  [PASS] LOAD lma 0x08002000-0x0800C5E8 inside application flash
+  [PASS] LOAD lma 0x0800C5E8-0x0800CBC0 inside application flash
   [PASS] RAM segment 0x20000C00-0x20001CF8 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800CCA4 (< 0x0800F800)
+  [PASS] image ends at 0x0800CBC0 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 44196 / 55296 bytes (79.9%), 11100 bytes free
+    application flash used 43968 / 55296 bytes (79.5%), 11328 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -33,9 +33,15 @@
   [PASS] POLICY-NKRO: no keyboard bitmap (NKRO) report in any HID descriptor
   [PASS] POLICY-NKRO: no NKRO code (at most the empty send_nkro stub, 2 bytes, bx lr): ['send_nkro']
   [PASS] POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags
-  [PASS] keymap comes from the userspace policy layer
-  [PASS] POLICY-FLASHREAD: read-only via_command_kb handler linked
+  [PASS] keymap comes from the userspace variant keymaps/falcon
   [PASS] POLICY-PARITY: HID console interface (0xFF31) present, as in stock
+  [PASS] POLICY-VARIANTS ship: no FLASHREAD handler (via_command_kb absent)
+  [PASS] POLICY-VARIANTS ship: -DFALCON_FLASHREAD_ENABLE absent
+  [PASS] POLICY-VARIANTS ship: -DKEYCODE_STRING_ENABLE absent
+  [PASS] POLICY-VARIANTS ship: -DDEBUG_MATRIX_SCAN_RATE absent
+  [PASS] POLICY-VARIANTS ship: no ACTION_DEBUG trace strings
+  [PASS] POLICY-VARIANTS ship: no WEAR_LEVELING_DEBUG_OUTPUT trace strings
+  [PASS] POLICY-VARIANTS ship: no DEBUG_MATRIX_SCAN_RATE trace strings
   [PASS] -DVIA_ENABLE present
   [PASS] -DRAW_ENABLE present
   [PASS] -DDYNAMIC_KEYMAP_ENABLE present
@@ -56,10 +62,11 @@
   [PASS] compiled image contains col_pins table identical to vendor
   [PASS] diode_direction COL2ROW
   [PASS] ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)
+  [PASS] no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)
   [PASS] RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor
-  [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr 0x1D0000) present
-  [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (STM32duino board)
-  [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present
+  [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present
+  [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)
+  [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)
   [PASS] wear-leveling 2048/1024 at 0x0800F800-0x0800FFFF matches vendor readback
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions

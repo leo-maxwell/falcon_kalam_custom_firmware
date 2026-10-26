@@ -36,6 +36,24 @@ def run(*cmd):
     return subprocess.run(cmd, check=True, capture_output=True, text=True).stdout
 
 
+def thumb2_find(payload, mask1, val1, mask2, val2):
+    """True if a 32-bit Thumb-2 instruction (two halfwords) matches the masks anywhere.
+
+    Used for stock-equivalence checks so they do not depend on which register the
+    compiler picked (the encodings differ only in register fields)."""
+    for off in range(0, len(payload) - 3, 2):
+        hw1, hw2 = struct.unpack_from('<HH', payload, off)
+        if hw1 & mask1 == val1 and hw2 & mask2 == val2:
+            return True
+    return False
+
+
+def movw_find(payload, imm16):
+    """MOVW Rd, #imm16 (encoding T3) with any destination register."""
+    imm4, i, imm3, imm8 = imm16 >> 12, (imm16 >> 11) & 1, (imm16 >> 8) & 7, imm16 & 0xFF
+    return thumb2_find(payload, 0xFFFF, 0xF240 | (i << 10) | imm4, 0x70FF, (imm3 << 12) | imm8)
+
+
 def ioline_bytes(pins):
     return b''.join(struct.pack('<I', PORT_BASE[p[0]] | int(p[1:])) for p in pins)
 
@@ -44,9 +62,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--bin', type=Path, required=True)
     ap.add_argument('--elf', type=Path, required=True)
-    ap.add_argument('--profile', choices=('base', 'release'), required=True,
-                    help='base: normal firmware (NKRO present, no VIA); release: policy layer (NKRO absent, VIA present)')
-    ap.add_argument('--via-json', type=Path, help='VIA definition shipped with the release (release profile)')
+    ap.add_argument('--profile', choices=('base', 'release', 'dev'), required=True,
+                    help='base: L1 normal firmware (NKRO, no VIA); release: ship variant (L2, no debug-only features); '
+                         'dev: dev variant (L2 + every debug feature) -- POLICY-VARIANTS')
+    ap.add_argument('--via-json', type=Path, help='VIA definition shipped with the L2 variants')
     ap.add_argument('--keyboard-json', type=Path, required=True)
     ap.add_argument('--cflags', type=Path, help='cflags.txt from the build (default: next to --bin)')
     ap.add_argument('--report', type=Path)
@@ -54,7 +73,9 @@ def main():
 
     c = vendor.Checker()
     c.lines.append('# Falcon HS R2 firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
-    release = args.profile == 'release'
+    release = args.profile in ('release', 'dev')   # built from the L2 configuration
+    ship, dev = args.profile == 'release', args.profile == 'dev'
+    keymap_dir = {'release': 'falcon', 'dev': 'falcon_dev'}.get(args.profile)
     kb = json.loads(args.keyboard_json.read_text())
     raw = args.bin.read_bytes()
 
@@ -147,12 +168,28 @@ def main():
         c.check(nk_syms == [] or (nk_syms == ['send_nkro'] and stub_ok),
                 'POLICY-NKRO: no NKRO code (at most the empty send_nkro stub, 2 bytes, bx lr): %s' % nk_syms)
         c.check('-DNKRO_ENABLE' not in flags, 'POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags')
-        c.check(any('userspace/keyboards/falcon_hs_r2/keymaps/falcon/keymap.c' in f for f in flags),
-                'keymap comes from the userspace policy layer')
-        c.check(any(n.split('.')[0] == 'via_command_kb' for n in syms), 'POLICY-FLASHREAD: read-only via_command_kb handler linked')
+        c.check(any('userspace/keyboards/falcon_hs_r2/keymaps/%s/keymap.c' % keymap_dir in f for f in flags),
+                'keymap comes from the userspace variant keymaps/%s' % keymap_dir)
         want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
                 '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
         c.check(bool(img.find(bytes.fromhex('0631ff0974'))), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
+        # POLICY-VARIANTS: debug-only features are present in dev and absent in ship.
+        flashread = any(n.split('.')[0] == 'via_command_kb' for n in syms)
+        debug_flags = ('-DFALCON_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
+        traces = {'ACTION_DEBUG': b'action_exec: start', 'WEAR_LEVELING_DEBUG_OUTPUT': b'Backing store: ',
+                  'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
+        if dev:
+            c.check(flashread, 'POLICY-VARIANTS dev: FLASHREAD handler (via_command_kb) linked')
+            for f in debug_flags:
+                c.check(f in flags, 'POLICY-VARIANTS dev: %s present' % f)
+            for name, needle in traces.items():
+                c.check(needle in payload, 'POLICY-VARIANTS dev: %s trace strings present' % name)
+        else:
+            c.check(not flashread, 'POLICY-VARIANTS ship: no FLASHREAD handler (via_command_kb absent)')
+            for f in debug_flags:
+                c.check(f not in flags, 'POLICY-VARIANTS ship: %s absent' % f)
+            for name, needle in traces.items():
+                c.check(needle not in payload, 'POLICY-VARIANTS ship: no %s trace strings' % name)
     else:
         c.check(bool(nkro_bitmap.search(payload)), 'base is a normal QMK build: NKRO bitmap report present')
         c.check('-DNKRO_ENABLE' in flags and '-DVIA_ENABLE' not in flags, 'base flags: NKRO_ENABLE on, VIA_ENABLE off')
@@ -182,15 +219,17 @@ def main():
     c.check(kb.get('diode_direction') == 'COL2ROW', 'diode_direction COL2ROW')
     efl = struct.pack('<IIIIIII', 3, 2, 128, 0, 1024, 0x08000000, 0x20000)
     c.check(bool(img.find(efl)), 'ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)')
-    if not release:
-        # Base only: the release legitimately reads 0x1FFFF7E0 (POLICY-FLASHREAD); both share config.h.
+    if not dev:
+        # Not for dev: its FLASHREAD legitimately reads 0x1FFFF7E0; all variants share L1 config.h.
         c.check(not img.find(struct.pack('<I', 0x1FFFF000)) and not img.find(struct.pack('<I', 0x1FFFF7E0)),
                 'no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)')
     c.check(bool(img.find(struct.pack('<I', 0x001D6400))), 'RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor')
-    c.check(bool(img.find(struct.pack('<HH', 0xF442, 0x12E8))), 'PLLSRC=HSE / PLLMUL x9 instruction (orr 0x1D0000) present')
-    c.check(bool(img.find(struct.pack('<HH', 0xF244, 0x224C))) and bool(img.find(struct.pack('<HH', 0xF244, 0x224D))),
-            'BKP_DR10 bootloader flags 0x424C / 0x424D present (STM32duino board)')
-    c.check(bool(img.find(struct.pack('<HH', 0xF043, 0x7300))), 'AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present')
+    # ORR.W Rd, Rn, #0x001D0000 (any registers): PLLSRC=HSE, PLLMUL x9
+    c.check(thumb2_find(payload, 0xFFF0, 0xF440, 0xF0FF, 0x10E8), 'PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present')
+    c.check(movw_find(payload, 0x424C) and movw_find(payload, 0x424D),
+            'BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)')
+    # ORR.W Rd, Rn, #0x02000000 (T1 modified immediate, any registers): AFIO_MAPR |= SWJ_CFG_JTAGDISABLE
+    c.check(thumb2_find(payload, 0xFFF0, 0xF040, 0xF0FF, 0x7000), 'AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)')
     wl = kb['eeprom']['wear_leveling']
     c.check((wl['backing_size'], wl['logical_size']) == (2048, 1024) and EEPROM_START + wl['backing_size'] == FLASH_END,
             'wear-leveling 2048/1024 at 0x%08X-0x%08X matches vendor readback' % (EEPROM_START, FLASH_END - 1))
