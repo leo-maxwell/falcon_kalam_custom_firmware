@@ -15,7 +15,7 @@ delete it here.
 
 ## To do
 
-1. **Dev image test round** (flash per `operations.md` §2, record results in `firmware.md`):
+1. **Dev image test round** (flash with `scripts/flash.sh flash dev <sha256>`, `operations.md` §2; record results in `firmware.md`):
    - Esc→DFU test and readback compare (as after every flash);
    - Caps Lock LED follows Caps Lock, also after a replug;
    - all 60 keys in VIA's key tester (works in dev thanks to `VIA_INSECURE`), or the console with Shift+Shift+D then X; includes the 7 positions the stock probe missed: `0,7 1,7 2,7 3,7 4,1 4,2 4,7`;
@@ -25,7 +25,10 @@ delete it here.
    - persistence: change a key in VIA, replug, compare `falcon_kalam_probe.py dump-keymap` with `artifacts/release_keymap_baseline.json`, then revert;
    - RGB off while the Mac sleeps;
    - spot-check the dev traces (action, wear-leveling, scan rate) in `qmk console`.
-2. **Ship image acceptance**: flash it, run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.
+   - Bootmagic (Esc at plug-in) → LEDs **red** in DFU (R15; same WS2812-latch question as Shift+Shift+B);
+   - **fault recovery** (R13, POLICY-RECOVERY): Shift+Shift+F → `qmk console` shows "fault test", the keyboard drops into DFU (`dfu-util -l` shows `1eaf:0003`), and a replug brings it back;
+   - **wear-leveling** (R2): with Shift+Shift+D on, change several keys in VIA and replug a few times; the console shows backing-store writes, and the changes persist
+2. **Ship image acceptance**: flash it (`scripts/flash.sh flash ship <sha256>`), run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.
 
 ## Before shipping (leaving alpha)
 

@@ -6,6 +6,10 @@
 
 #pragma once
 
+// Dev variant marker: enables dev-only code in users/falcon_kalam (currently the
+// Shift+Shift+F fault test for POLICY-RECOVERY).
+#define FALCON_KALAM_DEV
+
 // Lets VIA read the live switch matrix, so VIA's key tester and
 // tools/falcon_kalam_probe.py matrix work. QMK warns at build time on purpose: any
 // host program can then observe keypresses through VIA.

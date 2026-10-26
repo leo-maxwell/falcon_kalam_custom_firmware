@@ -7,16 +7,10 @@ user decision. Closed items move to the ledger at the end as one line.
 
 | ID | Problem | Status / impact | Mitigation / next step |
 |---|---|---|---|
-| B1 | **Caps Lock LED never lights** on image `9b61141e…`: the A10 indicator was not configured | fixed in the current release; not flashed (devnotes) | flash the current release and test |
-| R13 | **No power-on DFU window.** If an image fails to boot or scan keys, DFU is reachable only through the pads or SWD | mitigated by procedure | flash only verified images; test Esc→DFU after every flash (`operations.md` §2) |
-| R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST); GD32F103 ≠ STM32F103 | largely retired by the first flash (USB, scan, EEPROM init, DFU path) | open: long-term EEPROM writes; re-test after each QMK update |
-| R6 | **WS2812 bit-bang timing / colour order** on hardware | untested | RGB test in devnotes; failure = wrong colours or flicker, no damage |
-| R8 | **macOS Caps Lock / input-source fix** | user reports it working, also after a replug | close after the console Caps trace (devnotes) |
-| R12 | **Console + Command in the ship image** (stock parity): Shift+Shift+D then K prints keystrokes to the HID console, readable by any host program | **decided** (user, 2026-10-26): ship keeps H D X K V S B; the risky combos (wipe settings, lock, layer switch, …) type normally | residual risk accepted; the keystroke printout needs two deliberate combos and resets on replug |
-| R14 | **Full-white current**: 4 WS2812 at full white draw roughly 4 × 50–60 mA (typical datasheet values, not measured) on top of the MCU; within the 500 mA USB budget, but continuous | estimate only | measure the module current (I4); `RGBLIGHT_LIMIT_VAL` in L2 if needed |
-| R15 | **"Dark" is ambiguous** under POLICY-RGB: host asleep, DFU entered by Bootmagic, or white base switched off (Fn+Z) | by design | DFU entered via Shift+Shift+B / `QK_BOOT` should stay red (to be verified); I19 |
-| R9 | **GCC 8.5** (stock used 10.1) | low | I6 |
-| R11 | **Wrong image flashed** (`falcon_kalam_default.bin` sits next to the release) | procedural | approval names the SHA-256 (`operations.md` §2) |
+| B1 | **Caps Lock LED never lights** on image `9b61141e…` (the A10 indicator was not configured) | **fixed** in the ship and dev images (indicator compiled in, verified offline); not flashed | flash and confirm the LED (devnotes) |
+| R15 | **"Dark" is ambiguous** under POLICY-RGB | **fixed** in the images: Bootmagic now paints the LEDs red too, so dark = host asleep or white base switched off (Fn+Z). Red in DFU relies on the WS2812s latching the last frame (unverified) | confirm red in DFU (devnotes) |
+| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads or SWD | **partly fixed** (POLICY-RECOVERY): any CPU fault now resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
+| R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash retired USB, matrix scan, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev round persistence test with the wear-leveling trace; repeat after each QMK update |
 
 ## Known limitations
 
@@ -26,8 +20,9 @@ user decision. Closed items move to the ledger at the end as one line.
 | L2 | Fn+Esc = Power (HHKB convention) opens the macOS shut-down dialog |
 | L3 | `QK_BOOT` is not on any default layer: use Esc at plug-in, Shift+Shift+B, or assign it in VIA |
 | L4 | Command N ("NKRO toggle") does nothing in the dev image (no NKRO); in ship it types a normal N |
-| L5 | A DFU download to alt 1 erases `0x08002000`; only alt 2 is used |
+| L5 | A DFU download to alt 1 erases `0x08002000`. `scripts/flash.sh` hard-codes alt 2; never call `dfu-util -D` by hand |
 | L6 | The first boot of a new image with a different EEPROM layout resets the configuration (`SKIP_VERSION` fixes the VIA magic; clear EEPROM with Bootmagic if a layout changes) |
+| L7 | After a CPU fault the keyboard drops into DFU and stops typing until replugged. The LEDs keep their last colour (the fault handler must not touch them) |
 
 ## Ledger (closed)
 
@@ -41,3 +36,10 @@ user decision. Closed items move to the ledger at the end as one line.
 | B3 | 2026-10-26 | builds were reproducible only within one day: QMK Command embeds `__DATE__` (enabled by POLICY-PARITY on 2026-10-26). Fixed: `SOURCE_DATE_EPOCH` = pinned QMK commit time; the verifier checks the embedded date. The images `9b61141e…` (flashed) and `dd580803…` carry their build-day date; nothing else differs |
 | R10 | 2026-10-26 | FLASHREAD (exposes the chip UID) removed from the ship image by user decision; it exists only in the dev image, enforced by POLICY-VARIANTS (guard, verifier, negative test) |
 | B2 | 2026-10-26 | `falcon_kalam_probe.py matrix` read VIA ≥ 12 replies one byte early; fixed; `decode-log` re-maps the affected log |
+| R6 | 2026-10-26 | WS2812 timing and colour order statically identical to stock: same bit writer (T1H/T0L 5×6-NOP loops, 12-NOP T1L/T0H, 1344-pass latch, BASEPRI masking) and the same GRB buffer layout; enforced by the verifier on every build. Visual confirmation comes free in the dev round |
+| R8 | 2026-10-26 | the user confirmed that Caps Lock toggles and input-source switching work on macOS, also after a replug (image `9b61141e…`); every later image has no NKRO code either |
+| R9 | 2026-10-26 | GCC 8.5 is QMK's own macOS toolchain (the Homebrew `qmk` formula depends on `arm-none-eabi-gcc@8`); a newer compiler stays optional (I6) |
+| R11 | 2026-10-26 | `scripts/flash.sh` accepts only `ship` or `dev`, with the full approved SHA-256 matching the file, its `.sha256` record and `firmware.md`; negative tests prove the refusals |
+| R12 | 2026-10-26 | console + Command in ship accepted by user decision; mitigated by POLICY-RGB (magenta on channel A while keystrokes go to the console) |
+| R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). A measurement stays optional (I4) |
+| B4 | 2026-10-26 | a macOS `.DS_Store` in `keyboards/falcon_kalam/` was staged into QMK and failed `qmk lint`; staging now uses `rsync --delete-excluded --exclude .DS_Store` |

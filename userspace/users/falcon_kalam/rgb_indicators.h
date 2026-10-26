@@ -14,6 +14,15 @@
 #define FALCON_KALAM_RGB_CH_B 2, 2 // connection / layer states
 #define FALCON_KALAM_RGB_ALL 0, RGBLIGHT_LED_COUNT
 
+#include <stdbool.h>
+
+// Module interface; QMK hooks are dispatched from falcon_kalam.c.
+void falcon_kalam_rgb_init(void);                          // keyboard_post_init_user
+void falcon_kalam_rgb_task(void);                          // housekeeping_task_user
+void falcon_kalam_rgb_shutdown(bool jump_to_bootloader);   // shutdown_user
+void falcon_kalam_rgb_note_settings_reset(void);           // eeconfig_init_user
+void falcon_kalam_rgb_paint_bootloader(void);              // bootmagic_reset_eeprom
+
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
 // Dev only (FLASHREAD): brief all-LED blink when a request is served.
 void falcon_kalam_rgb_activity(void);

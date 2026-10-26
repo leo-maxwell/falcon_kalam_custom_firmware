@@ -13,6 +13,7 @@
 
 #include QMK_KEYBOARD_H
 #include "usb_device_state.h"
+#include "ws2812.h"
 #include "rgb_indicators.h"
 
 #if defined(RGBLIGHT_EFFECT_ALTERNATING) || defined(RGBLIGHT_EFFECT_BREATHING) || defined(RGBLIGHT_EFFECT_CHRISTMAS) ||   \
@@ -57,12 +58,9 @@ _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED m
 
 static bool settings_were_reset;
 
-// Called by QMK while (re)initialising EEPROM, before the LEDs are set up:
-// only note it here and blink once rgblight is running.
-void eeconfig_init_user(void) {
-#if (EECONFIG_USER_DATA_SIZE) == 0
-    eeconfig_update_user(0); // what QMK's default implementation does
-#endif
+// EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
+// and blink once rgblight is running.
+void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
 
@@ -77,7 +75,7 @@ static void enforce_white_base(void) {
     }
 }
 
-void keyboard_post_init_user(void) {
+void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
     enforce_white_base();
     if (settings_were_reset) {
@@ -88,7 +86,7 @@ void keyboard_post_init_user(void) {
 // State-driven indicators, polled from the main loop (the USB state callback
 // may run in interrupt context, and the debug flags have no callback at all).
 // rgblight_set_layer_state() schedules a redraw, so it is only called on change.
-void housekeeping_task_user(void) {
+void falcon_kalam_rgb_task(void) {
     static uint8_t shown; // bit n = indicator layer n currently on (n < 8)
 
     usb_configure_state_t usb    = usb_device_state_get_configure_state();
@@ -114,12 +112,19 @@ void housekeeping_task_user(void) {
 // Runs right before QMK resets the MCU. On a bootloader jump, paint all LEDs
 // red and push the frame out now: the WS2812s keep showing it while the
 // bootloader (which does not drive A1) is active.
-bool shutdown_user(bool jump_to_bootloader) {
+void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
     if (jump_to_bootloader) {
         rgblight_set_layer_state(FALCON_KALAM_RGB_BOOT, true);
         rgblight_set();
     }
-    return true;
+}
+
+// Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
+// directly: all LEDs red, latched while the bootloader runs (R15).
+void falcon_kalam_rgb_paint_bootloader(void) {
+    ws2812_init();
+    ws2812_set_color_all(RGB_RED);
+    ws2812_flush();
 }
 
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE

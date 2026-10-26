@@ -41,6 +41,9 @@
   [PASS] -DRGBLIGHT_WS2812 present
   [PASS] -DBOOTLOADER_STM32DUINO present
   [PASS] -DQMK_BOARD_STM32_F103_STM32DUINO present
+  [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in stock
+  [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in falcon_kalam_default.bin
+  [PASS] base keeps the ChibiOS default (weak) fault handlers
 
 ## 5. Configuration matches the manufacturer firmware
   [PASS] keyboard.json rows == vendor row_pins B3 B4 B5 B6 A2

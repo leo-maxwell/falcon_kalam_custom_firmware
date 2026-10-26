@@ -6,6 +6,9 @@
 #include QMK_KEYBOARD_H
 
 // POLICY-VARIANTS: debug-only features must never reach the ship image.
+#if defined(FALCON_KALAM_DEV)
+#    error "POLICY-VARIANTS: FALCON_KALAM_DEV is the dev variant marker"
+#endif
 #if defined(FALCON_KALAM_FLASHREAD_ENABLE)
 #    error "POLICY-VARIANTS: FLASHREAD is dev-only (set FALCON_KALAM_FLASHREAD only in keymaps/dev)"
 #endif

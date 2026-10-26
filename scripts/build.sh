@@ -78,7 +78,7 @@ step "Stage base keyboards/$KB into qmk_firmware"
 EXCLUDE="$(git -C "$QMK" rev-parse --git-path info/exclude)"
 [[ "$EXCLUDE" = /* ]] || EXCLUDE="$QMK/$EXCLUDE"
 grep -qxF "/keyboards/$KB/" "$EXCLUDE" 2>/dev/null || echo "/keyboards/$KB/" >> "$EXCLUDE"
-rsync -a --delete "$ROOT/keyboards/$KB/" "$QMK/keyboards/$KB/"
+rsync -a --delete --delete-excluded --exclude .DS_Store "$ROOT/keyboards/$KB/" "$QMK/keyboards/$KB/"
 DIRTY="$(git -C "$QMK" status --porcelain --ignore-submodules=none)"
 [[ -z "$DIRTY" ]] || { echo "$DIRTY"; die "qmk_firmware working tree is dirty"; }
 echo "staged (tree clean)"

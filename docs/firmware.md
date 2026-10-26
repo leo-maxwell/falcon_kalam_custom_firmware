@@ -9,8 +9,8 @@ commit time).
 
 | Variant | Image | SHA-256 | Size (of 55,296 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `6322403635075315940fe958441f26b985b0972c5f97ff5dd78bcd779768df0b` | 36,064 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `c7383224a62df2d4405fc4893959c868277b4a79f87ea34436bf912b777b2b79` | 41,504 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `4eddc2805a595428b297491cc92c8f12a0de5e0fa0c6292f2fa70f4a83be768f` | 36,148 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `46a6d48df5dff5b89b8a1e1e15074fbefea0edad6589b3d74c53c98535ca097d` | 41,660 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -32,8 +32,9 @@ feature code) · **pending** = see devnotes.
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | layout settled 2026-10-26; full key test pending |
 | Keymap | HHKB base + HHKB Fn (§3), 4 VIA layers | same | + (stock: generic 60%) | pending |
 | VIA | protocol `0x000D`, 4 layers, 16 macros (383-byte buffer), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ 2026-10-26 (probe) |
-| Bootmagic | Esc at plug-in → clear EEPROM → DFU | same | = | ✓ 2026-10-26 |
-| Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader. All other combos type normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, Caps/lock, E, M, C, N, Z, `` ` ``, 0–9, F1–F10) | = (ship: safer subset) | pending |
+| Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ 2026-10-26 (red: pending) |
+| Fault recovery (POLICY-RECOVERY) | any CPU fault resets into DFU instead of hanging | same + Shift+Shift+F fault test | new | pending |
+| Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader. All other combos type normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, Caps/lock, E, M, C, N, Z, `` ` ``, 0–9, F1–F10) + F = fault test | = (ship: safer subset) | pending |
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ 2026-10-26 |
 | Caps Lock LED | A10, active-low | same | = | pending |

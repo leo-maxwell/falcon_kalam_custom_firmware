@@ -34,6 +34,7 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-PARITY | both variants provide every stock feature: console, Command, LTO, on top of L1 (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B (decided 2026-10-26); dev keeps the full set | `users/falcon_kalam/rules.mk`, `users/falcon_kalam/config.h`, `ship/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only features. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code lives only in `users/falcon_kalam/`; no git branches are used for configuration | variant `rules.mk`/`config.h`; `#error` guards in `ship/keymap.c` | `build.sh` builds and verifies both every time; verifier profiles `release` (ship) / `dev`; negative tests inject each debug feature into ship |
 | POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `users/falcon_kalam/config.h` (`#undef` of every effect) | verifier: L1 image has all 43 effects, ship and dev have none, the indicator table is in both, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
+| POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c` (both variants); dev Shift+Shift+F fault test | verifier: all four fault vectors → the stack-free reset routine in ship and dev; base keeps ChibiOS defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Removed from ship by the user's decision (2026-10-26) | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
 | POLICY-HHKB | HHKB is the default everywhere: keymaps, first layout, VIA layout option 0 | `keyboard.json`, keymaps, `via/falcon_kalam.json` | verifier |
 
@@ -48,7 +49,7 @@ LED-order test.
 
 | Priority | State | Colour | LEDs | Trigger |
 |---|---|---|---|---|
-| 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` pushes the frame out; WS2812s latch it |
+| 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
 | 2 | settings were reset | orange, 3 blinks at boot | all | `eeconfig_init_user` (EEPROM init) |
 | 3 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
 | 4 | debug output on | yellow | A | Shift+Shift+D / X |
@@ -107,7 +108,7 @@ the release keymap was `hhkb_via`.
 | POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time) | `build.sh --twice`; the verifier checks the embedded build date |
 | POLICY-EVIDENCE | hardware parameters come only from verified evidence; anything unproven is marked so, never invented | analysis tool (exact-address checks); status column in `hardware.md` |
 | POLICY-READONLY-DEVICE | without an approval, only read the device: enumeration, DFU **upload**, whitelisted VIA queries | `falcon_kalam_probe.py` whitelist |
-| POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU. The daily image is always ship | `operations.md` §2 |
+| POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU. The daily image is always ship | `scripts/flash.sh` (refuses other images, wrong hashes, devices not in DFU; alt 2 hard-coded; pre-flash readback) + its negative tests; `operations.md` §2 |
 | POLICY-OPEN-ISSUES | an open issue stays open until the user settles it explicitly | `problems.md` |
 | POLICY-NAMING | §2.2 | verifier, `check_docs.py` |
 | POLICY-DOCS | §4 below | `scripts/check_docs.py` (run by `build.sh`) |
@@ -117,12 +118,12 @@ the release keymap was `hhkb_via`.
 | Path | Content |
 |---|---|
 | `keyboards/falcon_kalam/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 2048/1024, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_kalam.ld` (app region `0x08002000–0x0800F7FF`, exports `__falcon_kalam_app_*`); `keymaps/default/` (HHKB); `readme.md` |
-| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB layer settings, `falcon_kalam_keymap.h` the keymap, `rgb_indicators.c/.h` POLICY-RGB, `flashread.c`); `userspace/keyboards/falcon_kalam/keymaps/ship/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
+| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB layer settings, `falcon_kalam_keymap.h` the keymap, `falcon_kalam.c` the only file defining QMK hooks, `rgb_indicators.c/.h` POLICY-RGB, `recovery.c` POLICY-RECOVERY, `flashread.c`); `userspace/keyboards/falcon_kalam/keymaps/ship/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
 | `via/falcon_kalam.json` | VIA definition (both variants): the stock JSON with HHKB as layout option 0, without the lighting menu (POLICY-RGB) |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
 | `originals/` | stock BIN, readback, VIA JSON, `device_dump_2026-10-26/` (bootloader, F_SIZE/UID, option bytes), `SHA256SUMS` |
-| `scripts/` | `build.sh` (only build entry), `verify_firmware.py` (`--profile base\|release\|dev`), `negative_tests.sh`, `qmk_policy.sh`, `check_docs.py` |
+| `scripts/` | `build.sh` (only build entry), `flash.sh` (only flash entry: `check`/`flash`/`verify`), `verify_firmware.py` (`--profile base\|release\|dev`), `negative_tests.sh`, `qmk_policy.sh`, `check_docs.py` |
 | `tools/` | `analyze_vendor_firmware.py`, `feature_parity.py`, `falcon_kalam_probe.py` (read-only VIA probe), `usb_watch.py` (passive USB log), `disassemble_vendor.sh` |
 | `artifacts/` | built images (`.bin` with DFU suffix, `.elf`, `.map`, cflags, `info_config.h`, `.sha256`), build/verification reports, device logs |
 | `build/` | scratch, git-ignored |
@@ -175,16 +176,36 @@ compile). Names such as `F13` are unusable: QMK defines `F13` as a pin macro
 (GPIOF pin 13), which breaks the `KC_##key` paste. Layer switching is turned
 off with `MAGIC_KEY_SWITCH_LAYER_WITH_{FKEYS,NKEYS} false`.
 
-**`rgb_indicators.c`.** `keyboard_post_init_user` installs the layer table.
-`housekeeping_task_user` polls the state sources (USB state, debug flags,
+**`falcon_kalam.c` (hook dispatcher).** QMK's `*_user` hooks and weak hooks
+(`bootmagic_reset_eeprom`, `command_extra`) can each be defined only once per
+firmware. They all live here and call module functions
+(`falcon_kalam_rgb_init/task/shutdown/...`), so modules never collide.
+
+**`recovery.c` (POLICY-RECOVERY).** QMK writes `BKP_DR10 = 0x424C` (stay in
+DFU) at every boot, and the bootloader honours it after any reset. The four
+fault vectors alias one naked routine: write `0x424C` again, set
+`SCB->AIRCR = 0x05FA0004` (system reset), wait. It uses immediates only (no
+stack, no literal pool), because a second fault inside a HardFault handler
+locks the Cortex-M3 up. `_Static_assert`s pin the hard-coded addresses to the
+CMSIS definitions. Rejected: a watchdog (the IWDG keeps running across the
+reset, and the bootloader never feeds it, so it would abort DFU sessions).
+Not covered: `chSysHalt()`, whose hook lives in the board's `chconf.h`, i.e.
+L1.
+
+**`rgb_indicators.c`.** `falcon_kalam_rgb_init` (from `keyboard_post_init_user`)
+installs the layer table. `falcon_kalam_rgb_task` (from `housekeeping_task_user`)
+polls the state sources (USB state, debug flags,
 layer state) every main-loop pass. It calls `rgblight_set_layer_state()` only
 for layers whose state changed, because each call schedules a redraw. It also
 enforces the white base in ship. The USB-state callback is avoided because it
 can run in interrupt context, and the debug flags have no callback.
-`shutdown_user` sets the red layer and calls `rgblight_set()` directly, since
-there is no later main-loop pass before the reset. `eeconfig_init_user` runs
-before the LEDs exist, so it only sets a flag (keeping QMK's default
-`eeconfig_update_user(0)`); the blink starts in `keyboard_post_init_user`.
+`falcon_kalam_rgb_shutdown` sets the red layer and calls `rgblight_set()`
+directly, since there is no later main-loop pass before the reset. Bootmagic
+runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
+WS2812 driver directly (`ws2812_init`, `set_color_all(RGB_RED)`, `flush`).
+EEPROM initialisation runs before the LEDs exist, so it only sets a flag
+(the dispatcher keeps QMK's default `eeconfig_update_user(0)`); the blink
+starts at post-init.
 Note: rgblight blinks share one repeat timer, so overlapping blinks interfere
 (only possible in dev, during a FLASHREAD dump at boot). Layer changes are applied in `rgblight_task()`, which
 exists because `RGBLIGHT_LAYERS` forces `RGBLIGHT_USE_TIMER` even with no

@@ -224,6 +224,32 @@ def main():
         c.check(want is not None and m.group(1).decode() == want,
                 'embedded build date "%s" == SOURCE_DATE_EPOCH date "%s" (day-independent build)' % (m.group(1).decode(), want))
 
+    # R6: WS2812 bit-bang timing structurally identical to the stock routine
+    # (0x08004AE8): 5 x (6 NOP) loops for T1H and T0L, 12-NOP T1L/T0H, 1344-pass latch.
+    nop = b'\x00\xbf'
+    t1h = b'\x05\x24' + nop * 6 + b'\x01\x3c\xf7\xd1'                 # movs r4,#5; 6 nop; subs; bne
+    t0l = b'\x05\x24\x51\x61' + nop * 6 + b'\x01\x3c\xf7\xd1'       # same loop after the BRR store
+    t_short = b'\x51\x61' + nop * 12                                    # BRR store, 12 nop (T1L)
+    latch = b'\x4f\xf4\xa8\x63'                                       # mov.w r3,#1344 (280 us latch)
+    stock = (vendor.ORIG / 'manufacturer_firmware.bin').read_bytes()
+    for name, blob in (('stock', stock), (args.bin.name, payload)):
+        c.check(t1h in blob and t0l in blob and t_short in blob and latch in blob,
+                'R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in %s' % name)
+
+    # POLICY-RECOVERY: every fault vector -> one stack-free reset routine (L2 only).
+    vec = struct.unpack_from('<4I', payload, 3 * 4)   # HardFault, MemManage, BusFault, UsageFault
+    routine = struct.pack('<10H', 0xF646, 0x4028, 0xF2C4, 0x0000, 0xF244, 0x214C, 0x6001, 0xF3BF, 0x8F4F, 0xF64E)
+    if release:
+        target = vec[0] & ~1
+        same = len(set(vec)) == 1 and vec[0] & 1
+        c.check(same and payload[target - APP_START:target - APP_START + len(routine)] == routine,
+                'POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x%08X' % target)
+        c.check((b'fault test' in payload) == dev, 'POLICY-RECOVERY: Shift+Shift+F fault test %s' % ('present (dev)' if dev else 'absent (ship)'))
+    else:
+        weak = {p[2]: int(p[0], 16) for p in (l.split() for l in run('arm-none-eabi-nm', str(args.elf)).splitlines()) if len(p) == 3 and p[1] == 'W'}
+        c.check('HardFault_Handler' in weak and all(v & ~1 == weak['HardFault_Handler'] & ~1 for v in vec),
+                'base keeps the ChibiOS default (weak) fault handlers')
+
     # ------------------------------------------------------------------
     c.section('5. Configuration matches the manufacturer firmware')
     vimg = vendor.Image((vendor.ORIG / 'falcon_flash_backup.bin').read_bytes())

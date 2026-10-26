@@ -35,29 +35,22 @@ FLASHREAD, `VIA_INSECURE` and debug traces (POLICY-VARIANTS).
 
 ## 2. Flash
 
-**Approval** (in chat or `devnotes.md`): the variant (`falcon_kalam_ship.bin`
-= ship, or `falcon_kalam_dev.bin` = dev for testing), its full SHA-256,
-and the decisions on any open **HR** problems. The daily image is always ship.
+Always through `scripts/flash.sh` (POLICY-FLASH-GATE). It accepts only `ship`
+or `dev`, requires the full approved SHA-256 (matched against the file, its
+`.sha256` record and `docs/firmware.md`), hard-codes DFU alt 2, refuses a
+device that is not in DFU, and saves a pre-flash readback.
 
-1. Offline: `cd originals && shasum -a 256 -c SHA256SUMS`; `scripts/qmk_policy.sh --online`; `scripts/build.sh --twice`; `scripts/negative_tests.sh`; all reports `RESULT: PASS`; `scripts/check_docs.py` passes; the hash equals the approved one.
-2. Enter DFU: unplug, hold **Esc**, plug in, hold about 2 s (this clears EEPROM). The LEDs stay dark. Check with `dfu-util -l`: expect `1eaf:0003` with alt 2 "Upload to Flash 0x8002000".
-3. Read-only pre-flash readback (keep it):
-   ```bash
-   dfu-util -d 1EAF:0003 -a 2 -U build/readback_pre_flash.bin -Z 57344
-   ```
-4. **[WRITES DEVICE]** flash the approved variant, alt 2 only (dev: `falcon_kalam_dev.bin`):
-   ```bash
-   dfu-util -d 1EAF:0003 -a 2 -D artifacts/falcon_kalam_ship.bin -R
-   ```
-   A `LIBUSB_ERROR_TIMEOUT` on reset is normal. The app starts by itself.
-5. Check `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info`.
-6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU; read back and compare (step 7); replug normally.
-7. Verify the write (read-only):
-   ```bash
-   dfu-util -d 1EAF:0003 -a 2 -U build/readback_post_flash.bin -Z 57344
-   ```
-   The first `size − 16` bytes must equal the release payload.
-8. Run the open hardware tests from `devnotes.md`, and record the results there.
+**Approval** (in chat or `devnotes.md`): the variant (ship, or dev for
+testing), its full SHA-256 from `firmware.md` §1, and the decisions on any open
+**HR** problems. The daily image is always ship.
+
+1. Offline: `cd originals && shasum -a 256 -c SHA256SUMS`; `scripts/qmk_policy.sh --online`; `scripts/build.sh --twice`; `scripts/negative_tests.sh`; every report `RESULT: PASS`, including `check_docs.py`.
+2. `scripts/flash.sh check <variant> <sha256>` validates everything without touching the device.
+3. Enter DFU: unplug, hold **Esc**, plug in, hold about 2 s (this clears EEPROM). The LEDs go red (our images) or stay dark (stock).
+4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`. It reads back first (`build/readback_pre_*.bin`), then flashes; the log goes to `artifacts/flash_*.log`. The app starts by itself.
+5. Check that `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info`.
+6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU (red), then `scripts/flash.sh verify <variant>` (read-only: flash content = image). Replug normally.
+7. Run the open hardware tests from `devnotes.md`, and record the results there.
 
 ## 3. Hardware test procedures
 
@@ -80,7 +73,7 @@ otherwise the pads or SWD).
 
 | Goal | Command |
 |---|---|
-| Restore stock **[WRITES DEVICE]** | `dfu-util -d 1EAF:0003 -a 2 -D originals/manufacturer_firmware.bin -R` (suffix-checked; application region only) |
+| Restore stock **[WRITES DEVICE]** (the one case for a manual `dfu-util -D`, since `flash.sh` only takes our images; keep `-a 2`) | `dfu-util -d 1EAF:0003 -a 2 -D originals/manufacturer_firmware.bin -R` (suffix-checked; application region only) |
 | Restore the exact original flash incl. EEPROM **[WRITES DEVICE]**, untested whether the bootloader accepts a download up to the last page | `cp originals/falcon_flash_backup.bin build/restore_full.bin && chmod u+w build/restore_full.bin && dfu-suffix -v 1EAF -p 0003 -a build/restore_full.bin && dfu-util -d 1EAF:0003 -a 2 -D build/restore_full.bin -R` |
 | Verify a restore (read-only) | upload as in §2 step 7, then `cmp -n 43940 build/readback_after.bin originals/falcon_flash_backup.bin` |
 | Last resort: SWD | PA13/PA14, RDP off, so a full read and write is possible. Use a GD32F1-capable probe/OpenOCD target. The bootloader image is `originals/device_dump_2026-10-26/bootloader_0x08000000.bin` (= upstream `generic-none`). The SWD pads are not located yet |

@@ -3,7 +3,8 @@
 #   1. NKRO cannot be re-enabled in the release keymap (shared users/falcon_kalam config.h #error).
 #   2. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F800 in the keyboard-local linker script).
-#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces) are refused by the ship variant.
+#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces, dev marker) are refused by the ship variant.
+#   4. scripts/flash.sh refuses the L1 image and any hash that is not the approved one.
 # Uses throw-away keymaps inside the staged copy; restores it afterwards.
 set -euo pipefail
 
@@ -16,7 +17,7 @@ export PATH="${FALCON_KALAM_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}:
 export LC_ALL=C TZ=UTC QMK_HOME="$QMK" SKIP_VERSION=yes QMK_USERSPACE="$ROOT/userspace"
 
 [[ -d "$STAGED" ]] || { echo "run scripts/build.sh first" >&2; exit 1; }
-trap 'rsync -a --delete "$ROOT/keyboards/$KB/" "$STAGED/"' EXIT
+trap 'rsync -a --delete --delete-excluded --exclude .DS_Store "$ROOT/keyboards/$KB/" "$STAGED/"' EXIT
 exec > >(tee "$LOG") 2>&1
 
 fail=0
@@ -39,6 +40,7 @@ expect_failure ship "POLICY-NKRO: NKRO must stay disabled" NKRO_ENABLE=yes
 expect_failure ship "POLICY-VARIANTS: FLASHREAD is dev-only" FALCON_KALAM_FLASHREAD=yes
 expect_failure ship "POLICY-VARIANTS: VIA_INSECURE is dev-only" EXTRAFLAGS=-DVIA_INSECURE
 expect_failure ship "POLICY-VARIANTS: debug traces" EXTRAFLAGS=-DACTION_DEBUG
+expect_failure ship "POLICY-VARIANTS: FALCON_KALAM_DEV" EXTRAFLAGS=-DFALCON_KALAM_DEV
 
 # 2. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F800.
 mkdir -p "$STAGED/keymaps/neg_oversize"
@@ -55,5 +57,23 @@ EOF
 expect_failure neg_oversize "region .flash0. overflowed\|will not fit in region"
 
 (cd "$QMK" && make "$KB:neg_oversize:clean" >/dev/null 2>&1) || true
+
+# 4. POLICY-FLASH-GATE: scripts/flash.sh refuses anything but an approved ship/dev image
+#    (check mode only: lists USB devices, never writes).
+HASH="$(awk '{print $1}' "$ROOT/artifacts/falcon_kalam_ship.bin.sha256")"
+expect_script_failure() {
+    local label="$1" pattern="$2"; shift 2
+    local out
+    if out="$("$ROOT/scripts/flash.sh" "$@" 2>&1)"; then
+        echo "FAIL  flash.sh $label: accepted"; fail=1
+    elif grep -q -- "$pattern" <<<"$out"; then
+        echo "PASS  flash.sh $label: rejected ($out)"
+    else
+        echo "FAIL  flash.sh $label: wrong reason: $out"; fail=1
+    fi
+}
+expect_script_failure "L1 reference image" "only 'ship' or 'dev'" check default "$HASH"
+expect_script_failure "wrong hash" "does not match the approved" check ship "$(printf '0%.0s' {1..64})"
+expect_script_failure "short hash" "full approved SHA-256" check ship abc
 [[ $fail -eq 0 ]] && echo "RESULT: PASS" || echo "RESULT: FAIL"
 exit $fail

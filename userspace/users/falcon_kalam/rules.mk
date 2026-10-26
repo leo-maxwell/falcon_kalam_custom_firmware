@@ -20,8 +20,9 @@ CONSOLE_ENABLE = yes   # HID console (usage page 0xFF31), read with `qmk console
 COMMAND_ENABLE = yes   # LShift+RShift+<key> magic commands
 LTO_ENABLE = yes       # link-time optimisation
 
-# POLICY-RGB: status-indicator module (both variants).
-SRC += rgb_indicators.c
+# Hook dispatcher (the only file defining QMK *_user hooks), POLICY-RGB
+# status indicators, POLICY-RECOVERY fault handlers. Both variants.
+SRC += falcon_kalam.c rgb_indicators.c recovery.c
 
 # POLICY-FLASHREAD: read-only bootloader/option-byte/UID dump over raw HID.
 # Only a variant that sets FALCON_KALAM_FLASHREAD = yes gets it (dev); the ship
