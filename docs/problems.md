@@ -7,7 +7,6 @@ owner's decision. Closed items move to the ledger as one line.
 
 | ID | Problem | Status / impact | Mitigation / next step |
 |---|---|---|---|
-| B6 | **Fn+F (Eject) does nothing on macOS** (release 4): QMK's `KC_EJCT` sends consumer `0xCC` (Stop/Eject); the Classic sends `0xB8` (Eject) | **fixed** in release 6: `0xB8` is sent (seen in the log), but this Mac (no disc drive) still shows nothing | Ctrl+Fn+F: macOS answers Control+Eject with its shut-down dialog (devnotes) |
 | R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY; verified on the device: Shift+Shift+F lands in DFU): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
 | R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev-round persistence test with the wear-leveling trace; repeat after each QMK update |
 
@@ -45,9 +44,10 @@ owner's decision. Closed items move to the ledger as one line.
 | R16 | 2026-10-27 | deviations from the HHKB Classic settled: each is listed with its reason in `policy.md` §2.3 and accepted (L11). Virtual switch flips take effect at the next plug-in and the factory setting is HHK mode, as on the Classic |
 | L10 | 2026-10-27 | the virtual DIP switches and the mode had no display; Fn+Ctrl+Shift+0 and the mode keys now show them (I23) |
 | B1 | 2026-10-27 | Caps Lock LED: the A10 indicator is compiled in since the variant images; on the device it follows the host's Caps Lock (dev release 4) |
-| B5 | 2026-10-27 | settings-reset blink lost to USB suspend during enumeration: it now starts once the host has configured the keyboard; seen as red ×3 on the device (dev release 6). Release 7 shows it on a dark background, so the normal state no longer appears between the flashes |
+| B5 | 2026-10-27 | settings-reset blink lost to USB suspend during enumeration: it now starts once the host has configured the keyboard; seen as red ×3 on the device (dev release 6). Release 7 shows it on a dark background, so the normal state no longer appears between the flashes; release 8 keeps the LEDs dark from boot until the blinks end (the normal state flashed up once before them) |
 | B7 | 2026-10-27 | settings-display gap showed the normal state: an all-off layer covers it; dark on the device (dev release 6) |
-| B8 | 2026-10-27 | dev fault test: its console line never arrived, because the 50 ms wait blocked the main loop that sends the console; release 7 faults from the main loop 200 ms later |
+| B8 | 2026-10-27 | dev fault test: its console line never arrived, because the 50 ms wait blocked the main loop that sends the console; release 7 faults from the main loop 200 ms later, and the line arrives |
+| B6 | 2026-10-27 | Eject sent QMK's `0xCC`; now the Classic's `0xB8` (release 6). macOS accepts it: Control+Eject opens the shut-down dialog (release 7); plain Eject shows nothing on this Mac (no disc drive) |
 | R15 | 2026-10-27 | "dark" no longer ambiguous: Bootmagic and Command B leave all four LEDs red in DFU on the device (Command: release 3; Bootmagic: release 6, after LED 1 had lost the first frame, now held low and sent twice) |
 | B2 | 2026-10-26 | `falcon_kalam_probe.py matrix` read VIA ≥ 12 replies one byte early; fixed; `decode-log` re-maps the affected log |
 | B3 | 2026-10-26 | builds were reproducible only within one day: QMK Command embeds `__DATE__`. Fixed: `SOURCE_DATE_EPOCH` = pinned QMK commit time; the verifier checks the embedded date. Images `9b61141e…` (flashed) and `dd580803…` carry their build-day date; nothing else differs |

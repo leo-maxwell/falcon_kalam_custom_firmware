@@ -117,7 +117,7 @@ There are exactly two:
 | Light | Pin / drive | Details |
 |---|---|---|
 | **Caps Lock LED** | `A10`, push-pull, **active-low** | follows the host's Caps Lock (`led_set` at `0x08003E10`); off (high) at init |
-| **RGB module** | `A1`, bit-banged WS2812, **GRB**, 4 LEDs, 280 µs reset | a separate, **detachable module** on a connector; stock leaves it dark in DFU. Index order, placement (underglow or indicator), LED part and current draw: Unverified. Use: POLICY-RGB (`docs/policy.md`) |
+| **RGB module** | `A1`, bit-banged WS2812, **GRB**, 4 LEDs, 280 µs reset | a separate, **detachable module** on a connector; stock leaves it dark in DFU. **Index order = left to right** (Verified 2026-10-27: indices 0–1 are the two left LEDs, and the settings display lit indices 1–2 but not 3 as the second and third LEDs). Each LED blends mixed colours poorly; pure red, green and blue read clearly. Placement (underglow or indicator), LED part and current draw: Unverified. Use: POLICY-RGB (`docs/policy.md`) |
 
 How "nothing else" was established: in the stock image the only constant pin
 setups and GPIO writes are A1, A10, A12 (USB) and the `board.h` defaults; no

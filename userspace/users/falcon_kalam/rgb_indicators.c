@@ -90,8 +90,9 @@ _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED m
 
 static bool settings_were_reset;
 
-// Reset blinks: 3 x (250 ms red + 250 ms off) over the dark layer, so the
-// normal state does not show between the red flashes.
+// Reset blinks: 3 x (250 ms red + 250 ms off) over the dark layer, which is
+// on from boot (falcon_kalam_rgb_init), so the normal state shows only after
+// the blinks.
 #define RESET_BLINK_MS 250
 #define RESET_BLINKS 3
 static bool     reset_dark;
@@ -126,6 +127,11 @@ static void enforce_green_base(void) {
 void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
     enforce_green_base();
+    if (settings_were_reset) {
+        // Dark from boot until the reset blinks end, so the normal state does
+        // not flash up while the host is still configuring the keyboard.
+        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
+    }
 }
 
 // Draws one settings value (on = true): the mode colour on LED 1, LEDs 2-4
@@ -187,7 +193,6 @@ void falcon_kalam_rgb_task(void) {
     // rgblight_suspend() cancels every running blink.
     if (settings_were_reset && usb == USB_DEVICE_STATE_CONFIGURED) {
         settings_were_reset = false;
-        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
         reset_dark       = true;
         reset_dark_timer = timer_read();
         rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, RESET_BLINK_MS, RESET_BLINKS);
