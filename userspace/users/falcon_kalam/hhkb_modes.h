@@ -10,9 +10,9 @@
 #include QMK_KEYBOARD_H
 
 enum falcon_kalam_layers {
-    _HHK, // HHK mode
+    _HHK, // HHK mode (factory setting, as on the Classic)
     _HHK_FN,
-    _MAC, // Mac mode (our factory setting; the HHKB's is HHK mode)
+    _MAC, // Mac mode
     _MAC_FN,
     _WIN, // Win mode
     _WIN_FN,
@@ -27,7 +27,7 @@ enum falcon_kalam_layers {
 #define FALCON_KALAM_SW3 (1u << 2) // Delete key sends Backspace (not in Mac mode)
 #define FALCON_KALAM_SW4 (1u << 3) // left ◇ becomes Fn
 #define FALCON_KALAM_SW5 (1u << 4) // swap Alt and ◇
-#define FALCON_KALAM_DIP_FACTORY FALCON_KALAM_SW2 // Mac mode, everything else off
+#define FALCON_KALAM_DIP_FACTORY 0 // all off, as the Classic ships: HHK mode
 
 void falcon_kalam_hhkb_init(void);                                      // keyboard_post_init_user: power-on mode from SW1/SW2
 bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record); // process_record_user; false = consumed

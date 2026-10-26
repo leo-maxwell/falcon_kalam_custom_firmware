@@ -7,9 +7,10 @@
 // As on the Classic: SW1/SW2 select the mode at power-on; Fn+Control+M
 // switches to Mac mode and Fn+Control+W to Win mode (to HHK mode when SW1/SW2
 // select HHK), until the next power-on; SW3-SW5 change keys on top of the
-// keymap, as the Classic's DIP switches act on its stored keymap. This unit has
-// no switches, so they are virtual: saved in EEPROM and toggled with
-// Fn+Control+Shift+1..5, effective at once.
+// keymap, as the Classic's DIP switches act on its stored keymap. All are off
+// from the factory (HHK mode). This unit has no switches, so they are
+// virtual: saved in EEPROM and toggled with Fn+Control+Shift+1..5, effective
+// at once.
 
 #include "hhkb_modes.h"
 #include "rgb_indicators.h"

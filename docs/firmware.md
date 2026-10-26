@@ -9,8 +9,8 @@ the pinned QMK commit time).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `c8fe20f2d6f37189e45c844357b877bffd4b5ea30c76f08e882be83aefe6c774` | 37,216 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `0b874d61cbee8cb4d7a929d27f9d3c5a7e173546a6a34ed277143fce8454a217` | 42,692 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `1e1d37e30b83b78ffc354fc44e28a3990c28a918b0c49f45ab6672f943910f28` | 37,208 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `a35092b0c687b37af6552b19fe18ddd3be6fe76d07b65cf4d3e6afb601d8b60e` | 42,676 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -30,7 +30,7 @@ same feature code · **pending** = see devnotes.
 | HID interfaces | keyboard 6KRO, VIA, shared mouse/system/consumer, console; 1 ms | same | = (no NKRO report) | ✓ |
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | ✓ Caps Lock and input-source switching work on macOS, also after a replug |
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | pending: full key test |
-| Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); factory setting Mac mode (§3) | same | new (stock: generic 60%) | pending |
+| Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); HHK mode from the factory, as the Classic (§3) | same | new (stock: generic 60%) | pending |
 | VIA | protocol `0x000D`, 6 layers (the three modes, in the Classic's order), 16 macros in a 1,107 B buffer (stock: 4 layers, 383 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ (probe) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ (red: pending) |
 | Fault recovery (POLICY-RECOVERY) | any CPU fault resets into DFU instead of hanging | same + Shift+Shift+F fault test | new | pending |
@@ -67,7 +67,7 @@ Fn, every mode:  1–= F1–F12  \ Ins  ` Del  I PrtSc  O ScrLk  P Pause
 
 Mode keys (until the next plug-in):  Fn+Ctrl+M Mac · Fn+Ctrl+W Win (HHK when SW1/SW2 select HHK)
 Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 toggles SW1…SW5; dark blink ×1 = off, ×2 = on
-  SW1/SW2  power-on mode: OFF/OFF HHK · ON/OFF Win · OFF/ON Mac (factory) · ON/ON acts as HHK
+  SW1/SW2  power-on mode: OFF/OFF HHK (factory) · ON/OFF Win · OFF/ON Mac · ON/ON acts as HHK
   SW3      Delete sends Backspace (Win/HHK)
   SW4      left ◇ = Fn
   SW5      swap Alt and ◇
@@ -78,7 +78,9 @@ Codes as the Classic sends them: Power = Keyboard Power (`0x66`), Stop
 not support send the plain key. The switches act on top of the keymap, so VIA
 shows the unchanged layers. Positions outside the HHKB layout are `KC_NO` and
 can be assigned in VIA; all six VIA layers belong to the modes. An EEPROM
-reset restores the factory switches.
+reset restores the factory switches (all off: HHK mode). On a Mac, HHK mode
+has no Command key (◇ = Muhenkan/Henkan): switch to Mac mode with Fn+Ctrl+M
+for the session, or with SW2 (Fn+Ctrl+Shift+2) for good.
 
 The L1 reference image (`keymaps/default`, never flashed) has a simpler map:
 QMK's own HHKB layout (one Fn layer, as

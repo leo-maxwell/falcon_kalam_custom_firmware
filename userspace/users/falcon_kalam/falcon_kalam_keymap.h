@@ -10,12 +10,12 @@
 // POLICY-HHKB: the three HHKB Professional Classic setting modes, copied from
 // its User's Guide (P3PC-6661-01EN) and its keymap dump (docs/hardware.md §7).
 // Layers in the order the Classic stores them (HHK, Mac, Win); the power-on
-// mode comes from the virtual DIP switches (factory: Mac). Keys a mode does not
-// support are transparent: the HHKB sends the plain key there too. Mode keys
-// and DIP switches: hhkb_modes.c. Codes as the real keyboard sends
-// them: Power = Keyboard Power (0x66; the HHKB has no system-control report),
-// Stop = 0x78, Clear = Keypad Num Lock and Clear (0x53), volume/mute/eject on
-// the consumer page.
+// mode comes from the virtual DIP switches (factory: HHK, as on the Classic).
+// Keys a mode does not support are transparent: the HHKB sends the plain key
+// there too. Mode keys and DIP switches: hhkb_modes.c. Codes as the real
+// keyboard sends them: Power = Keyboard Power (0x66; the HHKB has no
+// system-control report), Stop = 0x78, Clear = Keypad Num Lock and Clear
+// (0x53), volume/mute/eject on the consumer page.
 //
 // This header DEFINES the keymaps array. Include it exactly once, from a
 // variant's keymap.c: QMK's keymap introspection compiles keymap.c itself and

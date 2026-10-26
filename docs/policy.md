@@ -11,8 +11,9 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
   keyboards/…/keymaps/dev/      dev variant  → falcon_kalam_dev.bin (debug image)
 ```
 
-* A hardware fact goes in L1; a choice goes in L2. When upstream fixes
-  something (e.g. NKRO on macOS), only L2 changes.
+* A hardware fact goes in L1; a choice goes in L2. Upstream is never fixed
+  here (POLICY-UPSTREAM): an upstream problem is configured around in L2, and
+  when upstream fixes it (e.g. NKRO on macOS), only L2 changes.
 * L1 passes `qmk lint` with upstream rules and builds `falcon_kalam_default.bin`,
   a reference that is **never flashed**.
 * L2 is QMK External Userspace (`QMK_USERSPACE=userspace/`). Each variant's
@@ -29,14 +30,14 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 
 | ID | Rule | Implemented in | Enforced by |
 |---|---|---|---|
-| POLICY-NKRO | NKRO is a configuration decision: L1 supports it (`"nkro": true`); both variants disable it, because stock NKRO breaks the macOS Caps Lock / input-source toggle | `users/falcon_kalam/rules.mk` `NKRO_ENABLE = no` + `#error` guard in `users/falcon_kalam/config.h` | verifier (no NKRO report, flag or code); negative test. To lift: delete both, flip the verifier checks |
+| POLICY-NKRO | NKRO is a configuration decision: L1 supports it (`"nkro": true`); both variants disable it, because stock NKRO breaks the macOS Caps Lock / input-source toggle | `users/falcon_kalam/rules.mk` `NKRO_ENABLE = no` + `#error` guard in `users/falcon_kalam/config.h` | verifier (no NKRO report, flag or code); negative test. Lifted when an upstream QMK release fixes the problem (re-test on each update, I8): delete both, flip the verifier checks |
 | POLICY-VIA | both variants are VIA-configurable | `users/falcon_kalam/rules.mk` | verifier |
 | POLICY-PARITY | both variants keep every stock feature on top of L1: console, Command, LTO (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B; dev keeps the full set | `users/falcon_kalam/rules.mk`, `users/falcon_kalam/config.h`, `ship/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only feature. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code only in `users/falcon_kalam/`; no git branches for configuration | variant `rules.mk`/`config.h`; `#error` guards in `ship/keymap.c` | `build.sh` builds and verifies both every time (verifier profiles `release` = ship, `dev`); negative tests inject each debug feature into ship |
 | POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 43 effects, ship and dev none, the indicator table is in both, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c`; dev Shift+Shift+F fault test | verifier: in ship and dev all four fault vectors lead to the stack-free reset routine; base keeps ChibiOS's defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Not in ship, because it exposes the chip UID | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
-| POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; Mac mode by default | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
+| POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; HHK mode from the factory, as the Classic | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
 
 ### 2.1 RGB policy (POLICY-RGB)
 
@@ -110,21 +111,20 @@ copy, the closest equivalent is used, and every deviation is listed here.
 | Keymap | the Classic's six layers in its own storage order: HHK base/Fn, Mac base/Fn, Win base/Fn; unsupported Fn keys send the plain key, as on the Classic |
 | HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
 | Mode keys | Fn+Control+M → Mac mode; Fn+Control+W → Win mode, or HHK mode when SW1/SW2 select HHK; effective until the next plug-in, as SW1/SW2 decide the power-on mode |
-| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, toggled with Fn+Control+Shift+1…5, acknowledged by a dark blink (POLICY-RGB). SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
+| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, toggled with Fn+Control+Shift+1…5, acknowledged by a dark blink (POLICY-RGB). SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
 
 Deviations, each because a copy is impossible or conflicts with a policy:
 
 | Deviation | Reason |
 |---|---|
-| Factory setting = Mac mode (virtual SW2 on); the Classic ships in HHK mode | the HHKB layout is built for the Mac |
 | Virtual DIP changes apply at once; the Classic applies them at the next plug-in | there is nothing to unplug for; waiting would only hide the effect |
 | SW1/SW2 ON/ON acts as HHK mode | the manual defines no such setting |
-| No SW6 (power saving) | it changes how the keyboard wakes the host; QMK's remote wakeup stays as stock had it |
+| No SW6 (power saving); the keyboard can always wake the host, as with SW6 on (the Classic ships with SW6 off: a key press cannot wake the host) | QMK's wake-up check (`suspend_wakeup_condition()`) has no configuration hook; emulating SW6 would mean patching QMK (POLICY-UPSTREAM) |
 | USB identity `9DD1:9D89` "Falcon", not PFU's `04FE:0020` "HHKB-Classic" | the board must not pass as PFU's product (POLICY-NAMING); VIA matches on our ID |
 | VIA instead of PFU's keymap tool and vendor interface | PFU's protocol is proprietary; VIA gives the same remapping (POLICY-VIA) |
 | RGB status lights | the Classic has none; the unit's light module serves as a status indicator (POLICY-RGB) |
 | Console, Command, Bootmagic | stock features of this unit (POLICY-PARITY) |
-| 6KRO only; the Classic also declares an NKRO report (unused) | POLICY-NKRO |
+| 6KRO only; the Classic also declares an NKRO report (unused) | **temporary**: POLICY-NKRO keeps NKRO off until upstream fixes the macOS problem |
 
 The policy lives in L2, since the keymap is a choice. L1 holds the physical
 layout and sizes the EEPROM for six layers; its own default keymap stays a
@@ -134,6 +134,7 @@ plain QMK-style HHKB reference.
 
 | ID | Rule | Enforced by |
 |---|---|---|
+| POLICY-UPSTREAM | upstream (QMK, ChibiOS, the bootloader) is used as released and **never fixed here**. A problem upstream is configured around in L2 (e.g. POLICY-NKRO disables NKRO instead of fixing it), recorded, and the configuration is lifted when an upstream release fixes it. Only upstream's own extension points are used: config macros, `rules.mk` options, `*_user`/weak hooks, the keyboard's linker script. Behaviour without such a hook is a deviation, not a patch | `qmk_firmware` is never edited (`build.sh` requires a clean pinned tree); review |
 | POLICY-QMK-LATEST | `qmk_firmware` sits exactly on the newest upstream QMK release tag; being newer than stock is intended | `scripts/qmk_policy.sh` (offline in every build, fatal; `--online` before each flash) |
 | POLICY-ORIGINALS | `originals/` is immutable evidence: mode 444, hashes in `SHA256SUMS`. New device dumps may be **added**, never changed | `build.sh` hash check |
 | POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time). Not the real date, because an approved SHA-256 must be re-derivable, and VIA wipes the saved keymap whenever the build date changes; pinned, that happens only with a QMK update, and our own layout changes use the schema stamp (§5) | `build.sh --twice`; the verifier checks the embedded build date |
@@ -236,7 +237,7 @@ firmware. They all live here and call module functions
 collide. It also owns the **settings schema stamp**. The eeconfig user word
 (`user_config.h`) holds a 16-bit schema and the virtual DIP byte;
 `eeconfig_init_user` writes `FALCON_KALAM_EEPROM_SCHEMA` and the factory
-switches (SW2 = Mac), and `keyboard_pre_init_user` (after the EEPROM driver
+switches (all off = HHK mode), and `keyboard_pre_init_user` (after the EEPROM driver
 starts, before QMK reads the settings) marks the settings invalid when the
 schema differs. QMK then
 re-initialises everything, VIA keymaps and macros included; its init calls
