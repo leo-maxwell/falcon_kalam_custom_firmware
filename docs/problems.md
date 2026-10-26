@@ -13,6 +13,8 @@ user decision. Closed items move to the ledger at the end as one line.
 | R6 | **WS2812 bit-bang timing / colour order** on hardware | untested | RGB test in devnotes; failure = wrong colours or flicker, no damage |
 | R8 | **macOS Caps Lock / input-source fix** | user reports it working, also after a replug | close after the console Caps trace (devnotes) |
 | R12 | **Console + Command in the ship image** (stock parity): Shift+Shift+D then K prints keystrokes to the HID console, readable by any host program | **decided** (user, 2026-10-26): ship keeps H D X K V S B; the risky combos (wipe settings, lock, layer switch, …) type normally | residual risk accepted; the keystroke printout needs two deliberate combos and resets on replug |
+| R14 | **Full-white current**: 4 WS2812 at full white draw roughly 4 × 50–60 mA (typical datasheet values, not measured) on top of the MCU; within the 500 mA USB budget, but continuous | estimate only | measure the module current (I4); `RGBLIGHT_LIMIT_VAL` in L2 if needed |
+| R15 | **"Dark" is ambiguous** under POLICY-RGB: host asleep, DFU entered by Bootmagic, or white base switched off (Fn+Z) | by design | DFU entered via Shift+Shift+B / `QK_BOOT` should stay red (to be verified); I19 |
 | R9 | **GCC 8.5** (stock used 10.1) | low | I6 |
 | R11 | **Wrong image flashed** (`falcon_hs_r2_default.bin` sits next to the release) | procedural | approval names the SHA-256 (`operations.md` §2) |
 

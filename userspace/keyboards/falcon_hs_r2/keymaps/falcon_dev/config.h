@@ -6,6 +6,11 @@
 
 #pragma once
 
+// POLICY-RGB dev extensions: decorative effects stay selectable underneath the
+// indicators (for LED tests such as RGB test mode), white is not enforced,
+// Shift+Shift+L runs the LED-order identify, FLASHREAD blinks cyan.
+#define FALCON_RGB_DEV
+
 // Lets VIA read the live switch matrix, so VIA's key tester and
 // tools/falcon_probe.py matrix work. QMK warns at build time on purpose: any
 // host program can then observe keypresses through VIA.

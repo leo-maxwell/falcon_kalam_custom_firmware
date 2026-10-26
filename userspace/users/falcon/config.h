@@ -13,9 +13,14 @@
 #    error "POLICY-NKRO: NKRO must stay disabled in the falcon keymap (macOS Caps Lock / input-source issue)"
 #endif
 
-// POLICY-PARITY: stock rgblight defaults, read from the stock firmware right
-// after its EEPROM reset (tools/falcon_probe.py info, 2026-10-26): mode 9
-// (rainbow swirl), brightness 127, hue 0, sat 255, speed 0. Hue/sat/speed equal
-// QMK's defaults. No brightness cap: the stock code has no RGBLIGHT_LIMIT_VAL clamp.
-#define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_RAINBOW_SWIRL
-#define RGBLIGHT_DEFAULT_VAL 127
+// POLICY-RGB: the RGB module is a status indicator (rgb_indicators.c). The base
+// is static white at full brightness; indicator states are rgblight layers.
+// Supersedes the stock rgblight defaults (rainbow swirl, brightness 127).
+#define RGBLIGHT_LAYERS
+#define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // indicators show even with the base light off
+#define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, dev activity)
+#define RGBLIGHT_MAX_LAYERS 16
+#define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
+#define RGBLIGHT_DEFAULT_HUE 0
+#define RGBLIGHT_DEFAULT_SAT 0
+#define RGBLIGHT_DEFAULT_VAL RGBLIGHT_LIMIT_VAL

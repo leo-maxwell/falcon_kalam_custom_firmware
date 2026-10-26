@@ -2,20 +2,20 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0x1DF2EB46 valid
-    file 43984 bytes, payload 43968 bytes
+  [PASS] DFU suffix CRC32 0xC5CE5BD9 valid
+    file 36100 bytes, payload 36084 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F800 == EEPROM start
-  [PASS] LOAD lma 0x08002000-0x0800C5E8 inside application flash
-  [PASS] LOAD lma 0x0800C5E8-0x0800CBC0 inside application flash
-  [PASS] RAM segment 0x20000C00-0x20001CF8 inside 20 KB SRAM
+  [PASS] LOAD lma 0x08002000-0x0800A78C inside application flash
+  [PASS] LOAD lma 0x0800A78C-0x0800ACF4 inside application flash
+  [PASS] RAM segment 0x20000C00-0x20001C50 inside 20 KB SRAM
   [PASS] RAM segment 0x20000000-0x20005000 inside 20 KB SRAM
-  [PASS] image ends at 0x0800CBC0 (< 0x0800F800)
+  [PASS] image ends at 0x0800ACF4 (< 0x0800F800)
   [PASS] binary length agrees with ELF load segments
-    application flash used 43968 / 55296 bytes (79.5%), 11328 bytes free
+    application flash used 36084 / 55296 bytes (65.3%), 19212 bytes free
     bootloader 0x08000000-0x08001FFF and EEPROM 0x0800F800-0x0800FFFF are outside every LOAD segment
     static RAM (data+bss+stacks+heap reservation) up to 0x20005000
 
@@ -35,6 +35,10 @@
   [PASS] POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags
   [PASS] keymap comes from the userspace variant keymaps/falcon
   [PASS] POLICY-PARITY: HID console interface (0xFF31) present, as in stock
+  [PASS] POLICY-RGB: indicator layer table (falcon_rgb_layers) linked
+  [PASS] POLICY-RGB: decorative effect table (all 43 rgblight modes) absent (ship)
+  [PASS] POLICY-RGB: LED identify tool (Shift+Shift+L) absent (ship)
+  [PASS] POLICY-RGB: falcon_hs_r2.json lighting menu absent (ship)
   [PASS] POLICY-VARIANTS ship: no FLASHREAD handler (via_command_kb absent)
   [PASS] POLICY-VARIANTS ship: -DFALCON_FLASHREAD_ENABLE absent
   [PASS] POLICY-VARIANTS ship: -DKEYCODE_STRING_ENABLE absent

@@ -31,10 +31,37 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 |---|---|---|---|
 | POLICY-NKRO | NKRO is a configuration decision: L1 supports it (`"nkro": true`), both variants disable it at build time (stock NKRO breaks the macOS Caps Lock / input-source toggle) | `users/falcon/rules.mk` `NKRO_ENABLE = no` + `users/falcon/config.h` `#error` guard | verifier (no NKRO report, flag or code); negative test. To lift: delete both, flip the verifier checks |
 | POLICY-VIA | both variants are VIA-configurable | `users/falcon/rules.mk` | verifier |
-| POLICY-PARITY | both variants provide every stock feature: console, Command, LTO, stock RGB defaults (rainbow swirl, brightness 127), on top of L1. **Ship** restricts Command to H D X K V S B (decided 2026-10-26); dev keeps the full set | `users/falcon/rules.mk`, `users/falcon/config.h`, `falcon/config.h` | verifier; `artifacts/feature_parity.txt` |
+| POLICY-PARITY | both variants provide every stock feature: console, Command, LTO, on top of L1 (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B (decided 2026-10-26); dev keeps the full set | `users/falcon/rules.mk`, `users/falcon/config.h`, `falcon/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only features. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code lives only in `users/falcon/`; no git branches are used for configuration | variant `rules.mk`/`config.h`; `#error` guards in `falcon/keymap.c` | `build.sh` builds and verifies both every time; verifier profiles `release` (ship) / `dev`; negative tests inject each debug feature into ship |
+| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1) | `users/falcon/rgb_indicators.c`, `users/falcon/config.h`; ship `config.h` removes every effect | verifier (indicator table in both; effect table and identify tool only in dev; lighting menu only in the dev VIA JSON); ship `#error` guard + negative test |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Removed from ship by the user's decision (2026-10-26) | `users/falcon/flashread.c`, compiled when `FALCON_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
 | POLICY-HHKB | HHKB is the default everywhere: keymaps, first layout, VIA layout option 0 | `keyboard.json`, keymaps, `via/falcon_hs_r2.json` | verifier |
+
+### 2.1 RGB policy (POLICY-RGB)
+
+**Normal = all 4 LEDs white, full brightness.** Anything else means something.
+States are QMK rgblight layers over the base; a higher priority wins where
+they overlap. Channel A and channel B are two LEDs each, so one safety state
+and one connection state can show together. The channel LED ranges are
+defined in `rgb_indicators.h`, to be mapped to physical positions after the
+LED-order test.
+
+| Priority | State | Colour | LEDs | Trigger |
+|---|---|---|---|---|
+| 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` pushes the frame out; WS2812s latch it |
+| 2 | settings were reset | orange, 3 blinks at boot | all | `eeconfig_init_user` (EEPROM init) |
+| 3 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
+| 4 | debug output on | yellow | A | Shift+Shift+D / X |
+| 5 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
+| 6 | non-default layer locked on | green | B | layer ≥ 2 active, or default layer ≠ 0 |
+| — | Fn held, Caps Lock | no RGB change | — | Fn is momentary; Caps Lock has its own LED |
+| — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
+| — | dev only: FLASHREAD request served | cyan blink | all | `falcon_rgb_activity()` |
+| — | dev only: LED-order identify | one white LED at a time | all | Shift+Shift+L steps LED 0 → 3 → off |
+
+Variants:
+* **Ship:** every rgblight effect is compiled out. The base is enforced to static white every main-loop pass (old EEPROM values and VIA commands cannot change it). The VIA definition has no lighting menu. Fn+Z switches the white base light off/on (persisted); indicators still show. Fn+X–B do nothing.
+* **Dev:** the same indicators. The base defaults to white but is not enforced: every effect (including RGB test mode) stays selectable via Fn+Z–B and VIA's lighting menu (`via/falcon_hs_r2_dev.json`), for LED tests. Adds the identify tool and the activity blink.
 
 ### Project
 
@@ -54,8 +81,9 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | Path | Content |
 |---|---|
 | `keyboards/falcon_hs_r2/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 2048/1024, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (pinned 64 KB flash size); `rules.mk` + `ld/…falcon_hs_r2.ld` (app region `0x08002000–0x0800F7FF`, exports `__falcon_app_*`); `keymaps/default/` (HHKB); `readme.md` |
-| `userspace/` | L2: `qmk.json` (targets `falcon_hs_r2:falcon`, `falcon_hs_r2:falcon_dev`); `users/falcon/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB defaults, `falcon_keymap.h` the keymap, `flashread.c`); `userspace/keyboards/falcon_hs_r2/keymaps/falcon/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
-| `via/falcon_hs_r2.json` | VIA definition: the stock JSON with HHKB as layout option 0 |
+| `userspace/` | L2: `qmk.json` (targets `falcon_hs_r2:falcon`, `falcon_hs_r2:falcon_dev`); `users/falcon/` (`rules.mk` shared policy + FLASHREAD switch, `config.h` shared guards and RGB layer settings, `falcon_keymap.h` the keymap, `rgb_indicators.c/.h` POLICY-RGB, `flashread.c`); `userspace/keyboards/falcon_hs_r2/keymaps/falcon/` (ship: selective Command, debug guards) and `…/falcon_dev/` (dev: all debug features) |
+| `via/falcon_hs_r2.json` | VIA definition for **ship**: the stock JSON with HHKB as layout option 0, without the lighting menu |
+| `via/falcon_hs_r2_dev.json` | VIA definition for **dev**: the same plus the `qmk_rgblight` menu |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
 | `originals/` | stock BIN, readback, VIA JSON, `device_dump_2026-10-26/` (bootloader, F_SIZE/UID, option bytes), `SHA256SUMS` |
@@ -111,6 +139,21 @@ switch and types normally. Each needs a distinct key (duplicate cases don't
 compile). Names such as `F13` are unusable: QMK defines `F13` as a pin macro
 (GPIOF pin 13), which breaks the `KC_##key` paste. Layer switching is turned
 off with `MAGIC_KEY_SWITCH_LAYER_WITH_{FKEYS,NKEYS} false`.
+
+**`rgb_indicators.c`.** `keyboard_post_init_user` installs the layer table.
+`housekeeping_task_user` polls the state sources (USB state, debug flags,
+layer state) every main-loop pass. It calls `rgblight_set_layer_state()` only
+for layers whose state changed, because each call schedules a redraw. It also
+enforces the white base in ship. The USB-state callback is avoided because it
+can run in interrupt context, and the debug flags have no callback.
+`shutdown_user` sets the red layer and calls `rgblight_set()` directly, since
+there is no later main-loop pass before the reset. `eeconfig_init_user` runs
+before the LEDs exist, so it only sets a flag (keeping QMK's default
+`eeconfig_update_user(0)`); the blink starts in `keyboard_post_init_user`.
+Note: rgblight blinks share one repeat timer, so overlapping blinks interfere
+(only possible in dev). Layer changes are applied in `rgblight_task()`, which
+exists because `RGBLIGHT_LAYERS` forces `RGBLIGHT_USE_TIMER` even with no
+effects compiled.
 
 **EEPROM placement.** ChibiOS describes the F103 flash as 128 × 1 KB sectors
 (the xB registry). QMK drops the sectors at or above the flash size, then takes

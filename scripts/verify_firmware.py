@@ -178,6 +178,14 @@ def main():
         debug_flags = ('-DFALCON_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
         traces = {'ACTION_DEBUG': b'action_exec: start', 'WEAR_LEVELING_DEBUG_OUTPUT': b'Backing store: ',
                   'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
+        # POLICY-RGB: status-indicator module in both variants; effects and dev RGB tools only in dev.
+        all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
+        c.check(any(n.split('.')[0] == 'falcon_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_rgb_layers) linked')
+        c.check((all_modes in payload) == dev, 'POLICY-RGB: decorative effect table (all 43 rgblight modes) %s' % ('present (dev)' if dev else 'absent (ship)'))
+        c.check((b'RGB identify' in payload) == dev, 'POLICY-RGB: LED identify tool (Shift+Shift+L) %s' % ('present (dev)' if dev else 'absent (ship)'))
+        if args.via_json:
+            menus = json.loads(args.via_json.read_text()).get('menus', [])
+            c.check(('qmk_rgblight' in menus) == dev, 'POLICY-RGB: %s lighting menu %s' % (args.via_json.name, 'present (dev)' if dev else 'absent (ship)'))
         if dev:
             c.check(flashread, 'POLICY-VARIANTS dev: FLASHREAD handler (via_command_kb) linked')
             for f in debug_flags:

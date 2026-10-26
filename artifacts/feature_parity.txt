@@ -1,7 +1,7 @@
 # Stock vs release, extracted from the binaries
 
 item                                   stock                        release                      same
-size (bytes)                           43940                        43968                        *
+size (bytes)                           43940                        36084                        *
 USB VID:PID / bcdDevice                9DD1:9D89 / 0001             9DD1:9D89 / 0001             =
 HID interfaces                         4                            4                            =
 endpoints (addr/size/interval ms)      81/8/1 82/32/1 03/32/1 84/32/1 85/32/1 81/8/1 82/32/1 03/32/1 84/32/1 85/32/1 =
@@ -16,4 +16,4 @@ HID: NKRO bitmap (ID 6)                yes                          no          
 matrix pins (vendor tables)            yes                          yes                          =
 clock RCC_CFGR 0x001D6400              yes                          yes                          =
 peripherals referenced                 AFIO BKP DWT FLASH GPIOA GPIOB NVIC/SysTick PWR RCC SCB USB AFIO BKP CoreDebug DWT FLASH GPIOA GPIOB NVIC/SysTick PWR RCC SCB USB *
-rgblight: all 43 effects               yes                          yes                          =
+rgblight: all 43 effects               yes                          no/other                     *

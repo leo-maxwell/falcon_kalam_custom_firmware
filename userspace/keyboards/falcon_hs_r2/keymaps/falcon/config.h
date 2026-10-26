@@ -5,6 +5,19 @@
 
 #pragma once
 
+// POLICY-RGB: no decorative effects in the ship image. L1 enables them all
+// (stock parity); remove them here so only static white plus indicators exist.
+#undef RGBLIGHT_EFFECT_ALTERNATING
+#undef RGBLIGHT_EFFECT_BREATHING
+#undef RGBLIGHT_EFFECT_CHRISTMAS
+#undef RGBLIGHT_EFFECT_KNIGHT
+#undef RGBLIGHT_EFFECT_RAINBOW_MOOD
+#undef RGBLIGHT_EFFECT_RAINBOW_SWIRL
+#undef RGBLIGHT_EFFECT_RGB_TEST
+#undef RGBLIGHT_EFFECT_SNAKE
+#undef RGBLIGHT_EFFECT_STATIC_GRADIENT
+#undef RGBLIGHT_EFFECT_TWINKLE
+
 // Selective Command (POLICY-PARITY, decided 2026-10-26). Kept with
 // LShift+RShift: H help, D debug, X matrix print, K key reports, V version,
 // S status, B bootloader. The rest are pointed at keys a US HHKB does not have

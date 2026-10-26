@@ -1,7 +1,4 @@
 {
-  "keycodes": [
-    "qmk_lighting"
-  ],
   "matrix": {
     "cols": 15,
     "rows": 5
@@ -9,9 +6,6 @@
   "name": "Falcon HS R2",
   "productId": "0x9D89",
   "vendorId": "0x9DD1",
-  "menus": [
-    "qmk_rgblight"
-  ],
   "layouts": {
     "keymap": [
       [

@@ -100,7 +100,7 @@ There are exactly two:
 | Light | Pin / drive | Details |
 |---|---|---|
 | **Caps Lock LED** | `A10`, push-pull, **active-low** | on whenever the host's Caps Lock is on (`led_set` at `0x08003E10`); off (high) at init |
-| **RGB module** | `A1`, bit-banged WS2812, **GRB**, 4 LEDs, 280 µs reset | a separate, **detachable module** on a connector; dark while in DFU. Placement (underglow vs. indicator) and LED part: Unverified |
+| **RGB module** | `A1`, bit-banged WS2812, **GRB**, 4 LEDs, 280 µs reset | a separate, **detachable module** on a connector; dark in DFU after Bootmagic (never initialised). Index order and placement (underglow vs. indicator), LED part, current draw: Unverified. Use: `docs/policy.md` POLICY-RGB |
 
 How "nothing else" was established: in the stock image, the only constant pin
 setups and GPIO writes are A1, A10, A12 (USB) and the `board.h` defaults. No

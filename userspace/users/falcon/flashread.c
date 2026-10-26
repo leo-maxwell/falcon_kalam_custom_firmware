@@ -7,6 +7,7 @@
 #include QMK_KEYBOARD_H
 #include "raw_hid.h"
 #include "via.h"
+#include "rgb_indicators.h"
 
 // POLICY-FLASHREAD: read-only raw-HID command so the bootloader can be backed up
 // once this firmware runs (DFU alt 2 cannot read below 0x08002000). Only the
@@ -49,6 +50,7 @@ __attribute__((noinline)) bool via_command_kb(uint8_t *data, uint8_t length) {
         for (uint8_t i = 0; i < len; i++) {
             data[6 + i] = src[i];
         }
+        falcon_rgb_activity();
     }
     raw_hid_send(data, length);
     return true;
