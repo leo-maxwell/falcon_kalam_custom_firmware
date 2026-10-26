@@ -39,7 +39,7 @@ owner's decision. Closed items move to the ledger as one line.
 | R6 | 2026-10-26 | WS2812 timing and colour order statically identical to stock: same bit writer (T1H/T0L 5×6-NOP loops, 12-NOP T1L/T0H, 1344-pass latch, BASEPRI masking) and the same GRB buffer layout; enforced by the verifier on every build. Visual confirmation comes with the dev round |
 | R7 | 2026-10-26 | the upstream bootloader source has a `bool` flag bug that would keep the device in DFU after a download; the installed prebuilt binary does not (the app started by itself) |
 | R8 | 2026-10-26 | without NKRO, Caps Lock and input-source switching work on macOS, also after a replug (image `9b61141e…`); no later image has NKRO code |
-| R9 | 2026-10-26 | GCC 8.5 is QMK's own macOS toolchain (the Homebrew `qmk` formula depends on `arm-none-eabi-gcc@8`); a newer compiler stays optional (I6) |
+| R9 | 2026-10-26 | GCC 8.5 is QMK's own macOS toolchain (the Homebrew `qmk` formula depends on `arm-none-eabi-gcc@8`); it stays, as POLICY-UPSTREAM uses upstream's toolchain |
 | R10 | 2026-10-26 | FLASHREAD exposes the chip UID, so it is dev-only, enforced by POLICY-VARIANTS (guard, verifier, negative test) |
 | R11 | 2026-10-26 | `scripts/flash.sh` accepts only `ship` or `dev`, with the full approved SHA-256 matching the file, its `.sha256` record and `firmware.md`; negative tests prove the refusals |
 | R12 | 2026-10-26 | console + Command stay in ship for stock parity; POLICY-RGB shows magenta on channel A while keystrokes go to the console |
