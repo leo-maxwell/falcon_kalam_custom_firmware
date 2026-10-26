@@ -68,8 +68,9 @@ Fn+X–B do nothing. No separate LED test tools are needed:
 
 Blue ("powered but not configured") is kept for: charge-only cables,
 power-only ports (charger, power bank, some hubs and monitors), a host that
-doesn't enumerate, and a short flash at every plug-in. Pending the user's
-decision (devnotes).
+doesn't enumerate, and a short flash at every plug-in. **Kept** (user decision,
+2026-10-26), accepting that it glows blue on a port that stays powered while the
+computer is off.
 
 ### Project
 

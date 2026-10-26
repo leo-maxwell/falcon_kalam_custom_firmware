@@ -26,7 +26,6 @@ delete it here.
    - RGB off while the Mac sleeps;
    - spot-check the dev traces (action, wear-leveling, scan rate) in `qmk console`.
 2. **Ship image acceptance**: flash it, run the Esc→DFU test and readback, then check the selective Command (H D X K V S B work; Shift+Shift+Backspace, Esc, Caps, 1, F1 and N type normally) and the RGB policy (white at full brightness, indicators as in dev, Fn+Z toggles the white base, Fn+X–B do nothing, lighting menu absent). Keep it as the daily image.
-3. **Decide** whether to keep blue = "powered but not configured by a host" (`policy.md` §2.1). For: it diagnoses charge-only cables and power-only ports, and flashes briefly at plug-in. Against: it glows blue permanently on a port that stays powered while the computer is off.
 
 ## Before shipping (leaving alpha)
 
