@@ -5,13 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 3** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 4** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `1be146c6aff3967db0cb47313ed304be23117c6fa7c31c63dde1f270a25a9f2b` | 37,812 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `a89f6e7adab2f5868ee0823e9e028df2addca3b92853c7b49ecde49e77f1ebe3` | 43,292 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `de8368b23702285b3e14cea226ad2f1f06b0205f5d8dc427d191fb15bd5b5d82` | 37,800 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `531c45cec130560b1b7653c891596fba1aec4791f7e62e95f94f589b5401b7fa` | 43,264 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -32,7 +32,7 @@ same feature code · **pending** = see devnotes.
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | ✓ Caps Lock and input-source switching work on macOS, also after a replug |
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | pending: full key test |
 | Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); HHK mode from the factory, as the Classic (§3) | same | new (stock: generic 60%) | pending |
-| Settings display (additions) | a mode key flashes the mode colour (HHK purple, Mac pink, Win gold); Fn+Ctrl+Shift+0 shows the mode colour on the first LED and SW3–SW5 on the other three (green = on), first as in effect, then as after the next plug-in if different (§3) | same | new | pending |
+| Settings display (additions) | Fn+Ctrl+Shift+0 and the mode keys show the mode on LED 1 (HHK red, Mac blue, Win green) and SW3–SW5 on LEDs 2–4 (blue = on), first as in effect, then as after the next plug-in if different (§3) | same | new | pending |
 | Release number | `VIA_FIRMWARE_VERSION`, readable over VIA | same | new | pending |
 | VIA | protocol `0x000D`, 6 layers (the three modes, in the Classic's order), 16 macros in a 1,107 B buffer (stock: 4 layers, 383 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ (probe) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ (red: pending) |
@@ -41,7 +41,7 @@ same feature code · **pending** = see devnotes.
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
 | Caps Lock LED | A10, active-low | same | = | pending |
-| RGB (POLICY-RGB) | **status indicator**: white at the brightness cap (63, a quarter of full scale) = normal; every colour is capped, the bootloader red included; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped, mode colours = mode flash and settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
+| RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 63, a quarter of full scale) or dim (a quarter of the cap): all green bright = normal; all red = bootloader; red ×3 = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |
@@ -69,11 +69,11 @@ Fn, every mode:  1–= F1–F12  \ Ins  ` Del  I PrtSc  O ScrLk  P Pause
   Win adds:  Tab Caps  Delete Backspace  H KP*  J KP/  N KP+  M KP-
 
 Mode keys (until the next plug-in):  Fn+Ctrl+M Mac · Fn+Ctrl+W Win (HHK when SW1/SW2 select HHK)
-Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 flips SW1…SW5; dark blink ×1 = off, ×2 = on;
+Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 flips SW1…SW5; off-blink ×1 = off, ×2 = on;
                                      effective from the next plug-in, as on the Classic
-Settings display:                    Fn+Ctrl+Shift+0 → 1.5 s now, then 1.5 s after-replug (if different);
-                                     LED 1 = mode colour, LEDs 2–4 = SW3–SW5 (green on, dark off)
-Mode colours:                        HHK purple · Mac pink · Win gold (also flashed by the mode keys)
+Settings display:                    Fn+Ctrl+Shift+0 (and every mode key) → 1.5 s now, then 1.5 s
+                                     after-replug (if different); LED 1 = mode: HHK red · Mac blue ·
+                                     Win green; LEDs 2–4 = SW3–SW5 (blue on, off off)
   SW1/SW2  power-on mode: OFF/OFF HHK (factory) · ON/OFF Win · OFF/ON Mac · ON/ON acts as HHK
   SW3      Delete sends Backspace (Win/HHK)
   SW4      left ◇ = Fn

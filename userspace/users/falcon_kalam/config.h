@@ -16,7 +16,7 @@
 // Release number of the ship and dev images, readable over VIA
 // (`falcon_kalam_probe.py info`). Bump it whenever the images change; must
 // equal the release in docs/firmware.md (scripts/check_docs.py).
-#define VIA_FIRMWARE_VERSION 3
+#define VIA_FIRMWARE_VERSION 4
 
 // POLICY-HHKB: HHK, Mac and Win mode, each a base layer and an Fn layer
 // (falcon_kalam_keymap.h). L1's EEPROM is sized for six layers plus VIA
@@ -24,19 +24,21 @@
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 // POLICY-RGB: the RGB module is a status indicator (rgb_indicators.c). The base
-// is static white at the brightness cap; indicator states are rgblight layers.
+// is static green at the brightness cap; indicator states are rgblight layers,
+// in pure red, green or blue only.
 // Supersedes the stock rgblight defaults (rainbow swirl, brightness 127).
 // Brightness cap: a quarter of full scale (255). Full scale and half (127)
 // were too bright to look at; rgblight clamps every colour, the base and the
-// indicators, to this.
+// indicators, to this. rgblight values pass QMK's CIE 1931 curve, so 63
+// drives the diodes at 12/255 (and the dim level, 15, at 2/255).
 #define RGBLIGHT_LIMIT_VAL 63
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // indicators show even with the base light off
 #define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, dev activity)
 #define RGBLIGHT_MAX_LAYERS 16
 #define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
-#define RGBLIGHT_DEFAULT_HUE 0
-#define RGBLIGHT_DEFAULT_SAT 0
+#define RGBLIGHT_DEFAULT_HUE 85 // green
+#define RGBLIGHT_DEFAULT_SAT 255
 #define RGBLIGHT_DEFAULT_VAL RGBLIGHT_LIMIT_VAL
 
 // POLICY-RGB: L1 keeps every decorative effect (normal QMK keyboard, stock

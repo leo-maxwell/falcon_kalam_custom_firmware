@@ -3,7 +3,7 @@
 //
 // POLICY-RGB: the RGB module shows state, not decoration (docs/policy.md).
 //
-// Normal state: every LED white at the brightness cap (a quarter of full scale).
+// Normal state: every LED green at the brightness cap (a quarter of full scale).
 // Indicator states are QMK rgblight layers drawn on top: a higher layer index
 // wins where layers overlap.
 // Safety/debug states use channel A, connection/layer states channel B, so one
@@ -26,43 +26,54 @@
 #endif
 
 // Layer indices = priority (low to high). Keep in sync with docs/policy.md §2.1.
+// Only pure red, green and blue (one diode each: mixed colours are hard to
+// tell on this module), at two levels: BRIGHT (the cap) and DIM (a quarter).
 enum falcon_kalam_rgb_layer {
-    FALCON_KALAM_RGB_LAYER_LOCKED, // B green:   a layer other than the mode base / held Fn is on
-    FALCON_KALAM_RGB_USB,          // B blue:    powered, but not configured by a USB host
-    FALCON_KALAM_RGB_DEBUG,        // A yellow:  debug output on
-    FALCON_KALAM_RGB_KEYLOG,       // A magenta: keystroke printout on (privacy warning)
+    FALCON_KALAM_RGB_LAYER_LOCKED, // B blue:      a layer other than the mode base / held Fn is on
+    FALCON_KALAM_RGB_USB,          // B dim green: powered, but not configured by a USB host
+    FALCON_KALAM_RGB_DEBUG,        // A blue:      debug output on
+    FALCON_KALAM_RGB_KEYLOG,       // A red:       keystroke printout on (privacy warning)
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
-    FALCON_KALAM_RGB_ACTIVITY, // all cyan blink: FLASHREAD request served (dev)
+    FALCON_KALAM_RGB_ACTIVITY, // all blue blink: FLASHREAD request served (dev)
 #endif
-    FALCON_KALAM_RGB_MODE_HHK, // all purple: HHK mode (mode-key flash; settings display, first LED)
-    FALCON_KALAM_RGB_MODE_MAC, // all pink:   Mac mode
-    FALCON_KALAM_RGB_MODE_WIN, // all gold:   Win mode
-    FALCON_KALAM_RGB_SHOW_BG,  // switch LEDs dark: settings display background
-    FALCON_KALAM_RGB_SHOW_SW3, // switch LED green: SW3 on
-    FALCON_KALAM_RGB_SHOW_SW4, // switch LED green: SW4 on
-    FALCON_KALAM_RGB_SHOW_SW5, // switch LED green: SW5 on
-    FALCON_KALAM_RGB_DIP,      // all dark, 1 blink = a virtual DIP switch turned off, 2 = on
-    FALCON_KALAM_RGB_RESET, // all orange, 3 blinks at boot: settings were reset
-    FALCON_KALAM_RGB_BOOT,  // all red: jumping to the bootloader (WS2812 keeps it in DFU)
+    FALCON_KALAM_RGB_MODE_HHK, // LED 1 red:   settings display, HHK mode
+    FALCON_KALAM_RGB_MODE_MAC, // LED 1 blue:  Mac mode
+    FALCON_KALAM_RGB_MODE_WIN, // LED 1 green: Win mode
+    FALCON_KALAM_RGB_SHOW_BG,  // LEDs 2-4 off: settings display background
+    FALCON_KALAM_RGB_SHOW_SW3, // switch LED blue: SW3 on
+    FALCON_KALAM_RGB_SHOW_SW4, // switch LED blue: SW4 on
+    FALCON_KALAM_RGB_SHOW_SW5, // switch LED blue: SW5 on
+    FALCON_KALAM_RGB_DIP,      // all off, 1 blink = a virtual DIP switch turned off, 2 = on
+    FALCON_KALAM_RGB_RESET,    // all red, 3 blinks once configured: settings were reset
+    FALCON_KALAM_RGB_BOOT,     // all red: jumping to the bootloader (WS2812 keeps it in DFU)
 };
 
-static const rgblight_segment_t PROGMEM seg_locked[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, HSV_GREEN});
-static const rgblight_segment_t PROGMEM seg_usb[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, HSV_BLUE});
-static const rgblight_segment_t PROGMEM seg_debug[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, HSV_YELLOW});
-static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, HSV_MAGENTA});
+// Hues of the pure colours: QMK's HSV conversion gives exactly one diode for
+// these (e.g. 0,255,v -> v,0,0). Values above the cap are clamped by rgblight.
+#define FK_RED 0, 255
+#define FK_GREEN 85, 255
+#define FK_BLUE 170, 255
+#define FK_BRIGHT RGBLIGHT_LIMIT_VAL
+#define FK_DIM (RGBLIGHT_LIMIT_VAL / 4)
+#define FK_LED_1 0, 1
+
+static const rgblight_segment_t PROGMEM seg_locked[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_usb[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, FK_GREEN, FK_DIM});
+static const rgblight_segment_t PROGMEM seg_debug[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, FK_RED, FK_BRIGHT});
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
-static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_CYAN});
+static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_BLUE, FK_BRIGHT});
 #endif
-static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_PURPLE});
-static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_PINK});
-static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_GOLD});
+static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_RED, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_GREEN, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_show_bg[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LEDS_SW, HSV_BLACK});
-static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, HSV_GREEN});
-static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, HSV_GREEN});
-static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, HSV_GREEN});
+static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, FK_BLUE, FK_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_dip[]      = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
-static const rgblight_segment_t PROGMEM seg_reset[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_ORANGE});
-static const rgblight_segment_t PROGMEM seg_boot[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_RED});
+static const rgblight_segment_t PROGMEM seg_reset[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_boot[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
 
 // Global and `used` so scripts/verify_firmware.py can find it under LTO.
 __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_layers[] = RGBLIGHT_LAYERS_LIST(seg_locked, seg_usb, seg_debug, seg_keylog,
@@ -92,24 +103,24 @@ void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
 
-// The base is always static white at the brightness cap. Only touches rgblight
+// The base is always static green at the brightness cap. Only touches rgblight
 // when something differs, because each call redraws the LEDs.
-static void enforce_white_base(void) {
+static void enforce_green_base(void) {
     if (rgblight_get_mode() != RGBLIGHT_MODE_STATIC_LIGHT) {
         rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
     }
-    if (rgblight_get_hue() != 0 || rgblight_get_sat() != 0 || rgblight_get_val() != RGBLIGHT_LIMIT_VAL) {
-        rgblight_sethsv_noeeprom(0, 0, RGBLIGHT_LIMIT_VAL);
+    if (rgblight_get_hue() != 85 || rgblight_get_sat() != 255 || rgblight_get_val() != RGBLIGHT_LIMIT_VAL) {
+        rgblight_sethsv_noeeprom(FK_GREEN, RGBLIGHT_LIMIT_VAL);
     }
 }
 
 void falcon_kalam_rgb_init(void) {
     rgblight_layers = falcon_kalam_rgb_layers;
-    enforce_white_base();
+    enforce_green_base();
 }
 
-// Draws one settings value (on = true): the mode colour on all LEDs, the
-// switch LEDs dark below their green SW3-SW5 layers. on = false clears them all.
+// Draws one settings value (on = true): the mode colour on LED 1, LEDs 2-4
+// off below their blue SW3-SW5 layers. on = false clears them all.
 static void show_draw(uint8_t settings, bool on) {
     for (uint8_t mode = 0; mode < 3; mode++) {
         rgblight_set_layer_state(FALCON_KALAM_RGB_MODE_HHK + mode, on && (settings & 3) == mode);
@@ -173,7 +184,7 @@ void falcon_kalam_rgb_task(void) {
     shown = want;
 
     show_task();
-    enforce_white_base();
+    enforce_green_base();
 }
 
 // Runs right before QMK resets the MCU. On a bootloader jump, paint all LEDs
@@ -188,30 +199,22 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
 
 // Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
 // directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
-// rgblight also bypasses its brightness cap, so apply it here.
+// rgblight also bypasses its cap and brightness curve, so apply both here.
 void falcon_kalam_rgb_paint_bootloader(void) {
+    rgb_t red = hsv_to_rgb((hsv_t){FK_RED, RGBLIGHT_LIMIT_VAL});
     ws2812_init();
-    ws2812_set_color_all(RGBLIGHT_LIMIT_VAL, 0, 0);
+    ws2812_set_color_all(red.r, red.g, red.b);
     ws2812_flush();
 }
 
-// POLICY-HHKB virtual DIP switch flipped: the white base blinks dark.
+// POLICY-HHKB virtual DIP switch flipped: all LEDs blink off.
 void falcon_kalam_rgb_dip_feedback(bool on) {
     rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DIP, 150, on ? 2 : 1);
 }
 
-// POLICY-HHKB mode key: one flash in the new mode's colour. Ends a running
-// settings display, which shares the mode layers.
-void falcon_kalam_rgb_mode_flash(uint8_t mode) {
-    show_draw(0, false);
-    show_phase = SHOW_IDLE;
-    rgblight_blink_layer(FALCON_KALAM_RGB_MODE_HHK + mode, 300);
-}
-
+// POLICY-HHKB settings display (Fn+Ctrl+Shift+0 and the mode keys); a new
+// request restarts it.
 void falcon_kalam_rgb_show_settings(uint8_t now, uint8_t next) {
-    for (uint8_t mode = 0; mode < 3; mode++) {
-        rgblight_unblink_layer(FALCON_KALAM_RGB_MODE_HHK + mode); // a pending flash would cut the display short
-    }
     show_draw(0, false);
     show_now   = now;
     show_next  = next;

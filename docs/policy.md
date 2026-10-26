@@ -41,43 +41,47 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 
 ### 2.1 RGB policy (POLICY-RGB)
 
-**Normal = all 4 LEDs white at the brightness cap**: `RGBLIGHT_LIMIT_VAL 63`
-in `users/falcon_kalam/config.h`, a quarter of full scale (255, the WS2812's
-8-bit maximum; the full and half settings were too bright to look at).
-rgblight clamps every colour to it, and the Bootmagic red is scaled the same
-way. Anything else means
-something. States are rgblight layers over the base; the higher priority wins
-where they overlap. Channels A and B are two LEDs each, so one safety state
-and one connection state can show together. Their LED ranges are in
-`rgb_indicators.h`, to be mapped to physical positions after the LED-order
-test.
+**Normal = all 4 LEDs green at the brightness cap.** Anything else means
+something.
 
-| Priority | State | Colour | LEDs | Trigger |
+* **Colours: pure red, green and blue only.** Each lights one diode; mixed
+  colours (white, yellow, magenta, …) blend poorly on this module and are
+  hard to tell apart. Meaning by colour: green = normal, blue = a state worth
+  knowing, red = attention.
+* **Two levels:** bright = the cap, `RGBLIGHT_LIMIT_VAL 63` in
+  `users/falcon_kalam/config.h` (a quarter of full scale 255; full and half
+  were too bright to look at); dim = a quarter of the cap (15). Bright =
+  active, dim = waiting. These are rgblight values; QMK's CIE 1931 brightness
+  curve turns them into diode duty 12/255 and 2/255. rgblight clamps every
+  colour to the cap, and the Bootmagic red passes the same cap and curve.
+* States are rgblight layers over the base; the higher priority wins where
+  they overlap. Channels A (LEDs 1–2) and B (LEDs 3–4) let one safety state
+  and one connection state show together. LEDs are counted left to right.
+
+| Priority | State | Shown as | LEDs | Trigger |
 |---|---|---|---|---|
-| 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
-| 2 | settings were reset | orange, 3 blinks at boot | all | `eeconfig_init_user` |
-| 3 | virtual DIP switch flipped | dark blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
-| 4 | settings display | LED 1: mode colour (HHK purple, Mac pink, Win gold); LEDs 2–4: SW3–SW5, green = on, dark = off; 1.5 s now, a dark gap, 1.5 s after the next plug-in if different | all | Fn+Ctrl+Shift+0 (POLICY-HHKB) |
-| 4 | mode key | one flash in the new mode's colour | all | Fn+Ctrl+M/W (POLICY-HHKB) |
-| 5 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
-| 6 | debug output on | yellow | A | Shift+Shift+D / X |
-| 7 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
-| 8 | layer locked on | green | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
+| 1 | bootloader (about to jump; kept while in DFU) | red, bright, steady | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
+| 2 | settings were reset | red, bright, 3 blinks | all | `eeconfig_init_user`; shown once the host has configured the keyboard |
+| 3 | virtual DIP switch flipped | off-blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
+| 4 | settings display | LED 1 = mode: HHK red, Mac blue, Win green; LEDs 2–4 = SW3–SW5: blue = on, off = off; 1.5 s now, an off gap, 1.5 s after the next plug-in if different | all | Fn+Ctrl+Shift+0 and the mode keys Fn+Ctrl+M/W (POLICY-HHKB) |
+| 5 | keystroke printout on (privacy warning) | red, bright | A | debug + Shift+Shift+K |
+| 6 | debug output on | blue, bright | A | Shift+Shift+D / X; always on from boot in dev (QMK's scan-rate option) |
+| 7 | USB not configured by a host | green, dim | B | USB state ≠ configured/suspended |
+| 8 | layer locked on | blue, bright | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
 | — | Fn held, Caps Lock | no change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
-| — | dev only (FLASHREAD): request served | cyan blink | all | `falcon_kalam_rgb_activity()` |
+| — | dev only (FLASHREAD): request served | blue blink | all | `falcon_kalam_rgb_activity()` |
 
 * Both variants behave the same. Every effect is compiled out, and the base is
-  re-set to static white on every main-loop pass, so old EEPROM values and VIA
+  re-set to static green on every main-loop pass, so old EEPROM values and VIA
   commands cannot change it. The VIA definition has no lighting menu, and no
-  default key switches the white base off.
-* Blue ("powered but not configured") covers charge-only cables, power-only
-  ports (charger, power bank, some hubs and monitors), a host that doesn't
-  enumerate, and a short flash at every plug-in. It stays, although it also
-  glows on a port that keeps power while the computer is off.
-* No separate LED test tool is needed: the indicator colours (red, yellow,
-  magenta, blue, green) also check the WS2812 colour order, and Shift+Shift+D
-  (channel A) shows which physical LEDs a channel uses.
+  default key switches the base off.
+* Dim green on channel B ("powered but not configured") covers charge-only
+  cables, power-only ports (charger, power bank, some hubs and monitors), a
+  host that doesn't enumerate, and a short moment at every plug-in. It stays,
+  although it also shows on a port that keeps power while the computer is off.
+* No separate LED test tool is needed: red, green and blue each check one
+  diode (and the WS2812 colour order), and Shift+Shift+D shows channel A.
 
 ### 2.2 Naming (POLICY-NAMING)
 
@@ -117,8 +121,8 @@ copy, the closest equivalent is used, and every deviation is listed here.
 | Keymap | the Classic's six layers in its own storage order: HHK base/Fn, Mac base/Fn, Win base/Fn; unsupported Fn keys send the plain key, as on the Classic |
 | HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
 | Mode keys | Fn+Control+M → Mac mode; Fn+Control+W → Win mode, or HHK mode when SW1/SW2 select HHK; effective until the next plug-in, as SW1/SW2 decide the power-on mode |
-| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, flipped with Fn+Control+Shift+1…5 (acknowledged by a dark blink, POLICY-RGB) and, as on the Classic, effective from the next plug-in. SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
-| Display (additions) | the Classic has none; on the RGB module (itself a deviation): a mode key flashes the mode colour, Fn+Control+Shift+0 shows the settings in effect and after the next plug-in |
+| DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, flipped with Fn+Control+Shift+1…5 (acknowledged by an off-blink, POLICY-RGB) and, as on the Classic, effective from the next plug-in. SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
+| Display (additions) | the Classic has none; on the RGB module (itself a deviation): Fn+Control+Shift+0 and the mode keys show the settings in effect and after the next plug-in |
 
 Deviations, each because a copy is impossible or conflicts with a policy;
 all are accepted:
@@ -216,8 +220,8 @@ count from that array.
 is QMK's (non-persistent) default layer. At post-init the virtual SW1/SW2 pick
 it; the mode keys change it until the next plug-in. A press with any Fn layer
 on and Control held is judged by its **base-layer** keycode (on the Fn layers
-M is keypad minus, 0–5 are F10, F1–F5): M and W switch mode (with a flash in
-the mode colour), Shift+1…5 flip a saved switch, Shift+0 shows the settings;
+M is keypad minus, 0–5 are F10, F1–F5): M and W switch mode and show the
+settings, Shift+1…5 flip a saved switch, Shift+0 shows the settings;
 these presses are swallowed. The switches in effect are read
 once at post-init, so a flip waits for the next plug-in, as on the Classic. SW3–SW5 act only on keys that resolve on
 a base layer (`layer_switch_get_layer`), so Fn+\` stays Delete: SW4 turns the
@@ -269,11 +273,9 @@ covered: `chSysHalt()`, whose hook lives in the board's `chconf.h` (L1).
 table. `falcon_kalam_rgb_task` (every main-loop pass) polls the USB state,
 debug flags and layer state, and calls `rgblight_set_layer_state()` only for
 layers that changed, since each call schedules a redraw; it also re-sets the
-white base, and advances the settings display (now → gap → after replug), a
-timed sequence of rgblight layers: the mode colour on all LEDs, a dark layer
-over LEDs 2–4, and a green layer per switch on top. A mode flash ends a running
-display, and a new display cancels a pending flash, because both use the mode
-layers. The USB-state callback is avoided because it can run in interrupt
+green base, and advances the settings display (now → gap → after replug), a
+timed sequence of rgblight layers: the mode colour on LED 1, an off layer over
+LEDs 2–4, and a blue layer per switch on top; a new request restarts it. The USB-state callback is avoided because it can run in interrupt
 context; the debug flags have no callback. The green lock state treats the
 mode bases (default layers 0/2/4; an empty default state means layer 0) and a
 held Fn layer (1/3/5) as normal. `falcon_kalam_rgb_shutdown` sets the red layer and
@@ -281,7 +283,7 @@ calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, `set_color_all(cap, 0, 0)`, `flush`).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
-orange blink starts once the host has configured the keyboard, because the
+reset blink starts once the host has configured the keyboard, because the
 host suspends and resumes the bus during enumeration and `rgblight_suspend()`
 cancels running blinks. rgblight blinks share one repeat timer, so
 overlapping blinks interfere (only possible in dev, during a FLASHREAD dump at

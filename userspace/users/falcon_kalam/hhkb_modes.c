@@ -12,8 +12,8 @@
 // virtual: saved in EEPROM and flipped with Fn+Control+Shift+1..5. As on the
 // Classic, a flip takes effect at the next plug-in.
 //
-// Additions (the Classic has no display): a mode key flashes the mode colour,
-// and Fn+Control+Shift+0 shows the settings on the RGB module.
+// Additions (the Classic has no display): Fn+Control+Shift+0 and the mode keys
+// show the settings on the RGB module.
 
 #include "hhkb_modes.h"
 #include "rgb_indicators.h"
@@ -50,16 +50,16 @@ static uint8_t settings(uint8_t base_layer, uint8_t switches) {
     return (base_layer / 2) | (((switches >> 2) & 7) << 2);
 }
 
-// Mode key (Fn+Control+M/W): switch until the next plug-in, flash the colour.
-static void mode_key(uint8_t base_layer) {
-    set_mode(base_layer);
-    falcon_kalam_rgb_mode_flash(base_layer / 2);
-}
-
 // Fn+Control+Shift+0: the settings in effect, then those after the next plug-in.
 static void show_settings(void) {
     falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
     falcon_kalam_rgb_show_settings(settings(current_mode(), dip), settings(dip_mode_of(cfg.dip), cfg.dip));
+}
+
+// Mode key (Fn+Control+M/W): switch until the next plug-in, show the settings.
+static void mode_key(uint8_t base_layer) {
+    set_mode(base_layer);
+    show_settings();
 }
 
 void falcon_kalam_hhkb_init(void) {
