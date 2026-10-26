@@ -25,7 +25,7 @@ EXTRAKEY CONSOLE COMMAND NKRO LTO`.
 |---|---|---|
 | USB | `9DD1:9D89`, bcdDevice `0x0001`, strings "Falcon"/"Falcon", no serial, 500 mA, remote wakeup | descriptors |
 | HID interfaces | 4: boot keyboard (6KRO, EP 81, 8 B); VIA raw HID `0xFF60` (EP 82/03, 32 B); shared EP 84: mouse (ID 2), system (3), consumer (4), **NKRO bitmap (6)**; console `0xFF31` (EP 85). All 1 ms polling | config descriptor |
-| NKRO | compiled in, and **on at start-up**: the user saw NK_OFF fix the macOS Caps Lock / input-source problem only until the next replug. The exact mechanism is not proven | user observation; `OPTIONS` |
+| NKRO | compiled in and **on at start-up**: NK_OFF fixes the macOS Caps Lock / input-source problem only until the next replug. The exact mechanism is not proven | observed on the device; `OPTIONS` |
 | Matrix | COL2ROW scan, 5 ms symmetric-deferred debounce | `docs/hardware.md` §5 |
 | Bootmagic | Esc held at plug-in → clear EEPROM → DFU | code `0x08009B40` |
 | Command | LShift+RShift+key. Help strings present: debug toggle, matrix debug, keyboard debug, mouse debug, console mode, layer switch 0–9 (F10 = L0), Jump to Bootloader (+ alternate), print EEPROM, Clear EEPROM, NKRO Toggle, version, status, mousekey console. The keys are QMK defaults (D, X, K, M, C, 0–9/F1–F10, B/Esc, E, Backspace, N, V, S); not individually verified | strings `0x0800B487`–`0x0800B9FE` |

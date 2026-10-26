@@ -7,14 +7,14 @@ IDs are permanent.
 |---|---|---|---|
 | I10 | **macOS Caps Lock / input-source key**: e.g. tap = switch input source, hold = Caps Lock; or Caps Word | addresses the original problem directly | L2 keymap code |
 | I8 | **NKRO without the macOS problem**: find the root cause, re-test on each QMK update, lift POLICY-NKRO | full NKRO | two-line change in L2 once fixed |
+| I22 | **HHKB DIP-switch equivalents**: SW3 (Delete = Backspace in Win/HHK mode), SW4 (left ◇ = Fn), SW5 (swap Alt and ◇) as stored settings set by a key combination | full POLICY-HHKB fidelity | QMK's Alt/GUI swap (`keymap_config`) covers SW5; SW3/SW4 need code |
+| I23 | **Mode feedback**: blink a colour when Fn+Ctrl+M/W/H switches mode, or show non-Mac modes on a channel | the mode is invisible today | a POLICY-RGB row |
+| I4 | **RGB brightness cap** from a measured LED-module current | USB power and heat margin (POLICY-RGB runs full white continuously, R14) | measurement; `RGBLIGHT_LIMIT_VAL` in L2 |
+| I20 | **Physical channel mapping**: once Shift+Shift+D shows where channel A sits, give the channels meaningful positions if needed (e.g. left pair / right pair) | readability | `FALCON_KALAM_RGB_CH_A/B` in `rgb_indicators.h` |
+| I21 | **Boot-protocol indicator**: show when the host uses the HID boot protocol (BIOS/firmware setup screens) | diagnosis | `usb_device_state_get_protocol()`; a channel-B colour |
 | I12 | **Version traceability**: report the git commit through VIA's firmware-version query or `bcdDevice` without breaking reproducibility | identify what is flashed (Command V shows the pinned QMK date, not the build) | — |
 | I13 | **Automated hardware tests**: script the probe, console traces and readback compare | repeatable post-flash checks | console parsing |
-| I4 | **RGB brightness cap** from a measured LED-module current (relevant now: POLICY-RGB runs full white continuously, R14) | USB power and heat margin | measurement; `RGBLIGHT_LIMIT_VAL` in L2 |
-| I20 | **Physical channel mapping**: once Shift+Shift+D shows where channel A sits, give the channels meaningful positions if needed (e.g. left pair / right pair) | readability | edit `FALCON_KALAM_RGB_CH_A/B` in `rgb_indicators.h` |
-| I21 | **Boot-protocol indicator**: show when the host uses the HID boot protocol (BIOS/firmware setup screens) | diagnosis | `usb_device_state_get_protocol()`; a channel-B colour |
-| I22 | **HHKB DIP-switch equivalents**: SW3 (Delete = Backspace in Win/HHK mode), SW4 (left ◇ = Fn), SW5 (swap Alt and ◇) as stored settings with a key combination | full POLICY-HHKB fidelity | QMK's Alt/GUI swap (`keymap_config`) covers SW5; SW3/SW4 need code |
-| I23 | **Mode feedback**: blink a colour when Fn+Ctrl+M/W/H switches mode, or show non-Mac modes on a channel | the mode is invisible today | a POLICY-RGB row |
 | I6 | **Newer toolchain** (GCC ≥ 10, as stock used) | modern compiler | must stay reproducible; re-verify RGB timing |
 | I7 | **Submit L1 upstream** to QMK | maintenance by upstream | L1 already passes upstream lint |
 | I14 | **Remote repository + CI** (build, verify, doc check) | protection against local loss | needs a hosting decision |
-| I15 | **Full-chip SWD backup** | complete image incl. option bytes via a second path | RDP is off; pads must be located |
+| I15 | **Full-chip SWD backup** | complete image incl. option bytes through a second path | RDP is off; pads must be located |
