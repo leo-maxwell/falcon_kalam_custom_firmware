@@ -8,8 +8,7 @@ here.
 
 | | |
 |---|---|
-| On the device | dev release 7 (`aef490d2…`, factory switches after Bootmagic), flashed 2026-10-27. Before it on the same day: releases 1–4 and 6, each read back equal to its image (release 5 was never flashed) |
-| Then | **ship** as the acceptance test, after the dev session. Each flash needs an approval naming the variant and its hash |
+| On the device | **ship** release 8 (`90d022ac…`), flashed 2026-10-27 for the acceptance test. Before it on the same day: dev releases 1–4, 6 and 7, each read back equal to its image (release 5 was never flashed) |
 | Assembly | being reassembled; the pads are no longer needed (Esc→DFU works) |
 | Phase | **alpha** |
 

@@ -27027,3 +27027,135 @@ Looking for devices...
 2026-10-27 01:50:22 Falcon:Falcon:1: matrix scan frequency: 3667
 2026-10-27 01:50:23 Falcon:Falcon:1: matrix scan frequency: 3667
 2026-10-27 01:50:24 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:25 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:26 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:27 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:28 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:29 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:30 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:31 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:32 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:33 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:34 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:35 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:36 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:37 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:38 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:39 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:40 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:41 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:42 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:43 Falcon:Falcon:1: matrix scan frequency: 3666
+2026-10-27 01:50:44 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:45 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:46 Falcon:Falcon:1: matrix scan frequency: 3668
+2026-10-27 01:50:47 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:48 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:49 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:50 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:51 Falcon:Falcon:1: matrix scan frequency: 3668
+2026-10-27 01:50:52 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:53 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:54 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:55 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:56 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:57 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:58 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:50:59 Falcon:Falcon:1: matrix scan frequency: 3668
+2026-10-27 01:51:00 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:01 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:02 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:03 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:04 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:05 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:06 Falcon:Falcon:1: matrix scan frequency: 3667
+2026-10-27 01:51:07 Falcon:Falcon:1: 
+2026-10-27 01:51:07 Falcon:Falcon:1: ---- action_exec: start -----
+2026-10-27 01:51:07 Falcon:Falcon:1: EVENT: 030Cd(22441)
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: ACTION: ACT_LMODS[0:E5] layer_state: 00000000(0) default_layer_state: 00000001(0)
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009B]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x009C]:  E5
+2026-10-27 01:51:07 Falcon:Falcon:1: processed: 030Cd(22441):0 
+2026-10-27 01:51:07 Falcon:Falcon:1: 
+2026-10-27 01:51:07 Falcon:Falcon:1: 
+2026-10-27 01:51:07 Falcon:Falcon:1: ---- action_exec: start -----
+2026-10-27 01:51:07 Falcon:Falcon:1: EVENT: 0300d(22474)
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: ACTION: ACT_LMODS[0:E1] layer_state: 00000000(0) default_layer_state: 00000001(0)
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0083]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0084]:  E1
+2026-10-27 01:51:07 Falcon:Falcon:1: processed: 0300d(22474):0 
+2026-10-27 01:51:07 Falcon:Falcon:1: 
+2026-10-27 01:51:07 Falcon:Falcon:1: matrix scan frequency: 3464
+2026-10-27 01:51:07 Falcon:Falcon:1: 
+2026-10-27 01:51:07 Falcon:Falcon:1: ---- action_exec: start -----
+2026-10-27 01:51:07 Falcon:Falcon:1: EVENT: 0306d(22888)
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x008F]:  00
+2026-10-27 01:51:07 Falcon:Falcon:1: Wear leveling: Read  [0x0090]:  05
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Bootloader Connected: stm32duino: Maple 003
+Ψ Bootloader Disconnected: stm32duino: Maple 003
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)

@@ -52,3 +52,7 @@
 4541.831 s  + 1EAF:0003 bootloader (DFU)
 4549.242 s  - 1EAF:0003 bootloader (DFU) (was present 7.411 s)
 4559.965 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)
+4845.303 s  - 9DD1:9D89 keyboard application (stock or falcon_kalam) (was present 285.338 s)
+4845.367 s  + 1EAF:0003 bootloader (DFU)
+4860.620 s  - 1EAF:0003 bootloader (DFU) (was present 15.253 s)
+4860.927 s  + 9DD1:9D89 keyboard application (stock or falcon_kalam)
