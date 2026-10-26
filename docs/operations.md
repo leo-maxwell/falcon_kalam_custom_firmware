@@ -49,7 +49,7 @@ testing), its full SHA-256 from `firmware.md` §1, and a decision on every open
 2. `scripts/flash.sh check <variant> <sha256>` validates everything without touching the device.
 3. Enter DFU: unplug, hold **Esc**, plug in, hold about 2 s (this clears EEPROM). The LEDs go red (our images) or stay dark (stock).
 4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`: reads back first (`build/readback_pre_*.bin`), then flashes; log in `artifacts/flash_*.log`. The app starts by itself.
-5. Check that `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info`.
+5. Check that `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info` (its firmware release must match `firmware.md`).
 6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU (red), then `scripts/flash.sh verify <variant>` (read-only: flash content = image). Replug normally.
 7. Run the open hardware tests from `devnotes.md` and record the results there.
 
@@ -70,18 +70,19 @@ testing), its full SHA-256 from `firmware.md` §1, and a decision on every open
 ## 4. Recovery
 
 Ways into DFU: `docs/hardware.md` §3 (Esc at plug-in works on stock and ours;
-otherwise the pads or SWD).
+otherwise the pads). There is no SWD probe, so DFU is the only recovery path;
+that is why every flash ends with the Esc→DFU test (§2 step 6).
 
 | Goal | Command |
 |---|---|
 | Restore stock **[WRITES DEVICE]** (the one case for a manual `dfu-util -D`, since `flash.sh` takes only our images; keep `-a 2`) | `dfu-util -d 1EAF:0003 -a 2 -D originals/manufacturer_firmware.bin -R` (suffix-checked; application region only) |
 | Restore the exact original flash incl. EEPROM **[WRITES DEVICE]**; whether the bootloader accepts a download up to the last page is untested | `cp originals/falcon_flash_backup.bin build/restore_full.bin && chmod u+w build/restore_full.bin && dfu-suffix -v 1EAF -p 0003 -a build/restore_full.bin && dfu-util -d 1EAF:0003 -a 2 -D build/restore_full.bin -R` |
 | Verify a restore (read-only, in DFU) | `dfu-util -d 1EAF:0003 -a 2 -U build/readback_after.bin -Z 57344`, then `cmp -n 43940 build/readback_after.bin originals/falcon_flash_backup.bin` |
-| Last resort: SWD | PA13/PA14, RDP off, so a full read and write is possible. Use a GD32F1-capable probe/OpenOCD target. Bootloader image: `originals/device_dump_2026-10-26/bootloader_0x08000000.bin` (= upstream `generic-none`). The SWD pads are not located yet |
 
 ## 5. QMK update (POLICY-QMK-LATEST)
 
 1. `scripts/qmk_policy.sh --online` fails → `scripts/qmk_policy.sh --update` (fetches, checks out the newest tag, syncs submodules, stages the gitlink).
-2. `scripts/build.sh --twice`; `scripts/negative_tests.sh`.
-3. Diff `artifacts/verification.txt` and `artifacts/feature_parity.txt` against the previous commit; changed stock-equivalence or parity rows need review.
-4. Update `firmware.md` §1, commit, and flash per §2 with a fresh approval. The build date changes with QMK, so VIA resets its saved keymap on the first boot.
+2. Read the release notes for a fix of NKRO on macOS (Caps Lock / input-source toggle); if one is claimed, record it in `devnotes.md` for a decision on lifting POLICY-NKRO (I8). Nothing is fixed here (POLICY-UPSTREAM).
+3. `scripts/build.sh --twice`; `scripts/negative_tests.sh`.
+4. Diff `artifacts/verification.txt` and `artifacts/feature_parity.txt` against the previous commit; changed stock-equivalence or parity rows need review.
+5. Bump `VIA_FIRMWARE_VERSION`, update `firmware.md` §1, commit, and flash per §2 with a fresh approval. The build date changes with QMK, so VIA resets its saved keymap on the first boot.

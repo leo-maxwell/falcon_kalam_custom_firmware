@@ -33,7 +33,14 @@ enum falcon_kalam_rgb_layer {
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
     FALCON_KALAM_RGB_ACTIVITY, // all cyan blink: FLASHREAD request served (dev)
 #endif
-    FALCON_KALAM_RGB_DIP,   // all dark, 1 blink = a virtual DIP switch turned off, 2 = on
+    FALCON_KALAM_RGB_MODE_HHK, // all purple: HHK mode (mode-key flash; settings display, first LED)
+    FALCON_KALAM_RGB_MODE_MAC, // all pink:   Mac mode
+    FALCON_KALAM_RGB_MODE_WIN, // all gold:   Win mode
+    FALCON_KALAM_RGB_SHOW_BG,  // switch LEDs dark: settings display background
+    FALCON_KALAM_RGB_SHOW_SW3, // switch LED green: SW3 on
+    FALCON_KALAM_RGB_SHOW_SW4, // switch LED green: SW4 on
+    FALCON_KALAM_RGB_SHOW_SW5, // switch LED green: SW5 on
+    FALCON_KALAM_RGB_DIP,      // all dark, 1 blink = a virtual DIP switch turned off, 2 = on
     FALCON_KALAM_RGB_RESET, // all orange, 3 blinks at boot: settings were reset
     FALCON_KALAM_RGB_BOOT,  // all red: jumping to the bootloader (WS2812 keeps it in DFU)
 };
@@ -45,7 +52,14 @@ static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
 static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_CYAN});
 #endif
-static const rgblight_segment_t PROGMEM seg_dip[]   = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
+static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_PURPLE});
+static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_PINK});
+static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_GOLD});
+static const rgblight_segment_t PROGMEM seg_show_bg[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LEDS_SW, HSV_BLACK});
+static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, HSV_GREEN});
+static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, HSV_GREEN});
+static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, HSV_GREEN});
+static const rgblight_segment_t PROGMEM seg_dip[]      = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_reset[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_ORANGE});
 static const rgblight_segment_t PROGMEM seg_boot[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_RED});
 
@@ -54,12 +68,22 @@ __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_l
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
                                                                                                           seg_activity,
 #endif
+                                                                                                          seg_mode_hhk, seg_mode_mac, seg_mode_win, seg_show_bg, seg_show_sw3, seg_show_sw4, seg_show_sw5,
                                                                                                           seg_dip, seg_reset, seg_boot);
 
 _Static_assert(FALCON_KALAM_RGB_BOOT < RGBLIGHT_MAX_LAYERS, "raise RGBLIGHT_MAX_LAYERS");
 _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED module");
 
 static bool settings_were_reset;
+
+// POLICY-HHKB settings display: the settings now, then (if different) the
+// settings after the next plug-in, separated by a dark gap.
+enum { SHOW_IDLE, SHOW_NOW, SHOW_GAP, SHOW_NEXT };
+#define SHOW_MS 1500
+#define SHOW_GAP_MS 300
+static uint8_t  show_phase;
+static uint16_t show_timer;
+static uint8_t  show_now, show_next; // packed settings, see rgb_indicators.h
 
 // EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
 // and blink once rgblight is running.
@@ -83,6 +107,35 @@ void falcon_kalam_rgb_init(void) {
     enforce_white_base();
     if (settings_were_reset) {
         rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, 250, 3);
+    }
+}
+
+// Draws one settings value (on = true): the mode colour on all LEDs, the
+// switch LEDs dark below their green SW3-SW5 layers. on = false clears them all.
+static void show_draw(uint8_t settings, bool on) {
+    for (uint8_t mode = 0; mode < 3; mode++) {
+        rgblight_set_layer_state(FALCON_KALAM_RGB_MODE_HHK + mode, on && (settings & 3) == mode);
+    }
+    rgblight_set_layer_state(FALCON_KALAM_RGB_SHOW_BG, on);
+    for (uint8_t sw = 0; sw < 3; sw++) {
+        rgblight_set_layer_state(FALCON_KALAM_RGB_SHOW_SW3 + sw, on && ((settings >> (2 + sw)) & 1));
+    }
+}
+
+static void show_task(void) {
+    if (show_phase == SHOW_IDLE || timer_elapsed(show_timer) < (show_phase == SHOW_GAP ? SHOW_GAP_MS : SHOW_MS)) {
+        return;
+    }
+    show_timer = timer_read();
+    if (show_phase == SHOW_NOW) {
+        show_draw(show_now, false);
+        show_phase = show_next != show_now ? SHOW_GAP : SHOW_IDLE;
+    } else if (show_phase == SHOW_GAP) {
+        show_draw(show_next, true);
+        show_phase = SHOW_NEXT;
+    } else {
+        show_draw(show_next, false);
+        show_phase = SHOW_IDLE;
     }
 }
 
@@ -113,6 +166,7 @@ void falcon_kalam_rgb_task(void) {
     }
     shown = want;
 
+    show_task();
     enforce_white_base();
 }
 
@@ -137,6 +191,26 @@ void falcon_kalam_rgb_paint_bootloader(void) {
 // POLICY-HHKB virtual DIP switch flipped: the white base blinks dark.
 void falcon_kalam_rgb_dip_feedback(bool on) {
     rgblight_blink_layer_repeat(FALCON_KALAM_RGB_DIP, 150, on ? 2 : 1);
+}
+
+// POLICY-HHKB mode key: one flash in the new mode's colour. Ends a running
+// settings display, which shares the mode layers.
+void falcon_kalam_rgb_mode_flash(uint8_t mode) {
+    show_draw(0, false);
+    show_phase = SHOW_IDLE;
+    rgblight_blink_layer(FALCON_KALAM_RGB_MODE_HHK + mode, 300);
+}
+
+void falcon_kalam_rgb_show_settings(uint8_t now, uint8_t next) {
+    for (uint8_t mode = 0; mode < 3; mode++) {
+        rgblight_unblink_layer(FALCON_KALAM_RGB_MODE_HHK + mode); // a pending flash would cut the display short
+    }
+    show_draw(0, false);
+    show_now   = now;
+    show_next  = next;
+    show_phase = SHOW_NOW;
+    show_timer = timer_read();
+    show_draw(now, true);
 }
 
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE

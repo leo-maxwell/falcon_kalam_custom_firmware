@@ -5,6 +5,6 @@ PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falco
 PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:10:6: error: #error "POLICY-VARIANTS: FALCON_KALAM_D)
 PASS  neg_oversize: rejected (| /opt/homebrew/opt/arm-none-eabi-binutils/bin/arm-none-eabi-ld: .build/falcon_kalam_neg_oversize.elf section `.rodata' will not fit in regi)
 PASS  flash.sh L1 reference image: rejected (flash.sh: refusing 'default': only 'ship' or 'dev' may be flashed (the L1 reference image never))
-PASS  flash.sh wrong hash: rejected (flash.sh: image hash 5fc5deb33ad90bccb99bf9364fb5480559b04c4c1e1d4fe71054e6bd0272f681 does not match the approved 0000000000000000000000000000000000000000000000000000000000000000)
+PASS  flash.sh wrong hash: rejected (flash.sh: image hash a068b40f1bb26bfc8c54118afb2d416296f39019d62bd0138d826f98d63dcd88 does not match the approved 0000000000000000000000000000000000000000000000000000000000000000)
 PASS  flash.sh short hash: rejected (flash.sh: give the full approved SHA-256 (64 hex digits))
 RESULT: PASS

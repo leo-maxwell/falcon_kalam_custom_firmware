@@ -9,7 +9,7 @@ owner's decision. Closed items move to the ledger as one line.
 |---|---|---|---|
 | B1 | **Caps Lock LED never lights** on image `9b61141e…` (the A10 indicator was not configured) | **fixed** in the ship and dev images (indicator compiled in, verified offline); not flashed | flash and confirm the LED (devnotes) |
 | R15 | **"Dark" is ambiguous** under POLICY-RGB | **fixed** in the images: Bootmagic paints the LEDs red too, so dark = host asleep. Red in DFU relies on the WS2812s latching the last frame (unverified) | confirm red in DFU (devnotes) |
-| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads or SWD | **partly fixed** (POLICY-RECOVERY): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
+| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook is in L1's `chconf.h`), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F (devnotes) |
 | R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Dev-round persistence test with the wear-leveling trace; repeat after each QMK update |
 
 ## Known limitations
@@ -25,7 +25,6 @@ owner's decision. Closed items move to the ledger as one line.
 | L7 | After a CPU fault the keyboard drops into DFU and stops typing until replugged. The LEDs keep their last colour (the fault handler must not touch them) |
 | L8 | As on a real HHKB: in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting; Fn+Ctrl+M (until the next plug-in) or SW2 (from the next plug-in) selects Mac mode |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
-| L10 | The virtual DIP switches have no display: a flip shows only as its blink (1 = off, 2 = on), and the setting through the keys' behaviour after the next plug-in (I23) |
 | L11 | Deviations from the HHKB Classic, all accepted (`policy.md` §2.3). Noticeable in use: no SW6, so a key press always wakes a sleeping host; 6KRO only until upstream fixes NKRO on macOS (POLICY-NKRO, I8); SW1/SW2 both on acts as HHK mode |
 
 ## Ledger (closed)
@@ -45,6 +44,7 @@ owner's decision. Closed items move to the ledger as one line.
 | R12 | 2026-10-26 | console + Command stay in ship for stock parity; POLICY-RGB shows magenta on channel A while keystrokes go to the console |
 | R14 | 2026-10-26 | full-white current within budget by worst-case analysis: 4 × 60 mA (WS2812 maximum at full white) + MCU < 50 mA ≈ 290 mA, against the declared 500 mA (`bMaxPower`). A measurement stays optional (I4) |
 | R16 | 2026-10-27 | deviations from the HHKB Classic settled: each is listed with its reason in `policy.md` §2.3 and accepted (L11). Virtual switch flips take effect at the next plug-in and the factory setting is HHK mode, as on the Classic |
+| L10 | 2026-10-27 | the virtual DIP switches and the mode had no display; Fn+Ctrl+Shift+0 now shows them, and mode keys flash the mode colour (I23) |
 | B2 | 2026-10-26 | `falcon_kalam_probe.py matrix` read VIA ≥ 12 replies one byte early; fixed; `decode-log` re-maps the affected log |
 | B3 | 2026-10-26 | builds were reproducible only within one day: QMK Command embeds `__DATE__`. Fixed: `SOURCE_DATE_EPOCH` = pinned QMK commit time; the verifier checks the embedded date. Images `9b61141e…` (flashed) and `dd580803…` carry their build-day date; nothing else differs |
 | B4 | 2026-10-26 | a macOS `.DS_Store` in `keyboards/falcon_kalam/` was staged into QMK and failed `qmk lint`; staging now uses `rsync --delete-excluded --exclude .DS_Store` |

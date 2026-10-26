@@ -5,12 +5,13 @@
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time).
+the pinned QMK commit time). **Release 1** (`VIA_FIRMWARE_VERSION`, shown by
+`falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `5fc5deb33ad90bccb99bf9364fb5480559b04c4c1e1d4fe71054e6bd0272f681` | 37,184 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `b6480b715efd8177cc47f9178d3f3495014be7efe6d9171c0b52a6cddd03c295` | 42,660 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `a068b40f1bb26bfc8c54118afb2d416296f39019d62bd0138d826f98d63dcd88` | 37,728 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `485d3e67ff77295f3ba58459f0b2a2cf9974e66a4eb3a19818c620bb7e7a6ff7` | 43,212 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -31,6 +32,8 @@ same feature code · **pending** = see devnotes.
 | NKRO | off (POLICY-NKRO) | off | cfg (the macOS fix) | ✓ Caps Lock and input-source switching work on macOS, also after a replug |
 | Matrix, layout | COL2ROW, stock pins, 5 ms debounce; HHKB classic (`LAYOUT_60_hhkb`) | same | = / + | pending: full key test |
 | Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); HHK mode from the factory, as the Classic (§3) | same | new (stock: generic 60%) | pending |
+| Settings display (additions) | a mode key flashes the mode colour (HHK purple, Mac pink, Win gold); Fn+Ctrl+Shift+0 shows the mode colour on the first LED and SW3–SW5 on the other three (green = on), first as in effect, then as after the next plug-in if different (§3) | same | new | pending |
+| Release number | `VIA_FIRMWARE_VERSION`, readable over VIA | same | new | pending |
 | VIA | protocol `0x000D`, 6 layers (the three modes, in the Classic's order), 16 macros in a 1,107 B buffer (stock: 4 layers, 383 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ (probe) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ (red: pending) |
 | Fault recovery (POLICY-RECOVERY) | any CPU fault resets into DFU instead of hanging | same + Shift+Shift+F fault test | new | pending |
@@ -38,7 +41,7 @@ same feature code · **pending** = see devnotes.
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | connects ✓; output pending |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
 | Caps Lock LED | A10, active-low | same | = | pending |
-| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
+| RGB (POLICY-RGB) | **status indicator**: white at full brightness = normal; red = bootloader, orange blinks = settings reset, magenta = keystroke printout, yellow = debug, blue = powered but not configured by a host, green = layer locked, dark blinks = virtual DIP switch flipped, mode colours = mode flash and settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + cyan blink while FLASHREAD serves a request | deliberate change (stock: decorative, rainbow swirl) | pending |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | pending (persistence) |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |
@@ -68,6 +71,9 @@ Fn, every mode:  1–= F1–F12  \ Ins  ` Del  I PrtSc  O ScrLk  P Pause
 Mode keys (until the next plug-in):  Fn+Ctrl+M Mac · Fn+Ctrl+W Win (HHK when SW1/SW2 select HHK)
 Virtual DIP switches (saved):        Fn+Ctrl+Shift+1…5 flips SW1…SW5; dark blink ×1 = off, ×2 = on;
                                      effective from the next plug-in, as on the Classic
+Settings display:                    Fn+Ctrl+Shift+0 → 1.5 s now, then 1.5 s after-replug (if different);
+                                     LED 1 = mode colour, LEDs 2–4 = SW3–SW5 (green on, dark off)
+Mode colours:                        HHK purple · Mac pink · Win gold (also flashed by the mode keys)
   SW1/SW2  power-on mode: OFF/OFF HHK (factory) · ON/OFF Win · OFF/ON Mac · ON/ON acts as HHK
   SW3      Delete sends Backspace (Win/HHK)
   SW4      left ◇ = Fn

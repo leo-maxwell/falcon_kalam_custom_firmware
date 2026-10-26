@@ -53,10 +53,12 @@ test.
 | 1 | bootloader (about to jump; kept while in DFU) | red | all | `shutdown_user(jump=true)` (Command B, `QK_BOOT`) and Bootmagic (Esc at plug-in) push the frame out; WS2812s latch it. Not after a CPU fault (POLICY-RECOVERY) |
 | 2 | settings were reset | orange, 3 blinks at boot | all | `eeconfig_init_user` |
 | 3 | virtual DIP switch flipped | dark blink: 1 = switched off, 2 = on | all | Fn+Ctrl+Shift+1…5 (POLICY-HHKB) |
-| 4 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
-| 5 | debug output on | yellow | A | Shift+Shift+D / X |
-| 6 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
-| 7 | layer locked on | green | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
+| 4 | settings display | LED 1: mode colour (HHK purple, Mac pink, Win gold); LEDs 2–4: SW3–SW5, green = on, dark = off; 1.5 s now, a dark gap, 1.5 s after the next plug-in if different | all | Fn+Ctrl+Shift+0 (POLICY-HHKB) |
+| 4 | mode key | one flash in the new mode's colour | all | Fn+Ctrl+M/W (POLICY-HHKB) |
+| 5 | keystroke printout on (privacy warning) | magenta | A | debug + Shift+Shift+K |
+| 6 | debug output on | yellow | A | Shift+Shift+D / X |
+| 7 | USB not configured by a host | blue | B | USB state ≠ configured/suspended |
+| 8 | layer locked on | green | B | a layer other than the mode's base and its held Fn layer is on, or the default layer is not a mode base (POLICY-HHKB) |
 | — | Fn held, Caps Lock | no change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
 | — | dev only (FLASHREAD): request served | cyan blink | all | `falcon_kalam_rgb_activity()` |
@@ -112,6 +114,7 @@ copy, the closest equivalent is used, and every deviation is listed here.
 | HID codes | as the Classic sends them: Power = Keyboard Power `0x66` (not QMK's usual System Power), Stop `0x78`, Clear `0x53`, volume/mute/eject on the consumer page |
 | Mode keys | Fn+Control+M → Mac mode; Fn+Control+W → Win mode, or HHK mode when SW1/SW2 select HHK; effective until the next plug-in, as SW1/SW2 decide the power-on mode |
 | DIP switches | **virtual**, since the unit has none: SW1–SW5 saved in EEPROM, all off from the factory (HHK mode) as on the Classic, flipped with Fn+Control+Shift+1…5 (acknowledged by a dark blink, POLICY-RGB) and, as on the Classic, effective from the next plug-in. SW1/SW2 = power-on mode; SW3 = Delete sends Backspace (not in Mac mode); SW4 = left ◇ becomes Fn; SW5 = swap Alt and ◇. Like the Classic's, they act on top of the keymap (VIA shows the unchanged layers) |
+| Display (additions) | the Classic has none; on the RGB module (itself a deviation): a mode key flashes the mode colour, Fn+Control+Shift+0 shows the settings in effect and after the next plug-in |
 
 Deviations, each because a copy is impossible or conflicts with a policy;
 all are accepted:
@@ -140,9 +143,10 @@ plain QMK-style HHKB reference.
 | POLICY-REPRODUCIBLE | offline build, pinned toolchain and sources, identical bytes on rebuild on any day (`SKIP_VERSION=yes`, `SOURCE_DATE_EPOCH` = pinned QMK commit time). Not the real date, because an approved SHA-256 must be re-derivable, and VIA wipes the saved keymap whenever the build date changes; pinned, that happens only with a QMK update, and our own layout changes use the schema stamp (§5) | `build.sh --twice`; the verifier checks the embedded build date |
 | POLICY-EVIDENCE | hardware parameters come only from verified evidence; anything unproven is marked so, never invented | analysis tool (exact-address checks); status column in `hardware.md` |
 | POLICY-READONLY-DEVICE | without an approval, only read the device: enumeration, DFU **upload**, whitelisted VIA queries | `falcon_kalam_probe.py` whitelist |
-| POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU. The daily image is always ship | `scripts/flash.sh` (refuses other images, wrong hashes, devices not in DFU; alt 2 hard-coded; pre-flash readback) + its negative tests; `operations.md` §2 |
+| POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU: with no SWD probe, DFU is the only recovery path and must stay reachable. The daily image is always ship | `scripts/flash.sh` (refuses other images, wrong hashes, devices not in DFU; alt 2 hard-coded; pre-flash readback) + its negative tests; `operations.md` §2 |
 | POLICY-OPEN-ISSUES | an open issue stays open until the owner closes it explicitly | `problems.md` |
 | POLICY-NAMING | §2.2 | verifier, `check_docs.py` |
+| POLICY-RELEASE | every change of the ship/dev images bumps the release number `VIA_FIRMWARE_VERSION` (`users/falcon_kalam/config.h`), readable over VIA; `firmware.md` states it | `scripts/check_docs.py` (matches `firmware.md`; fails if the images changed since HEAD without a bump) |
 | POLICY-DOCS | §4 | `scripts/check_docs.py` (run by `build.sh`) |
 
 ## 3. File organisation
@@ -208,8 +212,9 @@ count from that array.
 is QMK's (non-persistent) default layer. At post-init the virtual SW1/SW2 pick
 it; the mode keys change it until the next plug-in. A press with any Fn layer
 on and Control held is judged by its **base-layer** keycode (on the Fn layers
-M is keypad minus, 1–5 are F1–F5): M and W switch mode, Shift+1…5 flip a
-saved switch; these presses are swallowed. The switches in effect are read
+M is keypad minus, 0–5 are F10, F1–F5): M and W switch mode (with a flash in
+the mode colour), Shift+1…5 flip a saved switch, Shift+0 shows the settings;
+these presses are swallowed. The switches in effect are read
 once at post-init, so a flip waits for the next plug-in, as on the Classic. SW3–SW5 act only on keys that resolve on
 a base layer (`layer_switch_get_layer`), so Fn+\` stays Delete: SW4 turns the
 left ◇ (`KC_LGUI`, or `KC_INT5` in HHK mode) into the mode's Fn layer, SW5
@@ -260,7 +265,11 @@ covered: `chSysHalt()`, whose hook lives in the board's `chconf.h` (L1).
 table. `falcon_kalam_rgb_task` (every main-loop pass) polls the USB state,
 debug flags and layer state, and calls `rgblight_set_layer_state()` only for
 layers that changed, since each call schedules a redraw; it also re-sets the
-white base. The USB-state callback is avoided because it can run in interrupt
+white base, and advances the settings display (now → gap → after replug), a
+timed sequence of rgblight layers: the mode colour on all LEDs, a dark layer
+over LEDs 2–4, and a green layer per switch on top. A mode flash ends a running
+display, and a new display cancels a pending flash, because both use the mode
+layers. The USB-state callback is avoided because it can run in interrupt
 context; the debug flags have no callback. The green lock state treats the
 mode bases (default layers 0/2/4; an empty default state means layer 0) and a
 held Fn layer (1/3/5) as normal. `falcon_kalam_rgb_shutdown` sets the red layer and

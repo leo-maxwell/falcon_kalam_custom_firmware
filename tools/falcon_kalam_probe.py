@@ -78,6 +78,11 @@ class Probe:
         r = self.send(GET_KEYBOARD_VALUE, KV_LAYOUT_OPTIONS)
         return int.from_bytes(r[2:6], 'big') if r[0] != UNHANDLED else None
 
+    def firmware_version(self):
+        """VIA_FIRMWARE_VERSION: our release number (I12); 0 on stock."""
+        r = self.send(GET_KEYBOARD_VALUE, KV_FIRMWARE_VERSION)
+        return int.from_bytes(r[2:6], 'big') if r[0] != UNHANDLED else None
+
     def macros(self):
         count = self.send(MACRO_GET_COUNT)
         size = self.send(MACRO_GET_BUFFER_SIZE)
@@ -136,6 +141,8 @@ def cmd_info(p, a):
     proto = p.protocol()
     print('product:           %s / %s' % (p.dev.manufacturer, p.dev.product))
     print('VIA protocol:      0x%04X' % proto)
+    fw = p.firmware_version()
+    print('firmware release:  %s' % ('unsupported' if fw is None else fw))
     print('dynamic layers:    %d' % p.layers())
     m = p.macros()
     print('macros:            %s' % ('unsupported' if m is None else '%d, buffer %d bytes' % m))

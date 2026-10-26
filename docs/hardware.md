@@ -74,7 +74,10 @@ stock's is overwritten.
 | Fn+Tab (`QK_BOOT`) | stock default keymap only |
 | VIA host command | nowhere: QMK removed it in 2021 |
 | A CPU fault (POLICY-RECOVERY) | ours; dev triggers one on purpose with Shift+Shift+F |
-| Shorting the reset/boot pads, or SWD | always; last resort |
+| Shorting the reset/boot pads | always; last resort |
+
+SWD (PA13/PA14) is enabled, but no probe is available, so DFU is the only
+recovery path: an image that blocks every way into DFU bricks the unit.
 
 ## 4. Clock and USB
 

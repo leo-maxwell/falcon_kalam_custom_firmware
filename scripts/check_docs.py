@@ -10,9 +10,12 @@
    and the current release hash only in docs/firmware.md (plus devnotes).
 6. Retired names (falcon_hs_r2, "Falcon HS R2", ...) appear nowhere except the
    naming history in docs/policy.md (POLICY-NAMING).
+7. The release number (VIA_FIRMWARE_VERSION, I12) equals the one in
+   docs/firmware.md, and was bumped if the image hashes changed since HEAD.
 """
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -102,6 +105,30 @@ for h in hits:
     fail('retired name outside the policy naming history: ' + h)
 if not hits:
     ok('no retired names (POLICY-NAMING)')
+
+# 7. release number (I12)
+REL_RE = re.compile(r'#define VIA_FIRMWARE_VERSION (\d+)')
+CFG = 'userspace/users/falcon_kalam/config.h'
+release = REL_RE.search((ROOT / CFG).read_text())
+if not release:
+    fail('%s defines no VIA_FIRMWARE_VERSION' % CFG)
+else:
+    release = int(release.group(1))
+    if re.search(r'\*\*Release %d\*\*' % release, fw):
+        ok('firmware.md release = %d' % release)
+    else:
+        fail('firmware.md does not state **Release %d** (VIA_FIRMWARE_VERSION)' % release)
+
+    def at_head(path):
+        r = subprocess.run(['git', '-C', str(ROOT), 'show', 'HEAD:' + path], capture_output=True, text=True)
+        return r.stdout if r.returncode == 0 else ''
+
+    head_rel = REL_RE.search(at_head(CFG))
+    head_fw = at_head('docs/firmware.md')
+    if head_rel and hashes and not all(h in head_fw for h in hashes) and int(head_rel.group(1)) == release:
+        fail('the images changed since HEAD but VIA_FIRMWARE_VERSION is still %d: bump it' % release)
+    elif head_rel:
+        ok('release number consistent with HEAD (%s -> %d)' % (head_rel.group(1), release))
 
 print('RESULT: %s' % ('PASS' if not failures else 'FAIL (%d)' % len(failures)))
 sys.exit(1 if failures else 0)

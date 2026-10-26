@@ -11,6 +11,9 @@
 // from the factory (HHK mode). This unit has no switches, so they are
 // virtual: saved in EEPROM and flipped with Fn+Control+Shift+1..5. As on the
 // Classic, a flip takes effect at the next plug-in.
+//
+// Additions (the Classic has no display): a mode key flashes the mode colour,
+// and Fn+Control+Shift+0 shows the settings on the RGB module.
 
 #include "hhkb_modes.h"
 #include "rgb_indicators.h"
@@ -19,8 +22,8 @@
 static uint8_t dip; // the virtual DIP switches in effect: as saved at power-on
 
 // SW1/SW2 -> base layer. ON/ON is not a setting the manual defines; it acts as HHK mode.
-static uint8_t dip_mode(void) {
-    switch (dip & (FALCON_KALAM_SW1 | FALCON_KALAM_SW2)) {
+static uint8_t dip_mode_of(uint8_t switches) {
+    switch (switches & (FALCON_KALAM_SW1 | FALCON_KALAM_SW2)) {
         case FALCON_KALAM_SW1:
             return _WIN;
         case FALCON_KALAM_SW2:
@@ -30,12 +33,33 @@ static uint8_t dip_mode(void) {
     }
 }
 
+static uint8_t dip_mode(void) {
+    return dip_mode_of(dip);
+}
+
 static uint8_t current_mode(void) {
     return get_highest_layer(default_layer_state);
 }
 
 static void set_mode(uint8_t base_layer) {
     default_layer_set((layer_state_t)1 << base_layer);
+}
+
+// Packs a mode and SW3-SW5 for the settings display (rgb_indicators.h).
+static uint8_t settings(uint8_t base_layer, uint8_t switches) {
+    return (base_layer / 2) | (((switches >> 2) & 7) << 2);
+}
+
+// Mode key (Fn+Control+M/W): switch until the next plug-in, flash the colour.
+static void mode_key(uint8_t base_layer) {
+    set_mode(base_layer);
+    falcon_kalam_rgb_mode_flash(base_layer / 2);
+}
+
+// Fn+Control+Shift+0: the settings in effect, then those after the next plug-in.
+static void show_settings(void) {
+    falcon_kalam_user_config_t cfg = {.raw = eeconfig_read_user()};
+    falcon_kalam_rgb_show_settings(settings(current_mode(), dip), settings(dip_mode_of(cfg.dip), cfg.dip));
 }
 
 void falcon_kalam_hhkb_init(void) {
@@ -100,7 +124,7 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
     }
 
     // Fn+Control(+Shift)+key, judged by the key's base-layer legend: on the
-    // Fn layers M is keypad minus and 1-5 are F1-F5.
+    // Fn layers M is keypad minus and 0-5 are F10 and F1-F5.
     if ((layer_state & FALCON_KALAM_FN_LAYERS) && (get_mods() & MOD_MASK_CTRL)) {
         uint16_t legend = keymap_key_to_keycode(current_mode(), key);
         if (get_mods() & MOD_MASK_SHIFT) {
@@ -108,11 +132,15 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
                 flip_dip(legend - KC_1);
                 return false;
             }
+            if (legend == KC_0) {
+                show_settings();
+                return false;
+            }
         } else if (legend == KC_M) {
-            set_mode(_MAC);
+            mode_key(_MAC);
             return false;
         } else if (legend == KC_W) {
-            set_mode(dip_mode() == _HHK ? _HHK : _WIN);
+            mode_key(dip_mode() == _HHK ? _HHK : _WIN);
             return false;
         }
     }
