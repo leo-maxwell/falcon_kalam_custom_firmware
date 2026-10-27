@@ -126,4 +126,4 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 11 | `ff0538d` | dark until the host is ready at every boot; base lit once (B9) |
 | 12 | `cd83517` | dark frame at `keyboard_pre_init` (L12) |
 | 13 | `9bafd99` | dev: Command layer switching off (B10); the base light is switched back on if a raw-HID command turned it off (B11); FLASHREAD window covers the whole UID (B12); Eject handler sends on presses only |
-| 14 | — | data line settled low for two reset periods before the first frame at pre-init and before the Bootmagic red (B13, L12) |
+| 14 | `6c13af9` | data line settled low for two reset periods before the first frame at pre-init and before the Bootmagic red (B13, L12) |
