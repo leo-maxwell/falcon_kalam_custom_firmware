@@ -193,6 +193,7 @@ record it here.
 | 6 | `docs/problems.md` | open risks, bugs, limitations; closed items as a one-line ledger | when found or resolved |
 | 7 | `docs/improvements.md` | optional improvements, not committed to | when an idea arises; move it to devnotes when work starts |
 | 8 | `docs/operations.md` | procedures: build, flash, tests, recovery, QMK update | when a procedure changes |
+| 9 | `docs/manual.md` | user manual for the owner and enthusiasts: layout, modes, switches, the lights, key combinations, flashing, VIA, console; usage only, no internals | when a user-visible key, light or procedure changes |
 
 Rules:
 * Status (what is flashed, what is pending) appears **only** in `devnotes.md`;

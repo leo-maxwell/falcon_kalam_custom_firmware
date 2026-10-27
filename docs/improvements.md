@@ -12,11 +12,12 @@ days, or needs the device) · high (needs extra hardware or tooling).
 | ID | Improvement | Status | Effort | Gain | Notes |
 |---|---|---|---|---|---|
 | I8 | **NKRO re-test**: with each QMK update, check upstream for a fix of the macOS Caps Lock / input-source problem; only then consider lifting POLICY-NKRO | watch | trivial once fixed: two L2 lines, flip the verifier checks | low: 6KRO is enough for typing, and the Classic declares an NKRO report but does not use it | nothing indicates a fix so far; not investigated here (POLICY-UPSTREAM) |
-| I13 | **Automated hardware tests**: script the probe, console traces and readback compare | deferred | high: console parsing; key presses still need a person | **high** for maintenance: repeatable checks after each flash and QMK update | — |
-| I14 | **Remote repository + CI** (build, verify, docs check on every push) | deferred | low for a private repository; medium for CI, which must reproduce the gcc@8 hashes on a hosted runner | medium: the only copy is local; every change re-verified | needs a hosting decision |
-| I7 | **Submit L1 upstream** to QMK | deferred | medium: upstream review, naming of a clone, and the enlarged EEPROM is a project choice upstream may not accept | low: one unit; upstream would maintain L1 only | L1 already passes upstream lint |
+| I13 | **Automated hardware tests**: script the probe, console traces and readback compare | deferred | high: console parsing; key presses and replugs still need a person | **high** for maintenance: repeatable checks after each flash and QMK update | discussed 2026-10-27: the dev light test (Shift+Shift+L, release 15) now covers every indicator state without a replug; the probe (`info`, `dump-keymap`) and `console_keycheck.py` are the other pieces; a driver script would chain them |
+| I14 | **CI** (build, verify, docs check on every push) | deferred | medium: the runner must reproduce the gcc@8 hashes | medium: every change re-verified | the remote repository exists (github.com/leo-maxwell/falcom_kalam_custom_firmware); CI is the remaining part |
 
-Retired: I4 (brightness cap from a measured current: POLICY-RGB sets the cap,
+Retired: I7 (submit L1 upstream: a QMK or VIA registry entry would present
+this firmware as the Kalam Falcon's own, which it is not; the repository is
+its only home), I4 (brightness cap from a measured current: POLICY-RGB sets the cap,
 and the LEDs now draw a few mA, R14), I6 (newer toolchain: QMK's own toolchain
 is GCC 8, and POLICY-UPSTREAM uses upstream as released), I10 (tap/hold Caps
 Lock key: POLICY-HHKB copies the Classic's Control and Fn+Tab Caps Lock

@@ -39,3 +39,8 @@ void falcon_kalam_rgb_show_settings(uint8_t now, uint8_t next); // settings now,
 // Dev only (FLASHREAD): brief all-LED blink when a request is served.
 void falcon_kalam_rgb_activity(void);
 #endif
+
+#ifdef FALCON_KALAM_DEV
+// Dev only: Shift+Shift+L shows every indicator state in turn (about 20 s).
+void falcon_kalam_rgb_test_start(void);
+#endif

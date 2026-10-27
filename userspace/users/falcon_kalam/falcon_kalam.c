@@ -72,9 +72,14 @@ void bootmagic_reset_eeprom(void) {
 }
 
 #ifdef FALCON_KALAM_DEV
-// Dev Command extra. Shift+Shift+F: deliberately fault the CPU to prove that
-// POLICY-RECOVERY lands in DFU (hardware test for R13). Dev image only.
+// Dev Command extras. Shift+Shift+F: deliberately fault the CPU to prove that
+// POLICY-RECOVERY lands in DFU (hardware test for R13). Shift+Shift+L: the
+// light test, every indicator state in turn (POLICY-RGB). Dev image only.
 bool command_extra(uint8_t code) {
+    if (code == KC_L) {
+        falcon_kalam_rgb_test_start();
+        return true;
+    }
     if (code != KC_F) {
         return false;
     }

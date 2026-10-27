@@ -2,7 +2,7 @@
 
 ## 1. Binary container
   [PASS] DFU suffix targets 1EAF:0003 (STM32duino/Maple)
-  [PASS] DFU suffix CRC32 0xA81B139D valid
+  [PASS] DFU suffix CRC32 0x9ADA0E0D valid
     file 38212 bytes, payload 38196 bytes
   [PASS] payload is byte-identical to objcopy -O binary of the ELF
 

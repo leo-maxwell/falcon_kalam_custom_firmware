@@ -16,7 +16,7 @@
 // Release number of the ship and dev images, readable over VIA
 // (`falcon_kalam_probe.py info`). Bump it whenever the images change; must
 // equal the release in docs/firmware.md (scripts/check_docs.py).
-#define VIA_FIRMWARE_VERSION 14
+#define VIA_FIRMWARE_VERSION 15
 
 // POLICY-HHKB: HHK, Mac and Win mode, each a base layer and an Fn layer
 // (falcon_kalam_keymap.h). L1's EEPROM is sized for six layers plus VIA

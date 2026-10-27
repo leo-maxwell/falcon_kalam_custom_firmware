@@ -5,11 +5,8 @@ owner's decision. Closed items move to the ledger as one line.
 
 ## Open
 
-| ID | Problem | Status / impact | Mitigation / next step |
-|---|---|---|---|
-| R13 | **No power-on DFU window**: a broken image could leave DFU reachable only through the pads; with no SWD probe, losing DFU bricks the unit | **partly fixed** (POLICY-RECOVERY; verified on the device: Shift+Shift+F lands in DFU): any CPU fault resets into DFU. Not safely fixable in firmware: hangs without a fault (a watchdog survives the reset and the bootloader never feeds it, so it would cut DFU sessions short), `chSysHalt()` (its hook `CH_CFG_SYSTEM_HALT_HOOK` is upstream's; only a keyboard-level `chconf.h` could override it, and a choice may not go into L1), images that run but don't scan keys | flash only verified images through `scripts/flash.sh`; Esc→DFU test after every flash; dev fault test Shift+Shift+F |
-| B13 | **LED 1 flashes green at plug-in** (L12): the first frame after a high idle on A1 gives LED 1 a leading 1 bit | **fixed in release 14, under test**: the line is driven low and held for two reset periods before the first frame at pre-init and before the Bootmagic red | flash release 14 and watch several plug-ins and one Bootmagic entry; close into the ledger with L12 on success |
-| R2 | **Newer QMK/ChibiOS on the GD32** (intended, POLICY-QMK-LATEST) | the first flash proved USB, matrix scanning, EEPROM init and the DFU path | open: long-term wear-leveling writes. Settings persisted across replugs in the dev round (2026-10-27); watch over weeks of use, and repeat the check after each QMK update |
+None. (The table has the columns ID, Problem, Status / impact, Mitigation /
+next step; **HR** marks an item that needs the owner's decision.)
 
 ## Known limitations
 
@@ -25,12 +22,16 @@ owner's decision. Closed items move to the ledger as one line.
 | L8 | As on the HHKB Professional Classic (POLICY-HHKB, kept on purpose): in Win and HHK mode the Delete key sends Delete (Backspace = Fn+Delete, or SW3 from the next plug-in), and HHK mode has no GUI/Command key (◇ = Muhenkan/Henkan). HHK mode is the factory setting, so on a Mac there is no Command key until Mac mode is selected: Fn+Ctrl+M (until the next plug-in) or SW2 (Fn+Ctrl+Shift+2, then replug) |
 | L9 | All six VIA layers belong to the HHKB modes (stock had two spare transparent layers); custom keys go into a mode's layers |
 | L11 | Deviations from the HHKB Classic, all accepted (`policy.md` §2.3). Noticeable in use: no SW6, so a key press always wakes a sleeping host; 6KRO only until upstream fixes NKRO on macOS (POLICY-NKRO, I8); SW1/SW2 both on acts as HHK mode |
-| L12 | At plug-in LED 1 lights briefly (usually green, sometimes blue) with LEDs 2–4 dark. Explained as the first frame after a high idle: LED 1 reads a leading 1 bit (`hardware.md` §6); release 14 settles the line low before the first frame (B13, under test). What may remain is the bootloader's window, in which A1 floats and no firmware runs; if a flash remains after release 14, a dev image that holds the line low for 2 s before its first frame tells whether it is that window (hardware fix: a pull-down resistor on A1) |
+| L14 | A hang **without** a CPU fault (an endless loop, `chSysHalt()`, an image that runs but does not scan keys) is not recoverable from the firmware: there is no power-on DFU window, a watchdog would keep running through the reset and abort DFU sessions, and the `chSysHalt()` hook is upstream's. A CPU fault does land in DFU (POLICY-RECOVERY). Mitigation: only images that passed the build's verification are flashed, through `scripts/flash.sh`, and every flash ends with the Esc→DFU test |
 
 ## Ledger (closed)
 
 | ID | Closed | How |
 |---|---|---|
+| B13 | 2026-10-27 | LED 1 flashed green at plug-in (yellow after the Bootmagic red): the first frame began after a high idle on A1 (QMK's board default is a pull-up, and the driver's init only switches the mode), so LED 1 read a leading 1 bit. Release 14 drives the line low and holds it for two reset periods before the first frame; verified on the device: no flash at plug-in, Bootmagic red without yellow |
+| L12 | 2026-10-27 | the plug-in flash was B13, not the bootloader's floating window; closed with it |
+| R2 | 2026-10-27 | QMK 0.34.7 / ChibiOS on the GD32: USB, matrix, EEPROM, DFU and the fault path verified over fourteen releases; settings persisted across every replug and flash. Wear: a settings change costs one or two 16-bit cells of the 1,024-cell write log, and the pages are erased only when the log is full, so even at the conservative 10,000 erase cycles the keyboard outlives millions of settings writes; VIA keymap edits are the same size. Re-checked by the verifier after each QMK update (operations.md §5) |
+| R13 | 2026-10-27 | the fault path is fixed (POLICY-RECOVERY, verified with the dev fault test); what remains, a hang without a fault, cannot be fixed in firmware and is recorded as the limitation L14, mitigated by the flash gate and the Esc→DFU test after every flash |
 | R1 | 2026-10-26 | bootloader dumped twice through FLASHREAD, identical; = upstream `generic-none`; RDP off; stored in `originals/device_dump_2026-10-26/` |
 | R3 | 2026-10-26 | HSE 8 MHz: inferred from code, confirmed indirectly by working USB at ÷1.5 |
 | R4 | 2026-10-26 | the first-boot EEPROM reset is an accepted cost of the conversion; the backup held no user configuration |

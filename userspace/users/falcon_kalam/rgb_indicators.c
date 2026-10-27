@@ -214,9 +214,106 @@ static void show_task(void) {
 // State-driven indicators, polled from the main loop (the USB state callback
 // may run in interrupt context, and the debug flags have no callback at all).
 // rgblight_set_layer_state() schedules a redraw, so it is only called on change.
-void falcon_kalam_rgb_task(void) {
-    static uint8_t shown; // bit n = indicator layer n currently on (n < 8)
+static uint8_t shown; // bit n = polled indicator layer n currently on (n < 8)
 
+#ifdef FALCON_KALAM_DEV
+// Dev light test (Shift+Shift+L): every indicator state in turn, without a
+// replug, each named on the console. Layer states are switched on directly;
+// the one-off events run their normal code paths. The polled indicators are
+// paused meanwhile and re-evaluated at the end.
+#    include "print.h"
+enum {
+    TEST_IDLE,
+    TEST_LOCKED,
+    TEST_USB,
+    TEST_DEBUG,
+    TEST_KEYLOG,
+    TEST_MODE_HHK,
+    TEST_MODE_MAC,
+    TEST_MODE_WIN,
+    TEST_SHOW,
+    TEST_DIP_OFF,
+    TEST_DIP_ON,
+    TEST_RESET,
+    TEST_BOOT,
+    TEST_END,
+};
+static const struct {
+    const char *name;
+    uint8_t     layer; // switched on for the step, 0xFF = none
+    uint16_t    ms;
+} PROGMEM test_steps[] = {
+    [TEST_LOCKED] = {"channel B blue: layer locked", FALCON_KALAM_RGB_LAYER_LOCKED, 1500},
+    [TEST_USB] = {"channel B dim green: USB not configured", FALCON_KALAM_RGB_USB, 1500},
+    [TEST_DEBUG] = {"channel A blue: debug on", FALCON_KALAM_RGB_DEBUG, 1500},
+    [TEST_KEYLOG] = {"channel A red: keystroke printout on", FALCON_KALAM_RGB_KEYLOG, 1500},
+    [TEST_MODE_HHK] = {"LED 1 red: HHK mode", FALCON_KALAM_RGB_MODE_HHK, 1500},
+    [TEST_MODE_MAC] = {"LED 1 blue: Mac mode", FALCON_KALAM_RGB_MODE_MAC, 1500},
+    [TEST_MODE_WIN] = {"LED 1 green: Win mode", FALCON_KALAM_RGB_MODE_WIN, 1500},
+    [TEST_SHOW] = {"settings display: HHK+SW3 now, then Mac+SW4+SW5 after a replug", 0xFF, 4000},
+    [TEST_DIP_OFF] = {"switch flipped off: one off-blink", 0xFF, 1000},
+    [TEST_DIP_ON] = {"switch flipped on: two off-blinks", 0xFF, 1000},
+    [TEST_RESET] = {"settings reset: three red blinks on dark", 0xFF, 2000},
+    [TEST_BOOT] = {"bootloader: all red", FALCON_KALAM_RGB_BOOT, 1500},
+};
+static uint8_t  test_step = TEST_IDLE;
+static uint16_t test_timer;
+
+static void test_begin(uint8_t step) {
+    test_step  = step;
+    test_timer = timer_read();
+    if (step == TEST_END) {
+        uprintf("falcon_kalam: light test done\n");
+        test_step = TEST_IDLE;
+        shown     = 0; // re-evaluate the polled indicators on the next pass
+        return;
+    }
+    uprintf("falcon_kalam: light test %u/%u: %s\n", step, TEST_END - 1, test_steps[step].name);
+    switch (step) {
+        case TEST_SHOW:
+            falcon_kalam_rgb_show_settings(0 | (1u << 2), 1 | (2u << 2) | (4u << 2));
+            break;
+        case TEST_DIP_OFF:
+            falcon_kalam_rgb_dip_feedback(false);
+            break;
+        case TEST_DIP_ON:
+            falcon_kalam_rgb_dip_feedback(true);
+            break;
+        case TEST_RESET:
+            rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
+            rgblight_blink_layer_repeat(FALCON_KALAM_RGB_RESET, RESET_BLINK_MS, RESET_BLINKS);
+            break;
+        default:
+            rgblight_set_layer_state(test_steps[step].layer, true);
+            break;
+    }
+}
+
+static void test_end_step(void) {
+    uint8_t layer = test_steps[test_step].layer;
+    if (layer != 0xFF) {
+        rgblight_set_layer_state(layer, false);
+    } else if (test_step == TEST_RESET) {
+        rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
+    }
+}
+
+void falcon_kalam_rgb_test_start(void) {
+    if (test_step != TEST_IDLE) {
+        test_end_step();
+    }
+    test_begin(TEST_LOCKED);
+}
+
+static void test_task(void) {
+    if (timer_elapsed(test_timer) >= test_steps[test_step].ms) {
+        test_end_step();
+        test_begin(test_step + 1);
+    }
+}
+#endif
+
+void falcon_kalam_rgb_task(void) {
     usb_configure_state_t usb = usb_device_state_get_configure_state();
     // POLICY-HHKB: a mode base (default layer; an empty state means layer 0)
     // and a held Fn layer are normal; any other layer switched on, or another
@@ -240,6 +337,14 @@ void falcon_kalam_rgb_task(void) {
         reset_dark = false;
         boot_light_up();
     }
+
+#ifdef FALCON_KALAM_DEV
+    if (test_step != TEST_IDLE) {
+        test_task();
+        enforce_green_base();
+        return;
+    }
+#endif
 
     uint8_t want = 0;
     if (locked) want |= 1u << FALCON_KALAM_RGB_LAYER_LOCKED;
