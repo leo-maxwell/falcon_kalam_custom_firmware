@@ -8,7 +8,7 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 18 (`df75f34c…`), flashed 2026-10-27 (probe: release 18). Release 18 changes only the dev light test (B14), so the ship acceptance of release 17 carries over; the post-flash Esc→DFU test and `scripts/flash.sh verify ship` are the remaining step |
+| On the device | **ship** release 18 (`df75f34c…`, tag `release-18`), flashed and accepted 2026-10-27: probe release 18, Esc→DFU all red with an identical readback; the rest of the ship acceptance carries over from release 17 (release 18 changes only dev code). The daily image |
 | Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
 | Phase | **released** (2026-10-27): release 18, tag `release-18`, is the first official release and the daily image; every further change bumps the release and repeats `operations.md` §2 |
 
