@@ -22,15 +22,16 @@ the pinned QMK commit time). **Release 17** (`VIA_FIRMWARE_VERSION`, shown by
 | **dev** | `artifacts/falcon_kalam_dev.bin` | `33e2336f765f15b93317812f5e5b1d8c4557b7eceb0b8bad72eef6fe521c9420` | 44,636 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
-Stock image: 43,940 B. What is on the device and what is being tested:
-`docs/devnotes.md`.
+Stock image: 43,940 B. What is on the device: `docs/devnotes.md`.
 
 ## 2. Features
 
 vs stock: **=** same · **+** same function, done better · **cfg** supported
 by L1, disabled by L2 · **new** not in stock.
 Hardware: **✓** = verified on the device (2026-10-26/27), on an image with the
-same feature code · **pending** = see devnotes.
+same feature code.
+
+**Release validation (2026-10-27, releases 15–17).** Dev image: probe (release, layers, macros, the VIA keymap equal to the compiled layers, bootloader and option bytes equal to the originals, 20-byte UID dump); every base key and all 27 HHK Fn combinations on the console with 0 mismatches; the three modes (Win via SW1 and a replug), the five switches with replugs; the light test (every indicator state); Command H/V/S; the Caps LED; the fault test and Bootmagic, each with an identical readback. Ship image: probe and keymap dump, the plug-in (dark, then green, no LED 1 flash), the ship Command list (H), the VIA app (loads `via/falcon_kalam.json`, connects as "Falcon", six layers, no lighting menu), Esc→DFU with an identical readback. Log: `artifacts/release_validation_2026-10-27_console.log`. Changed on the way: the dim level (release 16), the cap and the Caps LED delay (release 17).
 
 | Feature | Ship | Dev | vs stock | Hardware |
 |---|---|---|---|---|
@@ -42,7 +43,7 @@ same feature code · **pending** = see devnotes.
 | Keymap (POLICY-HHKB) | a copy of the HHKB Professional Classic: its six layers (HHK, Mac, Win; base + Fn each) with its HID codes, its mode keys Fn+Ctrl+M/W, and its DIP switches SW1–SW5 as virtual switches (Fn+Ctrl+Shift+1…5); HHK mode from the factory, as the Classic (§3) | same | new (stock: generic 60%) | ✓ all three modes (HHK base/Fn, Mac Fn incl. Eject: macOS answers Control+Eject; Win Fn), mode keys incl. the Classic's Fn+Ctrl+W rule, SW1–SW5 (dev, 2026-10-27) |
 | Settings display (additions) | Fn+Ctrl+Shift+0 and the mode keys show the mode on LED 1 (HHK red, Mac blue, Win green) and SW3–SW5 on LEDs 2–4 (blue = on), first as in effect, then as after the next plug-in if different (§3) | same | new | ✓ both phases with a dark gap (dev release 6) |
 | Release number | `VIA_FIRMWARE_VERSION`, readable over VIA | same | new | ✓ (probe) |
-| VIA | protocol `0x000D`, 6 layers (the three modes, in the Classic's order), 16 macros in a 1,107 B buffer (stock: 4 layers, 384 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ (probe); the VIA app (no lighting menu) pending |
+| VIA | protocol `0x000D`, 6 layers (the three modes, in the Classic's order), 16 macros in a 1,107 B buffer (stock: 4 layers, 384 B), opens as HHKB | same + **`VIA_INSECURE`** (VIA key tester and `falcon_kalam_probe.py matrix` work) | + | ✓ (probe); the VIA app loads the definition, connects, shows six layers and no lighting menu (ship release 17) |
 | Bootmagic | Esc at plug-in → clear EEPROM → DFU, LEDs painted red | same | = (+ red) | ✓ all four LEDs red in DFU (dev release 6, ship releases 8–9) |
 | Fault recovery (POLICY-RECOVERY) | any CPU fault resets into DFU instead of hanging | same + Shift+Shift+F fault test | new | ✓ Shift+Shift+F drops into DFU; the console line arrives first (dev release 7) |
 | Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader; every other combination types normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, / help, E, M, C, `` ` ``; N, Caps and Z reach no compiled command, L4; layer switching by 0–9/F1–F10 is off as in ship) + F fault test | = (ship: safer subset) | ✓ ship (release 8): H D X K V S B work, help lists the remapped keys; Esc, Backspace, Caps, 1, F1, N, left ◇ type normally (the console shows only QMK's "?"; no action, no DFU entry) |

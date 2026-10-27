@@ -21554,3 +21554,25 @@ Looking for devices...
 2026-10-27 20:51:36 Falcon:Falcon:1: Wear leveling: Read  [0x01BC]:  05
 Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
 Ψ Bootloader Connected: stm32duino: Maple 003
+Ψ Bootloader Disconnected: stm32duino: Maple 003
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Console Connected: Falcon Falcon (9DD1:9D89:1)
+2026-10-27 20:58:04 Falcon:Falcon:1: 
+2026-10-27 20:58:04 Falcon:Falcon:1: 	- Magic -
+2026-10-27 20:58:04 Falcon:Falcon:1: D:	Debug Message Toggle
+2026-10-27 20:58:04 Falcon:Falcon:1: X:	Matrix Debug Mode Toggle - Show keypresses in matrix grid
+2026-10-27 20:58:04 Falcon:Falcon:1: K:	Keyboard Debug Toggle - Show keypress report
+2026-10-27 20:58:04 Falcon:Falcon:1: INTERNATIONAL_2:	Debug Mouse Toggle
+2026-10-27 20:58:04 Falcon:Falcon:1: V:	Version
+2026-10-27 20:58:04 Falcon:Falcon:1: S:	Status
+2026-10-27 20:58:04 Falcon:Falcon:1: INTERNATIONAL_3:	Activate Console Mode
+2026-10-27 20:58:04 Falcon:Falcon:1: INTERNATIONAL_6:	Switch to Layer 0 (alternate)
+2026-10-27 20:58:04 Falcon:Falcon:1: B:	Jump to Bootloader
+2026-10-27 20:58:04 Falcon:Falcon:1: INTERNATIONAL_7:	Jump to Bootloader (alternate)
+2026-10-27 20:58:04 Falcon:Falcon:1: INTERNATIONAL_9:	Print EEPROM Settings
+2026-10-27 20:58:04 Falcon:Falcon:1: LANGUAGE_2:	Clear EEPROM
+Ψ Console Disconnected: Falcon Falcon (9DD1:9D89:1)
+Ψ Bootloader Connected: stm32duino: Maple 003
