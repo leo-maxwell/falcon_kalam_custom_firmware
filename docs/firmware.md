@@ -128,8 +128,8 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 13 | `9bafd99` | dev: Command layer switching off (B10); the base light is switched back on if a raw-HID command turned it off (B11); FLASHREAD window covers the whole UID (B12); Eject handler sends on presses only |
 | 14 | `6c13af9` | data line settled low for two reset periods before the first frame at pre-init and before the Bootmagic red (B13, L12) |
 | 15 | `0e201f8` | dev: light test Shift+Shift+L shows every indicator state in turn |
-| 16 | — | dim level an eighth of the cap (1/255 duty): a quarter was too close to bright (V5) |
-| 17 | — | brightness cap 69 (63 raised by a tenth, 14/255 duty); Caps Lock LED on-delay 200 ms (POLICY-CAPSLED) |
+| 16 | `f4e0ac5` | dim level an eighth of the cap (1/255 duty): a quarter was too close to bright (V5) |
+| 17 | `f4e0ac5` | brightness cap 69 (63 raised by a tenth, 14/255 duty); Caps Lock LED on-delay 200 ms (POLICY-CAPSLED) |
 
 ## 5. What L2 changes against the L1 base
 
