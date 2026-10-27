@@ -125,4 +125,4 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 10 | `666a24a` | boot frame sent twice (LED 1 garbles the first frame) |
 | 11 | `ff0538d` | dark until the host is ready at every boot; base lit once (B9) |
 | 12 | `cd83517` | dark frame at `keyboard_pre_init` (L12) |
-| 13 | — | dev: Command layer switching off (B10); the base light is switched back on if a raw-HID command turned it off (B11); FLASHREAD window covers the whole UID (B12); Eject handler sends on presses only |
+| 13 | `9bafd99` | dev: Command layer switching off (B10); the base light is switched back on if a raw-HID command turned it off (B11); FLASHREAD window covers the whole UID (B12); Eject handler sends on presses only |
