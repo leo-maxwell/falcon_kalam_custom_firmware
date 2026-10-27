@@ -59,6 +59,8 @@
   [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present
   [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)
   [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)
+  [PASS] instruction matchers also find the PLL, BKP-flag and JTAG instructions in the stock image
+  [PASS] instruction matchers reject a constant no image contains (movw #0x424E)
   [PASS] wear-leveling 4096/2048 at 0x0800F000-0x0800FFFF (stock 2048/1024 at 0x0800F800, enlarged for POLICY-HHKB)
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions

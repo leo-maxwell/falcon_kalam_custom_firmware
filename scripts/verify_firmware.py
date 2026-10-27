@@ -8,7 +8,8 @@ features; both: the HHKB Classic keymap), and that the compiled configuration
 matches what was recovered from the manufacturer firmware
 (tools/analyze_vendor_firmware.py).
 
-Requires arm-none-eabi-readelf / -nm / -objcopy on PATH (scripts/build.sh sets it).
+Requires arm-none-eabi-readelf / -nm / -objcopy on PATH and SOURCE_DATE_EPOCH
+for the build-date check: `source scripts/env.sh` provides both (build.sh does).
 """
 
 import argparse
@@ -157,7 +158,7 @@ def main():
 
     c = vendor.Checker()
     c.lines.append('# falcon_kalam firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
-    release = args.profile in ('release', 'dev')   # built from the L2 configuration
+    release = args.profile in ('release', 'dev')   # built from the L2 configuration (ship or dev); `ship` below is the profile named 'release'
     ship, dev = args.profile == 'release', args.profile == 'dev'
     keymap_dir = {'release': 'ship', 'dev': 'dev'}.get(args.profile)
     kb = json.loads(args.keyboard_json.read_text())
@@ -297,6 +298,8 @@ def main():
 
     # Reproducibility: any compiler build date must come from SOURCE_DATE_EPOCH.
     m = re.search(rb'BUILD: [^(]*\(([A-Z][a-z]{2} [ 0-9]\d \d{4})\)', payload)
+    if release:
+        c.check(m is not None, 'QMK Command version banner (BUILD: date) embedded, so the build date is checkable')
     if m:
         epoch = os.environ.get('SOURCE_DATE_EPOCH')
         want_date = time.strftime('%b %e %Y', time.gmtime(int(epoch))) if epoch else None
@@ -351,6 +354,11 @@ def main():
             'BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)')
     # ORR.W Rd, Rn, #0x02000000 (T1 modified immediate, any registers): AFIO_MAPR |= SWJ_CFG_JTAGDISABLE
     c.check(thumb2_find(payload, 0xFFF0, 0xF040, 0xF0FF, 0x7000), 'AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)')
+    # Controls for the instruction matchers: the same patterns hit the stock image, and a
+    # neighbouring constant that no image contains does not.
+    c.check(thumb2_find(stock, 0xFFF0, 0xF440, 0xF0FF, 0x10E8) and movw_find(stock, 0x424C) and movw_find(stock, 0x424D)
+            and thumb2_find(stock, 0xFFF0, 0xF040, 0xF0FF, 0x7000), 'instruction matchers also find the PLL, BKP-flag and JTAG instructions in the stock image')
+    c.check(not movw_find(payload, 0x424E) and not movw_find(stock, 0x424E), 'instruction matchers reject a constant no image contains (movw #0x424E)')
     wl = kb['eeprom']['wear_leveling']
     # Stock: 2048/1024 at 0x0800F800 (vendor readback). Enlarged on purpose for
     # the six POLICY-HHKB layers; it still ends at the top of the 64 KB part.
@@ -370,7 +378,7 @@ def main():
                 if isinstance(k, str) and k:
                     legend = k.split('\n')
                     opt = legend[3] if len(legend) > 3 else ''
-                    if not opt or opt.split(',')[1] == '0':
+                    if not opt or ',' not in opt or opt.split(',')[1] == '0':
                         default_view.add(tuple(int(x) for x in legend[0].split(',')))
         c.check(default_view == hhkb_pos, '%s: VIA default view (all layout options = 0) is exactly LAYOUT_60_hhkb' % args.via_json.name)
         c.check(set(tuple(p) for p in vendor.via_positions(vj)) == via_pos, '%s: same matrix positions as the vendor VIA JSON' % args.via_json.name)

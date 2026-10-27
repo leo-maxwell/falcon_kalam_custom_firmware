@@ -12,8 +12,9 @@
 #define MAGIC_KEY_SWITCH_LAYER_WITH_FKEYS false
 #define MAGIC_KEY_SWITCH_LAYER_WITH_NKEYS false
 
-// Dev variant marker: enables dev-only code in users/falcon_kalam (currently the
-// Shift+Shift+F fault test for POLICY-RECOVERY).
+// Dev variant marker: enables the dev-only code in users/falcon_kalam (the
+// Shift+Shift+F fault test, POLICY-RECOVERY, and the Shift+Shift+L light test,
+// POLICY-RGB).
 #define FALCON_KALAM_DEV
 
 // Lets VIA read the live switch matrix, so VIA's key tester and

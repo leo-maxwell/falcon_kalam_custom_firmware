@@ -103,7 +103,7 @@ def features(d):
     f['matrix pins (vendor tables)'] = 'yes' if ROWS in d and COLS in d else 'no'
     f['clock RCC_CFGR 0x001D6400'] = 'yes' if struct.pack('<I', 0x001D6400) in d else 'no'
     f['peripherals referenced'] = ' '.join(sorted(peripherals(d)))
-    f['rgblight: all 42 effect modes'] = 'yes' if ALL_MODES + b'\x00' in d or ALL_MODES in d else 'no/other'
+    f['rgblight: all 42 effect modes'] = 'yes' if ALL_MODES in d else 'no/other'
     return f
 
 
@@ -116,8 +116,8 @@ def main():
     s, r = features(load(a.stock)), features(load(a.release))
     lines = ['# Stock vs release, extracted from the binaries', '',
              '%-38s %-28s %-28s %s' % ('item', 'stock', 'release', 'same')]
-    for k in s:
-        lines.append('%-38s %-28s %-28s %s' % (k, s[k], r.get(k), '=' if s[k] == r.get(k) else '*'))
+    for k in list(s) + [k for k in r if k not in s]:
+        lines.append('%-38s %-28s %-28s %s' % (k, s.get(k), r.get(k), '=' if s.get(k) == r.get(k) else '*'))
     text = '\n'.join(lines) + '\n'
     sys.stdout.write(text)
     if a.report:

@@ -6,7 +6,8 @@
 #   3. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F000 in the keyboard-local linker script).
 #   4. scripts/flash.sh refuses the L1 image and any hash that is not the approved one.
-# Uses throw-away keymaps inside the staged copy; restores it afterwards.
+# Test 3 uses a throw-away keymap inside the staged copy, restored afterwards;
+# the others build the ship keymap with extra make variables.
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"   # ROOT, QMK, KB, toolchain, QMK environment
@@ -59,7 +60,7 @@ expect_failure neg_oversize "region .flash0. overflowed\|will not fit in region"
 (cd "$QMK" && make "$KB:neg_oversize:clean" >/dev/null 2>&1) || true
 
 # 4. POLICY-FLASH-GATE: scripts/flash.sh refuses anything but an approved ship/dev image
-#    (check mode only: lists USB devices, never writes).
+#    (check mode; each case is refused before any USB access).
 HASH="$(awk '{print $1}' "$ROOT/artifacts/falcon_kalam_ship.bin.sha256")"
 expect_script_failure() {
     local label="$1" pattern="$2"; shift 2

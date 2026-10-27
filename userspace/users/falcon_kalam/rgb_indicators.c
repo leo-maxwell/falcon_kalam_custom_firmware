@@ -9,8 +9,8 @@
 // Safety/debug states use channel A, connection/layer states channel B, so one
 // of each can show at the same time; one-off events use all LEDs. The base is
 // enforced every main-loop pass (on, colour and mode), so EEPROM contents or
-// VIA lighting commands cannot change it. Decorative effects exist in L1 and are disabled for every
-// variant by users/falcon_kalam/config.h.
+// VIA lighting commands cannot change it. Decorative effects exist in L1 and
+// are disabled for every variant by users/falcon_kalam/config.h.
 
 #include QMK_KEYBOARD_H
 #include "usb_device_state.h"
@@ -51,31 +51,31 @@ enum falcon_kalam_rgb_layer {
 
 // Hues of the pure colours: QMK's HSV conversion gives exactly one diode for
 // these (e.g. 0,255,v -> v,0,0). Values above the cap are clamped by rgblight.
-#define FK_RED 0, 255
-#define FK_GREEN 85, 255
-#define FK_BLUE 170, 255
-#define FK_BRIGHT RGBLIGHT_LIMIT_VAL
-#define FK_DIM (RGBLIGHT_LIMIT_VAL / 8)
-#define FK_LED_1 0, 1
+#define PURE_RED 0, 255
+#define PURE_GREEN 85, 255
+#define PURE_BLUE 170, 255
+#define LEVEL_BRIGHT RGBLIGHT_LIMIT_VAL
+#define LEVEL_DIM (RGBLIGHT_LIMIT_VAL / 8)
+#define SEG_LED_1 0, 1
 
-static const rgblight_segment_t PROGMEM seg_locked[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_usb[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, FK_GREEN, FK_DIM});
-static const rgblight_segment_t PROGMEM seg_debug[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, FK_RED, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_locked[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, PURE_BLUE, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_usb[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, PURE_GREEN, LEVEL_DIM});
+static const rgblight_segment_t PROGMEM seg_debug[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, PURE_BLUE, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_keylog[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_A, PURE_RED, LEVEL_BRIGHT});
 #ifdef FALCON_KALAM_FLASHREAD_ENABLE
-static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_activity[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, PURE_BLUE, LEVEL_BRIGHT});
 #endif
-static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_RED, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, FK_GREEN, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_show_gap[] = RGBLIGHT_LAYER_SEGMENTS({FK_LED_1, HSV_BLACK});
+static const rgblight_segment_t PROGMEM seg_mode_hhk[] = RGBLIGHT_LAYER_SEGMENTS({SEG_LED_1, PURE_RED, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_mode_mac[] = RGBLIGHT_LAYER_SEGMENTS({SEG_LED_1, PURE_BLUE, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_mode_win[] = RGBLIGHT_LAYER_SEGMENTS({SEG_LED_1, PURE_GREEN, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_gap[] = RGBLIGHT_LAYER_SEGMENTS({SEG_LED_1, HSV_BLACK});
 static const rgblight_segment_t PROGMEM seg_show_bg[]  = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LEDS_SW, HSV_BLACK});
-static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, FK_BLUE, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, FK_BLUE, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_sw3[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW3, PURE_BLUE, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_sw4[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW4, PURE_BLUE, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_show_sw5[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_LED_SW5, PURE_BLUE, LEVEL_BRIGHT});
 static const rgblight_segment_t PROGMEM seg_dark[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, HSV_BLACK});
-static const rgblight_segment_t PROGMEM seg_reset[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
-static const rgblight_segment_t PROGMEM seg_boot[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, FK_RED, FK_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_reset[]    = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, PURE_RED, LEVEL_BRIGHT});
+static const rgblight_segment_t PROGMEM seg_boot[]     = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_ALL, PURE_RED, LEVEL_BRIGHT});
 
 // Global and `used` so scripts/verify_firmware.py can find it under LTO.
 __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_layers[] = RGBLIGHT_LAYERS_LIST(seg_locked, seg_usb, seg_debug, seg_keylog,
@@ -125,8 +125,9 @@ static uint8_t  show_phase;
 static uint16_t show_timer;
 static uint8_t  show_now, show_next; // packed settings, see rgb_indicators.h
 
-// EEPROM is being (re)initialised; the LEDs do not exist yet, so only note it
-// and blink later (falcon_kalam_rgb_task).
+// EEPROM is being (re)initialised at boot; the LEDs do not exist yet, so only
+// note it and blink later (falcon_kalam_rgb_task). A runtime clear (dev
+// Command Backspace) also lands here and is deliberately not shown.
 void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
@@ -147,7 +148,7 @@ static void enforce_green_base(void) {
         rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
     }
     if (rgblight_get_hue() != 85 || rgblight_get_sat() != 255 || rgblight_get_val() != RGBLIGHT_LIMIT_VAL) {
-        rgblight_sethsv_noeeprom(FK_GREEN, RGBLIGHT_LIMIT_VAL);
+        rgblight_sethsv_noeeprom(PURE_GREEN, RGBLIGHT_LIMIT_VAL);
     }
 }
 
@@ -221,7 +222,6 @@ static uint8_t shown; // bit n = polled indicator layer n currently on (n < 8)
 // replug, each named on the console. Layer states are switched on directly;
 // the one-off events run their normal code paths. The polled indicators are
 // paused meanwhile and re-evaluated at the end.
-#    include "print.h"
 enum {
     TEST_IDLE,
     TEST_LOCKED,
@@ -242,7 +242,7 @@ static const struct {
     const char *name;
     uint8_t     layer; // switched on for the step, 0xFF = none
     uint16_t    ms;
-} PROGMEM test_steps[] = {
+} test_steps[] = {
     [TEST_LOCKED] = {"channel B blue: layer locked", FALCON_KALAM_RGB_LAYER_LOCKED, 1500},
     [TEST_USB] = {"channel B dim green: USB not configured", FALCON_KALAM_RGB_USB, 1500},
     [TEST_DEBUG] = {"channel A blue: debug on", FALCON_KALAM_RGB_DEBUG, 1500},
@@ -405,7 +405,7 @@ void falcon_kalam_rgb_pre_init(void) {
 // The line is settled low first (the same sequence as at pre-init) and the
 // frame is sent twice as a safeguard.
 void falcon_kalam_rgb_paint_bootloader(void) {
-    rgb_t red = hsv_to_rgb((hsv_t){FK_RED, RGBLIGHT_LIMIT_VAL});
+    rgb_t red = hsv_to_rgb((hsv_t){PURE_RED, RGBLIGHT_LIMIT_VAL});
     ws2812_line_idle_low();
     ws2812_set_color_all(red.r, red.g, red.b);
     ws2812_flush();

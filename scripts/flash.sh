@@ -17,7 +17,14 @@ ALT=2 # never 1: a download to alt 1 erases the page at 0x08002000
 FLASH_BYTES=57344 # 0x08002000-0x0800FFFF
 
 die() { printf 'flash.sh: %s\n' "$*" >&2; exit 1; }
-usage() { sed -n '2,6p' "$0" >&2; exit 2; }
+usage() {
+    cat >&2 <<'EOF'
+usage: scripts/flash.sh check  <ship|dev> <sha256>   validate everything, touch nothing
+       scripts/flash.sh flash  <ship|dev> <sha256>   [WRITES DEVICE] flash the approved image
+       scripts/flash.sh verify <ship|dev>            read back (device in DFU) and compare
+EOF
+    exit 2
+}
 
 [[ $# -ge 2 ]] || usage
 MODE="$1" VARIANT="$2" WANT="${3:-}"
@@ -33,6 +40,7 @@ HAVE="$(shasum -a 256 "$IMG" | awk '{print $1}')"
 validate() {
     [[ "$WANT" =~ ^[0-9a-f]{64}$ ]] || die "give the full approved SHA-256 (64 hex digits)"
     [[ "$HAVE" == "$WANT" ]] || die "image hash $HAVE does not match the approved $WANT"
+    [[ -f "$IMG.sha256" ]] || die "$IMG.sha256 missing (run scripts/build.sh)"
     [[ "$(awk '{print $1}' "$IMG.sha256")" == "$HAVE" ]] || die "$IMG.sha256 does not match the image"
     # The hash must sit in the §1 row of this variant, not just anywhere in the file.
     grep -Eq "^\| \*\*$VARIANT\*\* \|[^|]*\|[^|]*\`$HAVE\`" "$ROOT/docs/firmware.md" || die "docs/firmware.md §1 does not list this hash for $VARIANT"

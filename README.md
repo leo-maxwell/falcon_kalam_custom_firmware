@@ -20,8 +20,9 @@ must never be flashed with it.
   combinations, Bootmagic; NKRO is off because it breaks the macOS Caps Lock /
   input-source toggle.
 * **Adds** crash-to-DFU recovery, a settings schema that resets stale
-  configurations, and a four-LED **status indicator** instead of lighting
-  effects (all green = normal; red = attention; blue = a state worth knowing).
+  configurations, a Caps Lock LED that ignores macOS's input-source flicker,
+  and a four-LED **status indicator** instead of lighting effects (all green =
+  normal; red = attention; blue = a state worth knowing).
 * **Two images from one tree**: `ship` for daily use and `dev` with every
   debug feature; both bit-reproducible and verified offline on every build,
   with an audit trail from the manufacturer firmware to each built image.
@@ -56,7 +57,7 @@ artifacts/                built images with hashes, verification reports, device
 originals/                the manufacturer firmware and device dumps, immutable
 ```
 
-## Quick start
+## Quick start (macOS)
 
 ```bash
 git clone --recursive https://github.com/leo-maxwell/falcom_kalam_custom_firmware.git
@@ -66,8 +67,8 @@ git clone --recursive https://github.com/leo-maxwell/falcom_kalam_custom_firmwar
 scripts/build.sh --twice
 ```
 
-Prerequisites are in `docs/operations.md` §1 (Homebrew `arm-none-eabi-gcc@8`,
-the QMK CLI, `dfu-util`). The build writes `artifacts/falcon_kalam_ship.bin`
+The scripts are written for macOS; prerequisites are in `docs/operations.md`
+§1 (Homebrew `arm-none-eabi-gcc@8`, the QMK CLI, `dfu-util`). The build writes `artifacts/falcon_kalam_ship.bin`
 and `artifacts/falcon_kalam_dev.bin` and verifies both. **Flash only as
 `docs/manual.md` §5 describes**: the keyboard has no power-on DFU window and
 no programming header in use, so every flash ends with the test that the
@@ -77,4 +78,6 @@ bootloader is still reachable.
 
 GPL-2.0-or-later (`LICENSE`), like QMK. The STM32duino bootloader is MIT
 (LeafLabs); its source is included as a submodule for reference and is
-neither built nor flashed by this project.
+neither built nor flashed by this project. The files under `originals/` are
+the manufacturer's firmware and dumps of this unit, kept as evidence; they are
+not covered by this licence.

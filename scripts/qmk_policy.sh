@@ -4,7 +4,7 @@
 #
 #   scripts/qmk_policy.sh --offline   pinned commit is a release tag and the newest
 #                                     one in the local clone (no network; build.sh)
-#   scripts/qmk_policy.sh --online    also compare against upstream (read-only network)
+#   scripts/qmk_policy.sh --online    also compare against upstream (read-only network; the default)
 #   scripts/qmk_policy.sh --update    fetch, check out the newest release tag, sync
 #                                     submodules and stage the new gitlink (no commit)
 set -euo pipefail
@@ -30,6 +30,7 @@ case "$MODE" in
 --online)
     remote_newest="$(git ls-remote --tags --refs "$UPSTREAM" | awk '{print $2}' | sed 's#refs/tags/##' | newest)"
     echo "newest upstream tag: $remote_newest"
+    [[ -n "$head_tag" ]] || { echo "POLICY: HEAD is not on a release tag -- run 'scripts/qmk_policy.sh --update'"; exit 1; }
     [[ "$head_tag" == "$remote_newest" ]] || { echo "POLICY: outdated -- run 'scripts/qmk_policy.sh --update'"; exit 1; }
     echo "policy (online):     OK"
     ;;

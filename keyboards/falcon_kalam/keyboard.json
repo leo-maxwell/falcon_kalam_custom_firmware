@@ -1,7 +1,7 @@
 {
     "manufacturer": "Falcon",
     "keyboard_name": "Falcon",
-    "maintainer": "leomaxwell",
+    "maintainer": "leo-maxwell",
     "processor": "STM32F103",
     "bootloader": "stm32duino",
     "usb": {

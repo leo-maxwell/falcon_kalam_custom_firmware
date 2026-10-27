@@ -106,8 +106,8 @@ the leftmost; "channel A" is LEDs 1–2, "channel B" LEDs 3–4.
 |---|---|---|
 | all green | normal | — |
 | all dark at plug-in, then green | the keyboard waits until the computer has configured it (at most 2 s) | nothing; this is every plug-in |
-| all dark, three red blinks, then green | the settings were reset to the factory state (first boot of a new release, or Esc held at plug-in) | set your switches again; VIA keymaps are also reset |
-| **all red, steady** | the keyboard is in the bootloader (DFU): it does not type | flash an image (§5), or replug to start the application; after a crash it stays red until replugged |
+| all dark, three red blinks, then green | the settings were reset to the factory state (after a flash, since Esc at plug-in wipes them, or after a change of the saved-settings layout) | set your switches again; VIA keymaps are also reset |
+| **all red, steady** | the keyboard is in the bootloader (DFU): it does not type | flash an image (§5), or replug to start the application. After a crash the keyboard is in the bootloader too, but the lights keep what they showed (usually green) |
 | LEDs 3–4 dim green | powered, but no computer has configured it: a charger, a power bank, a dead port or a hub that only powers | plug into a computer port; it also shows on a port that keeps power while the computer is off |
 | LEDs 3–4 blue | a layer is locked on, or the base layer is not one of the three modes (a VIA key did that) | press the key that locked the layer; Fn+Ctrl+M/W restores a mode |
 | LEDs 1–2 blue | debug output is on (dev: always, from boot) | Shift+Shift+D switches it off |
@@ -116,7 +116,7 @@ the leftmost; "channel A" is LEDs 1–2, "channel B" LEDs 3–4.
 | all off-blink once or twice | a virtual switch was flipped (once = off, twice = on) | — |
 | all dark while the computer sleeps | the host is asleep | — |
 | dev: all blue blink | the bootloader dump is being served | — |
-| Caps Lock LED (separate, under the Caps key) | the host's Caps Lock state, lit 200 ms after it turns on | — |
+| Caps Lock LED (the single LED apart from the light module) | the host's Caps Lock state, lit 200 ms after it turns on | — |
 
 What the lights never do: react to typing, show effects, or change colour
 through VIA. The brightness is fixed at 69 of 255 (bright) and the lowest step the LEDs have (dim).
@@ -139,11 +139,12 @@ work in every mode.
 | Backspace | — | ✓ | wipes the saved settings (switches, VIA keymaps) |
 | E | — | ✓ | prints the saved settings |
 | M, C, / | — | ✓ | mouse debug, console sub-mode, help (alternate) |
+| ` | — | ✓ | selects layer 0 (HHK mode) as the base until the next plug-in; the console prints L0 |
 | F | — | ✓ | **fault test**: crashes the firmware on purpose to prove it lands in the bootloader (all red), 0.2 s after the console line |
 | L | — | ✓ | **light test**: shows every indicator state in turn, about 20 s, each named on the console |
 
 In ship every other combination types normally (the console shows a "?").
-N, Caps and Z do nothing in dev either.
+In dev too, N, Caps and Z reach no command and type normally (the console shows a "?").
 
 **At plug-in:** hold **Esc** while plugging in and keep it for two seconds.
 This wipes the saved settings and enters the bootloader (all four LEDs red).
@@ -174,24 +175,26 @@ the test at the end.
    `scripts/flash.sh verify ship` compares the flash with the image. Replug
    normally. Every flash ends with this test, because a release that could
    not get back into the bootloader would be the last one.
-5. The first start after a new release resets the settings (three red
+5. The first start after a flash resets the settings (three red
    blinks): set the switches and VIA keymaps again.
 
 **Restoring the manufacturer firmware**: `docs/operations.md` §4 has the
 command; it uses the same bootloader entry.
 
-**If the keyboard does not type**: all red = bootloader, replug or flash.
+**If the keyboard does not type**: all red = bootloader, replug or flash; green but silent = it crashed into the bootloader, replug.
 Dark and silent on a computer = retry Esc at plug-in; if that never shows the
 bootloader, the only remaining route is the reset pads on the board. Dark
 with LEDs 3–4 dim green = the port gives power but no USB.
 
 ## 6. VIA
 
-Open the VIA app, enable *Use V2 definitions* in its settings, and load
-`via/falcon_kalam.json` from the *Design* tab; the keyboard appears as
+Open the VIA app, turn on *Show Design tab* in its settings, and load
+`via/falcon_kalam.json` on the *Design* tab; the keyboard appears as
 "Falcon". Six layers: HHK base, HHK Fn, Mac base, Mac Fn, Win base, Win Fn.
 Edit the layer of the mode you use. Keys outside the HHKB layout (a split
-left Shift, a split space bar) exist in the matrix and can be assigned.
+left Shift, a split space bar) exist in the matrix and can be assigned once
+the matching option is chosen under *Layouts*; the "2u Backspace" option there
+is a PCB variant this unit does not have.
 
 Rules: a `DF(n)` key must point at layer 0, 2 or 4 (the mode bases). There
 is no lighting menu, and lighting commands cannot change the base light. The
@@ -214,4 +217,4 @@ and light tests announce themselves there.
 * HHK mode has no Command key, as on the Classic; use Mac mode on a Mac.
 * The key-selected mode and a locked layer are forgotten at the next plug-in;
   the switches and VIA keymaps are saved.
-* After a crash the keyboard sits in the bootloader (all red) until replugged.
+* After a crash the keyboard sits in the bootloader until replugged; the lights keep their last colour, usually green.

@@ -55,8 +55,9 @@ echo "pinned:       $PINNED"
 echo "checked out:  $ACTUAL"
 [[ "$PINNED" == "$ACTUAL" ]] || die "qmk_firmware is not at the pinned commit"
 "$ROOT/scripts/qmk_policy.sh" --offline || die "QMK version policy violated (docs/policy.md)"
-git -C "$QMK" submodule status --recursive | sed 's/^/  /'
-if git -C "$QMK" submodule status --recursive | grep -q '^[-+U]'; then
+SUBMODULES="$(git -C "$QMK" submodule status --recursive)"
+sed 's/^/  /' <<<"$SUBMODULES"
+if grep -q '^[-+U]' <<<"$SUBMODULES"; then
     die "qmk_firmware submodules are missing or not at their recorded commits"
 fi
 
@@ -91,13 +92,13 @@ collect() {
 step "Build base $KB:$BASE_KM (normal firmware, reference only)"
 build_one "$BASE_KM"
 collect "$BASE_KM"
-grep -q "keymaps/$BASE_KM/keymap.c" "$ART/${KB}_$BASE_KM.cflags.txt" || die "base keymap not taken from the base keyboard"
+grep -qF "keymaps/$BASE_KM/keymap.c" "$ART/${KB}_$BASE_KM.cflags.txt" || die "base keymap not taken from the base keyboard"
 
 for KM in "$RELEASE_KM" "$DEV_KM"; do
     step "Build $KB:$KM (base + userspace configuration)"
     build_one "$KM"
     collect "$KM"
-    grep -q "$QMK_USERSPACE/keyboards/$KB/keymaps/$KM/keymap.c" "$ART/${KB}_$KM.cflags.txt" \
+    grep -qF "$QMK_USERSPACE/keyboards/$KB/keymaps/$KM/keymap.c" "$ART/${KB}_$KM.cflags.txt" \
         || die "$KM keymap was not taken from the userspace configuration"
 done
 

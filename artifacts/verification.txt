@@ -66,6 +66,7 @@
   [PASS] -DRGBLIGHT_WS2812 present
   [PASS] -DBOOTLOADER_STM32DUINO present
   [PASS] -DQMK_BOARD_STM32_F103_STM32DUINO present
+  [PASS] QMK Command version banner (BUILD: date) embedded, so the build date is checkable
   [PASS] embedded build date "Oct 16 2026" == SOURCE_DATE_EPOCH date "Oct 16 2026" (day-independent build)
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in stock
   [PASS] R6: WS2812 timing loops (T1H/T0L 5x6 NOP, T1L 12 NOP, 1344-pass latch) present in falcon_kalam_ship.bin
@@ -84,6 +85,8 @@
   [PASS] PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present
   [PASS] BKP_DR10 bootloader flags 0x424C / 0x424D present (movw, any register; STM32duino board)
   [PASS] AFIO_MAPR |= SWJ_CFG_JTAGDISABLE present (orr #0x02000000, any register)
+  [PASS] instruction matchers also find the PLL, BKP-flag and JTAG instructions in the stock image
+  [PASS] instruction matchers reject a constant no image contains (movw #0x424E)
   [PASS] wear-leveling 4096/2048 at 0x0800F000-0x0800FFFF (stock 2048/1024 at 0x0800F800, enlarged for POLICY-HHKB)
   [PASS] LAYOUT_all covers exactly the 63 matrix positions of the vendor VIA JSON
   [PASS] LAYOUT_60_hhkb is a 60-key subset of the VIA positions

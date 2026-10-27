@@ -5,11 +5,15 @@ Commands marked **[WRITES DEVICE]** change the keyboard and need an approval
 
 ## 1. Build (offline, reproducible)
 
-Prerequisites (installed): Homebrew `arm-none-eabi-gcc@8` (8.5.0) and
+Prerequisites (macOS): Homebrew `arm-none-eabi-gcc@8` (8.5.0) and
 `arm-none-eabi-binutils` (2.41), keg-only and put on `PATH` by the scripts
 (override with `FALCON_KALAM_GCC_BIN` / `FALCON_KALAM_BINUTILS_BIN`); QMK CLI
-1.1.8; GNU Make 3.81; Python 3 (standard library); rsync, shasum, dfu-util
-0.11, dfu-suffix. No network access is needed.
+1.1.8; GNU Make 3.81; Python 3 (standard library; the USB tools
+`falcon_kalam_probe.py` and `usb_watch.py` run on the QMK CLI's Python for its
+`hid` and `pyusb` modules, through their shebang); rsync, shasum, dfu-util
+0.11, dfu-suffix. No network access is needed. `scripts/env.sh` holds the
+toolchain and QMK environment; source it to run `scripts/verify_firmware.py`
+by hand.
 
 ```bash
 scripts/build.sh --twice
@@ -41,14 +45,14 @@ or `dev`, requires the full approved SHA-256 (matched against the file, its
 `.sha256` record and `docs/firmware.md`), hard-codes DFU alt 2, refuses a
 device that is not in DFU, and saves a pre-flash readback.
 
-**Approval** (in chat or `devnotes.md`): the variant (ship, or dev for
+**Approval** (recorded in `devnotes.md`): the variant (ship, or dev for
 testing), its full SHA-256 from `firmware.md` §1, and a decision on every open
 **HR** problem. The daily image is always ship.
 
 1. Offline: `cd originals && shasum -a 256 -c SHA256SUMS`; `scripts/qmk_policy.sh --online`; `scripts/build.sh --twice`; `scripts/negative_tests.sh`; every report says `RESULT: PASS`, including `check_docs.py`.
 2. `scripts/flash.sh check <variant> <sha256>` validates everything without touching the device.
 3. Enter DFU: unplug, hold **Esc**, plug in, hold about 2 s (this clears EEPROM). The LEDs go red (our images) or stay dark (stock).
-4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`: reads back first (`build/readback_pre_*.bin`), then flashes; log in `artifacts/flash_*.log`. The app starts by itself (`-R` makes the bootloader reset). If the download fails, do not unplug: the device is still in DFU, so repeat the flash (or the §4 restore) at once; a half-written image would run at the next plug-in, and only a fault in it leads back to DFU (R13).
+4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`: reads back first (`build/readback_pre_*.bin`), then flashes; log in `artifacts/flash_*.log`. The app starts by itself (`-R` makes the bootloader reset). If the download fails, do not unplug: the device is still in DFU, so repeat the flash (or the §4 restore) at once; a half-written image would run at the next plug-in, and only a fault in it leads back to DFU (L14).
 5. Check that `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info` (its firmware release must match `firmware.md`).
 6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU (red), then `scripts/flash.sh verify <variant>` (read-only: flash content = image). Replug normally.
 7. Run the open hardware tests from `devnotes.md` and record the results there.
@@ -85,5 +89,5 @@ that is why every flash ends with the Esc→DFU test (§2 step 6).
 1. `scripts/qmk_policy.sh --online` fails → `scripts/qmk_policy.sh --update` (fetches, checks out the newest tag, syncs submodules, stages the gitlink).
 2. Read the release notes for a fix of NKRO on macOS (Caps Lock / input-source toggle); if one is claimed, record it in `devnotes.md` for a decision on lifting POLICY-NKRO (I8). Nothing is fixed here (POLICY-UPSTREAM).
 3. `scripts/build.sh --twice`; `scripts/negative_tests.sh`.
-4. Diff `artifacts/verification.txt` and `artifacts/feature_parity.txt` against the previous commit; changed stock-equivalence or parity rows need review.
+4. Diff `artifacts/verification.txt` and `artifacts/feature_parity.txt` against the previous commit; changed stock-equivalence or parity rows need review. Re-derive `KEYMAP_BASE` in `tools/console_keycheck.py` (the VIA keymap's EEPROM offset: eeconfig size + VIA magic + layout options) from the new QMK's `quantum/nvm/eeprom/` headers; a wrong value shows as "lookup at r,c" mismatches in the key check.
 5. Bump `VIA_FIRMWARE_VERSION`, update `firmware.md` §1, commit, and flash per §2 with a fresh approval. The build date changes with QMK, so VIA resets its saved keymap on the first boot.

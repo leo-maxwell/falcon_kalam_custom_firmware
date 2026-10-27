@@ -12,9 +12,6 @@
 #include "hhkb_modes.h"
 #include "caps_led.h"
 #include "user_config.h"
-#ifdef FALCON_KALAM_DEV
-#    include "print.h"
-#endif
 
 // Runs after the EEPROM driver starts and before QMK reads the settings: a
 // schema stamp other than FALCON_KALAM_EEPROM_SCHEMA (user_config.h) marks
@@ -63,7 +60,8 @@ bool shutdown_user(bool jump_to_bootloader) {
     return true;
 }
 
-// Called by QMK while (re)initialising EEPROM, before the LEDs exist.
+// Called by QMK while (re)initialising EEPROM: at boot before the LEDs exist,
+// or at a runtime clear (dev Command Backspace), which is not shown.
 void eeconfig_init_user(void) {
     falcon_kalam_user_config_t cfg = {.schema = FALCON_KALAM_EEPROM_SCHEMA, .dip = FALCON_KALAM_DIP_FACTORY};
     eeconfig_update_user(cfg.raw);

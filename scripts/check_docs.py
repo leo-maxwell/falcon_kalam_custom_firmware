@@ -38,7 +38,11 @@ def ok(msg):
 
 # 1. category documents
 policy = (DOCS / 'policy.md').read_text()
-section = policy[policy.index('## 4. Documentation'):policy.index('## 5.')]
+try:
+    section = policy[policy.index('## 4. Documentation'):policy.index('## 5.')]
+except ValueError:
+    fail('policy.md has no "## 4. Documentation" section followed by "## 5."')
+    section = ''
 listed = set(re.findall(r'`docs/([a-z-]+\.md)`', section))
 present = {p.name for p in DOCS.glob('*.md')}
 if listed == present:
@@ -80,14 +84,16 @@ for variant in ('ship', 'dev'):
     sha = sha_file.read_text().split()[0]
     size = (ROOT / 'artifacts' / ('falcon_kalam_%s.bin' % variant)).stat().st_size - 16
     hashes.append(sha)
-    if sha in fw:
-        ok('firmware.md %s hash = artifacts (%s…)' % (variant, sha[:8]))
+    # The §1 row of the variant: | **variant** | `file` | `sha256` | size B | ... (scripts/flash.sh parses the same layout).
+    row = re.search(r'^\| \*\*%s\*\* \|[^|]*\| `([0-9a-f]{64})` \| ([0-9,]+) B' % variant, fw, re.M)
+    if row and row.group(1) == sha:
+        ok('firmware.md §1 %s hash = artifacts (%s…)' % (variant, sha[:8]))
     else:
-        fail('firmware.md does not contain the current %s hash %s' % (variant, sha))
-    if '{:,}'.format(size) in fw:
-        ok('firmware.md %s size = %s B' % (variant, '{:,}'.format(size)))
+        fail('firmware.md §1 %s row does not carry the current hash %s' % (variant, sha))
+    if row and row.group(2) == '{:,}'.format(size):
+        ok('firmware.md §1 %s size = %s B' % (variant, '{:,}'.format(size)))
     else:
-        fail('firmware.md does not state the current %s payload size {:,} B'.format(size) % variant)
+        fail('firmware.md §1 %s row does not state the current payload size {:,} B'.format(size) % variant)
 
 # 5. status lives in devnotes, release identity in firmware.md
 for doc in [ROOT / 'README.md'] + sorted(DOCS.glob('*.md')):
@@ -126,9 +132,11 @@ else:
 
     head_rel = REL_RE.search(at_head(CFG))
     head_fw = at_head('docs/firmware.md')
-    if head_rel and hashes and not all(h in head_fw for h in hashes) and int(head_rel.group(1)) == release:
+    if not head_rel:
+        fail('cannot read HEAD:%s (not a git checkout?), release-bump check impossible' % CFG)
+    elif hashes and not all(h in head_fw for h in hashes) and int(head_rel.group(1)) == release:
         fail('the images changed since HEAD but VIA_FIRMWARE_VERSION is still %d: bump it' % release)
-    elif head_rel:
+    else:
         ok('release number consistent with HEAD (%s -> %d)' % (head_rel.group(1), release))
 
 print('RESULT: %s' % ('PASS' if not failures else 'FAIL (%d)' % len(failures)))

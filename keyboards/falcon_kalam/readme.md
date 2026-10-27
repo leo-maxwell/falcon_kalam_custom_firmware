@@ -5,7 +5,7 @@ Falcon (shown to users as "Falcon"; not the genuine `matrix/falcon`), a 60% HHKB
 keyboard built on a GigaDevice GD32F103C8T6 with the STM32duino/Maple DFU
 bootloader.
 
-* Keyboard maintainer: [leomaxwell](https://github.com/leomaxwell)
+* Keyboard maintainer: [leo-maxwell](https://github.com/leo-maxwell)
 * Hardware supported: the 迦蓝 Falcon clone PCB (GD32F103C8T6, USB `9DD1:9D89`)
 * Hardware evidence and open questions: see `docs/hardware.md` in the
   parent project.
@@ -17,7 +17,7 @@ The project's release firmware adds a policy layer from `userspace/`
 
     make falcon_kalam:default
 
-**Flash only per `docs/operations.md`.**
+**Flash only per `docs/manual.md` §5 and `docs/operations.md` §2.**
 
 ## Bootloader
 

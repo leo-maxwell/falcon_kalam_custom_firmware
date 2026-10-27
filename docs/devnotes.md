@@ -10,7 +10,6 @@ here.
 |---|---|
 | On the device | **ship** release 17 (`d023b2a8…`), flashed 2026-10-27 and accepted: Esc→DFU with an identical readback, the plug-in dark-then-green without a flash, the ship Command list, the VIA app. The daily image |
 | Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
-| Note | Release 10 entered DFU 6 s after its flash, without an unplug: that was a deliberate Shift+Shift+B, not a crash. No image has entered DFU on its own |
 | Phase | **released** (2026-10-27): ship release 17 is the daily image; every further change bumps the release and repeats `operations.md` §2 |
 
 ## To do
@@ -28,6 +27,5 @@ here.
 | P3 | L7: fault counter in a spare backup register (DR1–DR9 are unused): first fault → `0x424D` (the app restarts), a second fault within ~10 s of boot → `0x424C` (DFU); the counter is cleared from housekeeping after a healthy start | a transient fault no longer silences the keyboard until a replug; a crash loop still parks in DFU | handler stays stack-free (immediates only); needs the dev fault test on the device |
 | P4 | L7 LEDs: paint red from the fault handler with a register-only WS2812 bit-bang (no stack, no literal pool) | DFU after a fault shows red like every other DFU entry (POLICY-RGB) | more code in a fault handler: a second fault there locks the core up (a hang, R13); keep as is unless P3 is taken |
 | P6 | `hhkb_modes.c`: on a mode switch with a Fn layer held, move the held layer to the new mode's Fn layer | Fn keys keep working after Fn+Ctrl+M/W without re-pressing Fn (policy §5) | cosmetic; the Classic's behaviour is unknown |
-| P8 | L1 (ship key tester): `SECURE_ENABLE` with an unlock sequence instead of `VIA_INSECURE` | the ship key tester works after a deliberate unlock, the matrix stays hidden otherwise | config-only (POLICY-UPSTREAM); not investigated on the device |
+| P8 | problem L1 (ship key tester): `SECURE_ENABLE` with an unlock sequence instead of `VIA_INSECURE` | the ship key tester works after a deliberate unlock, the matrix stays hidden otherwise | config-only (POLICY-UPSTREAM); not investigated on the device |
 
-L12 stays a limitation: PA1 floats for the bootloader's whole run (its source never touches GPIOA) and becomes a pulled-up input at ChibiOS' `halInit`, microseconds before `keyboard_pre_init_user` drives it; no upstream extension point runs earlier, and a custom board file would be a patched upstream file (POLICY-UPSTREAM). Whether the colour is line noise or the WS2812's own power-up state (which a pull-down would not cure) is unverified: it would show as the same symptom on the stock image, which sends its first frame later.

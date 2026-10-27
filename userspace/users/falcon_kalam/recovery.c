@@ -15,10 +15,9 @@
 //
 // Not covered: chSysHalt() (its hook CH_CFG_SYSTEM_HALT_HOOK is upstream's;
 // only a keyboard-level chconf.h could override it, and a choice may not go
-// into L1)
-// and infinite loops without a fault (a watchdog is unsafe here: the IWDG
-// survives the reset and the bootloader never feeds it, so it would cut DFU
-// sessions short).
+// into L1), and infinite loops without a fault (a watchdog is unsafe here:
+// the IWDG survives the reset and the bootloader never feeds it, so it would
+// cut DFU sessions short).
 
 #include QMK_KEYBOARD_H
 #include <stddef.h>

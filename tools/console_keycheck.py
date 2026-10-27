@@ -21,7 +21,6 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / 'scripts'))
 import verify_firmware as vf  # noqa: E402
 
-ROWS, COLS = 5, 15
 # DYNAMIC_KEYMAP_EEPROM_ADDR in QMK 0.34.7: eeconfig 37 B (eeprom_core_t in
 # quantum/nvm/eeprom/nvm_eeprom_eeconfig_internal.h; no KB/user/module data) +
 # VIA magic 3 B + layout options 1 B (quantum/via.h). Re-derive after a QMK
@@ -41,6 +40,7 @@ def main():
     a = ap.parse_args()
 
     kb = json.loads((ROOT / 'keyboards' / 'falcon_kalam' / 'keyboard.json').read_text())
+    ROWS, COLS = len(kb['matrix_pins']['rows']), len(kb['matrix_pins']['cols'])
     positions = [tuple(k['matrix']) for k in kb['layouts']['LAYOUT_60_hhkb']['layout']]
     kc = vf.qmk_keycodes()
     names = {}

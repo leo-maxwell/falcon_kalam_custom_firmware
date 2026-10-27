@@ -37,8 +37,8 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1), capped at **69 of full scale 255**: `RGBLIGHT_LIMIT_VAL 69` (a quarter raised by a tenth; 255 and 127 were too bright to look at). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 42 effect modes, ship and dev none, the indicator table is in both, the cap is 69, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c`; dev Shift+Shift+F fault test | verifier: in ship and dev all four fault vectors lead to the stack-free reset routine; base keeps ChibiOS's defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Not in ship, because it exposes the chip UID | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
-| POLICY-CAPSLED | the Caps Lock LED follows the host's Caps Lock state with a **200 ms on-delay** (off at once): macOS asserts and reverts Caps Lock within about 115 ms on some short presses when Caps Lock also switches input sources, which flashed the LED (dev log, 2026-10-27). A deviation from the Classic (§2.3) | `users/falcon_kalam/caps_led.c` (`led_update_user` returns false and drives the pin itself) | verifier: `falcon_kalam_caps_led_task` linked in ship and dev |
-| POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; HHK mode from the factory, as the Classic | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
+| POLICY-CAPSLED | the Caps Lock LED follows the host's Caps Lock state with a **200 ms on-delay** (off at once): macOS asserts and reverts Caps Lock within about 115 ms on some short presses when Caps Lock also switches input sources, which flashed the LED (dev log, 2026-10-27). A deviation from the Classic (§2.3) | `users/falcon_kalam/caps_led.c` (`falcon_kalam_caps_led_update`, called from `led_update_user` in `falcon_kalam.c`, returns false and drives the pin itself) | verifier: `falcon_kalam_caps_led_task` linked in ship and dev |
+| POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; HHK mode from the factory, as the Classic | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier report §6 (`artifacts/verification.txt`): the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
 
 ### 2.1 RGB policy (POLICY-RGB)
 
@@ -78,6 +78,7 @@ something.
 | — | Fn held, Caps Lock | no change | — | Fn is momentary; Caps Lock has its own LED |
 | — | host asleep | all off | all | `RGBLIGHT_SLEEP`; indicators are suppressed too |
 | — | dev only (FLASHREAD): request served | blue blink | all | `falcon_kalam_rgb_activity()` |
+| — | dev only: light test | every state above in turn, about 20 s | all | Shift+Shift+L (`falcon_kalam_rgb_test_start()`) |
 
 * Both variants behave the same. Every effect is compiled out, and the base is
   re-set to on, static green on every main-loop pass, so old EEPROM values and
@@ -87,8 +88,8 @@ something.
   cables, power-only ports (charger, power bank, some hubs and monitors), a
   host that doesn't enumerate; it shows once the 2 s dark start has ended. It stays,
   although it also shows on a port that keeps power while the computer is off.
-* No separate LED test tool is needed: red, green and blue each check one
-  diode (and the WS2812 colour order), and Shift+Shift+D shows channel A.
+* The dev light test (Shift+Shift+L) shows every state in turn; red, green
+  and blue each check one diode and the WS2812 colour order.
 
 ### 2.2 Naming (POLICY-NAMING)
 
@@ -191,7 +192,7 @@ record it here.
 | 1 | `docs/hardware.md` | hardware facts and conventions (pins, matrix, layout, lights, bootloader, memory, the HHKB reference) | when a fact is established; give its evidence |
 | 2 | `docs/stock-firmware.md` | stock image capabilities and feature list, RE method | when new RE results arrive |
 | 3 | `docs/policy.md` | this file: design, policies, file organisation, doc rules, design notes | when a rule or the file layout changes |
-| 4 | `docs/firmware.md` | our firmware's features, the current images, what is verified on hardware | at a milestone (from devnotes) |
+| 4 | `docs/firmware.md` | our firmware: the current images, features and what is verified on hardware, the keymap, the release history, what L2 changes against L1 | at a milestone (from devnotes) |
 | 5 | `docs/devnotes.md` | **the only status document**: device state, to-do, work in progress, results awaiting a milestone | most often. When an item reaches a milestone, write the result into `firmware.md` and **delete** it here |
 | 6 | `docs/problems.md` | open risks, bugs, limitations; closed items as a one-line ledger | when found or resolved |
 | 7 | `docs/improvements.md` | optional improvements, not committed to | when an idea arises; move it to devnotes when work starts |
@@ -230,7 +231,7 @@ count from that array.
 is QMK's (non-persistent) default layer. At post-init the virtual SW1/SW2 pick
 it; the mode keys change it until the next plug-in. A press with any Fn layer
 on and Control held is judged by its **base-layer** keycode (on the Fn layers
-M is keypad minus, 0–5 are F10, F1–F5): M and W switch mode and show the
+M is keypad minus on the Mac and Win Fn layers, 0–5 are F10, F1–F5): M and W switch mode and show the
 settings, Shift+1…5 flip a saved switch, Shift+0 shows the settings;
 these presses are swallowed. The switches in effect are read
 once at post-init, so a flip waits for the next plug-in, as on the Classic. SW3–SW5 act only on keys that resolve on
@@ -310,7 +311,7 @@ mode bases (default layers 0/2/4; an empty default state means layer 0) and a
 held Fn layer (1/3/5) as normal. `falcon_kalam_rgb_shutdown` sets the red layer and
 calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
-WS2812 driver directly (`ws2812_init`, a 1 ms low gap as reset, `set_color_all`
+WS2812 driver directly (`ws2812_init`, a low gap of two reset periods, `set_color_all`
 with the red that `hsv_to_rgb({0, 255, cap})` gives, 14/255 after the CIE curve,
 `flush` twice).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
@@ -340,7 +341,7 @@ the 2-bit entry type from the address and value.
 - Placement: every `LOAD` segment lies in `[0x08002000, 0x0800F000)`; RAM within 20 KB.
 - Vector table: SP = `__main_stack_end__`, reset = `Reset_Handler`, every vector points into the image.
 - Profiles: base = NKRO present, no VIA. Ship and dev = no NKRO (only ChibiOS's empty `send_nkro` stub may exist); VIA, console, Command and LTO present; keymap from the right variant directory. Ship has none of the dev features; dev has all of them (the FLASHREAD symbol, the `-D` flags, the trace strings of `ACTION_DEBUG`, `WEAR_LEVELING_DEBUG_OUTPUT` and the scan rate). `VIA_INSECURE` leaves no binary trace, so only the ship guard and its negative test enforce it.
-- Instruction checks (`thumb2_find`, `movw_find`) match opcode and immediate but ignore register fields, because each variant allocates registers differently. They are validated against the stock image and against constants that must not match.
+- Instruction checks (`thumb2_find`, `movw_find`) match opcode and immediate but ignore register fields, because each variant allocates registers differently. The verifier checks them against the stock image (the same patterns must hit there) and against a constant no image contains (`movw #0x424E` must not). The brightness cap is checked in the source (`config.h`), the images carry no readable copy of it.
 - Stock equivalence: pin tables, flash descriptor, clock literal and PLL instruction, BKP flags, JTAG-disable instruction, Caps LED config; VIA's default view = `LAYOUT_60_hhkb`. The EEPROM size is checked as the enlarged 4096/2048.
 - POLICY-HHKB (ship and dev): reads the `keymaps` array from the ELF and compares all six layers, in the Classic's order, with `hhkb_expected()`, built from the manual's Fn table (`HHKB_FN`) and the base differences (`HHKB_MODES`), written independently of the C source; keycode values come from the pinned `quantum/keycodes.h`. Ship: the Command keys in `ship/config.h` must be in no layer.
 

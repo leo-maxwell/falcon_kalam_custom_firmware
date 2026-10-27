@@ -124,7 +124,7 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
     }
 
     // Fn+Control(+Shift)+key, judged by the key's base-layer legend: on the
-    // Fn layers M is keypad minus and 0-5 are F10 and F1-F5.
+    // Mac and Win Fn layers M is keypad minus, and 0-5 are F10 and F1-F5 everywhere.
     if ((layer_state & FALCON_KALAM_FN_LAYERS) && (get_mods() & MOD_MASK_CTRL)) {
         uint16_t legend = keymap_key_to_keycode(current_mode(), key);
         if (get_mods() & MOD_MASK_SHIFT) {

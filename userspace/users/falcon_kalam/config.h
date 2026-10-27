@@ -36,7 +36,7 @@
 #define RGBLIGHT_LIMIT_VAL 69
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // indicators show even with the base light off
-#define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, dev activity)
+#define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, switch flips, dev activity)
 #define RGBLIGHT_MAX_LAYERS 16
 #define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
 #define RGBLIGHT_DEFAULT_HUE 85 // green
