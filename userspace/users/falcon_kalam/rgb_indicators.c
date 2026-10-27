@@ -3,7 +3,7 @@
 //
 // POLICY-RGB: the RGB module shows state, not decoration (docs/policy.md).
 //
-// Normal state: every LED green at the brightness cap (a quarter of full scale).
+// Normal state: every LED green at the brightness cap (69 of full scale 255).
 // Indicator states are QMK rgblight layers drawn on top: a higher layer index
 // wins where layers overlap.
 // Safety/debug states use channel A, connection/layer states channel B, so one
@@ -27,7 +27,7 @@
 
 // Layer indices = priority (low to high). Keep in sync with docs/policy.md §2.1.
 // Only pure red, green and blue (one diode each: mixed colours are hard to
-// tell on this module), at two levels: BRIGHT (the cap) and DIM (a quarter).
+// tell on this module), at two levels: BRIGHT (the cap) and DIM (an eighth).
 enum falcon_kalam_rgb_layer {
     FALCON_KALAM_RGB_LAYER_LOCKED, // B blue:      a layer other than the mode base / held Fn is on
     FALCON_KALAM_RGB_USB,          // B dim green: powered, but not configured by a USB host
@@ -55,7 +55,7 @@ enum falcon_kalam_rgb_layer {
 #define FK_GREEN 85, 255
 #define FK_BLUE 170, 255
 #define FK_BRIGHT RGBLIGHT_LIMIT_VAL
-#define FK_DIM (RGBLIGHT_LIMIT_VAL / 4)
+#define FK_DIM (RGBLIGHT_LIMIT_VAL / 8)
 #define FK_LED_1 0, 1
 
 static const rgblight_segment_t PROGMEM seg_locked[] = RGBLIGHT_LAYER_SEGMENTS({FALCON_KALAM_RGB_CH_B, FK_BLUE, FK_BRIGHT});

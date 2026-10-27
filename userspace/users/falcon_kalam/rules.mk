@@ -22,8 +22,8 @@ LTO_ENABLE = yes       # link-time optimisation
 
 # Hook dispatcher (the only file defining QMK *_user hooks), POLICY-RGB
 # status indicators, POLICY-RECOVERY fault handlers, POLICY-HHKB mode
-# switching. Both variants.
-SRC += falcon_kalam.c rgb_indicators.c recovery.c hhkb_modes.c
+# switching, POLICY-CAPSLED Caps Lock LED delay. Both variants.
+SRC += falcon_kalam.c rgb_indicators.c recovery.c hhkb_modes.c caps_led.c
 
 # POLICY-FLASHREAD: read-only bootloader/option-byte/UID dump over raw HID.
 # Only a variant that sets FALCON_KALAM_FLASHREAD = yes gets it (dev); the ship

@@ -10,6 +10,7 @@
 #include QMK_KEYBOARD_H
 #include "rgb_indicators.h"
 #include "hhkb_modes.h"
+#include "caps_led.h"
 #include "user_config.h"
 #ifdef FALCON_KALAM_DEV
 #    include "print.h"
@@ -39,6 +40,7 @@ static uint16_t fault_timer;
 
 void housekeeping_task_user(void) {
     falcon_kalam_rgb_task();
+    falcon_kalam_caps_led_task();
 #ifdef FALCON_KALAM_DEV
     // Dev fault test (command_extra): fault from the main loop once the
     // console report has had time to go out (the console is sent from here).
@@ -50,6 +52,10 @@ void housekeeping_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return falcon_kalam_hhkb_process(keycode, record);
+}
+
+bool led_update_user(led_t led_state) {
+    return falcon_kalam_caps_led_update(led_state);
 }
 
 bool shutdown_user(bool jump_to_bootloader) {

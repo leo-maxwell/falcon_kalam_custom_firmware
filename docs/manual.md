@@ -68,7 +68,10 @@ the setting is saved.
 
 A combination a mode does not have sends the plain key. Caps Lock on macOS:
 a short Fn+Tab switches the input source, a long press toggles Caps Lock
-(macOS's own rule; the Caps Lock LED follows the host).
+(macOS's own rule). The Caps Lock LED follows the host, lighting 200 ms after
+the host turns Caps Lock on and going off at once; macOS briefly asserts Caps
+Lock on some short presses when it switches the input source, and the delay
+keeps that from flashing the LED.
 
 **Virtual DIP switches.** The Classic has five switches on its underside;
 here they are saved settings, flipped with Fn+Ctrl+Shift+1 … 5. Like the
@@ -113,10 +116,10 @@ the leftmost; "channel A" is LEDs 1–2, "channel B" LEDs 3–4.
 | all off-blink once or twice | a virtual switch was flipped (once = off, twice = on) | — |
 | all dark while the computer sleeps | the host is asleep | — |
 | dev: all blue blink | the bootloader dump is being served | — |
-| Caps Lock LED (separate, under the Caps key) | the host's Caps Lock state | — |
+| Caps Lock LED (separate, under the Caps key) | the host's Caps Lock state, lit 200 ms after it turns on | — |
 
 What the lights never do: react to typing, show effects, or change colour
-through VIA. The brightness is fixed at a quarter of full scale.
+through VIA. The brightness is fixed at 69 of 255 (bright) and the lowest step the LEDs have (dim).
 
 ## 4. Key combinations
 
@@ -125,7 +128,7 @@ work in every mode.
 
 | Shift+Shift+ | Ship | Dev | Effect |
 |---|---|---|---|
-| H | ✓ | ✓ | lists the available commands on the console |
+| H | ✓ | ✓ | lists QMK's commands on the console (the dev extras F and L are not in that list) |
 | B | ✓ | ✓ | **enters the bootloader** (all red); the keyboard stops typing until flashed or replugged |
 | D | ✓ | ✓ | debug output on/off (LEDs 1–2 blue while on) |
 | X | ✓ | ✓ | matrix (key position) printout on/off, with debug on |

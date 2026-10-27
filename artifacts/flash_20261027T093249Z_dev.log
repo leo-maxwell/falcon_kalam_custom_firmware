@@ -1,0 +1,22 @@
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Opening DFU capable USB device...
+Device ID 1eaf:0003
+Device DFU version 0110
+Claiming USB DFU Interface...
+Setting Alternate Interface #2 ...
+Determining device status...
+DFU state(2) = dfuIDLE, status(0) = No error condition is present
+DFU mode device DFU version 0110
+Device returned transfer size 1024
+Copying data from PC to DFU device
+Download	[                         ]   0%            0 bytesDownload	[=                        ]   4%         2048 bytesDownload	[==                       ]   9%         4096 bytesDownload	[===                      ]  13%         6144 bytesDownload	[====                     ]  18%         8192 bytesDownload	[=====                    ]  20%         9216 bytesDownload	[======                   ]  24%        11264 bytesDownload	[=======                  ]  29%        13312 bytesDownload	[========                 ]  33%        15360 bytesDownload	[=========                ]  36%        16384 bytesDownload	[==========               ]  40%        18432 bytesDownload	[===========              ]  45%        20480 bytesDownload	[============             ]  49%        22528 bytesDownload	[=============            ]  54%        24576 bytesDownload	[==============           ]  56%        25600 bytesDownload	[===============          ]  60%        27648 bytesDownload	[================         ]  65%        29696 bytesDownload	[=================        ]  69%        31744 bytesDownload	[==================       ]  72%        32768 bytesDownload	[===================      ]  76%        34816 bytesDownload	[====================     ]  81%        36864 bytesDownload	[=====================    ]  85%        38912 bytesDownload	[=====================    ]  87%        39936 bytesDownload	[======================   ]  90%        40960 bytesDownload	[=======================  ]  92%        41984 bytesDownload	[======================== ]  96%        44032 bytesDownload	[=========================] 100%        44452 bytes
+Download done.
+DFU state(8) = dfuMANIFEST-WAIT-RESET, status(0) = No error condition is present
+Resetting USB to switch back to runtime mode
+Done!

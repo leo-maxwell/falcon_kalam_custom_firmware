@@ -16,7 +16,7 @@
 // Release number of the ship and dev images, readable over VIA
 // (`falcon_kalam_probe.py info`). Bump it whenever the images change; must
 // equal the release in docs/firmware.md (scripts/check_docs.py).
-#define VIA_FIRMWARE_VERSION 15
+#define VIA_FIRMWARE_VERSION 17
 
 // POLICY-HHKB: HHK, Mac and Win mode, each a base layer and an Fn layer
 // (falcon_kalam_keymap.h). L1's EEPROM is sized for six layers plus VIA
@@ -27,11 +27,13 @@
 // is static green at the brightness cap; indicator states are rgblight layers,
 // in pure red, green or blue only.
 // Supersedes the stock rgblight defaults (rainbow swirl, brightness 127).
-// Brightness cap: a quarter of full scale (255). Full scale and half (127)
-// were too bright to look at; rgblight clamps every colour, the base and the
-// indicators, to this. rgblight values pass QMK's CIE 1931 curve, so 63
-// drives the diodes at 12/255 (and the dim level, 15, at 2/255).
-#define RGBLIGHT_LIMIT_VAL 63
+// Brightness cap: 69 of full scale 255 (a quarter, 63, raised by a tenth
+// in release 17; full scale and half, 127, were too bright to look at).
+// rgblight clamps every colour, the base and the indicators, to this.
+// rgblight values pass QMK's CIE 1931 curve, so 69 drives the diodes at
+// 14/255 (and the dim level, an eighth of the cap = 8, at 1/255, the lowest
+// step: a quarter of the cap was too close to bright).
+#define RGBLIGHT_LIMIT_VAL 69
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // indicators show even with the base light off
 #define RGBLIGHT_LAYER_BLINK             // one-off events (settings reset, dev activity)

@@ -268,8 +268,9 @@ def main():
                   'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
         # POLICY-RGB: status-indicator module in both variants; decorative effects in neither.
         c.check(any(n.split('.')[0] == 'falcon_kalam_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_kalam_rgb_layers) linked')
+        c.check(any(n.split('.')[0] == 'falcon_kalam_caps_led_task' for n in syms), 'POLICY-CAPSLED: Caps Lock LED delay (falcon_kalam_caps_led_task) linked')
         c.check(RGBLIGHT_ALL_MODES not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
-        c.check(re.search(r'define RGBLIGHT_LIMIT_VAL 63\b', (ROOT / 'userspace' / 'users' / 'falcon_kalam' / 'config.h').read_text()) is not None, 'POLICY-RGB: brightness cap RGBLIGHT_LIMIT_VAL = 63 (a quarter of full scale 255)')
+        c.check(re.search(r'define RGBLIGHT_LIMIT_VAL 69\b', (ROOT / 'userspace' / 'users' / 'falcon_kalam' / 'config.h').read_text()) is not None, 'POLICY-RGB: brightness cap RGBLIGHT_LIMIT_VAL = 69 (of full scale 255)')
         if args.via_json:
             menus = json.loads(args.via_json.read_text()).get('menus', [])
             c.check('qmk_rgblight' not in menus, 'POLICY-RGB: %s has no lighting menu' % args.via_json.name)

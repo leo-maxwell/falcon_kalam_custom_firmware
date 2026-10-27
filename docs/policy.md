@@ -34,9 +34,10 @@ userspace/                    L2 CONFIGURATION: every project decision, tagged P
 | POLICY-VIA | both variants are VIA-configurable | `users/falcon_kalam/rules.mk` | verifier |
 | POLICY-PARITY | both variants keep every stock feature on top of L1: console, Command, LTO (stock RGB effects and defaults are superseded by POLICY-RGB). **Ship** restricts Command to H D X K V S B; dev keeps the full set | `users/falcon_kalam/rules.mk`, `users/falcon_kalam/config.h`, `ship/config.h` | verifier; `artifacts/feature_parity.txt` |
 | POLICY-VARIANTS | **one tree, two images.** Ship = daily use, no debug-only feature. Dev = every debug feature that fits (FLASHREAD, `VIA_INSECURE`, full Command, `ACTION_DEBUG`, wear-leveling trace, scan rate, keycode strings), never the daily image. Shared code only in `users/falcon_kalam/`; no git branches for configuration | variant `rules.mk`/`config.h`; `#error` guards in `ship/keymap.c` | `build.sh` builds and verifies both every time (verifier profiles `release` = ship, `dev`); negative tests inject each debug feature into ship |
-| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1), capped at **a quarter of full scale**: `RGBLIGHT_LIMIT_VAL 63` (full scale 255; 255 and 127 were too bright to look at). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 42 effect modes, ship and dev none, the indicator table is in both, the cap is 63, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
+| POLICY-RGB | the RGB module is a **status indicator, not decoration** (§2.1), capped at **69 of full scale 255**: `RGBLIGHT_LIMIT_VAL 69` (a quarter raised by a tenth; 255 and 127 were too bright to look at). Decorative effects stay in L1 and are disabled by L2 for every variant | `users/falcon_kalam/rgb_indicators.c`; `#undef` of every effect in `users/falcon_kalam/config.h` | verifier: L1 has all 42 effect modes, ship and dev none, the indicator table is in both, the cap is 69, the VIA JSON has no lighting menu; `#error` in `rgb_indicators.c` if an effect is defined |
 | POLICY-RECOVERY | a CPU fault never hangs the keyboard: it resets into DFU (the unit has no power-on DFU window). No watchdog (§5) | `users/falcon_kalam/recovery.c`; dev Shift+Shift+F fault test | verifier: in ship and dev all four fault vectors lead to the stack-free reset routine; base keeps ChibiOS's defaults |
 | POLICY-FLASHREAD | **dev only**: read (never write) the bootloader, option bytes and F_SIZE/UID over raw HID. Not in ship, because it exposes the chip UID | `users/falcon_kalam/flashread.c`, compiled when `FALCON_KALAM_FLASHREAD = yes` | ship: `#error` guard + verifier (no `via_command_kb`); dev: verifier requires it |
+| POLICY-CAPSLED | the Caps Lock LED follows the host's Caps Lock state with a **200 ms on-delay** (off at once): macOS asserts and reverts Caps Lock within about 115 ms on some short presses when Caps Lock also switches input sources, which flashed the LED (dev log, 2026-10-27). A deviation from the Classic (§2.3) | `users/falcon_kalam/caps_led.c` (`led_update_user` returns false and drives the pin itself) | verifier: `falcon_kalam_caps_led_task` linked in ship and dev |
 | POLICY-HHKB | the keyboard **mimics the HHKB Professional Classic in every way possible** (§2.3): its layout, setting modes, keys, HID codes, mode keys and DIP switches; HHK mode from the factory, as the Classic | `keyboard.json`, `via/falcon_kalam.json`; `users/falcon_kalam/falcon_kalam_keymap.h`, `hhkb_modes.c/.h`, `config.h` (6 layers); L1 EEPROM sized for it | verifier §6: the compiled keymap equals a table written from the manual; no ship Command key is in any layer |
 
 ### 2.1 RGB policy (POLICY-RGB)
@@ -48,11 +49,12 @@ something.
   colours (white, yellow, magenta, …) blend poorly on this module and are
   hard to tell apart. Meaning by colour: green = normal, blue = a state worth
   knowing, red = attention.
-* **Two levels:** bright = the cap, `RGBLIGHT_LIMIT_VAL 63` in
-  `users/falcon_kalam/config.h` (a quarter of full scale 255; full and half
-  were too bright to look at); dim = a quarter of the cap (15). Bright =
-  active, dim = waiting. These are rgblight values; QMK's CIE 1931 brightness
-  curve turns them into diode duty 12/255 and 2/255. rgblight clamps every
+* **Two levels:** bright = the cap, `RGBLIGHT_LIMIT_VAL 69` in
+  `users/falcon_kalam/config.h` (69 of full scale 255: a quarter raised by a
+  tenth; full and half were too bright to look at); dim = an eighth of the cap
+  (8; a quarter was too close to bright to tell apart). Bright = active, dim =
+  waiting. These are rgblight values; QMK's CIE 1931 brightness curve turns
+  them into diode duty 14/255 and 1/255, the lowest non-zero step. rgblight clamps every
   colour to the cap, and the Bootmagic red passes the same cap and curve.
 * **Boot:** dark until the host has configured the keyboard (at most 2 s),
   then the base lights once (or the reset blinks run first). rgblight is
@@ -141,6 +143,7 @@ all are accepted:
 | VIA instead of PFU's keymap tool and vendor interface | PFU's protocol is proprietary; VIA gives the same remapping (POLICY-VIA) |
 | RGB status lights | the Classic has none; the unit's light module serves as a status indicator (POLICY-RGB) |
 | Console, Command, Bootmagic | stock features of this unit (POLICY-PARITY) |
+| The Caps Lock LED lights 200 ms after the host sets Caps Lock; the Classic's follows at once | hides macOS's input-source flicker, which lit the LED for about 115 ms on some short Caps Lock presses (POLICY-CAPSLED) |
 | 6KRO only; the Classic also declares an NKRO report (unused) | **temporary**: POLICY-NKRO keeps NKRO off until upstream fixes the macOS problem |
 
 The policy lives in L2, since the keymap is a choice. L1 holds the physical
@@ -168,7 +171,7 @@ plain QMK-style HHKB reference.
 | Path | Content |
 |---|---|
 | `keyboards/falcon_kalam/` | L1: `keyboard.json` (MCU, bootloader, USB IDs, pins, COL2ROW, Caps LED A10 active-low, wear-leveling 4096/2048, WS2812 A1, rgblight 4 LEDs + all effects + sleep, layouts `LAYOUT_60_hhkb` (default) and `LAYOUT_all`); `config.h` (flash size pinned to 64 KB); `rules.mk` + `ld/…falcon_kalam.ld` (app region `0x08002000–0x0800EFFF`, exports `__falcon_kalam_app_*`); `keymaps/default/` (QMK-style HHKB reference); `readme.md` |
-| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/`: `rules.mk` (shared policy, FLASHREAD switch), `config.h` (guards, RGB layer settings, layer count), `falcon_kalam_keymap.h` (the keymap), `hhkb_modes.c/.h` (POLICY-HHKB layers, mode keys, virtual DIP switches), `user_config.h` (the saved user word: schema stamp + DIP switches), `falcon_kalam.c` (the only file defining QMK `*_user` hooks; `via_command_kb` lives in `flashread.c`, the fault vectors in `recovery.c`), `rgb_indicators.c/.h` (POLICY-RGB), `recovery.c` (POLICY-RECOVERY), `flashread.c`; `userspace/keyboards/falcon_kalam/keymaps/ship/` (selective Command, debug guards) and `…/dev/` (all debug features) |
+| `userspace/` | L2: `qmk.json` (targets `falcon_kalam:ship`, `falcon_kalam:dev`); `users/falcon_kalam/`: `rules.mk` (shared policy, FLASHREAD switch), `config.h` (guards, RGB layer settings, layer count), `falcon_kalam_keymap.h` (the keymap), `hhkb_modes.c/.h` (POLICY-HHKB layers, mode keys, virtual DIP switches), `user_config.h` (the saved user word: schema stamp + DIP switches), `falcon_kalam.c` (the only file defining QMK `*_user` hooks; `via_command_kb` lives in `flashread.c`, the fault vectors in `recovery.c`), `rgb_indicators.c/.h` (POLICY-RGB), `caps_led.c/.h` (POLICY-CAPSLED), `recovery.c` (POLICY-RECOVERY), `flashread.c`; `userspace/keyboards/falcon_kalam/keymaps/ship/` (selective Command, debug guards) and `…/dev/` (all debug features) |
 | `via/falcon_kalam.json` | VIA definition for both variants: the stock JSON with HHKB as layout option 0, without the lighting menu |
 | `qmk_firmware/` | submodule, pinned (POLICY-QMK-LATEST) |
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
@@ -274,6 +277,14 @@ our hook last, so the new stamp sticks. Bump the stamp whenever stored data
 changes meaning (layer count or order). VIA's own check cannot do this: it
 keys on the build date, which is pinned.
 
+**`caps_led.c` (POLICY-CAPSLED).** `led_update_user` (in `falcon_kalam.c`)
+hands every host LED change to `falcon_kalam_caps_led_update`, which returns
+false so QMK does not write the pin, records the host's Caps state and the
+time, and writes the pin at once for off; `falcon_kalam_caps_led_task`
+(housekeeping) writes it for on once the state has lasted 200 ms. The flicker
+seen on macOS (on at key-down, off at key-up, about 115 ms) never reaches the
+pin; a real toggle shows 200 ms late.
+
 **`recovery.c` (POLICY-RECOVERY).** QMK writes `BKP_DR10 = 0x424C` (stay in
 DFU) at every boot, and the bootloader honours it after any reset. The four
 fault vectors alias one naked routine: write `0x424C` again, set
@@ -300,7 +311,7 @@ held Fn layer (1/3/5) as normal. `falcon_kalam_rgb_shutdown` sets the red layer 
 calls `rgblight_set()` directly, since no main-loop pass follows. Bootmagic
 runs before rgblight exists, so `falcon_kalam_rgb_paint_bootloader` drives the
 WS2812 driver directly (`ws2812_init`, a 1 ms low gap as reset, `set_color_all`
-with the red that `hsv_to_rgb({0, 255, cap})` gives, 12/255 after the CIE curve,
+with the red that `hsv_to_rgb({0, 255, cap})` gives, 14/255 after the CIE curve,
 `flush` twice).
 EEPROM initialisation runs before the LEDs exist, so it only sets a flag; the
 boot is dark: `keyboard_pre_init_user` settles the data line low for two reset periods (QMK's board defaults leave it high, and a frame after a high idle gives LED 1 a leading 1 bit, `hardware.md` §6) and sends a dark frame twice (`falcon_kalam_rgb_pre_init`, before rgblight starts), rgblight is stored off, so `rgblight_init` draws nothing, the all-off layer (`FALCON_KALAM_RGB_DARK`, also used for the switch-flip blinks) is on from post-init, and the post-init dark frame is sent twice as a safeguard (the Bootmagic red likewise, after the same low idle). When the host has configured the keyboard, or after 2 s, the base is switched on with `rgblight_enable_noeeprom()` (the stored setting stays off), or on a reset the red blinks run first. A stored "on" from older images is rewritten once. rgblight blinks share one repeat timer, so overlapping blinks interfere: a switch flip during the reset blinks or the dark start cuts them short (accepted), and in dev a FLASHREAD dump at boot does the same. Layer changes are applied in `rgblight_task()`, which exists because

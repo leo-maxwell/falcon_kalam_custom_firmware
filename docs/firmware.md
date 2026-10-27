@@ -13,13 +13,13 @@ on every build; nearly every feature is also verified on the device (§2).
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 15** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 17** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change).
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `41b8043a210632f2172410afb47d9d8ec16bed63cff4d7e47cd7a056c88d5eef` | 38,196 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `cf613533f1413bc1bfe4d7d15b4da5b1af8b7afa32fa0ff391cfe471b396663d` | 44,452 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `d023b2a828b66e319fb403171417bf2b4b323dbf59b3bc0de207123c6e0137cd` | 38,332 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `33e2336f765f15b93317812f5e5b1d8c4557b7eceb0b8bad72eef6fe521c9420` | 44,636 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device and what is being tested:
@@ -48,8 +48,8 @@ same feature code · **pending** = see devnotes.
 | Command (LShift+RShift+) | **selective**: H help, D debug, X matrix print, K key reports, V version, S status, B bootloader; every other combination types normally | **full** QMK set (adds Esc/bootloader, Backspace/clear EEPROM, / help, E, M, C, `` ` ``; N, Caps and Z reach no compiled command, L4; layer switching by 0–9/F1–F10 is off as in ship) + F fault test | = (ship: safer subset) | ✓ ship (release 8): H D X K V S B work, help lists the remapped keys; Esc, Backspace, Caps, 1, F1, N, left ◇ type normally (the console shows only QMK's "?"; no action, no DFU entry) |
 | Console | HID console (`qmk console`) | same + traces: key actions/tapping (`ACTION_DEBUG`), EEPROM backing store (`WEAR_LEVELING_DEBUG_OUTPUT`), matrix scan rate, readable keycode names | = / dev + | ✓ connects; dev traces (key actions, wear-leveling, scan rate) seen in the dev round |
 | Bootloader read (FLASHREAD) | — | read-only dump of bootloader, option bytes, F_SIZE/UID (`falcon_kalam_probe.py dump-bootloader`) | new | ✓ |
-| Caps Lock LED | A10, active-low | same | = | ✓ follows the host's Caps Lock. On macOS a short Caps Lock press (Fn+Tab) switches the input source and a long press toggles Caps Lock, as intended (the macOS setting this firmware was built to keep working) |
-| RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 63, a quarter of full scale) or dim (a quarter of the cap): all green bright = normal; all red = bootloader; red ×3 on dark = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request + **light test** Shift+Shift+L (every state in turn, named on the console) | deliberate change (stock: decorative, rainbow swirl) | ✓ green base, channel A blue/red, channel B blue (layer lock), red in DFU (both routes, dev and ship), red ×3 on dark with nothing before it (release 10), off while the Mac sleeps; a normal plug-in lights once (release 11), without the LED 1 flash of releases up to 13 (B13, fixed in release 14); not tested: dim green on a power-only port (after the 2 s dark start) |
+| Caps Lock LED (POLICY-CAPSLED) | A10, active-low; lights 200 ms after the host sets Caps Lock, off at once (hides macOS's input-source flicker) | same | + | ✓ follows the host's Caps Lock with the delay: short taps that macOS asserts and reverts no longer flash it, a long press lights it (dev release 17). On macOS a short Caps Lock press (Fn+Tab) switches the input source and a long press toggles Caps Lock, as intended (the macOS setting this firmware was built to keep working) |
+| RGB (POLICY-RGB) | **status indicator in pure red, green and blue only**, bright (cap 69 of 255) or dim (an eighth of the cap): all green bright = normal; all red = bootloader; red ×3 on dark = settings reset; channel A red = keystroke printout, blue = debug; channel B dim green = not configured by a host, blue = layer locked; off-blinks = virtual DIP switch flipped; settings display (`policy.md` §2.1); effects compiled out (L1 keeps them); no light toggle key; off while the host sleeps | same + blue blink while FLASHREAD serves a request + **light test** Shift+Shift+L (every state in turn, named on the console) | deliberate change (stock: decorative, rainbow swirl) | ✓ green base, channel A blue/red, channel B blue (layer lock), red in DFU (both routes, dev and ship), red ×3 on dark with nothing before it (release 10), off while the Mac sleeps; a normal plug-in lights once (release 11), without the LED 1 flash of releases up to 13 (B13, fixed in release 14); not tested: dim green on a power-only port (after the 2 s dark start) |
 | EEPROM | wear-leveling 4 KB at `0x0800F000` (2 KB of settings; stock 2 KB / 1 KB), flash size pinned; a schema stamp resets stale settings once after a layout change | same | + | ✓ switch flips persist across replugs; long-term wear-leveling: R2 |
 | Flash safety | the linker refuses to grow into the EEPROM; the bootloader is never written | same | new | ✓ readback |
 | Keycode features | layer keys, one-shot, tri-layer, magic, macros, lighting, grave-escape, space-cadet, send-string, mouse/media keys | same | = | — |
@@ -128,6 +128,8 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 13 | `9bafd99` | dev: Command layer switching off (B10); the base light is switched back on if a raw-HID command turned it off (B11); FLASHREAD window covers the whole UID (B12); Eject handler sends on presses only |
 | 14 | `6c13af9` | data line settled low for two reset periods before the first frame at pre-init and before the Bootmagic red (B13, L12) |
 | 15 | `0e201f8` | dev: light test Shift+Shift+L shows every indicator state in turn |
+| 16 | — | dim level an eighth of the cap (1/255 duty): a quarter was too close to bright (V5) |
+| 17 | — | brightness cap 69 (63 raised by a tenth, 14/255 duty); Caps Lock LED on-delay 200 ms (POLICY-CAPSLED) |
 
 ## 5. What L2 changes against the L1 base
 
@@ -142,9 +144,10 @@ an L2 decision (POLICY-* in `policy.md`); L1 is untouched by it.
 | VIA | off | **on**, 6 dynamic layers, 1,107 B of macros; release number as the VIA firmware version | `rules.mk`, `config.h` |
 | Console, Command, LTO | off | **on** (stock parity); ship keeps only H D X K V S B of Command, dev the full set minus layer switching | `rules.mk`, `ship/config.h`, `dev/config.h` |
 | Keymap | QMK's `60_hhkb` default + underglow keys, 2 layers | the HHKB Classic's six layers, modes, mode keys, virtual DIP switches, settings display (POLICY-HHKB) | `falcon_kalam_keymap.h`, `hhkb_modes.c` |
-| Lights | rgblight with all 42 effects, rainbow default | effects compiled out; status indicator in red, green and blue at a quarter brightness; dark start; stored off, switched on per session (POLICY-RGB) | `config.h`, `rgb_indicators.c` |
+| Lights | rgblight with all 42 effects, rainbow default | effects compiled out; status indicator in red, green and blue at a low fixed brightness; dark start; stored off, switched on per session (POLICY-RGB) | `config.h`, `rgb_indicators.c` |
 | Saved settings | QMK defaults | a schema stamp in the user word resets stale settings once after a layout change; the virtual switches live there too | `user_config.h`, `falcon_kalam.c` |
 | Bootmagic | Esc at plug-in clears EEPROM and enters DFU | same, and paints all LEDs red first | `falcon_kalam.c`, `rgb_indicators.c` |
+| Caps Lock LED | follows the host at once | 200 ms on-delay, off at once (POLICY-CAPSLED) | `caps_led.c` |
 | CPU faults | ChibiOS default: hang | reset into DFU (POLICY-RECOVERY) | `recovery.c` |
 | Dev only | — | FLASHREAD bootloader dump, `VIA_INSECURE` key tester, key-action / EEPROM / scan-rate traces, keycode names, fault test, light test | `dev/rules.mk`, `dev/config.h`, `flashread.c` |
 | USB identity | "Falcon" / "Falcon", `9DD1:9D89` | unchanged (POLICY-NAMING) | L1 `keyboard.json` |
