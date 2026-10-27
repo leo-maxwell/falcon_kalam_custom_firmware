@@ -269,13 +269,26 @@ void falcon_kalam_rgb_shutdown(bool jump_to_bootloader) {
     }
 }
 
-// keyboard_pre_init_user: the earliest point this firmware reaches. Until the
-// data pin is driven, the first LED can pick up noise and light in a random
-// colour (docs/hardware.md §6). Drive it and send a dark frame now (twice, as
-// the first frame after set-up is garbled), long before rgblight starts.
-void falcon_kalam_rgb_pre_init(void) {
+// Puts the data line into the WS2812 idle state (low, for a reset period)
+// before the first frame. QMK's board defaults leave the pin high (an input
+// with pull-up, output register 1) and ws2812_init() only switches the mode,
+// so a frame sent right after it starts after a millisecond-long high: the
+// first LED reads that as a leading 1 bit and shows green at 128 while LEDs
+// 2-4 stay dark (docs/hardware.md §6). Low before the mode switch turns the
+// pull-up into a pull-down, low after it is the output level.
+static void ws2812_line_idle_low(void) {
+    gpio_write_pin_low(WS2812_DI_PIN);
     ws2812_init();
-    wait_ms(1);
+    gpio_write_pin_low(WS2812_DI_PIN);
+    wait_us(2 * WS2812_TRST_US);
+}
+
+// keyboard_pre_init_user: the earliest point this firmware reaches. Until the
+// data pin is driven, the first LED can pick up noise (docs/hardware.md §6).
+// Settle the line and send a dark frame now, long before rgblight starts;
+// the second frame is a safeguard.
+void falcon_kalam_rgb_pre_init(void) {
+    ws2812_line_idle_low();
     ws2812_set_color_all(0, 0, 0);
     ws2812_flush();
     ws2812_flush();
@@ -284,13 +297,11 @@ void falcon_kalam_rgb_pre_init(void) {
 // Bootmagic runs before rgblight is initialised, so drive the WS2812 driver
 // directly: all LEDs red, latched while the bootloader runs (R15). Bypassing
 // rgblight also bypasses its cap and brightness curve, so apply both here.
-// This is the first frame after the data pin is set up, and the first LED
-// garbles that (docs/hardware.md §6): hold the line low for a reset period,
-// then send the frame twice, so a garbled first frame is overwritten.
+// The line is settled low first (the same sequence as at pre-init) and the
+// frame is sent twice as a safeguard.
 void falcon_kalam_rgb_paint_bootloader(void) {
     rgb_t red = hsv_to_rgb((hsv_t){FK_RED, RGBLIGHT_LIMIT_VAL});
-    ws2812_init();
-    wait_ms(1);
+    ws2812_line_idle_low();
     ws2812_set_color_all(red.r, red.g, red.b);
     ws2812_flush();
     ws2812_flush();

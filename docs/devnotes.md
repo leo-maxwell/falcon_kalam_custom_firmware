@@ -8,14 +8,14 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 12 (`62072341…`), flashed 2026-10-27; release 13 is built, verified offline and not yet flashed. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–11, each read back equal to its image (release 5 was never flashed) |
+| On the device | **ship** release 12 (`62072341…`), flashed 2026-10-27; releases 13 and 14 are built and verified offline, not yet flashed. Before it on the same day: dev releases 1–4, 6, 7 and ship releases 8–11, each read back equal to its image (release 5 was never flashed) |
 | Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
 | Note | Release 10 entered DFU 6 s after its flash, without an unplug: that was a deliberate Shift+Shift+B, not a crash. No image has entered DFU on its own |
 | Phase | **alpha** |
 
 ## To do
 
-1. **Flash and accept release 13** (ship; `firmware.md` §1): Esc→DFU test and `scripts/flash.sh verify ship`; the VIA app loads `via/falcon_kalam.json`, connects, shows no lighting menu; dev: Shift+Shift+6 types 6 (B10) and `dump-bootloader` writes a 20-byte `fsize_uid` file (B12); a raw-HID "effect 0" leaves the base green (B11, needs a one-off script, optional).
+1. **Flash and accept release 14** (ship; `firmware.md` §1): Esc→DFU test and `scripts/flash.sh verify ship`; **L12/B13: no flash of LED 1 at plug-in, and Bootmagic DFU red on all four LEDs without a yellow first** (several plug-ins, dark room); the VIA app loads `via/falcon_kalam.json`, connects, shows no lighting menu; dev: Shift+Shift+6 types 6 (B10) and `dump-bootloader` writes a 20-byte `fsize_uid` file (B12); a raw-HID "effect 0" leaves the base green (B11, needs a one-off script, optional). If LED 1 still flashes: build a dev image whose pre-init holds the line low for 2 s before the first frame to tell the bootloader's window from the firmware's.
 
    Then ship is the daily image and the project leaves alpha.
 2. **Decide the remaining review proposals** below (each changes firmware behaviour).
