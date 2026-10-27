@@ -168,11 +168,11 @@ def analyse(c):
         found = img.find(enc)
         c.check(len(found) == 2, 'string descriptor "%s" used for manufacturer and product at %s' % (s, [hex(h) for h in found]))
     c.check(bool(img.find(bytes.fromhex('0660ff0961a1010962'))), 'raw HID report (usage page 0xFF60, usage 0x61) present => VIA protocol')
-    c.check(bool(img.find(bytes.fromhex('050109068501'.replace('8501', 'a101')))), 'boot keyboard report present')
+    c.check(bool(img.find(bytes.fromhex('05010906a1010507'))), 'boot keyboard report (usage page 1, usage 6, collection, page 7) present')
     nkro = bytes.fromhex('050109 06a1 0185 06 0507 19e0 29e7'.replace(' ', ''))
     c.check(bool(img.find(nkro)), 'shared-EP NKRO report (report ID 6, bitmap) present => vendor firmware HAS NKRO compiled in')
-    for rid, what in ((2, 'mouse'), (3, 'system control'), (4, 'consumer')):
-        c.check(bool(img.find(bytes([0x85, rid]))), 'report ID %d (%s) present in shared report descriptor' % (rid, what))
+    for sig, rid, what in (('05010902a101', 2, 'mouse'), ('05010980a101', 3, 'system control'), ('050c0901a101', 4, 'consumer')):
+        c.check(bool(img.find(bytes.fromhex(sig) + bytes([0x85, rid]))), 'report ID %d (%s) collection present in the shared report descriptor' % (rid, what))
 
     # ------------------------------------------------------------------
     c.section('4. Matrix pins and diode direction')
@@ -271,7 +271,7 @@ def analyse(c):
     modes = list(img.bytes(0x0800C2B6, 43))
     qmk_all = [0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6
     c.check(modes == qmk_all and img.u8(0x0800C2B6 + 43) == 0,
-            'rgblight mode_base_table @0x0800C2B6 has all 43 modes: static, breathing x4, rainbow mood x3, swirl x6, '
+            'rgblight mode_base_table @0x0800C2B6 has all 42 effect modes (43 entries with mode 0): static, breathing x4, rainbow mood x3, swirl x6, '
             'snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled')
 
     # ------------------------------------------------------------------
@@ -311,7 +311,6 @@ def analyse(c):
     keys = set(via_positions(via))
     c.info('labels: %s; menus: %s' % (via['layouts']['labels'], via.get('menus')))
     c.info('%d matrix positions referenced: %s' % (len(keys), ' '.join('%d,%d' % k for k in sorted(keys))))
-    return {'rows': rows, 'cols': cols, 'via_positions': sorted(keys)}
 
 
 def main():

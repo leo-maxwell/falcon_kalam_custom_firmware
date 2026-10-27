@@ -2,20 +2,24 @@
 """Offline verification of a built falcon_kalam image. Flashes nothing.
 
 Checks that the image fits between the bootloader and the EEPROM pages, that
-the binary is exactly the ELF's load image, that NKRO is absent and VIA is
-present, and that the compiled configuration matches what was recovered from
-the manufacturer firmware (tools/analyze_vendor_firmware.py).
+the binary is exactly the ELF's load image, that the profile's feature set is
+present (base: NKRO, no VIA; release/dev: VIA, no NKRO, the variant's debug
+features; both: the HHKB Classic keymap), and that the compiled configuration
+matches what was recovered from the manufacturer firmware
+(tools/analyze_vendor_firmware.py).
 
 Requires arm-none-eabi-readelf / -nm / -objcopy on PATH (scripts/build.sh sets it).
 """
 
 import argparse
 import json
+import os
 import re
 import struct
 import subprocess
 import sys
 import tempfile
+import time
 import zlib
 from pathlib import Path
 
@@ -30,6 +34,16 @@ FLASH_END = 0x08010000      # 64 KB part
 RAM_START, RAM_END = 0x20000000, 0x20005000  # 20 KB
 
 PORT_BASE = {'A': 0x40010800, 'B': 0x40010C00, 'C': 0x40011000, 'D': 0x40011400}
+
+# rgblight's mode_base_table with every effect enabled (43 entries: mode 0 + 42
+# effect modes), the signature of a decorative build (stock, L1 base).
+RGBLIGHT_ALL_MODES = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
+
+# POLICY-RECOVERY: the whole stack-free fault routine of users/falcon_kalam/recovery.c
+# (movw/movt r0 = BKP_DR10, movw r1 = 0x424C, str, dsb, movw/movt r0 = SCB->AIRCR,
+# movw/movt r1 = 0x05FA0004, str, dsb, b .).
+RECOVERY_ROUTINE = struct.pack('<21H', 0xF646, 0x4028, 0xF2C4, 0x0000, 0xF244, 0x214C, 0x6001, 0xF3BF, 0x8F4F,
+                               0xF64E, 0x500C, 0xF2CE, 0x0000, 0xF240, 0x0104, 0xF2C0, 0x51FA, 0x6001, 0xF3BF, 0x8F4F, 0xE7FE)
 
 
 def run(*cmd):
@@ -52,6 +66,18 @@ def movw_find(payload, imm16):
     """MOVW Rd, #imm16 (encoding T3) with any destination register."""
     imm4, i, imm3, imm8 = imm16 >> 12, (imm16 >> 11) & 1, (imm16 >> 8) & 7, imm16 & 0xFF
     return thumb2_find(payload, 0xFFFF, 0xF240 | (i << 10) | imm4, 0x70FF, (imm3 << 12) | imm8)
+
+
+def read_symbols(elf):
+    """arm-none-eabi-nm -S: name -> (address, size or None, type letter)."""
+    out = {}
+    for line in run('arm-none-eabi-nm', '-S', str(elf)).splitlines():
+        parts = line.split()
+        if len(parts) == 4:
+            out[parts[3]] = (int(parts[0], 16), int(parts[1], 16), parts[2])
+        elif len(parts) == 3:
+            out[parts[2]] = (int(parts[0], 16), None, parts[1])
+    return out
 
 
 def ioline_bytes(pins):
@@ -126,6 +152,8 @@ def main():
     ap.add_argument('--cflags', type=Path, help='cflags.txt from the build (default: next to --bin)')
     ap.add_argument('--report', type=Path)
     args = ap.parse_args()
+    if args.profile in ('release', 'dev') and not args.via_json:
+        ap.error('--via-json is required for --profile release/dev (POLICY-NAMING, POLICY-RGB and POLICY-HHKB checks)')
 
     c = vendor.Checker()
     c.lines.append('# falcon_kalam firmware verification: %s (profile: %s)' % (args.bin.name, args.profile))
@@ -155,13 +183,12 @@ def main():
 
     # ------------------------------------------------------------------
     c.section('2. Flash and RAM placement')
-    syms = {}
-    for line in run('arm-none-eabi-nm', str(args.elf)).splitlines():
-        parts = line.split()
-        if len(parts) == 3:
-            syms[parts[2]] = int(parts[0], 16)
+    symbols = read_symbols(args.elf)
+    syms = {n: v[0] for n, v in symbols.items()}
+    sizes = {n: (v[0], v[1]) for n, v in symbols.items() if v[1] is not None}
     c.check(syms.get('__falcon_kalam_app_start__') == APP_START, 'linker script app start 0x%08X' % syms.get('__falcon_kalam_app_start__', 0))
     c.check(syms.get('__falcon_kalam_app_limit__') == EEPROM_START, 'linker script app limit 0x%08X == EEPROM start' % syms.get('__falcon_kalam_app_limit__', 0))
+    c.check(syms.get('__falcon_kalam_eeprom_start__') == EEPROM_START, 'linker script EEPROM start 0x%08X' % syms.get('__falcon_kalam_eeprom_start__', 0))
 
     segs = []
     for line in run('arm-none-eabi-readelf', '-lW', str(args.elf)).splitlines():
@@ -192,7 +219,9 @@ def main():
     c.check(sp == syms.get('__main_stack_end__'), 'initial SP equals __main_stack_end__')
     c.check(reset & 1 and APP_START <= reset < APP_START + len(payload), 'reset vector 0x%08X is Thumb code in the image' % reset)
     c.check(reset & ~1 == syms.get('Reset_Handler', -1) & ~1, 'reset vector is Reset_Handler')
-    n_vec = 16 + 60  # Cortex-M3 system exceptions + STM32F10x medium-density IRQs
+    # ChibiOS places one table for every STM32F1 (16 system exceptions + CORTEX_NUM_VECTORS 72 IRQs); read its size from the ELF.
+    n_vec = (syms.get('__vectors_end__', 0) - syms.get('__vectors_base__', 0)) // 4
+    c.check(syms.get('__vectors_base__') == APP_START and n_vec == 16 + 72, 'vector table at 0x%08X, %d entries (ChibiOS STM32F1: 16 + 72)' % (syms.get('__vectors_base__', 0), n_vec))
     bad = [i for i, v in enumerate(struct.unpack('<%dI' % (n_vec - 2), payload[8:n_vec * 4]), 2)
            if v and not (APP_START <= v < APP_START + len(payload))]
     c.check(not bad, 'all populated entries of the %d-entry vector table point into the image%s' % (n_vec, ' (bad: %s)' % bad if bad else ''))
@@ -214,11 +243,6 @@ def main():
     via_hid = bool(img.find(bytes.fromhex('0660ff0961')))
     c.check(via_hid == release, 'raw HID usage page 0xFF60 / usage 0x61 (VIA) %s' % ('present' if release else 'absent'))
     nkro_bitmap = re.compile(rb'\x05\x07\x19\x00\x29[\x00-\xff]\x15\x00\x25\x01')
-    sizes = {}
-    for line in run('arm-none-eabi-nm', '-S', str(args.elf)).splitlines():
-        parts = line.split()
-        if len(parts) == 4:
-            sizes[parts[3]] = (int(parts[0], 16), int(parts[1], 16))
     nk_syms = sorted(s for s in syms if 'nkro' in s.lower())
     cflags_path = args.cflags or args.bin.with_name(args.bin.stem + '.cflags.txt')
     flags = cflags_path.read_text().split() if cflags_path.exists() else []
@@ -234,8 +258,8 @@ def main():
         c.check('-DNKRO_ENABLE' not in flags, 'POLICY-NKRO: -DNKRO_ENABLE absent from compiler flags')
         c.check(any('userspace/keyboards/falcon_kalam/keymaps/%s/keymap.c' % keymap_dir in f for f in flags),
                 'keymap comes from the userspace variant keymaps/%s' % keymap_dir)
-        want = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
-                '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
+        want_flags = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
+                      '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
         c.check(bool(img.find(bytes.fromhex('0631ff0974'))), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
         # POLICY-VARIANTS: debug-only features are present in dev and absent in ship.
         flashread = any(n.split('.')[0] == 'via_command_kb' for n in syms)
@@ -243,9 +267,8 @@ def main():
         traces = {'ACTION_DEBUG': b'action_exec: start', 'WEAR_LEVELING_DEBUG_OUTPUT': b'Backing store: ',
                   'DEBUG_MATRIX_SCAN_RATE': b'matrix scan frequency'}
         # POLICY-RGB: status-indicator module in both variants; decorative effects in neither.
-        all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
         c.check(any(n.split('.')[0] == 'falcon_kalam_rgb_layers' for n in syms), 'POLICY-RGB: indicator layer table (falcon_kalam_rgb_layers) linked')
-        c.check(all_modes not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
+        c.check(RGBLIGHT_ALL_MODES not in payload, 'POLICY-RGB: no decorative effect table (effects disabled by the configuration layer)')
         c.check(re.search(r'define RGBLIGHT_LIMIT_VAL 63\b', (ROOT / 'userspace' / 'users' / 'falcon_kalam' / 'config.h').read_text()) is not None, 'POLICY-RGB: brightness cap RGBLIGHT_LIMIT_VAL = 63 (a quarter of full scale 255)')
         if args.via_json:
             menus = json.loads(args.via_json.read_text()).get('menus', [])
@@ -265,21 +288,19 @@ def main():
     else:
         c.check(bool(nkro_bitmap.search(payload)), 'base is a normal QMK build: NKRO bitmap report present')
         c.check('-DNKRO_ENABLE' in flags and '-DVIA_ENABLE' not in flags, 'base flags: NKRO_ENABLE on, VIA_ENABLE off')
-        all_modes = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
-        c.check(all_modes in payload, 'POLICY-RGB: L1 keeps every decorative effect (all 43 rgblight modes, as stock)')
-        want = ()
-    for w in want + ('-DEEPROM_WEAR_LEVELING', '-DRGBLIGHT_ENABLE', '-DRGBLIGHT_WS2812',
+        c.check(RGBLIGHT_ALL_MODES in payload, 'POLICY-RGB: L1 keeps every decorative effect (all 42 rgblight modes, as stock)')
+        want_flags = ()
+    for w in want_flags + ('-DEEPROM_WEAR_LEVELING', '-DRGBLIGHT_ENABLE', '-DRGBLIGHT_WS2812',
                      '-DBOOTLOADER_STM32DUINO', '-DQMK_BOARD_STM32_F103_STM32DUINO'):
         c.check(w in flags, '%s present' % w)
 
     # Reproducibility: any compiler build date must come from SOURCE_DATE_EPOCH.
     m = re.search(rb'BUILD: [^(]*\(([A-Z][a-z]{2} [ 0-9]\d \d{4})\)', payload)
     if m:
-        import os, time
         epoch = os.environ.get('SOURCE_DATE_EPOCH')
-        want = time.strftime('%b %e %Y', time.gmtime(int(epoch))) if epoch else None
-        c.check(want is not None and m.group(1).decode() == want,
-                'embedded build date "%s" == SOURCE_DATE_EPOCH date "%s" (day-independent build)' % (m.group(1).decode(), want))
+        want_date = time.strftime('%b %e %Y', time.gmtime(int(epoch))) if epoch else None
+        c.check(want_date is not None and m.group(1).decode() == want_date,
+                'embedded build date "%s" == SOURCE_DATE_EPOCH date "%s" (day-independent build)' % (m.group(1).decode(), want_date))
 
     # R6: WS2812 bit-bang timing structurally identical to the stock routine
     # (0x08004AE8): 5 x (6 NOP) loops for T1H and T0L, 12-NOP T1L/T0H, 1344-pass latch.
@@ -295,15 +316,14 @@ def main():
 
     # POLICY-RECOVERY: every fault vector -> one stack-free reset routine (L2 only).
     vec = struct.unpack_from('<4I', payload, 3 * 4)   # HardFault, MemManage, BusFault, UsageFault
-    routine = struct.pack('<10H', 0xF646, 0x4028, 0xF2C4, 0x0000, 0xF244, 0x214C, 0x6001, 0xF3BF, 0x8F4F, 0xF64E)
     if release:
         target = vec[0] & ~1
         same = len(set(vec)) == 1 and vec[0] & 1
-        c.check(same and payload[target - APP_START:target - APP_START + len(routine)] == routine,
+        c.check(same and payload[target - APP_START:target - APP_START + len(RECOVERY_ROUTINE)] == RECOVERY_ROUTINE,
                 'POLICY-RECOVERY: HardFault/MemManage/BusFault/UsageFault -> stack-free BKP_DR10=0x424C + system reset at 0x%08X' % target)
         c.check((b'fault test' in payload) == dev, 'POLICY-RECOVERY: Shift+Shift+F fault test %s' % ('present (dev)' if dev else 'absent (ship)'))
     else:
-        weak = {p[2]: int(p[0], 16) for p in (l.split() for l in run('arm-none-eabi-nm', str(args.elf)).splitlines()) if len(p) == 3 and p[1] == 'W'}
+        weak = {n: v[0] for n, v in symbols.items() if v[2] == 'W'}
         c.check('HardFault_Handler' in weak and all(v & ~1 == weak['HardFault_Handler'] & ~1 for v in vec),
                 'base keeps the ChibiOS default (weak) fault handlers')
 
@@ -373,19 +393,19 @@ def main():
             n_layers = size // (rows * cols * 2)
             words = struct.unpack('<%dH' % (size // 2), payload[addr - APP_START:addr - APP_START + size])
             got = [[list(words[(l * rows + r) * cols:(l * rows + r + 1) * cols]) for r in range(rows)] for l in range(n_layers)]
-            want = hhkb_expected(kc, positions, rows, cols)
+            expected = hhkb_expected(kc, positions, rows, cols)
             c.check(n_layers == 6, 'six layers in the Classic\'s order: HHK, HHK Fn, Mac, Mac Fn, Win, Win Fn (%d compiled)' % n_layers)
             for l, name in enumerate(('HHK base', 'HHK Fn', 'Mac base', 'Mac Fn', 'Win base', 'Win Fn')):
                 if l >= n_layers:
                     break
                 bad = ['%s=0x%04X (want 0x%04X)' % (HHKB_KEYS[positions.index((r, col))] if (r, col) in positions else '%d,%d' % (r, col),
-                                                    got[l][r][col], want[l][r][col])
-                       for r in range(rows) for col in range(cols) if got[l][r][col] != want[l][r][col]]
+                                                    got[l][r][col], expected[l][r][col])
+                       for r in range(rows) for col in range(cols) if got[l][r][col] != expected[l][r][col]]
                 c.check(not bad, 'POLICY-HHKB %s matches the HHKB Classic manual%s' % (name, ': ' + ', '.join(bad) if bad else ''))
             if ship:
                 # Selective Command keys must be keys no layer sends (ship config.h).
                 cfg = (ROOT / 'userspace' / 'keyboards' / 'falcon_kalam' / 'keymaps' / 'ship' / 'config.h').read_text()
-                magic = {v: kc.get('KC_' + v) for v in re.findall(r'#define MAGIC_KEY_\w+ ([A-Z_0-9]+)\b', cfg) if v not in ('true', 'false')}
+                magic = {v: kc.get('KC_' + v) for v in re.findall(r'#define MAGIC_KEY_\w+ ([A-Z_0-9]+)\b', cfg)}  # the `false` lines do not match [A-Z_0-9]
                 used = {k for layer in got for row in layer for k in row}
                 clash = sorted(v for v, code in magic.items() if code is None or code in used)
                 c.check(len(magic) == 10 and not clash, 'ship Command keys are sent by no keymap layer%s' % (': %s' % clash if clash else ''))

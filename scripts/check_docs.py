@@ -9,7 +9,8 @@
 5. Device status (hashes of flashed images) appears only in docs/devnotes.md,
    and the current release hash only in docs/firmware.md (plus devnotes).
 6. Retired names (falcon_hs_r2, "Falcon HS R2", ...) appear nowhere except the
-   naming history in docs/policy.md (POLICY-NAMING).
+   naming history in docs/policy.md (POLICY-NAMING); device logs under
+   artifacts/ are not scanned, as they keep the strings they captured.
 7. The release number (VIA_FIRMWARE_VERSION, I12) equals the one in
    docs/firmware.md, and was bumped if the image hashes changed since HEAD.
 """
@@ -89,7 +90,7 @@ for variant in ('ship', 'dev'):
         fail('firmware.md does not state the current %s payload size {:,} B'.format(size) % variant)
 
 # 5. status lives in devnotes, release identity in firmware.md
-for doc in DOCS.glob('*.md'):
+for doc in [ROOT / 'README.md'] + sorted(DOCS.glob('*.md')):
     if doc.name in ('firmware.md', 'devnotes.md'):
         continue
     text = doc.read_text()
@@ -99,7 +100,7 @@ for doc in DOCS.glob('*.md'):
 
 # 6. POLICY-NAMING: retired names may appear only in the naming history (docs/policy.md).
 RETIRED = ('falcon_hs_r2', 'Falcon HS R2', 'hhkb_via', 'keymaps/falcon/', 'keymaps/falcon_dev')
-hits = sorted({'%s: %s' % (f.relative_to(ROOT), name) for f in files + sorted(DOCS.glob('*.md'))
+hits = sorted({'%s: %s' % (f.relative_to(ROOT), name) for f in files
                for name in RETIRED if name in f.read_text(errors='ignore') and f not in (DOCS / 'policy.md', Path(__file__).resolve())})
 for h in hits:
     fail('retired name outside the policy naming history: ' + h)

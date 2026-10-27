@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // Indicator channels as "first LED, LED count" pairs. LED indices run left to
@@ -21,16 +22,14 @@
 #define FALCON_KALAM_RGB_LED_SW4 2, 1
 #define FALCON_KALAM_RGB_LED_SW5 3, 1
 
-#include <stdbool.h>
-
 // Module interface; QMK hooks are dispatched from falcon_kalam.c.
-void falcon_kalam_rgb_pre_init(void);                      // keyboard_pre_init_user
-void falcon_kalam_rgb_init(void);                          // keyboard_post_init_user
-void falcon_kalam_rgb_task(void);                          // housekeeping_task_user
-void falcon_kalam_rgb_shutdown(bool jump_to_bootloader);   // shutdown_user
-void falcon_kalam_rgb_note_settings_reset(void);           // eeconfig_init_user
-void falcon_kalam_rgb_paint_bootloader(void);              // bootmagic_reset_eeprom
-void falcon_kalam_rgb_dip_feedback(bool on);               // hhkb_modes.c: virtual DIP switch flipped
+void falcon_kalam_rgb_pre_init(void);                    // keyboard_pre_init_user
+void falcon_kalam_rgb_init(void);                        // keyboard_post_init_user
+void falcon_kalam_rgb_task(void);                        // housekeeping_task_user
+void falcon_kalam_rgb_shutdown(bool jump_to_bootloader); // shutdown_user
+void falcon_kalam_rgb_note_settings_reset(void);         // eeconfig_init_user
+void falcon_kalam_rgb_paint_bootloader(void);            // bootmagic_reset_eeprom
+void falcon_kalam_rgb_dip_feedback(bool on);             // hhkb_modes.c: virtual DIP switch flipped
 
 // hhkb_modes.c. A settings value packs the mode (bits 0-1: 0 HHK, 1 Mac,
 // 2 Win) and SW3-SW5 (bits 2-4).

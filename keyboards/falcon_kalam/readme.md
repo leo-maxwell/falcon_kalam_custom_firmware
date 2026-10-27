@@ -25,4 +25,6 @@ The project's release firmware adds a policy layer from `userspace/`
   in. This jumps to the bootloader *and clears the persistent configuration*.
 * **No power-on window**: this unit's bootloader starts the application
   straight away, so a plain replug never shows `1EAF:0003`. Other ways in:
-  `QK_BOOT`, or shorting the reset/boot pads as a last resort.
+  none in this base definition (the ship and dev images add LShift+RShift+B
+  and fault recovery, `docs/hardware.md` §3); shorting the reset/boot pads is
+  the last resort.

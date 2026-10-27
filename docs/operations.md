@@ -27,7 +27,7 @@ scripts/negative_tests.sh
 4. stages L1 and runs `qmk lint`;
 5. builds base (`falcon_kalam:default`), ship (`falcon_kalam:ship`) and dev (`falcon_kalam:dev`) from clean with `SKIP_VERSION=yes LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=<QMK commit time>`, and asserts each variant's keymap comes from its `userspace/` directory;
 6. with `--twice`, rebuilds ship and dev and requires identical hashes;
-7. verifies the three images (`verification_base.txt`, `verification.txt` = ship, `verification_dev.txt`), writes `feature_parity.txt` (stock vs ship), and runs `check_docs.py`.
+7. verifies the three images (`verification_base.txt`, `verification.txt` = ship, `verification_dev.txt`), writes `feature_parity.txt` (stock vs ship), and runs `check_docs.py` (a failure here is only a warning in `build.sh`, because the new hashes are written into `firmware.md` after the build; §2 step 1 requires it to pass).
 
 `negative_tests.sh` (log: `artifacts/negative_tests.log`) proves that the ship
 build refuses `NKRO_ENABLE=yes`, FLASHREAD, `VIA_INSECURE`, debug traces and
@@ -48,7 +48,7 @@ testing), its full SHA-256 from `firmware.md` §1, and a decision on every open
 1. Offline: `cd originals && shasum -a 256 -c SHA256SUMS`; `scripts/qmk_policy.sh --online`; `scripts/build.sh --twice`; `scripts/negative_tests.sh`; every report says `RESULT: PASS`, including `check_docs.py`.
 2. `scripts/flash.sh check <variant> <sha256>` validates everything without touching the device.
 3. Enter DFU: unplug, hold **Esc**, plug in, hold about 2 s (this clears EEPROM). The LEDs go red (our images) or stay dark (stock).
-4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`: reads back first (`build/readback_pre_*.bin`), then flashes; log in `artifacts/flash_*.log`. The app starts by itself.
+4. **[WRITES DEVICE]** `scripts/flash.sh flash <variant> <sha256>`: reads back first (`build/readback_pre_*.bin`), then flashes; log in `artifacts/flash_*.log`. The app starts by itself (`-R` makes the bootloader reset). If the download fails, do not unplug: the device is still in DFU, so repeat the flash (or the §4 restore) at once; a half-written image would run at the next plug-in, and only a fault in it leads back to DFU (R13).
 5. Check that `9DD1:9D89` "Falcon" enumerates, then run `tools/falcon_kalam_probe.py info` (its firmware release must match `firmware.md`).
 6. **Esc→DFU test**, while recovery is still easy: unplug, hold Esc, plug in → DFU (red), then `scripts/flash.sh verify <variant>` (read-only: flash content = image). Replug normally.
 7. Run the open hardware tests from `devnotes.md` and record the results there.
@@ -78,7 +78,7 @@ that is why every flash ends with the Esc→DFU test (§2 step 6).
 |---|---|
 | Restore stock **[WRITES DEVICE]** (the one case for a manual `dfu-util -D`, since `flash.sh` takes only our images; keep `-a 2`) | `dfu-util -d 1EAF:0003 -a 2 -D originals/manufacturer_firmware.bin -R` (suffix-checked; application region only) |
 | Restore the exact original flash incl. EEPROM **[WRITES DEVICE]**; whether the bootloader accepts a download up to the last page is untested | `cp originals/falcon_flash_backup.bin build/restore_full.bin && chmod u+w build/restore_full.bin && dfu-suffix -v 1EAF -p 0003 -a build/restore_full.bin && dfu-util -d 1EAF:0003 -a 2 -D build/restore_full.bin -R` |
-| Verify a restore (read-only, in DFU) | `dfu-util -d 1EAF:0003 -a 2 -U build/readback_after.bin -Z 57344`, then `cmp -n 43940 build/readback_after.bin originals/falcon_flash_backup.bin` |
+| Verify a restore (read-only, in DFU; `dfu-util` refuses to overwrite an upload file) | `rm -f build/readback_after.bin && dfu-util -d 1EAF:0003 -a 2 -U build/readback_after.bin -Z 57344`, then `cmp -n 43940 build/readback_after.bin originals/falcon_flash_backup.bin` |
 
 ## 5. QMK update (POLICY-QMK-LATEST)
 

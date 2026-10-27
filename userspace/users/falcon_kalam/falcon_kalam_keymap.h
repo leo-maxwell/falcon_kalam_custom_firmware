@@ -3,9 +3,10 @@
 //
 // The falcon_kalam keymap shared by every variant (POLICY-VARIANTS). This unit is
 // physically an HHKB classic (docs/hardware.md), so the keymap uses
-// LAYOUT_60_hhkb. L1 keeps LAYOUT_all because the PCB also supports split
-// backspace / left shift / spacebar; positions outside LAYOUT_60_hhkb stay
-// KC_NO and can still be assigned in VIA.
+// LAYOUT_60_hhkb. L1 keeps LAYOUT_all because the PCB also supports a split
+// left shift and a split spacebar (its 2u backspace needs no extra position);
+// the three positions outside LAYOUT_60_hhkb stay KC_NO and can still be
+// assigned in VIA.
 //
 // POLICY-HHKB: the three HHKB Professional Classic setting modes, copied from
 // its User's Guide (P3PC-6661-01EN) and its keymap dump (docs/hardware.md §7).

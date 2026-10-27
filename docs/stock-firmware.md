@@ -31,9 +31,9 @@ EXTRAKEY CONSOLE COMMAND NKRO LTO`.
 | Command | LShift+RShift+key. Help strings present: debug toggle, matrix debug, keyboard debug, mouse debug, console mode, layer switch 0–9 (F10 = L0), Jump to Bootloader (+ alternate), print EEPROM, Clear EEPROM, NKRO Toggle, version, status, mousekey console. The keys are QMK defaults (D, X, K, M, C, 0–9/F1–F10, B/Esc, E, Backspace, N, V, S); not individually verified | strings `0x0800B487`–`0x0800B9FE` |
 | Console | HID console; QMK debug prints (rgblight, eeconfig, keyboard reports) | strings |
 | Caps Lock LED | A10, active-low, follows host Caps Lock | code `0x08003E10`, `0x08009BE4` |
-| RGB | rgblight, 4 × WS2812 bit-bang on A1, GRB; **all 43 modes** (static, breathing ×4, rainbow mood ×3, swirl ×6, snake ×6, knight ×3, christmas, gradient ×10, RGB test, alternating, twinkle ×6); **no brightness cap**; defaults after EEPROM reset: mode 9 (rainbow swirl), brightness 127, hue 0, sat 255, speed 0; off-on-suspend unknown | `mode_base_table` `0x0800C2B6`; probe |
+| RGB | rgblight, 4 × WS2812 bit-bang on A1, GRB; **all 42 modes** (static, breathing ×4, rainbow mood ×3, swirl ×6, snake ×6, knight ×3, christmas, gradient ×10, RGB test, alternating, twinkle ×6); **no brightness cap**; defaults after EEPROM reset: mode 9 (rainbow swirl), brightness 127, hue 0, sat 255, speed 0; off-on-suspend unknown | `mode_base_table` `0x0800C2B6`; probe |
 | VIA | protocol `0x000C`; 4 dynamic layers; 16 macros, 384-byte buffer; layout options default 0 (= 2u-backspace view) | probe |
-| Keycode features | handled: layer keys (LM, TO, MO, DF, OSL, OSM), one-shot on/off/toggle, tri-layer, magic keycodes, VIA/dynamic macros, lighting keycodes, `QK_BOOT`, `QK_CLEAR_EEPROM`, Grave-Escape | keycode-constant scan, §4 |
+| Keycode features | handled: layer keys (LM, TO, MO, DF, OSL, OSM), one-shot on/off/toggle, tri-layer, magic keycodes, VIA/dynamic macros, lighting keycodes, `QK_BOOT`, `QK_CLEAR_EEPROM`, Grave-Escape | manual scan of the disassembly, §4 |
 | EEPROM | wear-leveling, 2 KB at the top of flash, located via F_SIZE | `docs/hardware.md` §2 |
 | Mouse keys, media/system keys | compiled in (`MOUSEKEY`, `EXTRAKEY`) | `OPTIONS`, HID reports |
 | LTO | yes | `OPTIONS` |
@@ -63,13 +63,15 @@ On layer 1 the Fn keys themselves (`3,14`, `4,12`) are transparent; all other po
 * **Exact-address checks.** Each fact used by this project is pinned to an
   address and the expected bytes in `analyze_vendor_firmware.py`, so a wrong
   assumption fails loudly.
-* **Keycode features** come from scanning the disassembly for QMK keycode
-  constants (`QK_*` from the pinned `quantum/keycodes.h`, version 0.0.9) used
+* **Keycode features** come from a one-off manual scan of the disassembly
+  (`build/vendor_app.dis` from `tools/disassemble_vendor.sh`; no tool repeats
+  it) for QMK keycode constants (`QK_*` from the pinned `quantum/keycodes.h`, version 0.0.9) used
   as `cmp`/`sub`/`movw` immediates. The same scan on our release gives the
   same feature profile. Limits: features compiled into jump tables or reached
   through function calls are invisible, so absence proves nothing.
 * **Hardware outputs** were swept three ways: peripheral blocks referenced,
-  constant pin-mode calls, and every GPIO output-register write.
+  constant pin-mode calls, and every GPIO output-register write (manual passes;
+  `tools/feature_parity.py` repeats only the peripheral-block sweep).
 * **Cross-check with a second agent's notes** (same binary, `90123fb1…`). Their
   RGB findings were all confirmed (PA1, 4 LEDs, buffer `0x20001785`,
   bit-bang, BASEPRI, rgblight strings). Byte order (GRB) and the full effect

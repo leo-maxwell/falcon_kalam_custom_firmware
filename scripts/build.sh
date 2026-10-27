@@ -13,9 +13,7 @@
 # Never flashes anything. Outputs go to artifacts/.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-QMK="$ROOT/qmk_firmware"
-KB=falcon_kalam
+source "$(dirname "${BASH_SOURCE[0]}")/env.sh"   # ROOT, QMK, KB, toolchain, QMK environment
 BASE_KM=default
 RELEASE_KM=ship          # ship variant (POLICY-VARIANTS)
 DEV_KM=dev               # dev variant: every debug feature, never the daily image
@@ -24,16 +22,6 @@ LOG="$ART/build.log"
 TWICE=no
 [[ "${1:-}" == "--twice" ]] && TWICE=yes
 
-# Pinned toolchain (Homebrew, keg-only) -- prepend so nothing else on PATH wins.
-GCC_BIN="${FALCON_KALAM_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}"
-BINUTILS_BIN="${FALCON_KALAM_BINUTILS_BIN:-/opt/homebrew/opt/arm-none-eabi-binutils/bin}"
-export PATH="$GCC_BIN:$BINUTILS_BIN:$PATH"
-export LC_ALL=C TZ=UTC QMK_HOME="$QMK"
-export QMK_USERSPACE="$ROOT/userspace"   # policy layer (QMK External Userspace)
-export SKIP_VERSION=yes                  # fixed QMK_VERSION/QMK_BUILDDATE -> reproducible image
-# __DATE__/__TIME__ (embedded by QMK Command's version banner) follow the pinned
-# QMK commit time, so the image does not depend on the day of the build.
-export SOURCE_DATE_EPOCH="$(git -C "$QMK" log -1 --format=%ct HEAD)"
 
 mkdir -p "$ART"
 # Strip ANSI colour codes so the committed log is plain text.
@@ -92,7 +80,8 @@ build_one() {
 }
 
 collect() {
-    local km="$1" name="${KB}_$1" out="$QMK/.build"
+    local km="$1"
+    local name="${KB}_$km" out="$QMK/.build"
     cp "$out/$name.bin" "$out/$name.elf" "$out/$name.map" "$ART/"
     cp "$out/obj_$name/cflags.txt" "$ART/$name.cflags.txt"
     cp "$out/obj_$name/src/info_config.h" "$ART/$name.info_config.h"

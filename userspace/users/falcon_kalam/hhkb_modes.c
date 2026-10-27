@@ -85,9 +85,9 @@ static uint16_t held[MATRIX_ROWS][MATRIX_COLS];
 // SW3-SW5 applied to a base-layer keycode. The ◇ keys send GUI in Mac/Win
 // mode and Muhenkan (left) / Henkan (right) in HHK mode.
 static uint16_t dip_substitute(uint16_t keycode) {
-    uint8_t mode       = current_mode();
-    bool    left_dia   = keycode == KC_LGUI || keycode == KC_INT5;
-    bool    right_dia  = keycode == KC_RGUI || keycode == KC_INT4;
+    uint8_t mode      = current_mode();
+    bool    left_dia  = keycode == KC_LGUI || keycode == KC_INT5;
+    bool    right_dia = keycode == KC_RGUI || keycode == KC_INT4;
     if ((dip & FALCON_KALAM_SW4) && left_dia) {
         return HELD_AS_FN | (mode + 1); // each mode's Fn layer follows its base layer
     }
@@ -147,8 +147,9 @@ bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record) {
 
     // Eject: the Classic sends consumer usage 0xB8 (Eject), which macOS acts on;
     // QMK's KC_EJCT sends 0xCC (Stop/Eject). Send the Classic's code instead.
+    // Presses only: releases returned above, and QMK clears the consumer report.
     if (keycode == KC_EJCT) {
-        host_consumer_send(record->event.pressed ? TRANSPORT_EJECT : 0);
+        host_consumer_send(TRANSPORT_EJECT);
         return false;
     }
 

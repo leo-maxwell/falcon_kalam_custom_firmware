@@ -13,7 +13,9 @@
 // be the very hang this avoids. So no LED update here (the LEDs keep their
 // last colour).
 //
-// Not covered: chSysHalt() (its hook lives in the board's chconf.h, i.e. L1)
+// Not covered: chSysHalt() (its hook CH_CFG_SYSTEM_HALT_HOOK is upstream's;
+// only a keyboard-level chconf.h could override it, and a choice may not go
+// into L1)
 // and infinite loops without a fault (a watchdog is unsafe here: the IWDG
 // survives the reset and the bootloader never feeds it, so it would cut DFU
 // sessions short).

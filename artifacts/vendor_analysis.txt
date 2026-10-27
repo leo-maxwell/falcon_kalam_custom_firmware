@@ -24,11 +24,11 @@
   [PASS] device descriptor (USB 2.0, EP0=64, 9DD1:9D89, bcdDevice 0x0001, iSerial 0) at ['0x800bee5']
   [PASS] string descriptor "Falcon" used for manufacturer and product at ['0x800bf3f', '0x800bf4f']
   [PASS] raw HID report (usage page 0xFF60, usage 0x61) present => VIA protocol
-  [PASS] boot keyboard report present
+  [PASS] boot keyboard report (usage page 1, usage 6, collection, page 7) present
   [PASS] shared-EP NKRO report (report ID 6, bitmap) present => vendor firmware HAS NKRO compiled in
-  [PASS] report ID 2 (mouse) present in shared report descriptor
-  [PASS] report ID 3 (system control) present in shared report descriptor
-  [PASS] report ID 4 (consumer) present in shared report descriptor
+  [PASS] report ID 2 (mouse) collection present in the shared report descriptor
+  [PASS] report ID 3 (system control) collection present in the shared report descriptor
+  [PASS] report ID 4 (consumer) collection present in the shared report descriptor
 
 ## 4. Matrix pins and diode direction
   [PASS] row_pins @0x0800C464 (ChibiOS ioline_t = port|pad): B3 B4 B5 B6 A2
@@ -77,7 +77,7 @@
   [PASS] reset latch loop 1344 x 15 cycles = 20160 cycles = 280 us @ 72 MHz (WS2812_TRST_US default)
   [PASS] rgblight_set -> ws2812_setleds(led, 4) => RGBLIGHT_LED_COUNT 4
   [PASS] rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB
-  [PASS] rgblight mode_base_table @0x0800C2B6 has all 43 modes: static, breathing x4, rainbow mood x3, swirl x6, snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled
+  [PASS] rgblight mode_base_table @0x0800C2B6 has all 42 effect modes (43 entries with mode 0): static, breathing x4, rainbow mood x3, swirl x6, snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled
 
 ## 8a. Caps Lock indicator LED
   [PASS] led init @0x08009BE4: palSetGroupMode(GPIOA, mask 0x0400, 6=OUTPUT_PUSHPULL) => PA10 output

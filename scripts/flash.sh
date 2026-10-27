@@ -34,7 +34,8 @@ validate() {
     [[ "$WANT" =~ ^[0-9a-f]{64}$ ]] || die "give the full approved SHA-256 (64 hex digits)"
     [[ "$HAVE" == "$WANT" ]] || die "image hash $HAVE does not match the approved $WANT"
     [[ "$(awk '{print $1}' "$IMG.sha256")" == "$HAVE" ]] || die "$IMG.sha256 does not match the image"
-    grep -q "$HAVE" "$ROOT/docs/firmware.md" || die "docs/firmware.md does not list this image hash"
+    # The hash must sit in the §1 row of this variant, not just anywhere in the file.
+    grep -Eq "^\| \*\*$VARIANT\*\* \|[^|]*\|[^|]*\`$HAVE\`" "$ROOT/docs/firmware.md" || die "docs/firmware.md §1 does not list this hash for $VARIANT"
     tail -c 16 "$IMG" | head -c 11 | tail -c 3 | grep -q UFD || die "image has no DFU suffix"
     echo "ok: $VARIANT image $HAVE"
 }
@@ -61,6 +62,7 @@ flash)
     echo "ok: pre-flash readback build/readback_pre_$STAMP.bin"
     LOG="$ROOT/artifacts/flash_${STAMP}_$VARIANT.log"
     echo "flashing $VARIANT $HAVE via alt $ALT"
+    # -R is required: the bootloader leaves dfuMANIFEST-WAIT-RESET only on a USB reset (dfu.c dfuUpdateByReset).
     dfu-util -d "$VIDPID" -a "$ALT" -D "$IMG" -R 2>&1 | tee "$LOG" | grep -E 'Download done|state\(|Error' || true
     grep -q 'Download done' "$LOG" || die "download did not complete (see $LOG); the device is still in DFU, retry or restore"
     echo "ok: written. Next: confirm 9DD1:9D89 enumerates, then the Esc->DFU test and 'scripts/flash.sh verify $VARIANT'"

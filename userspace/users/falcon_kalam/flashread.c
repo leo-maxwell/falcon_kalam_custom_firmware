@@ -25,7 +25,7 @@ static bool falcon_kalam_read_allowed(uint32_t addr, uint8_t len) {
         uint32_t start, end; // end exclusive
     } ranges[] = {
         {0x08000000, 0x08002000}, // STM32duino/Maple bootloader (8 KB)
-        {0x1FFFF7E0, 0x1FFFF7F0}, // F_SIZE + 96-bit unique ID
+        {0x1FFFF7E0, 0x1FFFF7F4}, // F_SIZE, SRAM density, 96-bit unique ID (0x1FFFF7E8-0x1FFFF7F3)
         {0x1FFFF800, 0x1FFFF810}, // option bytes
     };
     for (uint8_t i = 0; i < sizeof(ranges) / sizeof(ranges[0]); i++) {

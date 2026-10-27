@@ -1,20 +1,17 @@
 #!/usr/bin/env bash
-# Prove the two safety nets actually fire (run after scripts/build.sh):
-#   1. NKRO cannot be re-enabled in the release keymap (shared users/falcon_kalam config.h #error).
-#   2. An image that would reach the EEPROM pages fails to link
+# Prove the four safety nets actually fire (run after scripts/build.sh), in this order:
+#   1. NKRO cannot be re-enabled in the ship keymap (shared users/falcon_kalam config.h #error).
+#   2. Every debug-only feature (FLASHREAD, VIA_INSECURE, each debug trace, the dev marker)
+#      is refused by the ship variant (POLICY-VARIANTS guards in ship/keymap.c).
+#   3. An image that would reach the EEPROM pages fails to link
 #      (flash0 ends at 0x0800F000 in the keyboard-local linker script).
-#   3. Debug-only features (FLASHREAD, VIA_INSECURE, debug traces, dev marker) are refused by the ship variant.
 #   4. scripts/flash.sh refuses the L1 image and any hash that is not the approved one.
 # Uses throw-away keymaps inside the staged copy; restores it afterwards.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-QMK="$ROOT/qmk_firmware"
-KB=falcon_kalam
+source "$(dirname "${BASH_SOURCE[0]}")/env.sh"   # ROOT, QMK, KB, toolchain, QMK environment
 STAGED="$QMK/keyboards/$KB"
 LOG="$ROOT/artifacts/negative_tests.log"
-export PATH="${FALCON_KALAM_GCC_BIN:-/opt/homebrew/opt/arm-none-eabi-gcc@8/bin}:${FALCON_KALAM_BINUTILS_BIN:-/opt/homebrew/opt/arm-none-eabi-binutils/bin}:$PATH"
-export LC_ALL=C TZ=UTC QMK_HOME="$QMK" SKIP_VERSION=yes QMK_USERSPACE="$ROOT/userspace"
 
 [[ -d "$STAGED" ]] || { echo "run scripts/build.sh first" >&2; exit 1; }
 trap 'rsync -a --delete --delete-excluded --exclude .DS_Store "$ROOT/keyboards/$KB/" "$STAGED/"' EXIT
@@ -33,16 +30,19 @@ expect_failure() {
     fi
 }
 
-# 1. POLICY-NKRO: NKRO forced on from the command line for the release keymap.
+# 1. POLICY-NKRO: NKRO forced on from the command line for the ship keymap.
 expect_failure ship "POLICY-NKRO: NKRO must stay disabled" NKRO_ENABLE=yes
 
-# 3. POLICY-VARIANTS: debug-only features are refused by the ship variant.
+# 2. POLICY-VARIANTS: each debug-only feature is refused by the ship variant.
 expect_failure ship "POLICY-VARIANTS: FLASHREAD is dev-only" FALCON_KALAM_FLASHREAD=yes
 expect_failure ship "POLICY-VARIANTS: VIA_INSECURE is dev-only" EXTRAFLAGS=-DVIA_INSECURE
 expect_failure ship "POLICY-VARIANTS: debug traces" EXTRAFLAGS=-DACTION_DEBUG
+expect_failure ship "POLICY-VARIANTS: debug traces" EXTRAFLAGS=-DWEAR_LEVELING_DEBUG_OUTPUT
+expect_failure ship "POLICY-VARIANTS: debug traces" KEYCODE_STRING_ENABLE=yes
+expect_failure ship "POLICY-VARIANTS: debug traces" DEBUG_MATRIX_SCAN_RATE_ENABLE=yes
 expect_failure ship "POLICY-VARIANTS: FALCON_KALAM_DEV" EXTRAFLAGS=-DFALCON_KALAM_DEV
 
-# 2. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F000.
+# 3. 20 KB of extra read-only data pushes the ~38 KB base image past 0x0800F000.
 mkdir -p "$STAGED/keymaps/neg_oversize"
 cp "$STAGED/keymaps/default/keymap.c" "$STAGED/keymaps/neg_oversize/keymap.c"
 cat >> "$STAGED/keymaps/neg_oversize/keymap.c" <<'EOF'

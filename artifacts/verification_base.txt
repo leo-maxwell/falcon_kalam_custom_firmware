@@ -9,6 +9,7 @@
 ## 2. Flash and RAM placement
   [PASS] linker script app start 0x08002000
   [PASS] linker script app limit 0x0800F000 == EEPROM start
+  [PASS] linker script EEPROM start 0x0800F000
   [PASS] LOAD lma 0x08002000-0x0800B17C inside application flash
   [PASS] LOAD lma 0x0800B17C-0x0800B52C inside application flash
   [PASS] RAM segment 0x20000C00-0x20001D70 inside 20 KB SRAM
@@ -24,7 +25,8 @@
   [PASS] initial SP equals __main_stack_end__
   [PASS] reset vector 0x08002239 is Thumb code in the image
   [PASS] reset vector is Reset_Handler
-  [PASS] all populated entries of the 76-entry vector table point into the image
+  [PASS] vector table at 0x08002000, 88 entries (ChibiOS STM32F1: 16 + 72)
+  [PASS] all populated entries of the 88-entry vector table point into the image
 
 ## 4. USB / HID
   [PASS] device descriptor USB 2.0 / EP0 64 / 9DD1:9D89 / bcdDevice 0x0001 (same as vendor)
@@ -35,7 +37,7 @@
   [PASS] compiler flags read from falcon_kalam_default.cflags.txt
   [PASS] base is a normal QMK build: NKRO bitmap report present
   [PASS] base flags: NKRO_ENABLE on, VIA_ENABLE off
-  [PASS] POLICY-RGB: L1 keeps every decorative effect (all 43 rgblight modes, as stock)
+  [PASS] POLICY-RGB: L1 keeps every decorative effect (all 42 rgblight modes, as stock)
   [PASS] -DEEPROM_WEAR_LEVELING present
   [PASS] -DRGBLIGHT_ENABLE present
   [PASS] -DRGBLIGHT_WS2812 present

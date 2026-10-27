@@ -2,12 +2,14 @@
  * falcon_kalam -- GD32F103C8T6 (64 KB flash, 20 KB SRAM) behind the
  * STM32duino/Maple DFU bootloader.
  *
- * Derived from QMK's platforms/chibios/boards/STM32_F103_STM32DUINO/ld/
- * stm32duino_bootloader_common.ld (ChibiOS, Apache-2.0). The only change is
- * the length of flash0: the stock script gives the application everything up
- * to the end of the 64 KB part, which overlaps the wear-leveling EEPROM pages.
- * Here those pages are excluded so an oversized image fails at link time
- * instead of silently overlapping persistent storage.
+ * A flattened copy of QMK's platforms/chibios/boards/STM32_F103_STM32DUINO/ld/
+ * STM32F103x8_stm32duino.ld + stm32duino_bootloader_common.ld (ChibiOS,
+ * Apache-2.0). Changes: flash0 is shortened by the wear-leveling area, so an
+ * oversized image fails at link time instead of silently overlapping
+ * persistent storage (upstream gives the application everything up to the end
+ * of the 64 KB part); the sizes are named constants; three __falcon_kalam_*
+ * symbols are exported for scripts/verify_firmware.py; two ASSERTs tie the
+ * regions together.
  *
  *   0x08000000 - 0x08001FFF   8 KB   STM32duino/Maple bootloader (never written)
  *   0x08002000 - 0x0800EFFF  52 KB   application (this region)
@@ -17,8 +19,9 @@
  * 4 KB (2 KB of settings) so the six HHKB mode layers fit next to VIA macros
  * (POLICY-HHKB, docs/policy.md).
  *
- * Keep FALCON_KALAM_EEPROM_BYTES in sync with WEAR_LEVELING_BACKING_SIZE and
- * WEAR_LEVELING_EFL_FLASH_SIZE in config.h / keyboard.json.
+ * Keep falcon_kalam_eeprom_bytes equal to keyboard.json's
+ * eeprom.wear_leveling.backing_size and falcon_kalam_flash_size equal to
+ * WEAR_LEVELING_EFL_FLASH_SIZE in config.h.
  */
 
 falcon_kalam_flash_size    = 64k;
@@ -28,7 +31,7 @@ falcon_kalam_eeprom_bytes  = 4k;
 
 MEMORY
 {
-    flash0  : org = 0x08002000, len = 64k - 0x2000 - 4k
+    flash0  : org = 0x08002000, len = falcon_kalam_flash_size - falcon_kalam_boot_bytes - falcon_kalam_eeprom_bytes
     flash1  : org = 0x00000000, len = 0
     flash2  : org = 0x00000000, len = 0
     flash3  : org = 0x00000000, len = 0
@@ -36,7 +39,7 @@ MEMORY
     flash5  : org = 0x00000000, len = 0
     flash6  : org = 0x00000000, len = 0
     flash7  : org = 0x00000000, len = 0
-    ram0    : org = 0x20000000, len = 20k
+    ram0    : org = 0x20000000, len = falcon_kalam_ram_size
     ram1    : org = 0x00000000, len = 0
     ram2    : org = 0x00000000, len = 0
     ram3    : org = 0x00000000, len = 0

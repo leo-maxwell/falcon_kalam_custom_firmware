@@ -2,9 +2,12 @@ PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/users/falcon_ka
 PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:13:6: error: #error "POLICY-VARIANTS: FLASHREAD is d)
 PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:16:6: error: #error "POLICY-VARIANTS: VIA_INSECURE i)
 PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:19:6: error: #error "POLICY-VARIANTS: debug traces ()
+PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:19:6: error: #error "POLICY-VARIANTS: debug traces ()
+PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:19:6: error: #error "POLICY-VARIANTS: debug traces ()
+PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:19:6: error: #error "POLICY-VARIANTS: debug traces ()
 PASS  ship: rejected (/Volumes/Develop/falcon-keyboard/userspace/keyboards/falcon_kalam/keymaps/ship/keymap.c:10:6: error: #error "POLICY-VARIANTS: FALCON_KALAM_D)
 PASS  neg_oversize: rejected (| /opt/homebrew/opt/arm-none-eabi-binutils/bin/arm-none-eabi-ld: .build/falcon_kalam_neg_oversize.elf section `.rodata' will not fit in regi)
 PASS  flash.sh L1 reference image: rejected (flash.sh: refusing 'default': only 'ship' or 'dev' may be flashed (the L1 reference image never))
-PASS  flash.sh wrong hash: rejected (flash.sh: image hash 62072341ea3021771fab5a1ec20e239a45623564df41a25c6ed8d1372b8f080c does not match the approved 0000000000000000000000000000000000000000000000000000000000000000)
+PASS  flash.sh wrong hash: rejected (flash.sh: image hash 5c95edc9a0bed9c77716cf85943b145472d23bd0073f6141230123caed54a51c does not match the approved 0000000000000000000000000000000000000000000000000000000000000000)
 PASS  flash.sh short hash: rejected (flash.sh: give the full approved SHA-256 (64 hex digits))
 RESULT: PASS

@@ -2,9 +2,15 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Dev variant (POLICY-VARIANTS). Shared configuration: users/falcon_kalam/config.h.
-// Full QMK Command (all LShift+RShift keys) stays at its defaults here.
+// Full QMK Command (all LShift+RShift keys) stays at its defaults here, except
+// layer switching: with DYNAMIC_KEYMAP_LAYER_COUNT 6, Shift+Shift+6..9 and
+// F6..F9 would select a default layer that has no keymap, and every key then
+// reads KC_NO until the next plug-in (release 13; ship switches it off too).
 
 #pragma once
+
+#define MAGIC_KEY_SWITCH_LAYER_WITH_FKEYS false
+#define MAGIC_KEY_SWITCH_LAYER_WITH_NKEYS false
 
 // Dev variant marker: enables dev-only code in users/falcon_kalam (currently the
 // Shift+Shift+F fault test for POLICY-RECOVERY).

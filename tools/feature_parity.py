@@ -103,7 +103,7 @@ def features(d):
     f['matrix pins (vendor tables)'] = 'yes' if ROWS in d and COLS in d else 'no'
     f['clock RCC_CFGR 0x001D6400'] = 'yes' if struct.pack('<I', 0x001D6400) in d else 'no'
     f['peripherals referenced'] = ' '.join(sorted(peripherals(d)))
-    f['rgblight: all 43 effects'] = 'yes' if ALL_MODES + b'\x00' in d or ALL_MODES in d else 'no/other'
+    f['rgblight: all 42 effect modes'] = 'yes' if ALL_MODES + b'\x00' in d or ALL_MODES in d else 'no/other'
     return f
 
 

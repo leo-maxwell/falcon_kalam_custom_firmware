@@ -22,7 +22,11 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 import verify_firmware as vf  # noqa: E402
 
 ROWS, COLS = 5, 15
-KEYMAP_BASE = 41  # eeconfig (37 B) + VIA magic (3 B) + layout options (1 B); see docs/policy.md §5
+# DYNAMIC_KEYMAP_EEPROM_ADDR in QMK 0.34.7: eeconfig 37 B (eeprom_core_t in
+# quantum/nvm/eeprom/nvm_eeprom_eeconfig_internal.h; no KB/user/module data) +
+# VIA magic 3 B + layout options 1 B (quantum/via.h). Re-derive after a QMK
+# update (docs/operations.md §5); a wrong value shows as 'lookup at r,c' mismatches.
+KEYMAP_BASE = 41
 
 EVENT = re.compile(r'(\d\d:\d\d:\d\d) .*EVENT: ([0-9A-F]{2})([0-9A-F]{2})([du])')
 READ = re.compile(r'Wear leveling: Read  \[0x([0-9A-F]{4})\]:  ([0-9A-F]{2})')
@@ -60,7 +64,7 @@ def main():
         if m:
             addr, val = int(m.group(1), 16), int(m.group(2), 16)
             reads[addr] = val
-            if addr - 1 in reads and (addr - 1 - KEYMAP_BASE) % 2 == 0:
+            if addr - 1 >= KEYMAP_BASE and addr - 1 in reads and (addr - 1 - KEYMAP_BASE) % 2 == 0:
                 idx = (addr - 1 - KEYMAP_BASE) // 2
                 cur['last'] = (idx // (ROWS * COLS), (idx // COLS) % ROWS, idx % COLS, (reads[addr - 1] << 8) | val)
             continue

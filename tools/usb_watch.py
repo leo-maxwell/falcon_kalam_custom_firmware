@@ -9,6 +9,11 @@ then unplug and replug the keyboard normally; Ctrl-C (or --seconds) to stop.
 Answers: does the bootloader enumerate (1EAF:0003) for a short window after
 power-on before the application (9DD1:9D89) appears, and for how long? If yes,
 DFU can be entered by plug-in alone (`dfu-util -w ...`), without keys or pads.
+Result for this unit: no window (docs/hardware.md §3, artifacts/usb_watch_replug.txt).
+
+Uses pyusb (usb.core) from the Homebrew QMK CLI's Python, hence the shebang.
+Polls the OS device list every 20 ms, so it only sees devices the host has
+finished enumerating.
 """
 
 import argparse

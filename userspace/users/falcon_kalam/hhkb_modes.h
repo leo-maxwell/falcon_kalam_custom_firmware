@@ -29,5 +29,5 @@ enum falcon_kalam_layers {
 #define FALCON_KALAM_SW5 (1u << 4) // swap Alt and ◇
 #define FALCON_KALAM_DIP_FACTORY 0 // all off, as the Classic ships: HHK mode
 
-void falcon_kalam_hhkb_init(void);                                      // keyboard_post_init_user: power-on mode from SW1/SW2
+void falcon_kalam_hhkb_init(void);                                     // keyboard_post_init_user: power-on mode from SW1/SW2
 bool falcon_kalam_hhkb_process(uint16_t keycode, keyrecord_t *record); // process_record_user; false = consumed

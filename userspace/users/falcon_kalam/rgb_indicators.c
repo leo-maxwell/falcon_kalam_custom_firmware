@@ -8,8 +8,8 @@
 // wins where layers overlap.
 // Safety/debug states use channel A, connection/layer states channel B, so one
 // of each can show at the same time; one-off events use all LEDs. The base is
-// enforced every main-loop pass, so EEPROM contents or VIA lighting commands
-// cannot change it. Decorative effects exist in L1 and are disabled for every
+// enforced every main-loop pass (on, colour and mode), so EEPROM contents or
+// VIA lighting commands cannot change it. Decorative effects exist in L1 and are disabled for every
 // variant by users/falcon_kalam/config.h.
 
 #include QMK_KEYBOARD_H
@@ -87,6 +87,7 @@ __attribute__((used)) const rgblight_segment_t *const PROGMEM falcon_kalam_rgb_l
 
 _Static_assert(FALCON_KALAM_RGB_BOOT < RGBLIGHT_MAX_LAYERS, "raise RGBLIGHT_MAX_LAYERS");
 _Static_assert(RGBLIGHT_LED_COUNT == 4, "the channel segments assume the 4-LED module");
+_Static_assert(FALCON_KALAM_RGB_KEYLOG < 8, "the polled indicator layers must fit the uint8_t masks in falcon_kalam_rgb_task");
 
 static bool settings_were_reset;
 
@@ -130,9 +131,18 @@ void falcon_kalam_rgb_note_settings_reset(void) {
     settings_were_reset = true;
 }
 
-// The base is always static green at the brightness cap. Only touches rgblight
-// when something differs, because each call redraws the LEDs.
+// The base is always on, static green at the brightness cap, once the boot is
+// over: a raw-HID "effect 0" (rgblight off) is undone here, as are colour and
+// mode changes. Only touches rgblight when something differs, because each
+// call redraws the LEDs. Not while the boot is dark (dark start, reset blinks),
+// and never while the host sleeps: the main loop does not run then.
 static void enforce_green_base(void) {
+    if (booting || reset_dark) {
+        return;
+    }
+    if (!rgblight_is_enabled()) {
+        rgblight_enable_noeeprom();
+    }
     if (rgblight_get_mode() != RGBLIGHT_MODE_STATIC_LIGHT) {
         rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
     }
@@ -151,7 +161,6 @@ void falcon_kalam_rgb_init(void) {
         eeconfig_update_rgblight(&cfg);
         rgblight_disable_noeeprom();
     }
-    enforce_green_base();
     rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, true);
     boot_timer = timer_read();
     // The first LED garbles the first frame after the data pin is set up
@@ -208,7 +217,7 @@ static void show_task(void) {
 void falcon_kalam_rgb_task(void) {
     static uint8_t shown; // bit n = indicator layer n currently on (n < 8)
 
-    usb_configure_state_t usb    = usb_device_state_get_configure_state();
+    usb_configure_state_t usb = usb_device_state_get_configure_state();
     // POLICY-HHKB: a mode base (default layer; an empty state means layer 0)
     // and a held Fn layer are normal; any other layer switched on, or another
     // default layer, is not.

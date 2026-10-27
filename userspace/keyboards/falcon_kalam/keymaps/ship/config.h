@@ -5,7 +5,7 @@
 
 #pragma once
 
-// Selective Command (POLICY-PARITY, decided 2026-10-26). Kept with
+// Selective Command (POLICY-PARITY). Kept with
 // LShift+RShift: H help, D debug, X matrix print, K key reports, V version,
 // S status, B bootloader. The rest are pointed at keys no keymap layer sends
 // (International 1-3 and 6-9, Language 1-3; HHK mode's ◇ keys send

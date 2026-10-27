@@ -1,16 +1,17 @@
 #!/opt/homebrew/opt/qmk/libexec/bin/python
 """Read-only USB probe for falcon_kalam over the VIA raw-HID interface.
 
-Works with the manufacturer firmware (VIA) and with this project's release
-firmware. It only sends query commands. A whitelist enforced in send() makes
+Works with the manufacturer firmware (VIA) and with this project's ship and
+dev images. It only sends query commands. A whitelist enforced in send() makes
 it impossible to issue any VIA command that writes EEPROM, resets, or jumps to
 the bootloader.
 
     tools/falcon_kalam_probe.py info                      protocol, layers, layout options
     tools/falcon_kalam_probe.py dump-keymap OUT.json      all dynamic-keymap layers
     tools/falcon_kalam_probe.py matrix [--log OUT.csv]    live matrix positions (layout settlement)
-    tools/falcon_kalam_probe.py dump-bootloader OUTDIR    0x08000000-0x08001FFF + option bytes + UID
-                                                    (release firmware only: POLICY-FLASHREAD)
+    tools/falcon_kalam_probe.py dump-bootloader OUTDIR    0x08000000-0x08001FFF + option bytes + F_SIZE/UID
+                                                    (dev image only: POLICY-FLASHREAD)
+    tools/falcon_kalam_probe.py decode-log CSV            re-map a matrix log of the pre-fix decoder (offline, B2)
 
 Uses the `hid` module bundled with the Homebrew QMK CLI (hence the shebang).
 """
@@ -131,7 +132,7 @@ class Probe:
     def read_mem(self, addr, n):
         r = self.send(FALCON_KALAM_READ, (addr >> 24) & 0xFF, (addr >> 16) & 0xFF, (addr >> 8) & 0xFF, addr & 0xFF, n)
         if r[0] == UNHANDLED:
-            raise RuntimeError('firmware does not implement FALCON_KALAM_READ (manufacturer firmware?)')
+            raise RuntimeError('firmware does not implement FALCON_KALAM_READ (ship or manufacturer firmware; use the dev image)')
         if r[5] != n:
             raise RuntimeError('address range 0x%08X+%d refused by firmware' % (addr, n))
         return bytes(r[6:6 + n])
@@ -218,7 +219,7 @@ def cmd_dump_bootloader(p, a):
     out = Path(a.outdir)
     out.mkdir(parents=True, exist_ok=True)
     regions = [('bootloader_0x08000000.bin', 0x08000000, 0x2000),
-               ('fsize_uid_0x1FFFF7E0.bin', 0x1FFFF7E0, 16),
+               ('fsize_uid_0x1FFFF7E0.bin', 0x1FFFF7E0, 20),  # F_SIZE, SRAM density, 96-bit UID (release >= 13; earlier dev images allow 16)
                ('option_bytes_0x1FFFF800.bin', 0x1FFFF800, 16)]
     for name, base, size in regions:
         data = b''.join(p.read_mem(base + off, min(24, size - off)) for off in range(0, size, 24))
@@ -235,13 +236,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd', required=True)
     sub.add_parser('info', help='read-only summary; run it once on the stock firmware for docs/stock-firmware.md')
-    s = sub.add_parser('dump-keymap')
+    s = sub.add_parser('dump-keymap', help='all dynamic-keymap layers to OUT.json')
     s.add_argument('out')
-    s = sub.add_parser('matrix')
+    s = sub.add_parser('matrix', help='live matrix positions (dev or stock only; ship hides the matrix, problems L1)')
     s.add_argument('--log')
     s = sub.add_parser('decode-log', help='re-map a matrix log recorded with the pre-fix decoder (offline)')
     s.add_argument('csv')
-    s = sub.add_parser('dump-bootloader')
+    s = sub.add_parser('dump-bootloader', help='bootloader, F_SIZE/UID and option bytes via FLASHREAD (dev image only)')
     s.add_argument('outdir')
     a = ap.parse_args()
     if a.cmd == 'decode-log':

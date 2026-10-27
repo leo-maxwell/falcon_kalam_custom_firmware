@@ -1,9 +1,11 @@
 // Copyright 2026 Leo Maxwell
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
-// The only place that defines QMK's *_user / weak hooks for falcon_kalam. Each
-// hook may exist once per firmware, so modules (rgb_indicators.c, ...) expose
-// plain functions and this file dispatches to them.
+// The only place that defines QMK's *_user hooks and the shared weak hooks
+// (bootmagic_reset_eeprom, command_extra) for falcon_kalam. Each hook may exist
+// once per firmware, so modules (rgb_indicators.c, ...) expose plain functions
+// and this file dispatches to them. Two single-owner hooks stay with their
+// module: via_command_kb (flashread.c, dev) and the fault vectors (recovery.c).
 
 #include QMK_KEYBOARD_H
 #include "rgb_indicators.h"

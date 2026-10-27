@@ -63,7 +63,7 @@ stock's is overwritten.
 | DFU alts | **2** = flash at `0x08002000` (ours) · 1 = flash at `0x08005000`: **a download to alt 1 erases `0x08002000`, never use it** · 0 = RAM, unsupported |
 | Upload limit | uploads end at F_SIZE × 1 KB (`0x08010000`). The bootloader cannot read itself, the option bytes or the UID over DFU |
 | Power-on DFU window | **none**: a watched replug shows the app directly (`artifacts/usb_watch_replug.txt`) |
-| Flags (`BKP_DR10`) | `0x424C` = stay in DFU; the app writes it at every boot, so any reset into the bootloader stays there. `0x424D` = just uploaded, start the app; after a download the app starts by itself |
+| Flags (`BKP_DR10`) | `0x424C` = stay in DFU; the app writes it at every boot, so any reset into the bootloader stays there. `0x424D` = just uploaded, start the app at once; after a download the bootloader parks until the host resets the bus (`dfu-util -R`), then resets and starts the app |
 
 **Entering DFU.** In DFU, stock leaves the LEDs dark; our images paint them red first.
 
