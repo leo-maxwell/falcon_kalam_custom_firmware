@@ -133,7 +133,7 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 15 | `0e201f8` | dev: light test Shift+Shift+L shows every indicator state in turn |
 | 16 | `f4e0ac5` (with 17) | dim level an eighth of the cap (1/255 duty): a quarter was too close to bright |
 | 17 | `f4e0ac5` | brightness cap 69 (63 raised by a tenth, 14/255 duty); Caps Lock LED on-delay 200 ms (POLICY-CAPSLED) |
-| 18 | — | dev light test runs the settings display and starts from a clean slate (B14); **the first official release**, tag `release-18` |
+| 18 | `a3c0409` | dev light test runs the settings display and starts from a clean slate (B14); **the first official release**, tag `release-18` |
 
 ## 5. What L2 changes against the L1 base
 
