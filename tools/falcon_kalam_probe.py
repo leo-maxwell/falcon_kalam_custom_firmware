@@ -25,9 +25,12 @@ from pathlib import Path
 
 import hid
 
-VID, PID = 0x9DD1, 0x9D89
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # python3 -I drops the script directory
+from falcon_kalam_facts import APP_PID, APP_VID, matrix_size
+
+VID, PID = APP_VID, APP_PID
 USAGE_PAGE, USAGE = 0xFF60, 0x61
-ROWS, COLS = 5, 15
+ROWS, COLS = matrix_size()
 REPORT = 32
 
 # VIA command ids (quantum/via.h); everything not listed here is refused.

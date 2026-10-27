@@ -20,12 +20,12 @@ import sys
 import zlib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-ORIG = ROOT / 'originals'
-APP_BASE = 0x08002000
-FLASH_END = 0x08010000
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # python3 -I drops the script directory
+from falcon_kalam_facts import (APP_START, DFU_PID, DFU_VID, EFL_DESCRIPTOR, FLASH_END, HID_REPORTS, RCC_CFGR, RGBLIGHT_ALL_MODES, ROOT,
+                                STOCK_APP_BYTES, VENDOR_COL_PINS, VENDOR_COL_PINS_ADDR, VENDOR_ROW_PINS, VENDOR_ROW_PINS_ADDR, ioline_name)
 
-GPIO_PORTS = {0x40010800: 'A', 0x40010C00: 'B', 0x40011000: 'C', 0x40011400: 'D', 0x40011800: 'E'}
+ORIG = ROOT / 'originals'
+APP_BASE = APP_START
 
 # QMK (>= 0.19 numbering) keycodes needed to read the vendor keymap.
 HID_NAMES = dict(enumerate([None, None, None, None] + list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') + list('1234567890'), 0))
@@ -99,13 +99,8 @@ class Image:
         return hits
 
 
-def ioline(v):
-    port = GPIO_PORTS.get(v & ~0xF)
-    return '%s%d' % (port, v & 0xF) if port else None
-
-
 def pin_table(img, addr, count):
-    return [ioline(img.u32(addr + 4 * i)) for i in range(count)]
+    return [ioline_name(img.u32(addr + 4 * i)) for i in range(count)]
 
 
 def via_positions(via):
@@ -137,10 +132,10 @@ def analyse(c):
     bcd_dev, pid, vid, bcd_dfu = struct.unpack('<HHHH', suffix[:8])
     sig, length, crc = suffix[8:11], suffix[11], struct.unpack('<I', suffix[12:])[0]
     c.check(sig == b'UFD' and length == 16, 'manufacturer BIN ends in a 16-byte DFU suffix (signature "UFD")')
-    c.check((vid, pid) == (0x1EAF, 0x0003), 'DFU suffix targets VID:PID %04X:%04X (STM32duino/Maple bootloader)' % (vid, pid))
+    c.check((vid, pid) == (DFU_VID, DFU_PID), 'DFU suffix targets VID:PID %04X:%04X (STM32duino/Maple bootloader)' % (vid, pid))
     c.check(crc == (~zlib.crc32(raw_bin[:-4]) & 0xFFFFFFFF), 'DFU suffix CRC32 0x%08X is valid' % crc)
     c.info('suffix: bcdDevice=0x%04X bcdDFU=0x%04X' % (bcd_dev, bcd_dfu))
-    c.check(len(app) == 43940, 'application payload is %d bytes' % len(app))
+    c.check(len(app) == STOCK_APP_BYTES, 'application payload is %d bytes' % len(app))
     c.check(readback[:len(app)] == app, 'payload equals the first %d bytes of the DFU readback' % len(app))
     c.check(len(readback) == FLASH_END - APP_BASE,
             'readback covers 0x%08X-0x%08X (%d bytes) => 64 KB part, 8 KB bootloader' % (APP_BASE, FLASH_END - 1, len(readback)))
@@ -168,20 +163,19 @@ def analyse(c):
         found = img.find(enc)
         c.check(len(found) == 2, 'string descriptor "%s" used for manufacturer and product at %s' % (s, [hex(h) for h in found]))
     c.check(bool(img.find(bytes.fromhex('0660ff0961a1010962'))), 'raw HID report (usage page 0xFF60, usage 0x61) present => VIA protocol')
-    c.check(bool(img.find(bytes.fromhex('05010906a1010507'))), 'boot keyboard report (usage page 1, usage 6, collection, page 7) present')
+    c.check(bool(img.find(HID_REPORTS['boot keyboard (6KRO)'])), 'boot keyboard report (usage page 1, usage 6, collection, page 7) present')
     nkro = bytes.fromhex('050109 06a1 0185 06 0507 19e0 29e7'.replace(' ', ''))
     c.check(bool(img.find(nkro)), 'shared-EP NKRO report (report ID 6, bitmap) present => vendor firmware HAS NKRO compiled in')
-    for sig, rid, what in (('05010902a101', 2, 'mouse'), ('05010980a101', 3, 'system control'), ('050c0901a101', 4, 'consumer')):
-        c.check(bool(img.find(bytes.fromhex(sig) + bytes([0x85, rid]))), 'report ID %d (%s) collection present in the shared report descriptor' % (rid, what))
+    for rid, what in ((2, 'mouse'), (3, 'system control'), (4, 'consumer')):
+        c.check(bool(img.find(HID_REPORTS['%s (ID %d)' % (what, rid)])), 'report ID %d (%s) collection present in the shared report descriptor' % (rid, what))
 
     # ------------------------------------------------------------------
     c.section('4. Matrix pins and diode direction')
-    rows = pin_table(img, 0x0800C464, 5)
-    cols = pin_table(img, 0x0800C10C, 15)
-    c.check(rows == ['B3', 'B4', 'B5', 'B6', 'A2'], 'row_pins @0x0800C464 (ChibiOS ioline_t = port|pad): %s' % ' '.join(rows))
-    c.check(cols == ['A9', 'A3', 'A4', 'A5', 'A6', 'A7', 'B0', 'B1', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'A8'],
-            'col_pins @0x0800C10C: %s' % ' '.join(cols))
-    c.check(img.u32(0x08006228) == 0x0800C464 and img.u32(0x08006230) == 0x0800C10C,
+    rows = pin_table(img, VENDOR_ROW_PINS_ADDR, len(VENDOR_ROW_PINS))
+    cols = pin_table(img, VENDOR_COL_PINS_ADDR, len(VENDOR_COL_PINS))
+    c.check(rows == VENDOR_ROW_PINS, 'row_pins @0x%08X (ChibiOS ioline_t = port|pad): %s' % (VENDOR_ROW_PINS_ADDR, ' '.join(rows)))
+    c.check(cols == VENDOR_COL_PINS, 'col_pins @0x%08X: %s' % (VENDOR_COL_PINS_ADDR, ' '.join(cols)))
+    c.check(img.u32(0x08006228) == VENDOR_ROW_PINS_ADDR and img.u32(0x08006230) == VENDOR_COL_PINS_ADDR,
             'matrix scan @0x08006100 iterates row_pins in the outer loop and col_pins in the inner loop')
     c.check(img.thumb(0x08006138, '2206') and img.thumb(0x0800613E, '6145'),
             'select: palSetLineMode(row, 6=OUTPUT_PUSHPULL) then GPIO->BRR (offset 0x14) => row driven LOW')
@@ -194,7 +188,7 @@ def analyse(c):
     c.section('5. Clock tree (stm32_clock_init @0x080090AC)')
     c.check(img.thumb(0x080090D0, '681a f442 3280'), 'RCC_CR |= HSEON (0x10000), waits HSERDY => external crystal used')
     c.check(img.thumb(0x080090E0, 'f442 12e8'), 'RCC_CFGR |= 0x001D0000 => PLLSRC=HSE, PLLMUL=x9')
-    c.check(img.u32(0x08009118) == 0x001D6400,
+    c.check(img.u32(0x08009118) == RCC_CFGR,
             'RCC_CFGR = 0x001D6400 => HPRE/1, PPRE1/2, PPRE2/2, ADCPRE/4, USBPRE=/1.5')
     c.check(img.thumb(0x080090F4, '2112') and img.u32(0x0800911C) == 0x40022000, 'FLASH_ACR = 0x12 => 2 wait states + prefetch (72 MHz)')
     c.check(img.thumb(0x08009100, 'f042 0202'), 'SW = PLL')
@@ -227,7 +221,7 @@ def analyse(c):
     # ------------------------------------------------------------------
     c.section('7. Flash layout and EEPROM (wear-leveling on embedded flash)')
     desc = struct.unpack('<IIIIIII', img.bytes(0x0800C148, 28))
-    c.check(desc == (3, 2, 128, 0, 1024, 0x08000000, 0x20000),
+    c.check(desc == EFL_DESCRIPTOR,
             'ChibiOS EFL descriptor @0x0800C148: attrs=%d page=%d sectors=%d sector_size=%d base=0x%08X size=0x%X (STM32F103xB registry)'
             % (desc[0], desc[1], desc[2], desc[4], desc[5], desc[6]))
     c.check(img.u32(0x08009664) == 0x1FFFF000 and img.thumb(0x080095C8, 'f8d3 27e0'),
@@ -268,9 +262,8 @@ def analyse(c):
     c.check(img.thumb(0x080049F6, '7058 7019 709a'),
             'rgblight_setrgb stores r->[1], g->[0], b->[2] => rgb_led_t is {g,r,b} => WS2812_BYTE_ORDER GRB')
 
-    modes = list(img.bytes(0x0800C2B6, 43))
-    qmk_all = [0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6
-    c.check(modes == qmk_all and img.u8(0x0800C2B6 + 43) == 0,
+    modes = img.bytes(0x0800C2B6, len(RGBLIGHT_ALL_MODES))
+    c.check(modes == RGBLIGHT_ALL_MODES and img.u8(0x0800C2B6 + len(RGBLIGHT_ALL_MODES)) == 0,
             'rgblight mode_base_table @0x0800C2B6 has all 42 effect modes (43 entries with mode 0): static, breathing x4, rainbow mood x3, swirl x6, '
             'snake x6, knight x3, christmas, gradient x10, RGB test, alternating, twinkle x6 => every effect enabled')
 

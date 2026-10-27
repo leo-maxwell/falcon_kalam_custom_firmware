@@ -5,11 +5,8 @@ owner's decision. Closed items move to the ledger as one line.
 
 ## Open
 
-| ID | Problem | Status / impact | Mitigation / next step |
-|---|---|---|---|
-| B14 | **Dev light test freezes the settings display** (step 8): while the test runs, `falcon_kalam_rgb_task` returns before `show_task()`, so only the "now" half shows, its layers linger under steps 9–12, and the "after replug" half plays after "done". The same freeze hits Fn+Ctrl+Shift+0 and the mode keys during the test; a restarted test can leave a reset or switch blink running over the new step, and the polled layers are not cleared at the start (dev shows debug blue beside steps 1–2) | open, dev only (found in the final review, 2026-10-27); ship unaffected | fix: call `show_task()` in the test branch, stop running blinks and clear the polled layers at `falcon_kalam_rgb_test_start`; needs a release and a dev check |
-
-**HR** marks an item that needs the owner's decision.
+None. An open item is a row with ID, problem, status / impact and the
+mitigation or next step; **HR** marks an item that needs the owner's decision.
 
 ## Known limitations
 
@@ -40,6 +37,7 @@ owner's decision. Closed items move to the ledger as one line.
 | B10 | 2026-10-27 | dev: Shift+Shift+6–9 and F6–F9 selected default layers 6–9, which have no keymap, so every key read `KC_NO` until a replug (QMK's `MAGIC_KEY_SWITCH_LAYER_WITH_{N,F}KEYS` defaults); off in dev as in ship (release 13) |
 | B11 | 2026-10-27 | a raw-HID rgblight "effect 0" command switched the base light off for the session, although the policy says VIA commands cannot change it: `enforce_green_base` now re-enables rgblight once the boot is over (release 13) |
 | B12 | 2026-10-27 | FLASHREAD's window ended at `0x1FFFF7F0`, so the dump held 64 of the 96 UID bits; the window now ends at `0x1FFFF7F4` and the probe reads 20 B (release 13; `originals/device_dump_2026-10-26/` keeps the 16-byte dump) |
+| B14 | 2026-10-27 | the dev light test froze the settings display (step 8 showed only the "now" half, its layers lingered, the "after replug" half played after "done"), a restart could leave a blink running and the polled layers were not cleared: the test branch now advances the display, and a start stops blinks, the display and the polled layers (release 18) |
 | B13 | 2026-10-27 | LED 1 flashed green at plug-in (yellow after the Bootmagic red): the first frame began after a high idle on A1 (QMK's board default is a pull-up, and the driver's init only switches the mode), so LED 1 read a leading 1 bit. Release 14 drives the line low and holds it for two reset periods before the first frame; verified on the device: no flash at plug-in, Bootmagic red without yellow |
 | R2 | 2026-10-27 | QMK 0.34.7 / ChibiOS on the GD32: USB, matrix, EEPROM, DFU and the fault path verified over fourteen releases; settings persisted across every replug and flash. Wear: a settings change costs one or two 16-bit cells of the 1,024-cell write log, and the pages are erased only when the log is full, so even at the conservative 10,000 erase cycles the keyboard outlives millions of settings writes; VIA keymap edits are the same size. Re-checked by the verifier after each QMK update (operations.md §5) |
 | R13 | 2026-10-27 | the fault path is fixed (POLICY-RECOVERY, verified with the dev fault test); what remains, a hang without a fault, cannot be fixed in firmware and is recorded as the limitation L14, mitigated by the flash gate and the Esc→DFU test after every flash |

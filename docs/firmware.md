@@ -13,15 +13,15 @@ on every build; nearly every feature is also verified on the device (§2).
 Built from one tree: QMK 0.34.7 (`180f394b`) + `keyboards/falcon_kalam` (L1)
 + `userspace/` (L2: shared `users/falcon_kalam/` plus one keymap per
 variant). Both images are reproducible on any day (`SOURCE_DATE_EPOCH` =
-the pinned QMK commit time). **Release 17** (`VIA_FIRMWARE_VERSION`, shown by
+the pinned QMK commit time). **Release 18** (`VIA_FIRMWARE_VERSION`, shown by
 `falcon_kalam_probe.py info`; bumped whenever the images change). The table's
 layout is parsed by `scripts/flash.sh` and `scripts/check_docs.py` (variant in
 bold, then file, hash and size); keep it.
 
 | Variant | Image | SHA-256 | Size (of 53,248 B) | Use |
 |---|---|---|---|---|
-| **ship** | `artifacts/falcon_kalam_ship.bin` | `d023b2a828b66e319fb403171417bf2b4b323dbf59b3bc0de207123c6e0137cd` | 38,332 B | the daily image |
-| **dev** | `artifacts/falcon_kalam_dev.bin` | `33e2336f765f15b93317812f5e5b1d8c4557b7eceb0b8bad72eef6fe521c9420` | 44,636 B | testing and diagnosis only; never the daily image |
+| **ship** | `artifacts/falcon_kalam_ship.bin` | `df75f34c3856a057b81c70efec0b1b73f515b92109f562f58e9cbcf614cf0a7c` | 38,332 B | the daily image |
+| **dev** | `artifacts/falcon_kalam_dev.bin` | `6897f988c8cb40357200ee8480278facada4e7c9517862c7702646f86b6a8923` | 44,756 B | testing and diagnosis only; never the daily image |
 | (base) | `artifacts/falcon_kalam_default.bin` | — | — | L1 reference with NKRO, no VIA; **never flash** |
 
 Stock image: 43,940 B. What is on the device: `docs/devnotes.md`.
@@ -33,7 +33,7 @@ by L1, disabled by L2 · **new** not in stock.
 Hardware: **✓** = verified on the device (2026-10-26/27), on an image with the
 same feature code.
 
-**Release validation (2026-10-27, releases 15–17).** Dev image: probe (release, layers, macros, the VIA keymap equal to the compiled layers, bootloader and option bytes equal to the originals, 20-byte UID dump); every base key and all 27 HHK Fn combinations on the console with 0 mismatches; the three modes (Win via SW1 and a replug), the five switches with replugs; the light test (every indicator state except the second half of the settings display, B14); Command H/V/S; the Caps LED; the fault test and Bootmagic, each with an identical readback. Ship image: probe and keymap dump, the plug-in (dark, then green, no LED 1 flash), the ship Command list (H), the VIA app (loads `via/falcon_kalam.json`, connects as "Falcon", six layers, no lighting menu), Esc→DFU with an identical readback. Log: `artifacts/release_validation_2026-10-27_console.log`.
+**Release validation (2026-10-27, releases 15–17).** Dev image: probe (release, layers, macros, the VIA keymap equal to the compiled layers, bootloader and option bytes equal to the originals, 20-byte UID dump); every base key and all 27 HHK Fn combinations on the console with 0 mismatches; the three modes (Win via SW1 and a replug), the five switches with replugs; the light test (every indicator state; the settings display's second half since release 18, B14); Command H/V/S; the Caps LED; the fault test and Bootmagic, each with an identical readback. Ship image: probe and keymap dump, the plug-in (dark, then green, no LED 1 flash), the ship Command list (H), the VIA app (loads `via/falcon_kalam.json`, connects as "Falcon", six layers, no lighting menu), Esc→DFU with an identical readback. Log: `artifacts/release_validation_2026-10-27_console.log`.
 
 | Feature | Ship | Dev | vs stock | Hardware |
 |---|---|---|---|---|
@@ -133,6 +133,7 @@ unnumbered images (`devnotes.md` history, `problems.md` ledger).
 | 15 | `0e201f8` | dev: light test Shift+Shift+L shows every indicator state in turn |
 | 16 | `f4e0ac5` (with 17) | dim level an eighth of the cap (1/255 duty): a quarter was too close to bright |
 | 17 | `f4e0ac5` | brightness cap 69 (63 raised by a tenth, 14/255 duty); Caps Lock LED on-delay 200 ms (POLICY-CAPSLED) |
+| 18 | — | dev light test runs the settings display and starts from a clean slate (B14); **the first official release**, tag `release-18` |
 
 ## 5. What L2 changes against the L1 base
 

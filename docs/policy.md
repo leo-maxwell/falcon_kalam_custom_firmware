@@ -164,7 +164,7 @@ plain QMK-style HHKB reference.
 | POLICY-FLASH-GATE | flash only an L2 image (ship, or dev for testing) whose approval names the **variant and its SHA-256**, via DFU **alt 2**, then test Esc→DFU: with no SWD probe, DFU is the only recovery path and must stay reachable. The daily image is always ship | `scripts/flash.sh` (refuses other images, wrong hashes, devices not in DFU; alt 2 hard-coded; pre-flash readback) + its negative tests; `operations.md` §2 |
 | POLICY-OPEN-ISSUES | an open issue stays open until the owner closes it explicitly | `problems.md` |
 | POLICY-NAMING | §2.2 | verifier, `check_docs.py` |
-| POLICY-RELEASE | every change of the ship/dev images bumps the release number `VIA_FIRMWARE_VERSION` (`users/falcon_kalam/config.h`), readable over VIA; `firmware.md` states it | `scripts/check_docs.py` (matches `firmware.md`; fails if the images changed since HEAD without a bump) |
+| POLICY-RELEASE | every change of the ship/dev images bumps the release number `VIA_FIRMWARE_VERSION` (`users/falcon_kalam/config.h`), readable over VIA; `firmware.md` states it. A release accepted as the daily image is tagged `release-N` on its commit (release 18 is the first official one) | `scripts/check_docs.py` (matches `firmware.md`; fails if the images changed since HEAD without a bump) |
 | POLICY-DOCS | §4 | `scripts/check_docs.py` (run by `build.sh`) |
 
 ## 3. File organisation
@@ -178,7 +178,7 @@ plain QMK-style HHKB reference.
 | `bootloader/STM32duino-bootloader/` | MIT bootloader source, pinned submodule; reference only, never built or flashed |
 | `originals/` | stock BIN, readback, VIA JSON, `device_dump_2026-10-26/` (bootloader, F_SIZE/UID, option bytes), `SHA256SUMS` |
 | `scripts/` | `env.sh` (shared toolchain and QMK environment), `build.sh` (the only build entry), `flash.sh` (the only flash entry: `check`/`flash`/`verify`), `verify_firmware.py` (`--profile base\|release\|dev`), `negative_tests.sh`, `qmk_policy.sh`, `check_docs.py` |
-| `tools/` | `analyze_vendor_firmware.py`, `feature_parity.py`, `falcon_kalam_probe.py` (read-only VIA probe), `usb_watch.py` (passive USB log), `console_keycheck.py` (checks logged key presses against POLICY-HHKB), `disassemble_vendor.sh` |
+| `tools/` | `falcon_kalam_facts.py` (the single copy of the addresses, sizes, USB ids and byte signatures the scripts and tools share; `--shell` prints them for the shell scripts), `analyze_vendor_firmware.py`, `feature_parity.py`, `falcon_kalam_probe.py` (read-only VIA probe), `usb_watch.py` (passive USB log), `console_keycheck.py` (checks logged key presses against POLICY-HHKB), `disassemble_vendor.sh` |
 | `artifacts/` | built images (`.bin` with DFU suffix, `.elf`, `.map`, cflags, `info_config.h`, `.sha256`), build/verification reports, device logs |
 | `build/` | scratch, git-ignored |
 
@@ -328,6 +328,13 @@ refuses that; 2 KB leaves 1,107 B. On the first boot after the move, the old
 2 KB sits where the new write log starts; the new base image is erased, so
 its checksum fails and wear-leveling clears its cache, QMK's settings magic
 fails, and the schema stamp forces a clean re-initialisation anyway.
+
+**`falcon_kalam_facts.py`.** The flash map, USB ids, stock image size, pin
+tables and addresses, clock and flash-descriptor literals, the rgblight mode
+table and the HID report signatures live here once; `analyze_vendor_firmware.py`,
+`feature_parity.py`, `verify_firmware.py`, the probe and `usb_watch.py` import
+them, and `flash.sh` evals `--shell`. The tools insert their own directory into
+`sys.path`, because `python3 -I` (used everywhere for safety) drops it.
 
 **`analyze_vendor_firmware.py`.** The stock image has no symbols. Each check
 names an address and the exact instruction/data bytes expected there

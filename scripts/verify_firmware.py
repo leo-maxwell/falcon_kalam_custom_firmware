@@ -27,18 +27,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / 'tools'))
 import analyze_vendor_firmware as vendor  # noqa: E402
-
-FLASH_BASE = 0x08000000
-APP_START = 0x08002000      # end of the 8 KB STM32duino bootloader
-EEPROM_START = 0x0800F000   # 4 KB wear-leveling backing store (stock: 2 KB at 0x0800F800)
-FLASH_END = 0x08010000      # 64 KB part
-RAM_START, RAM_END = 0x20000000, 0x20005000  # 20 KB
-
-PORT_BASE = {'A': 0x40010800, 'B': 0x40010C00, 'C': 0x40011000, 'D': 0x40011400}
-
-# rgblight's mode_base_table with every effect enabled (43 entries: mode 0 + 42
-# effect modes), the signature of a decorative build (stock, L1 base).
-RGBLIGHT_ALL_MODES = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
+from falcon_kalam_facts import (APP_START, DFU_PID, DFU_VID, EEPROM_START, EFL_DESCRIPTOR, FLASH_BASE, FLASH_END, HID_REPORTS,  # noqa: E402
+                                RAM_END, RAM_START, RCC_CFGR, RGBLIGHT_ALL_MODES, VENDOR_COL_PINS, VENDOR_COL_PINS_ADDR, VENDOR_ROW_PINS,
+                                VENDOR_ROW_PINS_ADDR, ioline_bytes, strip_dfu_suffix)
 
 # POLICY-RECOVERY: the whole stack-free fault routine of users/falcon_kalam/recovery.c
 # (movw/movt r0 = BKP_DR10, movw r1 = 0x424C, str, dsb, movw/movt r0 = SCB->AIRCR,
@@ -79,10 +70,6 @@ def read_symbols(elf):
         elif len(parts) == 3:
             out[parts[2]] = (int(parts[0], 16), None, parts[1])
     return out
-
-
-def ioline_bytes(pins):
-    return b''.join(struct.pack('<I', PORT_BASE[p[0]] | int(p[1:])) for p in pins)
 
 
 # POLICY-HHKB reference: the Fn table of the HHKB Professional Classic User's
@@ -166,14 +153,13 @@ def main():
 
     # ------------------------------------------------------------------
     c.section('1. Binary container')
-    if raw[-16:][8:11] == b'UFD':
-        suffix, payload = raw[-16:], raw[:-16]
+    payload, suffix = strip_dfu_suffix(raw)
+    if suffix:
         _, pid, vid, _ = struct.unpack('<HHHH', suffix[:8])
         crc = struct.unpack('<I', suffix[12:])[0]
-        c.check((vid, pid) == (0x1EAF, 0x0003), 'DFU suffix targets %04X:%04X (STM32duino/Maple)' % (vid, pid))
+        c.check((vid, pid) == (DFU_VID, DFU_PID), 'DFU suffix targets %04X:%04X (STM32duino/Maple)' % (vid, pid))
         c.check(crc == (~zlib.crc32(raw[:-4]) & 0xFFFFFFFF), 'DFU suffix CRC32 0x%08X valid' % crc)
     else:
-        payload = raw
         c.info('no DFU suffix')
     c.info('file %d bytes, payload %d bytes' % (len(raw), len(payload)))
 
@@ -241,7 +227,7 @@ def main():
     c.check(kb.get('keyboard_name') == 'Falcon' and kb.get('manufacturer') == 'Falcon', 'POLICY-NAMING: keyboard.json keyboard_name and manufacturer are "Falcon"')
     if args.via_json:
         c.check(json.loads(args.via_json.read_text()).get('name') == 'Falcon', 'POLICY-NAMING: %s name is "Falcon"' % args.via_json.name)
-    via_hid = bool(img.find(bytes.fromhex('0660ff0961')))
+    via_hid = bool(img.find(HID_REPORTS['VIA raw HID 0xFF60']))
     c.check(via_hid == release, 'raw HID usage page 0xFF60 / usage 0x61 (VIA) %s' % ('present' if release else 'absent'))
     nkro_bitmap = re.compile(rb'\x05\x07\x19\x00\x29[\x00-\xff]\x15\x00\x25\x01')
     nk_syms = sorted(s for s in syms if 'nkro' in s.lower())
@@ -261,7 +247,7 @@ def main():
                 'keymap comes from the userspace variant keymaps/%s' % keymap_dir)
         want_flags = ('-DVIA_ENABLE', '-DRAW_ENABLE', '-DDYNAMIC_KEYMAP_ENABLE',
                       '-DCONSOLE_ENABLE', '-DCOMMAND_ENABLE', '-DLTO_ENABLE')  # POLICY-PARITY
-        c.check(bool(img.find(bytes.fromhex('0631ff0974'))), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
+        c.check(bool(img.find(HID_REPORTS['console 0xFF31'])), 'POLICY-PARITY: HID console interface (0xFF31) present, as in stock')
         # POLICY-VARIANTS: debug-only features are present in dev and absent in ship.
         flashread = any(n.split('.')[0] == 'via_command_kb' for n in syms)
         debug_flags = ('-DFALCON_KALAM_FLASHREAD_ENABLE', '-DKEYCODE_STRING_ENABLE', '-DDEBUG_MATRIX_SCAN_RATE')
@@ -334,20 +320,20 @@ def main():
     # ------------------------------------------------------------------
     c.section('5. Configuration matches the manufacturer firmware')
     vimg = vendor.Image((vendor.ORIG / 'falcon_flash_backup.bin').read_bytes())
-    vrows = vendor.pin_table(vimg, 0x0800C464, 5)
-    vcols = vendor.pin_table(vimg, 0x0800C10C, 15)
+    vrows = vendor.pin_table(vimg, VENDOR_ROW_PINS_ADDR, len(VENDOR_ROW_PINS))
+    vcols = vendor.pin_table(vimg, VENDOR_COL_PINS_ADDR, len(VENDOR_COL_PINS))
     c.check(kb['matrix_pins']['rows'] == vrows, 'keyboard.json rows == vendor row_pins %s' % ' '.join(vrows))
     c.check(kb['matrix_pins']['cols'] == vcols, 'keyboard.json cols == vendor col_pins %s' % ' '.join(vcols))
     c.check(bool(img.find(ioline_bytes(vrows))), 'compiled image contains row_pins table identical to vendor')
     c.check(bool(img.find(ioline_bytes(vcols))), 'compiled image contains col_pins table identical to vendor')
     c.check(kb.get('diode_direction') == 'COL2ROW', 'diode_direction COL2ROW')
-    efl = struct.pack('<IIIIIII', 3, 2, 128, 0, 1024, 0x08000000, 0x20000)
+    efl = struct.pack('<IIIIIII', *EFL_DESCRIPTOR)
     c.check(bool(img.find(efl)), 'ChibiOS EFL descriptor identical to vendor (128 x 1 KB sectors)')
     if not dev:
         # Not for dev: its FLASHREAD legitimately reads 0x1FFFF7E0; all variants share L1 config.h.
         c.check(not img.find(struct.pack('<I', 0x1FFFF000)) and not img.find(struct.pack('<I', 0x1FFFF7E0)),
                 'no F_SIZE register access (WEAR_LEVELING_EFL_FLASH_SIZE pinned to 64 KB)')
-    c.check(bool(img.find(struct.pack('<I', 0x001D6400))), 'RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor')
+    c.check(bool(img.find(struct.pack('<I', RCC_CFGR))), 'RCC_CFGR value 0x001D6400 (PLL x9, USB /1.5, APB /2) identical to vendor')
     # ORR.W Rd, Rn, #0x001D0000 (any registers): PLLSRC=HSE, PLLMUL x9
     c.check(thumb2_find(payload, 0xFFF0, 0xF440, 0xF0FF, 0x10E8), 'PLLSRC=HSE / PLLMUL x9 instruction (orr #0x1D0000, any register) present')
     c.check(movw_find(payload, 0x424C) and movw_find(payload, 0x424D),

@@ -12,9 +12,10 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VIDPID=1eaf:0003
-ALT=2 # never 1: a download to alt 1 erases the page at 0x08002000
-FLASH_BYTES=57344 # 0x08002000-0x0800FFFF
+eval "$(python3 -I "$ROOT/tools/falcon_kalam_facts.py" --shell)"   # FALCON_KALAM_DFU_ID, _APP_REGION_BYTES, _APP_START_SHORT
+VIDPID="$FALCON_KALAM_DFU_ID"
+ALT=2 # never 1: a download to alt 1 erases the page at the application start
+FLASH_BYTES="$FALCON_KALAM_APP_REGION_BYTES" # the application region, bootloader end to flash end
 
 die() { printf 'flash.sh: %s\n' "$*" >&2; exit 1; }
 usage() {
@@ -48,7 +49,7 @@ validate() {
     echo "ok: $VARIANT image $HAVE"
 }
 
-in_dfu() { dfu-util -l 2>/dev/null | grep -q "\[$VIDPID\].*alt=$ALT.*Upload to Flash 0x8002000"; }
+in_dfu() { dfu-util -l 2>/dev/null | grep -q "\[$VIDPID\].*alt=$ALT.*Upload to Flash $FALCON_KALAM_APP_START_SHORT"; }
 
 readback() { # $1 = output file
     rm -f "$1"

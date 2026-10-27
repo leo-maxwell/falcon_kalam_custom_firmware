@@ -60,7 +60,7 @@ originals/                the manufacturer firmware and device dumps, immutable
 ## Quick start (macOS)
 
 ```bash
-git clone --recursive https://github.com/leo-maxwell/falcom_kalam_custom_firmware.git
+git clone --recursive https://github.com/leo-maxwell/falcon_kalam_custom_firmware.git
 ```
 
 ```bash

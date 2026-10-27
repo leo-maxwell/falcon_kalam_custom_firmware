@@ -17,11 +17,16 @@ finished enumerating.
 """
 
 import argparse
+import sys
 import time
+from pathlib import Path
 
 import usb.core
 
-WATCH = {(0x1EAF, 0x0003): 'bootloader (DFU)', (0x9DD1, 0x9D89): 'keyboard application (stock or falcon_kalam)'}
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # python3 -I drops the script directory
+from falcon_kalam_facts import APP_PID, APP_VID, DFU_PID, DFU_VID
+
+WATCH = {(DFU_VID, DFU_PID): 'bootloader (DFU)', (APP_VID, APP_PID): 'keyboard application (stock or falcon_kalam)'}
 
 
 def present():

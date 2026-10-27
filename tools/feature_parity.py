@@ -18,19 +18,10 @@ import struct
 import sys
 from pathlib import Path
 
-HID_REPORTS = {  # unique byte signatures from QMK's report descriptors
-    'boot keyboard (6KRO)': b'\x05\x01\x09\x06\xa1\x01\x05\x07',
-    'VIA raw HID 0xFF60': b'\x06\x60\xff\x09\x61',
-    'console 0xFF31': b'\x06\x31\xff\x09\x74',
-    'mouse (ID 2)': b'\x05\x01\x09\x02\xa1\x01\x85\x02',
-    'system control (ID 3)': b'\x05\x01\x09\x80\xa1\x01\x85\x03',
-    'consumer (ID 4)': b'\x05\x0c\x09\x01\xa1\x01\x85\x04',
-    'NKRO bitmap (ID 6)': b'\x05\x01\x09\x06\xa1\x01\x85\x06',
-}
-ROWS = b''.join(struct.pack('<I', v) for v in (0x40010C03, 0x40010C04, 0x40010C05, 0x40010C06, 0x40010802))
-COLS = b''.join(struct.pack('<I', v) for v in (0x40010809, 0x40010803, 0x40010804, 0x40010805, 0x40010806, 0x40010807,
-                                                 0x40010C00, 0x40010C01, 0x40010C0A, 0x40010C0B, 0x40010C0C, 0x40010C0D,
-                                                 0x40010C0E, 0x40010C0F, 0x40010808))
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # python3 -I drops the script directory
+from falcon_kalam_facts import HID_REPORTS, RCC_CFGR, RGBLIGHT_ALL_MODES, VENDOR_COL_PINS, VENDOR_ROW_PINS, ioline_bytes, strip_dfu_suffix
+
+ROWS, COLS = ioline_bytes(VENDOR_ROW_PINS), ioline_bytes(VENDOR_COL_PINS)  # the pin tables as compiled
 # Peripheral blocks (STM32F103/GD32F103 memory map). A block referenced by only
 # one image (e.g. a timer for PWM backlight, another GPIO port for an LED) is a
 # feature-gap candidate; this is how hardware outputs are compared, since
@@ -44,12 +35,10 @@ PERIPHERALS = [(0x40000000, 'TIM2'), (0x40000400, 'TIM3'), (0x40000800, 'TIM4'),
                (0x40012800, 'ADC2'), (0x40012C00, 'TIM1'), (0x40013000, 'SPI1'), (0x40013800, 'USART1'),
                (0x40020000, 'DMA1'), (0x40021000, 'RCC'), (0x40022000, 'FLASH'), (0x40023000, 'CRC'),
                (0xE000E000, 'NVIC/SysTick'), (0xE000ED00, 'SCB'), (0xE0001000, 'DWT'), (0xE000EDF0, 'CoreDebug')]
-ALL_MODES = bytes([0, 1] + [2] * 4 + [6] * 3 + [9] * 6 + [15] * 6 + [21] * 3 + [24] + [25] * 10 + [35, 36] + [37] * 6)
 
 
 def load(path):
-    d = Path(path).read_bytes()
-    return d[:-16] if d[-16:][8:11] == b'UFD' else d
+    return strip_dfu_suffix(Path(path).read_bytes())[0]
 
 
 def config_descriptor(d):
@@ -101,9 +90,9 @@ def features(d):
     for name, sig in HID_REPORTS.items():
         f['HID: ' + name] = 'yes' if sig in d else 'no'
     f['matrix pins (vendor tables)'] = 'yes' if ROWS in d and COLS in d else 'no'
-    f['clock RCC_CFGR 0x001D6400'] = 'yes' if struct.pack('<I', 0x001D6400) in d else 'no'
+    f['clock RCC_CFGR 0x%08X' % RCC_CFGR] = 'yes' if struct.pack('<I', RCC_CFGR) in d else 'no'
     f['peripherals referenced'] = ' '.join(sorted(peripherals(d)))
-    f['rgblight: all 42 effect modes'] = 'yes' if ALL_MODES in d else 'no/other'
+    f['rgblight: all 42 effect modes'] = 'yes' if RGBLIGHT_ALL_MODES in d else 'no/other'
     return f
 
 

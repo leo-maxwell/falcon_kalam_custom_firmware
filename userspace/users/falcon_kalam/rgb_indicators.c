@@ -256,6 +256,13 @@ static const struct {
     [TEST_RESET] = {"settings reset: three red blinks on dark", 0xFF, 2000},
     [TEST_BOOT] = {"bootloader: all red", FALCON_KALAM_RGB_BOOT, 1500},
 };
+// Ends a running settings display at once.
+static void show_stop(void) {
+    show_gap(false);
+    show_draw(0, false);
+    show_phase = SHOW_IDLE;
+}
+
 static uint8_t  test_step = TEST_IDLE;
 static uint16_t test_timer;
 
@@ -295,13 +302,24 @@ static void test_end_step(void) {
         rgblight_set_layer_state(layer, false);
     } else if (test_step == TEST_RESET) {
         rgblight_set_layer_state(FALCON_KALAM_RGB_DARK, false);
+    } else if (test_step == TEST_SHOW) {
+        show_stop();
     }
+    rgblight_unblink_all_but_layer(RGBLIGHT_MAX_LAYERS); // a blink of this step must not run into the next
 }
 
+// Starts (or restarts) the test from a clean slate: no running blink, no
+// settings display, the polled indicators off (they return at the end).
 void falcon_kalam_rgb_test_start(void) {
     if (test_step != TEST_IDLE) {
         test_end_step();
     }
+    rgblight_unblink_all_but_layer(RGBLIGHT_MAX_LAYERS);
+    show_stop();
+    for (uint8_t layer = FALCON_KALAM_RGB_LAYER_LOCKED; layer <= FALCON_KALAM_RGB_KEYLOG; layer++) {
+        rgblight_set_layer_state(layer, false);
+    }
+    shown = 0;
     test_begin(TEST_LOCKED);
 }
 
@@ -341,6 +359,7 @@ void falcon_kalam_rgb_task(void) {
 #ifdef FALCON_KALAM_DEV
     if (test_step != TEST_IDLE) {
         test_task();
+        show_task(); // the settings display (step 8) runs its two phases as usual
         enforce_green_base();
         return;
     }

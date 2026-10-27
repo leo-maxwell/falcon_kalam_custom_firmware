@@ -8,9 +8,9 @@ here.
 
 | | |
 |---|---|
-| On the device | **ship** release 17 (`d023b2a8…`), flashed 2026-10-27 and accepted: Esc→DFU with an identical readback, the plug-in dark-then-green without a flash, the ship Command list, the VIA app. The daily image |
+| On the device | **ship** release 18 (`df75f34c…`), flashed 2026-10-27 (probe: release 18). Release 18 changes only the dev light test (B14), so the ship acceptance of release 17 carries over; the post-flash Esc→DFU test and `scripts/flash.sh verify ship` are the remaining step |
 | Recovery | Esc at plug-in reaches DFU on every image tested; the pads are no longer needed |
-| Phase | **released** (2026-10-27): ship release 17 is the daily image; every further change bumps the release and repeats `operations.md` §2 |
+| Phase | **released** (2026-10-27): release 18, tag `release-18`, is the first official release and the daily image; every further change bumps the release and repeats `operations.md` §2 |
 
 ## To do
 
